@@ -5,8 +5,6 @@ OBJECTIVE
 ---------
 1. Get users playing games they might be interested in
 2. Be the central point of discovery for game on Kik
-3. Promote quality cross-promotion between games * TODO Not in app itself
-4. Convince users to revisit the application to play more games * TODO don't have any features for this...
 
 FEATURES
 --------
@@ -33,10 +31,12 @@ apps.
 
 3. Ability to filter games by category
 The full list of categories isn't shown at first, just a "Categories" button. Tapping on this button expands
-the list of categories: TODO
+the list of categories:  
+Action, Multiplayer, Shooter, Adventure, RPG, Sports, Racing, Strategy, Defense, Puzzle, Arcade, Educational
 
 4. Ability to sort by rating and date
-
+We'll have to consult with Cristian to get a better idea of the UX for this and the categories in a later version
+of the app. For now we can have a toggle beneath the categories.
 
 USERS
 -----
@@ -47,18 +47,17 @@ USERS
   * Platform: 52% iOS, 45% Android
   * Likes: Flirting, Meeting new people
 
-TODO: Users key interactions with product
-
 USER FLOWS
 ----------
 Open App -> Game List -> Choose Game
+                      |
+                      -> Choose categor(ies) -> Choose game
+                      |
+                      -> Change sorting -> Choose game
 
 WIREFRAMES
 ----------
-
-FUNCTIONAL REQUIREMENTS
------------------------
-Horizontally scalable backend
+game-discovery.ep
 
 BACKEND
 -------
@@ -78,6 +77,8 @@ JSON encoded object { offset: int, count: int, categories: array, games: array }
 Each game object in the games array will need: { name: string, description: string, promoImage: string(url), rating: double, promoStatus: string }
 ** promoStatus will either be featured or empty string. I don't want this as a boolean, because we may have varying levels of 'featured'
 
+Needs to be horizontally scalable
+
 PERFORMANCE REQUIREMENTS
 -----------------------
 Initial load time (app open, content not necessarily available): < 2s on 3G
@@ -94,6 +95,6 @@ We want this version of the app to consistently stay in the **top 40** on Kik. T
 good bit of traffic to it (since there's no inherent sharing in the app). We'll also have to update the Clay
 sidebar to link to this app from every game on Kik.
 
-Top 40 on Kik translates to ____
+Top 40 on Kik translates to ~300,000 uniques / month
 
-Push tokens for these users, ... TODO ..., no email yet.
+Push tokens for all users, no email yet (next stage of app)
