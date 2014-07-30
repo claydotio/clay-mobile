@@ -1,2 +1,2 @@
-clay-mobile
+Clay Mobile
 ===========
