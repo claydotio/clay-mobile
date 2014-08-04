@@ -5,6 +5,7 @@ OBJECTIVE
 ---------
 1. Get users playing games they might be interested in
 2. Be the central point of discovery for game on Kik
+3. Create a strong base for the remainder of our cornerstone app
 
 FEATURES
 --------
@@ -75,8 +76,9 @@ Needs to be horizontally scalable
 PREPARING FOR NEW PLATFORMS
 ---------------------------
 While we're initially building this for Kik, we need to keep in mind it will soon be followed by other platforms.
-This means we need to keep in mind the flow between marketplace and game for each platform.
 
+### Marketplace -> Game Flow
+This means we need to keep in mind the flow between marketplace and game for each platform.
 On Kik we have the option to either open the game in a modal window within the Clay 'app' (see figure 1), OR we
 can open a new page that takes up the whole window. Both add the game as a favorite to the sidebar.
 
@@ -86,6 +88,21 @@ engagement in the games themselves. This is something we should test.
 
 **Figure 1 (this is a chat modal over an app. The browser modal is similar - just different content)**
 <img src="/../master/specs/resources/kik-modal.png?raw=true" alt="Figure 1" style="width: 250px">
+
+When branching out to other platforms, we'll want to consider the best way to open an app/game in each of those.
+For now, we need to make sure the 'game opening method' is interchangable by platform.
+
+Eg.
+* Kik - Game modal (Kik API call)
+* Google Play - Webview (potentially APK request - but that will likely be from within the game)
+* Amazon - Webview
+* iOS - Webview, but it may need to be a webview that looks more like a traditional browser (eg URL bar like Kik)
+* Facebook - Facebook webview OR Safari if it makes sense for better retention (and we're technologically able to do it)
+* Firefox OS - I think they have an API to save to device
+
+### Resolution
+Obviously this needs to be responsive. We may want to change the layout on a portrait vs landscape basis as well (Cristian's court)
+Need to account for retina devices with the promo images
 
 PERFORMANCE REQUIREMENTS
 -----------------------
