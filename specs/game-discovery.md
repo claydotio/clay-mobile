@@ -85,7 +85,7 @@ if they continue to a game they may not enjoy (or is a really quick game). The d
 engagement in the games themselves. This is something we should test.
 
 **Figure 1 (this is a chat modal over an app. The browser modal is similar - just different content)**
-![Figure 1](/../master/specs/resources/kik-modal.png?raw=true =250x)
+<img src="/../master/specs/resources/kik-modal.png?raw=true" alt="Figure 1" style="width: 250px">
 
 PERFORMANCE REQUIREMENTS
 -----------------------
