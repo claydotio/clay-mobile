@@ -15,7 +15,7 @@ FEATURES
 
 FEATURES IN-DEPTH
 -----------------
-1. LIST OF GAMES
+1. List of games
   * **Initial Games**  Defaults to 15 most-popular games, where most-popular is currently defined ( for reference in case it's useful) as:  
       -2 * price // try to show more free games since paid ones don't do well  
     \+ IF rating > 0 then ( rating - 2.5 ) * SQRT( LOG10( votes ) ) ELSE 0 // take into account both avg rating & # of votes  
@@ -26,7 +26,7 @@ FEATURES IN-DEPTH
   * ** Smart Game Loading
     * Detect bounce rate for games on different devices, flag a game as not working for a device subset and don't show for consumers on that device
 
-2. ABILITY TO VIEW MORE GAMES THROUGH SCROLLING
+2. Ability to view more games through scrolling
 Infinite scrolling. Rudimentarily initially - eventually we'll want to do something (eg remove from DOM) with the initial games that are
 no longer in view (for memory reasons). Facebook and LinkedIn had to do something similar with their HTML5
 apps.
@@ -71,6 +71,21 @@ though we could and just abstract out read/writes (which we should do anyways)
 We'll want a separate node.js server for this app
 
 Needs to be horizontally scalable
+
+PREPARING FOR NEW PLATFORMS
+---------------------------
+While we're initially building this for Kik, we need to keep in mind it will soon be followed by other platforms.
+This means we need to keep in mind the flow between marketplace and game for each platform.
+
+On Kik we have the option to either open the game in a modal window within the Clay 'app' (see figure 1), OR we
+can open a new page that takes up the whole window. Both add the game as a favorite to the sidebar.
+
+My initial feeling is the modal option will be better for us because it helps the marketplace app retain better
+if they continue to a game they may not enjoy (or is a really quick game). The downside is it could cause less
+engagement in the games themselves. This is something we should test.
+
+**Figure 1 (this is a chat modal over an app. The browser modal is similar - just different content)**
+![Figure 1](/../master/specs/resources/kik-modal.png?raw=true)
 
 PERFORMANCE REQUIREMENTS
 -----------------------
