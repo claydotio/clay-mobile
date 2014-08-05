@@ -1,7 +1,3 @@
-TODOs:
-* Spec for the game screen & swipe bar
-* Detail the flow for game -> marketplace -> game modal for Kik
-
 Clay Mobile: Game Discovery
 ---------------------------
 
