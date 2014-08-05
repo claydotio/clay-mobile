@@ -1,5 +1,4 @@
 TODOs:
-* Be more concise (more bulets, fewer sentences)
 * Spec for the game screen & swipe bar
 * Detail the flow for game -> marketplace -> game modal for Kik
 
@@ -13,38 +12,34 @@ Clay Mobile: Game Discovery
 
 ### FEATURES
 1. List of games
-2. Ability to view more games through scrolling (infinite pagination)
-2. Ability to filter games by category
-3. Ability to sort by rating and date
+2. Ability to access a game by clicking on the promotional image
+3. Ability to view more games through scrolling (infinite pagination)
+4. Ability to filter games by category
+5. Ability to sort by rating and date
 
 ### FEATURES IN-DEPTH
 1. List of games
-  * **Initial Games**  Defaults to 15 most-popular games, where most-popular is currently defined ( for reference in case it's useful) as:  
-
-    ```
-      -2 * price // try to show more free games since paid ones don't do well  
-    \+ IF rating > 0 then ( rating - 2.5 ) * SQRT( LOG10( votes ) ) ELSE 0 // take into account both avg rating & # of votes  
-    \+ staff_mobile_rating ^ 3 // our own rating can count for a lot (up to 125)  
-    \+ IF featured THEN 20 else 0 // give featured games more weight  
-    \+ IF lastupdate (timestamp) THEN LOG10(lastupdate) ELSE 0  
-    \+ IF add_time > 0 THEN LOG2( add_time - 1325376000 ) ^ 1.8 ELSE 0`
+  * **Initial Games**  Defaults to 15 most-popular games, where most-popular takes into account:
+    price (favoring free), rating, plays yesterday, staff rating, votes, featured status, last update and add time
     ```
   * **Smart Game Loading**
     * Detect bounce rate for games on different devices, flag a game as not working for a device subset and don't show for consumers on that device
 
-2. Ability to view more games through scrolling
-Infinite scrolling. Rudimentarily initially - eventually we'll want to do something (eg remove from DOM) with the initial games that are
-no longer in view (for memory reasons). Facebook and LinkedIn had to do something similar with their HTML5
-apps.
+2. Ability to access a game by clicking on the promotional image
+TODO: Redirect to marketplace, open game modal
 
-3. Ability to filter games by category
-The full list of categories isn't shown at first, just a "Categories" button. Tapping on this button expands
-the list of categories:  
-Action, Multiplayer, Shooter, Adventure, RPG, Sports, Racing, Strategy, Defense, Puzzle, Arcade, Educational
+3. Ability to view more games through scrolling
+  * Infinite scrolling
+    * Rough implementation at first - we can worry about memory usage later (eg Facebook, LinkedIn HTML5 experiences)
 
-4. Ability to sort by rating and date
-We'll have to consult with Cristian to get a better idea of the UX for this and the categories in a later version
-of the app. For now we can have a toggle beneath the categories.
+4. Ability to filter games by category
+  * Full list of categories isn't shown at first, just "Categories" button.
+  * Tapping on this button expands the list of categories:  
+    * Action, Multiplayer, Shooter, Adventure, RPG, Sports, Racing, Strategy, Defense, Puzzle, Arcade, Educational
+
+5. Ability to sort by rating and date
+  * For now we can have a toggle beneath the categories.
+  * Cristian can work on a smarter way to display this
 
 ### USERS
 1. Kik Users
@@ -65,26 +60,20 @@ Open App -> Game List -> Choose Game
 game-discovery.ep
 
 ### BACKEND
-For now we'll continue to grab game data from MySQL since the entire developer dashboard is based on MySQL.
-We shouldn't need any other database for this stage. For later stages of this app, we'll want to look into
-what's best for the stream, etc... Probably don't want to build on top of what's there now for too long -
-though we could and just abstract out read/writes (which we should do anyways)
-
-We'll want a separate node.js server for this app
-
-Needs to be horizontally scalable
+* For now, grab data from MySQL since entire developer dashboard is tied to it
+* No other database for this stage since the primary use is just to display games
+* Separate node.js server for this app
+* Horizontally scalable
 
 ### PREPARING FOR NEW PLATFORMS
 While we're initially building this for Kik, we need to keep in mind it will soon be followed by other platforms.
 
-#### Marketplace -> Game Flow
-This means we need to keep in mind the flow between marketplace and game for each platform.
+#### Marketplace -> Game Open Flow
 On Kik we have the option to either open the game in a modal window within the Clay 'app' (see figure 1), OR we
 can open a new page that takes up the whole window. Both add the game as a favorite to the sidebar.
 
 My initial feeling is the modal option will be better for us because it helps the marketplace app retain better
-if they continue to a game they may not enjoy (or is a really quick game). The downside is it could cause less
-engagement in the games themselves. This is something we should test.
+The downside is it could cause less engagement in the games themselves. This is something we should test.
 
 **Figure 1 (this is a chat modal over an app. The browser modal is similar - just different content)**
 <img src="/../master/specs/resources/kik-modal.png?raw=true" alt="Figure 1" style="width: 250px">
@@ -101,21 +90,20 @@ Eg.
 * Firefox OS - I think they have an API to save to device
 
 #### Resolution
-Obviously this needs to be responsive, but we'll lock it in portrait for now. Need to account for retina devices with the promo images
+* Needs to be responsive, but we'll lock it in portrait for now
+* Needs to account for retina devices with the promo images
 
 ### PERFORMANCE REQUIREMENTS
-First view < 5s load time for [http://www.webpagetest.org](WebPageTest) (this does not include all initial images).
-WebPageTest seems to be *much* slower than typical load times. We'll want the app to load within 2s on our devices.
-
-Kik doens't hide their "Loading" screen until the load event, so we want that to be as quick as possible, then load
-game images. We want all game images to be loaded within another 3 seconds on 3G.
+* First view < 5s load time [http://www.webpagetest.org](WebPageTest) (this does not include all initial images).
+* Kik doesn't hide their "Loading" screen until the load event, so we want that to be as quick as possible, then load
+game images
+* We want all game images to be loaded within another 3 seconds on 3G.
 
 WebPageTest stats for other sites Motorola G Chrome
 * Indeed ~4s
 * Threadless ~15s
 * CNN ~15s
 * ESPN ~10s
-
 
 For this stage we're looking at 10k-15k DAU and likely no more than 100-150 concurrent (in-line with top 40 metric)
 
@@ -128,4 +116,12 @@ Top 40 on Kik translates to ~300,000 uniques / month
 
 Push tokens for all users, no email yet (next stage of app)
 
-#### Metrics we track
+#### Metrics that measure success
+It's difficult to define what we want these metrics to be without the app already existing. We can use these to
+A/B test and improve phase 1 of the app in those areas
+* Repeat visitors
+* Number of games played per session
+* Total number of sessions (important for climbing to #1 spot)
+* Average time spent per game (lets us know if our popular games/eventually recommended games are good picks)
+
+All can be achieved in Google Analytics
