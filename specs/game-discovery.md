@@ -1,3 +1,8 @@
+TODOs:
+* Be more concise (more bulets, fewer sentences)
+* Spec for the game screen & swipe bar
+* Detail the flow for game -> marketplace -> game modal for Kik
+
 Clay Mobile: Game Discovery
 ---------------------------
 
@@ -96,8 +101,7 @@ Eg.
 * Firefox OS - I think they have an API to save to device
 
 #### Resolution
-Obviously this needs to be responsive. We may want to change the layout on a portrait vs landscape basis as well (Cristian's court)
-Need to account for retina devices with the promo images
+Obviously this needs to be responsive, but we'll lock it in portrait for now. Need to account for retina devices with the promo images
 
 ### PERFORMANCE REQUIREMENTS
 First view < 5s load time for [http://www.webpagetest.org](WebPageTest) (this does not include all initial images).
@@ -107,10 +111,10 @@ Kik doens't hide their "Loading" screen until the load event, so we want that to
 game images. We want all game images to be loaded within another 3 seconds on 3G.
 
 WebPageTest stats for other sites Motorola G Chrome
-Indeed ~4s
-Threadless ~15s
-CNN ~15s
-ESPN ~10s
+* Indeed ~4s
+* Threadless ~15s
+* CNN ~15s
+* ESPN ~10s
 
 
 For this stage we're looking at 10k-15k DAU and likely no more than 100-150 concurrent (in-line with top 40 metric)
@@ -123,3 +127,5 @@ sidebar to link to this app from every game on Kik.
 Top 40 on Kik translates to ~300,000 uniques / month
 
 Push tokens for all users, no email yet (next stage of app)
+
+#### Metrics we track
