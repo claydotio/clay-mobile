@@ -106,11 +106,18 @@ Need to account for retina devices with the promo images
 
 PERFORMANCE REQUIREMENTS
 -----------------------
-Initial load time (app open, content not necessarily available): < 2s on 3G
-Priority: 8/10
+First view < 5s load time for [http://www.webpagetest.org](WebPageTest) (this does not include all initial images).
+WebPageTest seems to be *much* slower than typical load times. We'll want the app to load within 2s on our devices.
 
-All game images loaded time: < 5s on 3G
-Priority: 6/10
+Kik doens't hide their "Loading" screen until the load event, so we want that to be as quick as possible, then load
+game images. We want all game images to be loaded within another 3 seconds on 3G.
+
+WebPageTest stats for other sites Motorola G Chrome
+Indeed ~4s
+Threadless ~15s
+CNN ~15s
+ESPN ~10s
+
 
 For this stage we're looking at 10k-15k DAU and likely no more than 100-150 concurrent (in-line with top 40 metric)
 
