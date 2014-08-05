@@ -1,0 +1,59 @@
+{
+  "name": "clay-mobile",
+  "private": true,
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "postinstall": "node_modules/bower/bin/bower install",
+    "test": "node_modules/gulp/bin/gulp.js test",
+    "start": "node server.js",
+    "dev": "node_modules/gulp/bin/gulp.js",
+    "build": "node_modules/gulp/bin/gulp.js build"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "bower": "1.3.8",
+    "browserify": "4.2.1",
+    "browserify-shim": "3.6.0",
+    "clay-chai": "0.0.1",
+    "coffee-script": "1.7.1",
+    "coffeeify": "0.6.0",
+    "express": "4.5.1",
+    "fb-flo": "0.2.1",
+    "glob": "4.0.4",
+    "gulp": "3.8.6",
+    "gulp-clean": "0.3.1",
+    "gulp-coffeelint": "0.3.3",
+    "gulp-concat": "2.3.4",
+    "gulp-nodemon": "1.0.4",
+    "gulp-rename": "1.2.0",
+    "gulp-run-sequence": "0.3.2",
+    "gulp-sourcemaps": "0.4.5",
+    "gulp-stylus": "1.0.4",
+    "gulp-util": "2.2.20",
+    "karma": "0.12.17",
+    "karma-browserify": "0.2.1",
+    "karma-chrome-launcher": "0.1.4",
+    "karma-coffee-preprocessor": "0.2.1",
+    "karma-firefox-launcher": "0.1.3",
+    "karma-mocha": "0.1.6",
+    "karma-phantomjs-launcher": "0.1.4",
+    "lodash": "2.4.1",
+    "mocha": "1.20.1",
+    "uglifyify": "2.5.0",
+    "vinyl-source-stream": "0.1.1"
+  },
+  "browser": {
+    "lodash": "./components/lodash/dist/lodash.js",
+    "zorium": "./components/zorium.js/mithril.js",
+    "loglevel": "./components/loglevel/dist/loglevel.js",
+    "q": "./components/q/q.js"
+  },
+  "browserify": {
+    "transform": [
+      "coffeeify"
+    ]
+  }
+}
