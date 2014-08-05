@@ -28,15 +28,41 @@ Clay Mobile: Game View
   * Inside Kik, this link will just close the current modal window (assuming that is technologically possible, otherwise redirect)
 4. Swipe Bar game ratings
   * Like vs Dislike (better for mobile than 5-star)
+  * Give success feedback immediately, follow with error message if something went wrong on backend
 5. Initial game load redirect (Kik only)
   * All games/apps on Kik that are in our marketplace will redirect to the marketplace (for the DAU) and open the game in Kik's native modal
   * At this stage we shouldn't jump right into having all of our apps redirect to the marketplace and open in modal
     * Start with two of our lesser-apps: Hotness Factor and Pretty Bubbles
 
-### BACKEND
+### BACKEND/TECH
+#### Iframes vs Inline
+* Games can be loaded in an iframe or inline - both have advantages and disadvantages
+  * To load inline, we grab HTML via cURL and change the <base href>
+* In the approval process we have a manual setting that dictates whether or not the game will be loaded in an iframe on mobile
+
+Note: in the future I'm going to go less into this stuff - if we need to talk about it, we'll talk - it's quicker
+
+**Iframe advantages**
+* Most external games (not hosted on Clay) will work
+
+#### Iframe disadvantages
+* Scaling doesn't always work properly. If we have the meta width=device-width, and the game has it as well, sometimes the game doesn't display properly
+* We can't access the html of remote games
+
+**Inline advantages**
+* Able to modify HTML of game itself
+* Scaling works
+
+**Inline disadvantages**
+* Depending on the game/assets, we'll get CORS errors
+
+#### API
 * Swipe bar should be based on API swipe bar (ie, use the API...)
+  * This means the API should be loaded for every marketplace game
 * Like/Dislike will need to tap into backend
   * Easiest thing to do for now is to hit `http://clay.io/ajax/gameRate` with `{ allowAnon: true, game_id: gameId, vote: 1 || 5 }`
+
+All of this exists in PHP, but should be rewritten for this because it's not the prettiest...
 
 ### USERS
 1. Kik Users
@@ -64,7 +90,8 @@ Game -> Swipe from right -> Swipe Menu opens
 ### WIREFRAMES
 Let me know if you want/need any. I'd just take the existing swipe bar / what Cristian did for it
 <img src="/../master/specs/resources/swipe-bar.png?raw=true" style="width: 250px">
-
+* Share game is easy enough that it should probably be done in phase 1 (basic Clay/Kik API call)
+* Skip achievements, leaderboard, personal profile for now
 
 ### PREPARING FOR NEW PLATFORMS
 #### Marketplace <-> Game Flow
@@ -78,11 +105,12 @@ Let me know if you want/need any. I'd just take the existing swipe bar / what Cr
 * Needs to account for retina devices with the promo images
 
 ### PERFORMANCE REQUIREMENTS
-* Swipe bar should load within 2 seconds
-* 
+* Swipe bar nub should be visible within 2 seconds of the game content first loading (3G)
 
 ### WHAT SUCCESS LOOKS LIKE
-Marketplace app
+* Marketplace app in top 30
+* > 4 min avg time per game
+* Users playing an average of 2 games per session (it's difficult to give an estimate for this right now)
 
 #### Metrics that measure success
 **Success for our App/features**
