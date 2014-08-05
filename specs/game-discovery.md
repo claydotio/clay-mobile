@@ -15,6 +15,7 @@ Clay Mobile: Game Discovery
 ### FEATURES IN-DEPTH
 1. List of games
   * **Initial Games**  Defaults to 15 most-popular games, where most-popular is currently defined ( for reference in case it's useful) as:  
+
     ```
       -2 * price // try to show more free games since paid ones don't do well  
     \+ IF rating > 0 then ( rating - 2.5 ) * SQRT( LOG10( votes ) ) ELSE 0 // take into account both avg rating & # of votes  
@@ -23,7 +24,7 @@ Clay Mobile: Game Discovery
     \+ IF lastupdate (timestamp) THEN LOG10(lastupdate) ELSE 0  
     \+ IF add_time > 0 THEN LOG2( add_time - 1325376000 ) ^ 1.8 ELSE 0`
     ```
-  * ***Smart Game Loading**
+  * **Smart Game Loading**
     * Detect bounce rate for games on different devices, flag a game as not working for a device subset and don't show for consumers on that device
 
 2. Ability to view more games through scrolling
