@@ -1,21 +1,18 @@
 Clay Mobile: Game Discovery
-===========================
+---------------------------
 
-OBJECTIVE
----------
+### OBJECTIVE
 1. Get users playing games they might be interested in
 2. Be the central point of discovery for game on Kik
 3. Create a strong base for the remainder of our cornerstone app
 
-FEATURES
---------
+### FEATURES
 1. List of games
 2. Ability to view more games through scrolling (infinite pagination)
 2. Ability to filter games by category
 3. Ability to sort by rating and date
 
-FEATURES IN-DEPTH
------------------
+### FEATURES IN-DEPTH
 1. List of games
   * **Initial Games**  Defaults to 15 most-popular games, where most-popular is currently defined ( for reference in case it's useful) as:  
       -2 * price // try to show more free games since paid ones don't do well  
@@ -41,8 +38,7 @@ Action, Multiplayer, Shooter, Adventure, RPG, Sports, Racing, Strategy, Defense,
 We'll have to consult with Cristian to get a better idea of the UX for this and the categories in a later version
 of the app. For now we can have a toggle beneath the categories.
 
-USERS
------
+### USERS
 1. Kik Users
   * Age: 52% 13-18, 23% 19-25, 25% 26+
   * Gender: 51% male, 49% female
@@ -50,20 +46,17 @@ USERS
   * Platform: 52% iOS, 45% Android
   * Likes: Flirting, Meeting new people
 
-USER FLOWS
-----------
+### USER FLOWS
 Open App -> Game List -> Choose Game
                       |
                       -> Choose categor(ies) -> Choose game
                       |
                       -> Change sorting -> Choose game
 
-WIREFRAMES
-----------
+### WIREFRAMES
 game-discovery.ep
 
-BACKEND
--------
+### BACKEND
 For now we'll continue to grab game data from MySQL since the entire developer dashboard is based on MySQL.
 We shouldn't need any other database for this stage. For later stages of this app, we'll want to look into
 what's best for the stream, etc... Probably don't want to build on top of what's there now for too long -
@@ -73,11 +66,10 @@ We'll want a separate node.js server for this app
 
 Needs to be horizontally scalable
 
-PREPARING FOR NEW PLATFORMS
----------------------------
+### PREPARING FOR NEW PLATFORMS
 While we're initially building this for Kik, we need to keep in mind it will soon be followed by other platforms.
 
-### Marketplace -> Game Flow
+#### Marketplace -> Game Flow
 This means we need to keep in mind the flow between marketplace and game for each platform.
 On Kik we have the option to either open the game in a modal window within the Clay 'app' (see figure 1), OR we
 can open a new page that takes up the whole window. Both add the game as a favorite to the sidebar.
@@ -100,12 +92,11 @@ Eg.
 * Facebook - Facebook webview OR Safari if it makes sense for better retention (and we're technologically able to do it)
 * Firefox OS - I think they have an API to save to device
 
-### Resolution
+#### Resolution
 Obviously this needs to be responsive. We may want to change the layout on a portrait vs landscape basis as well (Cristian's court)
 Need to account for retina devices with the promo images
 
-PERFORMANCE REQUIREMENTS
------------------------
+### PERFORMANCE REQUIREMENTS
 First view < 5s load time for [http://www.webpagetest.org](WebPageTest) (this does not include all initial images).
 WebPageTest seems to be *much* slower than typical load times. We'll want the app to load within 2s on our devices.
 
@@ -121,8 +112,7 @@ ESPN ~10s
 
 For this stage we're looking at 10k-15k DAU and likely no more than 100-150 concurrent (in-line with top 40 metric)
 
-WHAT SUCCESS LOOKS LIKE
------------------------
+### WHAT SUCCESS LOOKS LIKE
 We want this version of the app to consistently stay in the **top 40** on Kik. To do so, we'll have to drive a
 good bit of traffic to it (since there's no inherent sharing in the app). We'll also have to update the Clay
 sidebar to link to this app from every game on Kik.
