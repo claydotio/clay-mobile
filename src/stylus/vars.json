@@ -1,0 +1,15 @@
+{
+  "bgColor": "#673ab7",
+  "fontColor": "#fff",
+  "mainButtonColor": "#5677fc",
+  "addFriendColor": "#009688",
+  "friendColors": [
+    "#e51c23",
+    "#e91e63",
+    "#9c27b0",
+    "#3f51b5",
+    "#5677fc",
+    "#009688",
+    "#ff9800"
+  ]
+}
