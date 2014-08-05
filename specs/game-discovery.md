@@ -37,6 +37,12 @@ TODO: Redirect to marketplace, open game modal
   * For now we can have a toggle beneath the categories.
   * Cristian can work on a smarter way to display this
 
+### BACKEND
+* For now, grab data from MySQL since entire developer dashboard is tied to it
+* No other database for this stage since the primary use is just to display games
+* Separate node.js server for this app
+* Horizontally scalable
+
 ### USERS
 1. Kik Users
   * Age: 52% 13-18, 23% 19-25, 25% 26+
@@ -54,12 +60,6 @@ Open App -> Game List -> Choose Game
 
 ### WIREFRAMES
 game-discovery.ep
-
-### BACKEND
-* For now, grab data from MySQL since entire developer dashboard is tied to it
-* No other database for this stage since the primary use is just to display games
-* Separate node.js server for this app
-* Horizontally scalable
 
 ### PREPARING FOR NEW PLATFORMS
 While we're initially building this for Kik, we need to keep in mind it will soon be followed by other platforms.
@@ -101,14 +101,14 @@ WebPageTest stats for other sites Motorola G Chrome
 * CNN ~15s
 * ESPN ~10s
 
-For this stage we're looking at 10k-15k DAU and likely no more than 100-150 concurrent (in-line with top 40 metric)
+For this stage we're looking at 20k DAU and likely no more than 200-250 concurrent (in-line with top 40 metric)
 
 ### WHAT SUCCESS LOOKS LIKE
-We want this version of the app to consistently stay in the **top 40** on Kik. To do so, we'll have to drive a
+We want this version of the app to consistently stay in the **top 30** on Kik. To do so, we'll have to drive a
 good bit of traffic to it (since there's no inherent sharing in the app). We'll also have to update the Clay
 sidebar to link to this app from every game on Kik.
 
-Top 40 on Kik translates to ~300,000 uniques / month
+Top 30 on Kik translates to ~500,000 uniques / month
 
 Push tokens for all users, no email yet (next stage of app)
 
