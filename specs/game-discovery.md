@@ -6,33 +6,38 @@
   3. Create a strong base for the remainder of our cornerstone app
 
 ### FEATURES
-  1. List of games
+  1. Populated list of games
   2. Ability to access a game by clicking on the promotional image
   3. Ability to view more games through scrolling (infinite pagination)
   4. Ability to filter games by category
-  5. Ability to sort by rating and date
+  5. Ability to sort by popularity (default) and date
 
 ### FEATURES IN-DEPTH
-  1. List of games
+  1. Populated list of games
+    - **Why?** Give users an immediate choice/entry point to eye-catching games
     - **Initial Games**  Defaults to 15 most-popular games, where most-popular takes into account:
       price (favoring free), rating, plays yesterday, staff rating, votes, featured status, last update and add time
       ```
     - **Smart Game Loading**
       - Detect bounce rate for games on different devices, flag a game as not working for a device subset and don't show for consumers on that device
 
-  2. Ability to access a game by clicking on the promotional image
-  TODO: Redirect to marketplace, open game modal
+  2. Ability to access a game by tapping on the promotional image
+    - **Why?** To get users in the game ASAP (no in-between details page)
+    - Tapping on the game will open it inside a modal window on Kik (on other platforms we'll redirect, etc...)
 
   3. Ability to view more games through scrolling
+    - **Why?** To give users a larger selection of games
     - Infinite scrolling
       - Rough implementation at first - we can worry about memory usage later (eg Facebook, LinkedIn HTML5 experiences)
 
   4. Ability to filter games by category
+    - **Why?** To help users find the right game for them / their current mood
     - Full list of categories isn't shown at first, just "Categories" button.
     - Tapping on this button expands the list of categories:  
       - Action, Multiplayer, Shooter, Adventure, RPG, Sports, Racing, Strategy, Defense, Puzzle, Arcade, Educational
 
-  5. Ability to sort by rating and date
+  5. Ability to sort by popularity (default) and date
+    - **Why?** The main aspect here is the option to sort by date - this lets users find new games
     - For now we can have a toggle beneath the categories.
     - Cristian can work on a smarter way to display this
 
@@ -102,15 +107,43 @@ WebPageTest stats for other sites Motorola G Chrome
 
 For this stage we're looking at 20k DAU and likely no more than 200-250 concurrent (in-line with top 40 metric)
 
-#### METRICS TO TRACK
+### METRICS TO TRACK
 It's difficult to define what we want these metrics to be without the app already existing. We can use these to
-A/B test and improve phase 1 of the app in those areas
-  - Repeat visitors
-  - Number of games played per session
-  - Total number of sessions (important for climbing to #1 spot)
-  - Average time spent per game (lets us know if our popular games/eventually recommended games are good picks)
+A/B test and improve phase 1 of the app in those areas.
 
-All can be achieved in Google Analytics
+In order of importance:
+  - Repeat visitors
+  - Average game session length (lets us know if our popular games/eventually recommended games are good picks)
+  - Game bounce rate (same reason as above)
+  - Number of games played per session
+
+### A/B TESTS
+We'll run tests as follows:
+
+#### Test #1
+Test combinations of the following features:
+  - Feature 3. Ability to view more games through scrolling (infinite pagination)
+  - Feature 4. Ability to filter games by category
+  - Feature 5. Ability to sort by popularity (default) and date
+
+Tests consist of
+  - `3`, `3, 4`, `3, 4, 5`, `4`, `4, 5`, `5`
+  - Conversion primary metrics
+    - Repeat visitors, bounce rate of games, game session length, number of games played per session
+
+#### Test #2 (once Test #1 is compelete)
+  - Feature 1. Populated list of games
+    - A-?: Supply different algorithms for which games to display
+    - Conversion primary metrics
+      - Repeat visitors, bounce rate of games, game session length, number of games played per session
+
+#### Test #3 (after we implement external game sharing)
+  - Feature 2. Ability to access a game by tapping on the promotional image
+    - A: Load game after tapping on promotional image
+    - B: Load game info page after tapping on promotional image
+    - Conversion primary metrics
+      - Repeat visitors, hares per session, bounce rate of games, game session length, number of games played per session
+
 
 ### WHAT SUCCESS LOOKS LIKE
 We want this version of the app to consistently stay in the **top 30** on Kik. To do so, we'll have to drive a

@@ -106,6 +106,7 @@ Let me know if you want/need any. I'd just take the existing swipe bar / what Cr
   - Number of marketplace/game visits (every game session will mean at least one marketplace visit with the redirect)
 **Success for game (eg we may want to account for it in how we sort/rank/display games)**
   - Session length
+  - Bounce rate
   - Total plays/visits
   - Repeat plays/visits
 
