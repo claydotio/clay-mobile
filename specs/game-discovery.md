@@ -102,16 +102,7 @@ WebPageTest stats for other sites Motorola G Chrome
 
 For this stage we're looking at 20k DAU and likely no more than 200-250 concurrent (in-line with top 40 metric)
 
-### WHAT SUCCESS LOOKS LIKE
-We want this version of the app to consistently stay in the **top 30** on Kik. To do so, we'll have to drive a
-good bit of traffic to it (since there's no inherent sharing in the app). We'll also have to update the Clay
-sidebar to link to this app from every game on Kik.
-
-Top 30 on Kik translates to ~500,000 uniques / month
-
-Push tokens for all users, no email yet (next stage of app)
-
-#### Metrics that measure success
+#### METRICS TO TRACK
 It's difficult to define what we want these metrics to be without the app already existing. We can use these to
 A/B test and improve phase 1 of the app in those areas
   - Repeat visitors
@@ -120,3 +111,12 @@ A/B test and improve phase 1 of the app in those areas
   - Average time spent per game (lets us know if our popular games/eventually recommended games are good picks)
 
 All can be achieved in Google Analytics
+
+### WHAT SUCCESS LOOKS LIKE
+We want this version of the app to consistently stay in the **top 30** on Kik. To do so, we'll have to drive a
+good bit of traffic to it (since there's no inherent sharing in the app). We'll also have to update the Clay
+sidebar to link to this app from every game on Kik.
+
+Top 30 on Kik translates to ~500,000 uniques / month
+
+Push tokens for all users, no email yet (next stage of app)
