@@ -1,18 +1,14 @@
 
-## Clay Mobile: Game View
-
-**V1** of this spec. **V2** will add in game sharing (external), **V3** will add social stream
+## Clay Mobile: Game Sharing (external)
 
 ### OBJECTIVE
-  1. Cross-promote between games
-  2. Push traffic to the marketplace
+  1. Get users sharing games to external sources
+  2. Get new users playing games
+  3. Get new users to the marketplace
 
 ### FEATURES
-  1. Swipe Bar
-  2. Swipe Bar Cross Promotion
-  3. Swipe Bar back to marketplace
-  4. Swipe Bar game ratings
-  5. Initial game load redirect (Kik only)
+  1. Swipe bar game sharing
+  2.
 
 ### FEATURES IN-DEPTH
   1. Swipe Bar
@@ -64,18 +60,24 @@ Note: in the future I'm going to go less into this stuff - if we need to talk ab
 All of this exists in PHP, but should be rewritten for this because it's not the prettiest...
 
 ### USERS
-  1. Kik Users
-    - Age: 52% 13-18, 23% 19-25, 25% 26+
-    - Gender: 51% male, 49% female
-    - Location: 60% North America
-    - Platform: 52% iOS, 45% Android
-    - Likes: Flirting, Meeting new people
+1. Kik Users
+  - Age: 52% 13-18, 23% 19-25, 25% 26+
+  - Gender: 51% male, 49% female
+  - Location: 60% North America
+  - Platform: 52% iOS, 45% Android
+  - Likes: Flirting, Meeting new people
 
 ### USER FLOWS
 #### Flows into game
-  1. External source -> Game on Kik -> Redirect to Marketplace -> Opens game in Modal
-  2. Internal Cross-promotion (from another game) -> Marketplace link (not direct link to game) -> Game Modal Opens
-  3. Internal Marketplace page -> Tap on game -> Opens in Modal
+1.
+External source -> Game on Kik -> Redirect to Marketplace -> Opens game in Modal
+
+2.
+Internal Cross-promotion (from another game) -> Marketplace link (not direct link to game)
+-> Game Modal Opens
+
+3.
+Internal Marketplace page -> Tap on game -> Opens in Modal
 
 #### Flows within game
 Game -> Swipe from right -> Swipe Menu opens
@@ -91,7 +93,7 @@ Let me know if you want/need any. I'd just take the existing swipe bar / what Cr
   - Cross promotion on Kik will go do marketplace->modal flow, elsewhere it will go directly to game
   - On platforms like Android, we might want a more obvious 'return to marketplace' that's not hidden in swipe bar
   - "More games" link (back to marketplace) will behave different on each platform
-  -
+
 
 #### Resolution
   - Needs to be responsive, but we'll lock it in portrait for now
