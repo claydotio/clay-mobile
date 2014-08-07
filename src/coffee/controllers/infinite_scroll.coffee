@@ -1,13 +1,13 @@
 SCROLL_THRESHOLD = 250
 
+elTopPosition = ($el) ->
+  if $el
+  then $el.offsetTop + elTopPosition($el.offsetParent)
+  else 0
+
 module.exports = class InfiniteScrollView
   constructor: ({@loadMore}) ->
     @isListening = true
-
-  elTopPosition: ($el) ->
-    if $el
-    then $el.offsetTop + @elTopPosition($el.offsetParent)
-    else 0
 
   scrollListener: =>
     unless @isListening
@@ -21,7 +21,7 @@ module.exports = class InfiniteScrollView
     scrollTop ?= document.body.parentNode.scrollTop
     scrollTop ?= document.body.scrollTop
 
-    totalScrolled = @elTopPosition($el) + $el.offsetHeight
+    totalScrolled = elTopPosition($el) + $el.offsetHeight
     totalScrollHeight = scrollTop + window.innerHeight
 
     if totalScrolled - totalScrollHeight < SCROLL_THRESHOLD
