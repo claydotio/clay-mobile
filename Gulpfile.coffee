@@ -25,11 +25,13 @@ outFiles =
 paths =
   static: './src/*.*'
   scripts: './src/coffee/**/*.coffee'
-  images: './src/images/'
-  styles: './src/stylus/style.styl'
+  images: './src/images/*'
+  fonts: './src/fonts/*'
+  styles: './src/stylus/**/*.styl'
 
   tests: './test/**/*.coffee'
   root: './src/coffee/root.coffee'
+  baseStyle: './src/stylus/base.styl'
   dist: './dist/'
   build: './build/'
 
@@ -44,6 +46,7 @@ gulp.task 'assets:dev', [
   'scripts:dev'
   'styles:dev'
   'images:dev'
+  'fonts:dev'
   'static:dev'
 ]
 
@@ -52,6 +55,7 @@ gulp.task 'assets:prod', [
   'scripts:prod'
   'styles:prod'
   'images:prod'
+  'fonts:prod'
   'static:prod'
 ]
 
@@ -121,9 +125,9 @@ gulp.task 'scripts:dev', ['lint:scripts'], ->
 
 # css/style.css --> build/css/bundle.css
 gulp.task 'styles:dev', ->
-  gulp.src paths.styles
+  gulp.src paths.baseStyle
     .pipe sourcemaps.init()
-      .pipe stylus()
+      .pipe stylus 'include css': true
       .pipe rename outFiles.styles
     .pipe sourcemaps.write()
     .pipe gulp.dest paths.build + '/css/'
@@ -136,7 +140,12 @@ gulp.task 'static:dev', ->
 # images/* --> build/images/*
 gulp.task 'images:dev', ->
   gulp.src paths.images
-    .pipe gulp.dest paths.build
+    .pipe gulp.dest paths.build + '/images/'
+
+# fonts/* --> build/fonts/*
+gulp.task 'fonts:dev', ->
+  gulp.src paths.fonts
+    .pipe gulp.dest paths.build + '/fonts/'
 
 #
 # Production compilation
@@ -159,9 +168,9 @@ gulp.task 'scripts:prod', ['lint:scripts'], ->
 
 # css/style.css --> dist/css/bundle.min.css
 gulp.task 'styles:prod', ->
-  gulp.src paths.styles
+  gulp.src paths.baseStyle
     .pipe sourcemaps.init()
-      .pipe stylus()
+      .pipe stylus 'include css': true
       .pipe rename outFiles.styles
     .pipe sourcemaps.write '../maps/'
     .pipe gulp.dest paths.dist + '/css/'
@@ -174,4 +183,9 @@ gulp.task 'static:prod', ->
 # images/* --> dist/images/*
 gulp.task 'images:prod', ->
   gulp.src paths.images
-    .pipe gulp.dest paths.dist
+    .pipe gulp.dest paths.dist + '/images/'
+
+# fonts/* --> dist/fonts/*
+gulp.task 'fonts:prod', ->
+  gulp.src paths.fonts
+    .pipe gulp.dest paths.dist + '/fonts/'
