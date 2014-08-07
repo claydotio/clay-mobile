@@ -8,6 +8,7 @@
 
 ### FEATURES
   1. Swipe bar game sharing
+  2. Game info page sharing
 
 ### FEATURES IN-DEPTH
   1. Swipe Bar game sharing
@@ -15,10 +16,18 @@
     - Tapping on link gives user option to share via multiple sources: Kik, Twitter, Facebook
       - We decide the best sharing method (eg Kik inside of Kik) and highlight that one
 
+  2. Game info page sharing
+    - Game info page consists of promotional images/text, reviews, and sharing options
+      - Will probably have separate spec sheet for it when we get to that point
+    - This won't be implemented until we are testing whether or not the game info page is a good idea
+
+
 ### BACKEND/TECH
 #### API
+  - API should already be in each game page from the "game-view" phase
   - Social Sharing (eg `Clay.Social.smartShare`)
     -Spread across 4 classes: `Clay.Social` (general), `Clay.Facebook`, `Clay.Twitter`, `Clay.Kik`
+    - The `.coffee` files should have decent documentation on how to do this - same goes for the [docs](http://clay.io/docs)
 
 ### USERS
 1. Kik Users
@@ -50,10 +59,17 @@ Let me know if you want/need any. I'd just take the existing swipe bar / what Cr
   -
 
 ### METRICS TO TRACK
-  - Shares per game session (overall and by-source)
+In order of importance
   - K-Factor (# of invites sent by each user * conversion rate of invite)
-  - Inbound users from shares (overall and by-source)
-  -
+    - Shares sent by each user (overall and per session)
+      - Track the source (eg sharing to Facebook, Twitter)
+    - Inbound users from shares
+      - Track the source (eg incoming from Facebook, Twitter)
+
+### A/B TESTS
+We'll run tests as follows:
+
+
 
 ### WHAT SUCCESS LOOKS LIKE
   - K-factor > 1
