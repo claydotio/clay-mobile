@@ -26,7 +26,6 @@ flo(
     host: 'localhost',
     verbose: false,
     glob: [
-      'js/vendor.js',
       'js/bundle.js',
       'css/bundle.css'
     ]

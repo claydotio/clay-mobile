@@ -7,6 +7,8 @@
     "lodash": "2.4.1",
     "zorium.js": "https://github.com/claydotio/zorium.js.git#next",
     "loglevel": "0.6.0",
-    "q": "1.0.1"
+    "q": "1.0.1",
+    "normalize.css": "3.0.1",
+    "components-font-awesome": "4.1.0"
   }
 }

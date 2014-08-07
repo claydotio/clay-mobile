@@ -1,13 +1,15 @@
 z = require 'zorium'
 
-FriendListView = new (require '../views/friend_list')()
-WinkActionView = new (require '../views/wink_action')()
+NavView = new (require '../views/nav')()
+HeaderView = new (require '../views/header')()
+GameResultsView = new (require '../views/game_results')()
 
 module.exports = class HomePage
   view: ->
-    z 'div.c-text-center', [
-      WinkActionView.render()
-      FriendListView.render()
+    z 'div', [
+      z 'div', HeaderView.render()
+      z 'div', NavView.render()
+      z 'div', GameResultsView.render()
     ]
   controller: ->
     null
