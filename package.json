@@ -49,7 +49,8 @@
     "lodash": "./components/lodash/dist/lodash.js",
     "zorium": "./components/zorium.js/mithril.js",
     "loglevel": "./components/loglevel/dist/loglevel.js",
-    "q": "./components/q/q.js"
+    "q": "./components/q/q.js",
+    "restangular": "./components/restangular/dist/restangular.js"
   },
   "browserify": {
     "transform": [

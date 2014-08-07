@@ -9,7 +9,7 @@ InfiniteScrollCtrl = require '../controllers/infinite_scroll'
 module.exports = class GameResultsView
   constructor: ->
     @infiniteScrollCtrl = new InfiniteScrollCtrl(loadMore: @loadMore)
-    @gameBoxes = _.map GamesCtrl.getTop(15), (game) ->
+    @gameBoxes = _.map GamesCtrl.findTop(15), (game) ->
       new GameBox(url: game.url)
 
   loadMore: =>

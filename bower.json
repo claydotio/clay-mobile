@@ -9,6 +9,7 @@
     "loglevel": "0.6.0",
     "q": "1.0.1",
     "normalize.css": "3.0.1",
-    "components-font-awesome": "4.1.0"
+    "components-font-awesome": "4.1.0",
+    "restangular": "https://github.com/claydotio/restangular.git#noangular"
   }
 }
