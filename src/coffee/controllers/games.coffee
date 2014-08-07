@@ -1,8 +1,8 @@
 _ = require 'lodash'
+Q = require 'q'
 
-DEBUG_IMG = 'http://slime.clay.io/claymedia/icon128.png'
+Game = require '../models/game'
 
-module.exports = class NoopCtrl
-  getTop: (limit, skip) ->
-    _.map _.range(limit), ->
-      url: DEBUG_IMG
+module.exports = class GamesCtrl
+  findTop: ->
+    return [{url: 'http://slime.clay.io/claymedia/icon128.png'}]
