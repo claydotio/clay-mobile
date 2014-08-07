@@ -4,8 +4,20 @@
 
   1. **Get users playing games they might be interested in**
     - Metrics: Average game session length, Number of games played per session
-  2. **Be the central point of discovery for games on Kik**
-    - Metrics: DAU from Kik
+  3. **Be the central point of discovery for games on Kik**
+    - Metrics: Returning Users, DAU
+
+-#### SUMMARY OF METRICS
+-
+-In order of importance (though all are still very important), along with success criteria:
+-  - **Returning visitors (D1/D7/D30)**
+-    - TBD
+-  - **Average game session length**
+-    - \> 3:00
+-  - **Number of games played per session**
+-    - TBD (we'll need to find a good way to track this in GA)
+-  - ** DAU **
+-    - 15,000 (top 30 on Kik)
 
 ### FEATURES
 
@@ -15,13 +27,13 @@
       price (favoring free), rating, plays yesterday, staff rating, votes, featured status, last update and add time
     - **Smart Game Loading**
       - Detect bounce rate for games on different devices, flag a game as not working for a device subset and don't show for consumers on that device
-  1. Ability to access a game immediately
+  2. Ability to access a game immediately
     - **Why?** To get users in the game ASAP (no in-between details page)
-  1. Ability to view more games
+  3. Ability to view more games
     - **Why?** To give users a larger selection of games
-  1. Ability to sort by popularity (default) and new popularity
+  4. Ability to sort by popularity (default) and new popularity
     - **Why?** lets users find new games
-  1. Push Notifications
+  5. Push Notifications
     - **Why?** To bring users back
     - send push notifications at some daily interval (e.g. every 3rd day)
 
@@ -49,7 +61,7 @@ Open App -> Game List -> Change sorting -> Choose game
 
 ![Wireframe](/../master/specs/resources/kik-modal.png?raw=true)
 
-### Notes
+### NOTES
 
 While we're initially building this for Kik, we need to keep in mind it will soon be followed by other platforms.
 
@@ -100,7 +112,6 @@ For this stage we're looking at 20k DAU and likely no more than 200-250 concurre
 
 #### Add Categories
 
-  - **Hypothesis:** removing categories will cause no effect across all metrics
-    - No categories will be easier to maintain
-    - When we add search, categories could be implemented within the search (eg search for category)
-  - **Primary metrics:** Returning visitors, bounce rate of games, game session length, number of games played per session, monthly uniques
+  - **Hypothesis:** adding categories will cause an increase in games played per session and game engagement
+    - More targeted games for the player / their current mood
+  - **Primary metrics:** game session length, number of games played per session

@@ -1,67 +1,24 @@
 
 ## Clay Mobile: Game View
 
-**V1** of this spec. **V2** will add in game sharing (external), **V3** will add social stream
-
 ### OBJECTIVE
-  1. Cross-promote between games
-  2. Push traffic to the marketplace
+  1. Push traffic to the marketplace
+  2. Create an engaging experience focused on the game
 
 ### FEATURES
-  1. Swipe Bar
-  2. Swipe Bar Cross Promotion
-  3. Swipe Bar back to marketplace
-  4. Swipe Bar game ratings
-  5. Initial game load redirect (Kik only)
-
-### FEATURES IN-DEPTH
-  1. Swipe Bar
-    - User swipes in from right side of page to open bar
-  2. Swipe Bar Cross Promotion
-    - 3 games to show
-    - Pick random 3 of the 10 most popular games that have at least one category (genre) in common with the current game
-    - Display game promo image. Clicking brings the user to the marketplace app on Kik, which automatically opens game modal
-  3. Swipe Bar back to marketplace
-    - "More games" link
-    - A/B test the text/look we use to send people back to the marketplace
-    - Inside Kik, this link will just close the current modal window (assuming that is technologically possible, otherwise redirect)
-  4. Swipe Bar game ratings
-    - Like vs Dislike (better for mobile than 5-star)
-    - Give success feedback immediately, follow with error message if something went wrong on backend
-  5. Initial game load redirect (Kik only)
+  1. Game is displayed - full screen
+    - Scroll past URL bar on mobile
+  2. Initial game load redirect (Kik only)
     - All games/apps on Kik that are in our marketplace will redirect to the marketplace (for the DAU) and open the game in Kik's native modal
     - At this stage we shouldn't jump right into having all of our apps redirect to the marketplace and open in modal
       - Start with two of our lesser-apps: Hotness Factor and Pretty Bubbles
 
+
 ### BACKEND/TECH
-#### Iframes vs Inline
-  - Games can be loaded in an iframe or inline - both have advantages and disadvantages
-    - To load inline, we grab HTML via cURL and change the <base href>
-  - In the approval process we have a manual setting that dictates whether or not the game will be loaded in an iframe on mobile
-
-Note: in the future I'm going to go less into this stuff - if we need to talk about it, we'll talk - it's quicker
-
-**Iframe advantages**
-  - Most external games (not hosted on Clay) will work
-
-#### Iframe disadvantages
-  - Scaling doesn't always work properly. If we have the meta width=device-width, and the game has it as well, sometimes the game doesn't display properly
-  - We can't access the html of remote games
-
-**Inline advantages**
-  - Able to modify HTML of game itself
-  - Scaling works
-
-**Inline disadvantages**
-  - Depending on the game/assets, we'll get CORS errors
-
-#### API
-  - Swipe bar should be based on API swipe bar (ie, use the API...)
-    - This means the API should be loaded for every marketplace game
-  - Like/Dislike will need to tap into backend
-    - Easiest thing to do for now is to hit `http://clay.io/ajax/gameRate` with `{ allowAnon: true, game_id: gameId, vote: 1 || 5 }`
-
-All of this exists in PHP, but should be rewritten for this because it's not the prettiest...
+  - Inside a frame you may run into some scaling issues on iOS 5 for games that use meta tag width=device-width (Construct 2 games typically have this issue)
+  - API is loaded in the parent frame
+    - For [swipe bar](./swipe-bar.md)
+  - Games should be accessible at subdomain.clay.io (replacing old PHP implementation)
 
 ### USERS
   1. Kik Users
@@ -73,9 +30,9 @@ All of this exists in PHP, but should be rewritten for this because it's not the
 
 ### USER FLOWS
 #### Flows into game
-  1. External source -> Game on Kik -> Redirect to Marketplace -> Opens game in Modal
-  2. Internal Cross-promotion (from another game) -> Marketplace link (not direct link to game) -> Game Modal Opens
-  3. Internal Marketplace page -> Tap on game -> Opens in Modal
+  1. External source -> Game on Kik -> Redirect to Marketplace -> Game View Modal Opens
+  2. Internal Cross-promotion (from another game) -> Marketplace link (not direct link to game) -> Game View Modal Opens
+  3. Internal Marketplace page -> Tap on game -> Game View Modal Opens
 
 #### Flows within game
 Game -> Swipe from right -> Swipe Menu opens
