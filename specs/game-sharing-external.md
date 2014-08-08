@@ -2,9 +2,9 @@
 ## Clay Mobile: Game Sharing (external)
 
 ### OBJECTIVE
-  1. Get users sharing games to external sources (Kik, Twitter, Facebook initially)
+  1. **Get users sharing games to external sources (Kik, Twitter, Facebook initially)**
     - Metrics: K-Factor
-  2. Get new users from outside sources playing games (via external sharing)
+  2. **Get new users from outside sources playing games (via external sharing)**
     - Most important outside sources are Facebook and Twitter (so we can have more diversity)
     - Metrics: K-Factor
 

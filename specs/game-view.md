@@ -3,9 +3,9 @@
 
 ### OBJECTIVE
 
-  1. Push traffic to the marketplace
+  1. **Push traffic to the marketplace**
     - Metrics: Marketplace views (from game page), Number of games played per session
-  2. Create an engaging experience focused on the game
+  2. **Create an engaging experience focused on the game**
     - Metrics: Average game session length
 
 #### SUMMARY OF METRICS

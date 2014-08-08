@@ -8,6 +8,7 @@
     - Metrics: Returning Users, DAU
 
 -#### SUMMARY OF METRICS
+
 In order of importance (though all are still very important), along with success criteria:
   - **Returning visitors (D1/D7/D30)**
     - TBD

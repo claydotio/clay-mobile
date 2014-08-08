@@ -5,11 +5,11 @@
 
 ### OBJECTIVE
 
-  1. Cross-promote between games
+  1. **Cross-promote between games**
     - Number of games played per session
-  2. Push traffic to the marketplace
+  2. **Push traffic to the marketplace**
     - DAU of Marketplace, Number of games played per session
-  3. Give us data about the game
+  3. **Give us data about the game**
     - Average game session length
 
 #### SUMMARY OF METRICS
