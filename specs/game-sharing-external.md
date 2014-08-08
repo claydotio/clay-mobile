@@ -2,9 +2,16 @@
 ## Clay Mobile: Game Sharing (external)
 
 ### OBJECTIVE
-  1. Get users sharing games to external sources
-  2. Get new users playing games
-  3. Get new users to the marketplace
+  1. Get users sharing games to external sources (Kik, Twitter, Facebook initially)
+    - Metrics: K-Factor
+  2. Get new users from outside sources playing games (via external sharing)
+    - Most important outside sources are Facebook and Twitter (so we can have more diversity)
+    - Metrics: K-Factor
+
+#### SUMMARY OF METRICS
+In order of importance
+  - K-Factor (# of invites sent by each user * conversion rate of invite)
+    - \>= 1
 
 ### FEATURES
   1. Swipe bar game sharing
@@ -12,13 +19,10 @@
 
 ### FEATURES IN-DEPTH
   1. Swipe Bar game sharing
-    - **Share Game** link in swipe bar
-    - Tapping on link gives user option to share via multiple sources: Kik, Twitter, Facebook
-      - We decide the best sharing method (eg Kik inside of Kik) and highlight that one
-
+    - **Share Game** link in swipe bar, when tapped we give the user options on where to share the game
   2. Game info page sharing
+    - Separate spec will be made for the game info page when the time is right
     - Game info page consists of promotional images/text, reviews, and sharing options
-      - Will probably have separate spec sheet for it when we get to that point
     - This won't be implemented until we are testing whether or not the game info page is a good idea
 
 
@@ -38,38 +42,17 @@
   - Likes: Flirting, Meeting new people
 
 ### USER FLOWS
-
+N/A
 
 ### WIREFRAMES
-Let me know if you want/need any. I'd just take the existing swipe bar / what Cristian did for it
 <img src="/../master/specs/resources/swipe-bar.png?raw=true" style="width: 250px">
   - Share game is easy enough that it should probably be done in phase 1 (basic Clay/Kik API call)
   - Skip achievements, leaderboard, personal profile for now
 
-### PREPARING FOR NEW PLATFORMS
-#### Marketplace <-> Game Flow
-  -
-
-
+### NOTES
 #### Resolution
   - Needs to be responsive, but we'll lock it in portrait for now
   - Needs to account for retina devices with the promo images
 
 ### PERFORMANCE REQUIREMENTS
-  -
-
-### METRICS TO TRACK
-In order of importance
-  - K-Factor (# of invites sent by each user * conversion rate of invite)
-    - Shares sent by each user (overall and per session)
-      - Track the source (eg sharing to Facebook, Twitter)
-    - Inbound users from shares
-      - Track the source (eg incoming from Facebook, Twitter)
-
-### A/B TESTS
-We'll run tests as follows:
-
-
-
-### WHAT SUCCESS LOOKS LIKE
-  - K-factor > 1
+  - TBD
