@@ -8,16 +8,15 @@
     - Metrics: Returning Users, DAU
 
 -#### SUMMARY OF METRICS
--
--In order of importance (though all are still very important), along with success criteria:
--  - **Returning visitors (D1/D7/D30)**
--    - TBD
--  - **Average game session length**
--    - \> 3:00
--  - **Number of games played per session**
--    - TBD (we'll need to find a good way to track this in GA)
--  - ** DAU **
--    - 15,000 (top 30 on Kik)
+In order of importance (though all are still very important), along with success criteria:
+  - **Returning visitors (D1/D7/D30)**
+    - TBD
+  - **Average game session length**
+    - \> 3:00
+  - **Number of games played per session**
+    - TBD (we'll need to find a good way to track this in GA)
+  - ** DAU **
+    - 15,000 (top 30 on Kik)
 
 ### FEATURES
 
