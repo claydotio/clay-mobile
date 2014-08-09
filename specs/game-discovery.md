@@ -7,7 +7,7 @@
   3. **Be the central point of discovery for games on Kik**
     - Metrics: Returning Users, DAU
 
--#### SUMMARY OF METRICS
+#### SUMMARY OF METRICS
 
 In order of importance (though all are still very important), along with success criteria:
   - **Returning visitors (D1/D7/D30)**
@@ -59,7 +59,8 @@ Open App -> Game List -> Change sorting -> Choose game
 
 ### WIREFRAMES
 
-![Wireframe](/../master/specs/resources/kik-modal.png?raw=true)
+(Cristian, feel free to scrap this)
+![Wireframe](/../master/specs/resources/game-discovery.png?raw=true)
 
 ### NOTES
 
