@@ -50,7 +50,8 @@
     "zorium": "./components/zorium.js/mithril.js",
     "loglevel": "./components/loglevel/dist/loglevel.js",
     "q": "./components/q/q.js",
-    "restangular": "./components/restangular/dist/restangular.js"
+    "restangular": "./components/restangular/dist/restangular.js",
+    "zock": "./components/zock/zock.coffee"
   },
   "browserify": {
     "transform": [
