@@ -1,7 +1,7 @@
 _ = require 'lodash'
 Q = require 'q'
 
-Game = require '../models/game'
+Game = require '../models/games'
 
 module.exports = class GamesCtrl
   findTop: ->
