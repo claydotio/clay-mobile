@@ -20,12 +20,14 @@ later deadlines.
 
   - Timeline: August 1st - August 15th
   - Specs: [Game Discovery](./specs/game-discovery.md), [Game Discovery](./specs/game-view.md), [Swipe Bar](./specs/swipe-bar.md)
+  - Basic deploy (no staging or rollbacks)
 
 ### Phase 2 - Game Sharing (external)
 
   - Timeline: August 16th - August 25th
   - Specs: [Game Sharing (external)](./specs/game-sharing-external.md), [Game Details](./specs/game-details.md)
   - Cristian starts the 20th - some of the above time will be spent changing the UX of game discovery phase
+  - Staging and rollbacks added to deploy process
   - Phase 2 includes continual running of A/B tests from Phase 1
 
 ### Phase 3 - Challenger Discovery
