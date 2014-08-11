@@ -59,6 +59,14 @@ later deadlines.
 
   - Timeline: TBD
 
+#### Convert all games to APKs
+
+  - Do it for every game (with or without developer permission) and give user option to install via that (for better retention)
+    - Make sure we have *something* in the APK to retain that user (eg bring back to marketplace) like the swipe bar
+
+  _ Give developers the option to use the APK to get on Google Play (or we add it for them)
+    - This opens up the door to other platforms like Tango (messaging app), WeChat 'native' games, etc...
+
 ## Amazon Appstore
 
 **Goal:**
