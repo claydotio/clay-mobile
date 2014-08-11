@@ -7,7 +7,7 @@
   2. **Create a social graph of gamers**
     - Metrics: Friends per user
     - More friends (usually) means more engagement. People want to play games where their friends are
-  3.
+      - A strong social graph can become an unfair advantage for us
 
 -#### SUMMARY OF METRICS
 
@@ -24,19 +24,20 @@ In order of importance (though all are still very important), along with success
 ### FEATURES
 
   1. Leaderboards
-    - **Why?** encounters per user
+    - **Why?** leads to more encounters per user and more engagement in games (attempting to beat others' scores)
     - Separate spec: [leaderboards.md](leaderboards.md)
   2. Profiles
-    - **Why?** experiences per user
+    - **Why?** more experiences per user and people love their vanity
     - Separate spec: [profiles.md](profiles.md)
   3. Friend System
-    - **Why?** friends per user
+    - **Why?** friends per user, basis of social graph
     - Separate spec: [friends.md](friends.md)
-
 
 ### BACKEND
 
-  -
+  - Most of this should be integrated into the API backend so developers can enable this challenger discovery in their games
+  - We're logging all friendships on Kik (and outside of it) in the `friendships` column
+    - Right now our idea of friendships on Kik is essentially just the concept of experiences (detailed above), with a `confirmed` boolean that is true if both users have initiated an event to the other
 
 ### USERS
 
@@ -49,18 +50,16 @@ In order of importance (though all are still very important), along with success
 
 ### USER FLOWS
 
-Open App ->
+  - Will be laid out in individual feature specs
 
 ### WIREFRAMES
-
-![Wireframe]()
+N/A
 
 ### NOTES
 
 ### PERFORMANCE REQUIREMENTS
-
-  -
+N/A
 
 ### A/B TESTS
 
-####
+#### TBD
