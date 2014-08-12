@@ -2,30 +2,37 @@
 
 ### OBJECTIVE
 
-  1. **
+  1. **Encourage challenger/friend discovery**
+    - Metrics: Encounters per user, Experiences per User
+    - Stream view = encounter which can lead to experiences (eg profile view) and friendships
+  2. **Encourage game discovery**
+    - Metrics: Games played per session
+    - See what friends are playing, join them in those games - either synchronously (multiplayer/co-op) or async (high scores)
+  3. **Promote return visits with up-to-date content from friends (the Facebook stream effect)
+    - Metrics: Return visitors
 
 -#### SUMMARY OF METRICS
 
 In order of importance (though all are still very important), along with success criteria:
-  - 
+  - Return visitors
+  - Encounters per user
+  - Experiences per user
+    - Social stream will need to be able to convert enounters to experiences (eg clicking on a profile, or playing a friend in a game)
+  - Games played per session
 
 ### FEATURES
 
-  1. Leaderboards
-    - **Why?** leads to more encounters per user and more engagement in games (attempting to beat others' scores)
-    - Separate spec: [leaderboards.md](leaderboards.md)
-  2. Profiles
-    - **Why?** more experiences per user and people love their vanity
-    - Separate spec: [profiles.md](profiles.md)
-  3. Friend System
-    - **Why?** friends per user, basis of social graph
-    - Separate spec: [friends.md](friends.md)
+  1. List of status updates
+    - **Why?**
+    - Initial version can be based on time (most recent updates). Eventually we'll have an algorithm for what is shown
+  2. Easy-access mini-profile
+    - **Why?**
+  3. Ability to access profile via the stream
+    - **Why?**
 
 ### BACKEND
 
-  - Most of this should be integrated into the API backend so developers can enable this challenger discovery in their games
-  - We're logging all friendships on Kik (and outside of it) in the `friendships` column
-    - Right now our idea of friendships on Kik is essentially just the concept of experiences (detailed above), with a `confirmed` boolean that is true if both users have initiated an event to the other
+  -
 
 ### USERS
 
