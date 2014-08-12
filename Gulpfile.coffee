@@ -31,10 +31,12 @@ paths =
 
   tests: './test/**/*.coffee'
   root: './src/coffee/root.coffee'
+  mock: './src/coffee/mock.coffee'
   baseStyle: './src/stylus/base.styl'
   dist: './dist/'
   build: './build/'
 
+isMockingApi = process.env.MOCK
 
 # start the dev server, and auto-update
 gulp.task 'default', ['server', 'dev', 'watch']
@@ -91,7 +93,7 @@ gulp.task 'scripts:test', ->
 gulp.task 'server', ->
 
   # Don't actually watch for changes, just run the server
-  nodemon script: 'server.js', ext: 'null'
+  nodemon {script: 'server.coffee', ext: 'null', ignore: ['**/*.*']}
 
 
 gulp.task 'watch', ->
@@ -115,8 +117,14 @@ errorHandler = ->
 
 # init.coffee --> build/js/bundle.js
 gulp.task 'scripts:dev', ['lint:scripts'], ->
+  entries = [paths.root]
+
+  # Order matters because mock overrides window.XMLHttpRequest
+  if isMockingApi
+    entries = [paths.mock].concat entries
+
   browserify
-    entries: paths.root
+    entries: entries
     extensions: ['.coffee']
   .bundle debug: true
   .on 'error', errorHandler

@@ -7,8 +7,9 @@
   "scripts": {
     "postinstall": "node_modules/bower/bin/bower install",
     "test": "node_modules/gulp/bin/gulp.js test",
-    "start": "node server.js",
+    "start": "node_modules/coffee-script/bin/coffee server.coffee",
     "dev": "node_modules/gulp/bin/gulp.js",
+    "mock": "MOCK=true node_modules/gulp/bin/gulp.js",
     "build": "node_modules/gulp/bin/gulp.js build"
   },
   "author": "",
@@ -20,6 +21,7 @@
     "clay-chai": "0.0.1",
     "coffee-script": "1.7.1",
     "coffeeify": "0.6.0",
+    "envify": "3.0.0",
     "express": "4.5.1",
     "fb-flo": "0.2.1",
     "glob": "4.0.4",
@@ -51,11 +53,12 @@
     "loglevel": "./components/loglevel/dist/loglevel.js",
     "q": "./components/q/q.js",
     "restangular": "./components/restangular/dist/restangular.js",
-    "zock": "./components/zock/zock.coffee"
+    "zock": "./components/zock/zock.js"
   },
   "browserify": {
     "transform": [
-      "coffeeify"
+      "coffeeify",
+      "envify"
     ]
   }
 }
