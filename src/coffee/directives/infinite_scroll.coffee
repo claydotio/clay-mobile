@@ -27,10 +27,10 @@ module.exports = class InfiniteScrollDir
     totalScrollHeight = scrollTop + window.innerHeight
 
     if totalScrolled - totalScrollHeight < SCROLL_THRESHOLD
-      isListening = false
+      @isListening = false
 
       @loadMore().then =>
-        isListening = true
+        @isListening = true
         @scrollListener()
       .catch log.error
 
