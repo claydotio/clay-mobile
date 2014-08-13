@@ -3,7 +3,7 @@ z = require 'zorium'
 module.exports = class Nav
   render: ->
     z 'nav.nav', [
-      z 'a', 'Categories'
+      z 'a[href=/]', 'Top'
       z '.separator'
-      z 'a', 'Top'
+      z 'a[href=/games/new]', 'New'
     ]
