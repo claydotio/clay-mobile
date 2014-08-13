@@ -2,6 +2,7 @@ z = require 'zorium'
 _ = require 'lodash'
 Q = require 'q'
 
+Game = require '../models/game'
 GameBox = require './game_box'
 InfiniteScrollDir = require '../directives/infinite_scroll'
 
@@ -9,18 +10,24 @@ module.exports = class GameResults
   constructor: ->
     @infiniteScrollDir = new InfiniteScrollDir(loadMore: @loadMore)
 
-    stub = [{url: 'http://slime.clay.io/claymedia/icon128.png'}]
-    @gameBoxes = _.map stub, (game) ->
-      new GameBox(url: game.url)
+    @gameBoxes = z.prop []
+
+    # TODO Error logs and z.prop Q
+    Game.all('games').getTop().then (games) =>
+      @gameBoxes _.map games, (game) ->
+        new GameBox(url: game.url)
+
+      z.redraw()
+    .then null, (e) -> console.log e
 
   loadMore: =>
-    @gameBoxes = @gameBoxes.concat(@gameBoxes)
+    @gameBoxes(@gameBoxes().concat(@gameBoxes()))
     z.redraw()
     Q.when(null)
 
-  render: ->
+  render: =>
     z 'section.game-results', {config: @infiniteScrollDir.config},
-    _.map @gameBoxes, (gameBox) ->
+    _.map @gameBoxes(), (gameBox) ->
       z '.result-container', [
         z '.result', gameBox.render()
       ]

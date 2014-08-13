@@ -1,4 +1,9 @@
 resource = require '../lib/resource'
 config = require '../config'
 
-module.exports = resource.setBaseUrl(config.API_URL).all('games')
+resource.extendCollection 'games', (collection) ->
+  collection.getTop = -> @customGET('top')
+
+  return collection
+
+module.exports = resource.setBaseUrl config.API_URL
