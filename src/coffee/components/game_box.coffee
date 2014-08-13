@@ -6,6 +6,7 @@ module.exports = class GameBox
   constructor: (game) ->
     @game = game
     @ratings = new RatingsWidget(stars: 4)
+
   render: ->
     z '.game-box', [
       z 'img', src: @game.url
