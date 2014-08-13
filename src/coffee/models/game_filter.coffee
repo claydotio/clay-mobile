@@ -10,10 +10,10 @@ class GameFilter
   getFilter: ->
     @label
 
-  getGames: ->
+  getGames: (params) ->
     if @label == 'new'
-      return Game.all('games').getNew()
+      return Game.all('games').getNew(params)
     else
-      return Game.all('games').getTop()
+      return Game.all('games').getTop(params)
 
 module.exports = new GameFilter()

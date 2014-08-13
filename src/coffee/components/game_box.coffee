@@ -11,7 +11,7 @@ module.exports = class GameBox
     z '.game-box', [
       z 'img', src: @game.url
       z '.game-box-info', [
-        z 'h3.title', 'title'
+        z 'h3.title', @game.title
         z '.snippet', 'snippet'
         z 'div', @ratings.render()
       ]
