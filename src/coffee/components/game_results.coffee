@@ -16,7 +16,10 @@ module.exports = class GameResults
     GameFilter.getGames().then (games) =>
       @gameBoxes @gameBoxes().concat _.map games, (game) ->
         new GameBox(url: game.url)
-      z.redraw()
+
+      # force
+      z.redraw(true)
+
     .catch log.error
 
   render: =>

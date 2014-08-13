@@ -4,10 +4,17 @@
 express = require 'express'
 app = express()
 
+router = express.Router()
+
 if process.env.NODE_ENV is 'production'
   app.use express['static'](__dirname + '/dist')
 else
   app.use express['static'](__dirname + '/build')
+
+router.get /^(?!([^.]\w+$))/, (req, res) ->
+  res.sendfile './build/index.html'
+
+app.use router
 
 app.listen process.env.PORT or 3000
 
