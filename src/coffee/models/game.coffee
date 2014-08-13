@@ -3,6 +3,7 @@ config = require '../config'
 
 resource.extendCollection 'games', (collection) ->
   collection.getTop = -> @customGET('top')
+  collection.getNew = -> @customGET('new')
 
   return collection
 
