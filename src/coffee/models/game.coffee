@@ -2,8 +2,10 @@ resource = require '../lib/resource'
 config = require '../config'
 
 resource.extendCollection 'games', (collection) ->
-  collection.getTop = -> @customGET('top')
-  collection.getNew = -> @customGET('new')
+  collection.getTop = ({limit, skip}) ->
+    @customGET('top', {limit: limit, skip: skip})
+  collection.getNew = ({limit, skip}) ->
+    @customGET('new', {limit: limit, skip: skip})
 
   return collection
 

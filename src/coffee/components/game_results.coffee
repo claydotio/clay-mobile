@@ -13,9 +13,12 @@ module.exports = class GameResults
     @gameBoxes = z.prop []
 
   loadMore: =>
-    GameFilter.getGames().then (games) =>
+    GameFilter.getGames
+      limit: 10
+      skip: @gameBoxes().length
+    .then (games) =>
       @gameBoxes @gameBoxes().concat _.map games, (game) ->
-        new GameBox(url: game.url)
+        new GameBox(game)
 
       # force
       z.redraw(true)
