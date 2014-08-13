@@ -2,7 +2,7 @@ z = require 'zorium'
 
 RatingsWidget = require './ratings'
 
-module.exports = class GameBoxView
+module.exports = class GameBox
   constructor: (game) ->
     @game = game
     @ratings = new RatingsWidget(stars: 4)
