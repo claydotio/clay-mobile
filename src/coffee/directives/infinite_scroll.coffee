@@ -1,3 +1,5 @@
+log = require 'loglevel'
+
 SCROLL_THRESHOLD = 250
 
 elTopPosition = ($el) ->
@@ -27,9 +29,10 @@ module.exports = class InfiniteScrollDir
     if totalScrolled - totalScrollHeight < SCROLL_THRESHOLD
       isListening = false
 
-      @loadMore().then ->
+      @loadMore().then =>
         isListening = true
         @scrollListener()
+      .catch log.error
 
   config: ($el, isInit) =>
 

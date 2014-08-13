@@ -1,6 +1,7 @@
 z = require 'zorium'
 _ = require 'lodash'
 Q = require 'q'
+log = require 'loglevel'
 
 Game = require '../models/game'
 GameBox = require './game_box'
@@ -12,18 +13,12 @@ module.exports = class GameResults
 
     @gameBoxes = z.prop []
 
-    # TODO Error logs and z.prop Q
-    Game.all('games').getTop().then (games) =>
-      @gameBoxes _.map games, (game) ->
-        new GameBox(url: game.url)
-
-      z.redraw()
-    .then null, (e) -> console.log e
-
   loadMore: =>
-    @gameBoxes(@gameBoxes().concat(@gameBoxes()))
-    z.redraw()
-    Q.when(null)
+    Game.all('games').getTop().then (games) =>
+      @gameBoxes @gameBoxes().concat _.map games, (game) ->
+        new GameBox(url: game.url)
+      z.redraw()
+    .catch log.error
 
   render: =>
     z 'section.game-results', {config: @infiniteScrollDir.config},

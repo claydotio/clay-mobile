@@ -4,6 +4,7 @@ _ = require 'lodash'
 module.exports = class RatingsWidget
   constructor: ({@stars}) ->
     @totalStars = 5
+
   render: ->
     z 'div', _.flatten([
       _.map _.range(@stars), ->
