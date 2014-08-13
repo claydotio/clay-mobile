@@ -1,5 +1,5 @@
 should = require('clay-chai').should()
-Games = require 'models/games'
+Games = require 'models/game'
 
 describe 'GamesModel', ->
   it 'getList()', ->

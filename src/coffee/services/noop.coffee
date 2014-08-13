@@ -2,7 +2,7 @@ log = require 'loglevel'
 _ = require 'lodash'
 
 class NoopService
-  noop: _.noop
+  noop: -> null
 
 
 
