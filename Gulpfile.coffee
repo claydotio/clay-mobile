@@ -39,9 +39,8 @@ paths =
 isMockingApi = process.env.MOCK
 
 # start the dev server, and auto-update
-gulp.task 'default', ['server', 'dev', 'watch']
-
-gulp.task 'dev', ['assets:dev', 'test:phantom']
+gulp.task 'dev', ['assets:dev', 'test:phantom', 'watch'], ->
+  gulp.start 'server'
 
 # compile sources: src/* -> build/*
 gulp.task 'assets:dev', [
