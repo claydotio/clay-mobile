@@ -8,8 +8,8 @@
     "postinstall": "node_modules/bower/bin/bower install",
     "test": "node_modules/gulp/bin/gulp.js test",
     "start": "node_modules/coffee-script/bin/coffee server.coffee",
-    "dev": "node_modules/gulp/bin/gulp.js",
-    "mock": "MOCK=true node_modules/gulp/bin/gulp.js",
+    "dev": "node_modules/gulp/bin/gulp.js dev",
+    "mock": "MOCK=true node_modules/gulp/bin/gulp.js dev",
     "build": "node_modules/gulp/bin/gulp.js build"
   },
   "author": "",
