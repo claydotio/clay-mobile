@@ -3,13 +3,14 @@ _ = require 'lodash'
 Q = require 'q'
 
 GameBox = require './game_box'
-GamesCtrl = new (require '../controllers/games')()
-InfiniteScrollCtrl = require '../controllers/infinite_scroll'
+InfiniteScrollDir = require '../directives/infinite_scroll'
 
-module.exports = class GameResultsView
+module.exports = class GameResults
   constructor: ->
-    @infiniteScrollCtrl = new InfiniteScrollCtrl(loadMore: @loadMore)
-    @gameBoxes = _.map GamesCtrl.findTop(15), (game) ->
+    @infiniteScrollDir = new InfiniteScrollDir(loadMore: @loadMore)
+
+    stub = [{url: 'http://slime.clay.io/claymedia/icon128.png'}]
+    @gameBoxes = _.map stub, (game) ->
       new GameBox(url: game.url)
 
   loadMore: =>
@@ -18,7 +19,7 @@ module.exports = class GameResultsView
     Q.when(null)
 
   render: ->
-    z 'section.game-results', {config: @infiniteScrollCtrl.config},
+    z 'section.game-results', {config: @infiniteScrollDir.config},
     _.map @gameBoxes, (gameBox) ->
       z '.result-container', [
         z '.result', gameBox.render()

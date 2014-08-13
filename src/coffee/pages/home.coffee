@@ -1,15 +1,15 @@
 z = require 'zorium'
 
-NavView = new (require '../views/nav')()
-HeaderView = new (require '../views/header')()
-GameResultsView = new (require '../views/game_results')()
-
 module.exports = class HomePage
-  view: ->
+  constructor: ->
+    @Nav = new (require '../components/nav')()
+    @Header = new (require '../components/header')()
+    @GameResults = new (require '../components/game_results')()
+
+  view: =>
     z 'div', [
-      z 'div', HeaderView.render()
-      z 'div', NavView.render()
-      z 'div', GameResultsView.render()
+      z 'div', @Header.render()
+      z 'div', @Nav.render()
+      z 'div', @GameResults.render()
     ]
-  controller: ->
-    null
+  controller: -> null

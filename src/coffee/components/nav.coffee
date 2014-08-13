@@ -1,6 +1,6 @@
 z = require 'zorium'
 
-module.exports = class NavView
+module.exports = class Nav
   render: ->
     z 'nav.nav', [
       z 'a', 'Categories'

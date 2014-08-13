@@ -1,6 +1,6 @@
 z = require 'zorium'
 
-module.exports = class HeaderView
+module.exports = class Header
   render: ->
     z 'header.header', [
       z '.header-logo', [

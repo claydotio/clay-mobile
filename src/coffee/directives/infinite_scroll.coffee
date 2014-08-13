@@ -5,7 +5,7 @@ elTopPosition = ($el) ->
   then $el.offsetTop + elTopPosition($el.offsetParent)
   else 0
 
-module.exports = class InfiniteScrollView
+module.exports = class InfiniteScrollDir
   constructor: ({@loadMore}) ->
     @isListening = true
 
