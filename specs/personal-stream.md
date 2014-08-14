@@ -23,16 +23,25 @@ In order of importance (though all are still very important), along with success
 ### FEATURES
 
   1. List of status updates
-    - **Why?**
+    - **Why?** More encounters per user (reading others 'status' updates)
+    - Consists of:
+      - Achievements earned
+      - High scores
+      - Custom message / status
     - Initial version can be based on time (most recent updates). Eventually we'll have an algorithm for what is shown
   2. Easy-access mini-profile
-    - **Why?**
+    - **Why?** More experiences per user
+    - Ability to befriend them
+    - Could A/B test full-featured "mini" vs light "mini" with accompanying [full profile](./profile.md)
+      - Would test for # of friendships, and number of interactions (clicks/actions within profile)
   3. Ability to access profile via the stream
-    - **Why?**
+    - **Why?** more experiences per user, which hopefully leads to friendships
+    - Either have the mini-profile be the entire experience, or have a separate profile page
 
 ### BACKEND
 
-  -
+  - There is existing 'stream' architecture in MySQL (`stream` table)
+    - Might be worth thinking about whether or not that's the best setup for this
 
 ### USERS
 
@@ -45,7 +54,10 @@ In order of importance (though all are still very important), along with success
 
 ### USER FLOWS
 
-  - Will be laid out in individual feature specs
+Open App -> Click "Social" tab -> View Stream
+                                              |
+                                               -> Click a profile link
+                                               -> Click stream item (eg redirect to game)
 
 ### WIREFRAMES
 N/A
@@ -57,4 +69,7 @@ N/A
 
 ### A/B TESTS
 
-#### TBD
+#### App first load page/tab
+
+  - **Hypothesis:** making the social stream be the first page opened in the app will increase retention and user discovery with a negligible affect on games played per session
+  - **Primary metrics:** experiences per user, return visitors, number of games played per session
