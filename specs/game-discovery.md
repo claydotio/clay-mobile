@@ -116,3 +116,9 @@ For this stage we're looking at 20k DAU and likely no more than 200-250 concurre
   - **Hypothesis:** adding categories will cause an increase in games played per session and game engagement
     - More targeted games for the player / their current mood
   - **Primary metrics:** game session length, number of games played per session
+
+#### Thumb up / Thumb down
+
+  - **Hypothesis:** A thumbs rating system would lead to more games played per session and more ratings per user
+    - The primary case for this would be users like to see a green/red Youtube style bar (or some other UI) to indicate good games
+  - **Primary metrics:** number of games played per session, ratings per user
