@@ -7,8 +7,13 @@ module.exports = class GameBox
     @game = game
     @ratings = new RatingsWidget(stars: game.rating)
 
+  loadGame: =>
+    gameUrl = 'http://' + @game.key + '.' + window.location.host
+    z.route '/game/' + @game.key
+    kik.picker(gameUrl, {}, -> null)
+
   render: ->
-    z '.game-box', [
+    z '.game-box', {onclick: @loadGame}, [
       z 'img', src: @game.icon128Url
       z '.game-box-info', [
         z 'h3.title', @game.name
