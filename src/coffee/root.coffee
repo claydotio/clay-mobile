@@ -33,6 +33,6 @@ unless host == targetHost
   host = host.split '.'
   gameKey = host[0]
   z.route "/game/#{gameKey}"
-  kik.picker?('http://192.168.2.98.xip.io:3000', {}, -> null)
+  kik.picker?("http://#{targetHost}", {}, -> null)
 
 log.info 'App Ready'
