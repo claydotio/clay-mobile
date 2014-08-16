@@ -26,13 +26,13 @@ z.route document.getElementById('app'), '/', route(
   '/games/:filter': GamesPage
 )
 
-# If this was loaded as a game page (abc.clay.io), pciker marketplace for hit
+# If this was loaded as a game page (abc.clay.io), picker marketplace for hit
 host = window.location.host
 targetHost = config.APP_HOST
 unless host == targetHost
   host = host.split '.'
   gameKey = host[0]
   z.route "/game/#{gameKey}"
-  kik.picker('http://192.168.2.98.xip.io:3000', {}, -> null)
+  kik.picker?('http://192.168.2.98.xip.io:3000', {}, -> null)
 
 log.info 'App Ready'

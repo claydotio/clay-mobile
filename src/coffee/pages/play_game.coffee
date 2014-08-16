@@ -5,11 +5,11 @@ GamePlayer = require '../components/game_player'
 module.exports = class PlayGamePage
   constructor: (params) ->
     gameKey = params('key')
-    @Header = new (require '../components/header')()
+    @gameHeader = new (require '../components/game_header')()
     @gamePlayer = new GamePlayer(gameKey: gameKey)
 
   render: =>
     z 'div', [
-      z 'div', @Header.render()
       z 'div', @gamePlayer.render()
+      z 'div', @gameHeader.render()
     ]
