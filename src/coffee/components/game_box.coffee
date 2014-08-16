@@ -10,7 +10,7 @@ module.exports = class GameBox
   loadGame: =>
     gameUrl = 'http://' + @game.key + '.' + window.location.host
     z.route '/game/' + @game.key
-    kik.picker(gameUrl, {}, -> null)
+    kik.picker?(gameUrl, {}, -> null)
 
   render: ->
     z '.game-box', {onclick: @loadGame}, [
