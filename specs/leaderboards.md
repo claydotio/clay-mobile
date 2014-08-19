@@ -23,19 +23,22 @@ In order of importance (though all are still very important), along with success
     - **Why?** Creates competition: user vs self and user vs others that will hopefully increase engagement**
     - For now we can continue to just show top X scores (no pagination)
   2. Friends' high scores
-    -**Why?** Encourages users to befriend others, and users will theoretically care more about beating friends scores
-  3. Easy-access mini-profile
+    - **Why?** Encourages users to befriend others, and users will theoretically care more about beating friends scores
+  3. Personal high score / rank
+    - **Why?** Makes it clear how the user ranks and how close/far they are from having their name in lights (top x scores)
+    - If user isn't in top X, still show their score/rank
+  4. Easy-access mini-profile
     - **Why?** More experiences per user, better game discovery (see what friends are playing)
     - Ability to befriend them
     - See [Profile Spec](./profiles.md)
-  4. Share high score
+  5. Share high score
     - **Why?** Increased invites per users -> increased K-factor (# of invites sent by each user * conversion rate of invite)
     - This will be our 'challenge a friend' system for now
       - Eventually we'll do a more involved challenge system that isn't simply sharing the game
 
 ### BACKEND
 
-  - The base for a leaderboard has already been implemented in the API, with **High scores (global and friends)** and **Share high score** already existing
+  - The base for a leaderboard has already been implemented in the API, with **High scores (global and friends)**, **Personal high score/rank** and **Share high score** already existing
   - Mini-profile component for API will need to be added
 
 ### USERS

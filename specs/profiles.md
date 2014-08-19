@@ -25,8 +25,11 @@ In order of importance (though all are still very important), along with success
   1. Feed
     - **Why?** Keep the profiles fresh to encourage more experiences (eg user viewing someone's profile more than once), and encourage game discovery
     - Same posts as [the personal stream](./personal-stream.md), just filtered to be only the profile's owner/user
-  2. Games
-    -**Why?** Encourage game discovery (games played per session)
+  2. List of recent games
+    - **Why?** Encourage game discovery (games played per session)
+    - List of recent games
+  3. List of friends
+    - **Why?** More encounters and experiences
   3. Add as friend
     - **Why?** More friendships
     - Needs to stand out
@@ -52,10 +55,8 @@ In order of importance (though all are still very important), along with success
     - Likes: Flirting, Meeting new people
 
 ### USER FLOWS
-Primarily up to the developer for when they want the leaderboard to be shown.
 
 ### WIREFRAMES / MOCKUPS
-[Cristian's first leaderboard mockup](./resources/leaderboards.pdf)
 
 ### NOTES
 - Eventually we will focus more on points aka GamerScore (assuming tests go well)
