@@ -42,6 +42,8 @@ In order of importance (though all are still very important), along with success
 
   - There is existing 'stream' architecture in MySQL (`stream` table)
     - Might be worth thinking about whether or not that's the best setup for this
+    - Is setup for everything *except* high scores posted
+      - Probably only want to post when the user beats their previous score (or is first score they've posted for a game)
 
 ### USERS
 

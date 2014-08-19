@@ -4,7 +4,7 @@
 
   1. **Encourage challenger discovery**
     - Metrics: Encounters per user, Experiences per User
-  3. **Increase Engagement through competition**
+  2. **Increase Engagement through competition**
     - Metrics: Average game session length, Return visitors
 
 -#### SUMMARY OF METRICS
