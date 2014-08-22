@@ -4,6 +4,7 @@ class GameFilter
   constructor: ->
     @label = 'top'
 
+  # top or new
   setFilter: (label) ->
     @label = label
 
