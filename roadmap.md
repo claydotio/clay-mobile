@@ -18,13 +18,13 @@ later deadlines.
 
 ### Phase 1 - Game Discovery
 
-  - Timeline: August 1st - August 15th
+  - Timeline: August 1st - August 22nd
   - Specs: [Game Discovery](./specs/game-discovery.md), [Game Discovery](./specs/game-view.md), [Swipe Bar](./specs/swipe-bar.md)
   - Basic deploy (no staging or rollbacks)
 
 ### Phase 2 - Game Sharing (external)
 
-  - Timeline: August 16th - August 25th
+  - Timeline: August 22nd - August 30th
   - Specs: [Game Sharing (external)](./specs/game-sharing-external.md), [Game Details](./specs/game-details.md)
   - Cristian starts the 20th - some of the above time will be spent changing the UX of game discovery phase
   - Staging and rollbacks added to deploy process
@@ -32,12 +32,12 @@ later deadlines.
 
 ### Phase 3 - Challenger Discovery
 
-  - Timeline: August 26th - September 2nd
+  - Timeline: August 30th - September 3rd
   - Specs: [Challenger Discovery](./specs/challenger-discovery.md)
   - Phase 3 includes continual running of A/B tests from Phases 1 and 2
 
 ### Phase 4 - Personal Stream
-- Timeline: September 2nd - September 10th
+- Timeline: September 3rd - September 10th
 - Specs: [Personal Stream](./specs/personal-stream.md)
 - Phase 2 includes continual running of A/B tests from Phases 1, 2 and 3
 
@@ -58,6 +58,7 @@ later deadlines.
 ### Convert app to APK for Google Play
 
   - Timeline: TBD
+  - Ask for contact list?
 
 #### Convert all games to APKs
 

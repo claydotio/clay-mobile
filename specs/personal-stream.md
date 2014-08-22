@@ -8,7 +8,7 @@
   2. **Encourage game discovery**
     - Metrics: Games played per session
     - See what friends are playing, join them in those games - either synchronously (multiplayer/co-op) or async (high scores)
-  3. **Promote return visits with up-to-date content from friends (the Facebook stream effect)
+  3. **Promote return visits with up-to-date content from friends (the Facebook stream effect)**
     - Metrics: Return visitors
 
 -#### SUMMARY OF METRICS
@@ -17,7 +17,7 @@ In order of importance (though all are still very important), along with success
   - Return visitors
   - Encounters per user
   - Experiences per user
-    - Social stream will need to be able to convert enounters to experiences (eg clicking on a profile, or playing a friend in a game)
+    - Social stream will need to be able to convert encounters to experiences (eg clicking on a profile, or playing a friend in a game)
   - Games played per session
 
 ### FEATURES
@@ -42,6 +42,8 @@ In order of importance (though all are still very important), along with success
 
   - There is existing 'stream' architecture in MySQL (`stream` table)
     - Might be worth thinking about whether or not that's the best setup for this
+    - Is setup for everything *except* high scores posted
+      - Probably only want to post when the user beats their previous score (or is first score they've posted for a game)
 
 ### USERS
 
