@@ -1,6 +1,6 @@
 z = require 'zorium'
 
-RatingsWidget = require './ratings'
+RatingsWidget = require './stars'
 
 module.exports = class GameBox
   constructor: (game) ->

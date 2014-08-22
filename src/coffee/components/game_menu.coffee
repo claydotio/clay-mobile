@@ -1,9 +1,15 @@
 z = require 'zorium'
+_ = require 'lodash'
 
 module.exports = class GameMenu
-  render: ->
-    z 'nav.game-menu', [
-      z 'a[href="/"]', {config: z.route}, 'Top'
-      z '.separator'
-      z 'a[href="/games/new/"]', {config: z.route}, 'New'
+  constructor: ->
+    @items = z.prop [
+      {title: 'Popular', link: '/', isSelected: true},
+      {title: 'New Games', link: '/'}
     ]
+  render: =>
+    z 'nav.game-menu', _.map @items(), (item) ->
+      isSelected = if item.isSelected then '.isSelected' else ''
+
+      z "a#{isSelected}[href='#{item.link}']",
+        {config: z.route}, "#{item.title}"

@@ -12,13 +12,13 @@ log.enableAll()
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
 
+window.addEventListener 'fb-flo-reload', z.redraw
+
 route = (routes) ->
   _.transform routes, (result, Component, route) ->
     result[route] =
       controller: => @component = new Component(z.route.param)
       view: => @component.render()
-
-window.addEventListener 'fb-flo-reload', z.redraw
 
 # Kik changes app if the url changes, so don't change it
 z.route.mode = 'hash'
