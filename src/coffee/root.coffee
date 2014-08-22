@@ -29,7 +29,7 @@ z.route document.getElementById('app'), '/', route(
 # If this was loaded as a game page (abc.clay.io), picker marketplace for hit
 host = window.location.host
 targetHost = config.APP_HOST
-unless host == targetHost
+unless host == targetHost or config.MOCK
   host = host.split '.'
   gameKey = host[0]
   z.route "/game/#{gameKey}"
