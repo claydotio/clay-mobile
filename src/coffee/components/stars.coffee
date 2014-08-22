@@ -17,7 +17,7 @@ module.exports = class RatingsWidget
 
 
   render: =>
-    z 'div', _.flatten([
+    z 'div.stars', _.flatten([
       _.map _.range(@fullStars), ->
         z 'i.fa.fa-star'
       _.map _.range(@halfStars), ->

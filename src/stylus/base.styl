@@ -1,3 +1,4 @@
+@require '../../components/nib/index.styl'
 @require '../../components/normalize.css/normalize.css'
 @require '../../components/components-font-awesome/css/font-awesome.css'
 
@@ -10,5 +11,9 @@ json('./vars.json')
 //
 
 body
-  background: bgColor
-  color: fontColor
+  background: $pageBgColor
+  color: $pageFontColor
+
+a
+  text-decoration: none
+  color: #000
