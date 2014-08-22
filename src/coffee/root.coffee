@@ -18,6 +18,8 @@ route = (routes) ->
       controller: => @component = new Component(z.route.param)
       view: => @component.render()
 
+window.addEventListener 'fb-flo-reload', z.redraw
+
 # Kik changes app if the url changes, so don't change it
 z.route.mode = 'hash'
 z.route document.getElementById('app'), '/', route(
