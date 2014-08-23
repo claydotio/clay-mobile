@@ -1,7 +1,9 @@
 {
-  "$pageBgColor": "#fff",
-  "$pageFontColor": "#000",
-  "$grayLight": "#eee",
-  "$orange": "#ff9800",
-  "$gray": "#666"
+  "$orange": "#fcaa2f",
+  "$blue": "#67afe6",
+  "$bgColor": "#f2f2f2",
+  "$white": "#ffffff",
+  "$black": "#000000",
+  "$grayDark": "#262626",
+  "$grayLight": "#757575"
 }
