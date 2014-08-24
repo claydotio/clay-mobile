@@ -3,6 +3,10 @@
 
 json('./vars.json')
 
+@font-face
+  font-family: 'roboto'
+  src: url('../fonts/roboto-regular.otf') format("opentype")
+
 @require './module/*'
 
 //
@@ -12,6 +16,7 @@ json('./vars.json')
 body
   background: $bgColor
   color: $black
+  font: 12px 'roboto'
 
 a
   text-decoration: none
