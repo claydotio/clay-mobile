@@ -4,7 +4,7 @@
 json('./vars.json')
 
 @font-face
-  font-family: 'roboto'
+  font-family: 'Roboto'
   src: url('../fonts/roboto-regular.otf') format("opentype")
 
 @require './module/*'
@@ -13,10 +13,14 @@ json('./vars.json')
 // Base Styles
 //
 
+html
+  font-size: 62.5% /* 10px browser default */
+
 body
   background: $bgColor
   color: $black
-  font: 12px 'roboto'
+  font: $fontSizeDefault 'Roboto'
+
 
 a
   text-decoration: none
