@@ -14,32 +14,22 @@
   font-style: normal
   font-weight: normal
   speak: none
-
   display: inline-block
   text-decoration: inherit
   width: 1em
-  // margin-right: .2em
-  /* Animation center compensation - margins should be symmetric */
-  /* remove if not needed */
-  // margin-left: .2em
   text-align: center
-
   /* For safety - reset parent styles, that can break glyph codes*/
   font-variant: normal
   text-transform: none
-
-  /* fix buttons height, for twitter bootstrap */
-  line-height: 1em
-
-  /* you can be more comfortable with increased icons size */
-  font-size: 120%
-
-  /* Uncomment for 3D effect */
-  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3) */
+  font-size: 160%
 
 .icon-star-half:before { content: '\e800' } /* half star */
 .icon-star-outline:before { content: '\e801' } /* star outline */
 .icon-star:before { content: '\e802' } /* 'filled star' */
+
+// Squish stars together a bit more
+.icon-star-half:before, .icon-star-outine:before, .icon-star:before
+  margin: 0 -0.1em
 
 .icon-star-filled
   color: $orange
