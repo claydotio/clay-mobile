@@ -1,0 +1,47 @@
+/* icon font */
+@font-face
+  font-family 'icons'
+  src url('../fonts/icons.eot?16920334')
+  src url('../fonts/icons.eot?16920334#iefix') format('embedded-opentype'),
+       url('../fonts/icons.woff?16920334') format('woff'),
+       url('../fonts/icons.ttf?16920334') format('truetype'),
+       url('../fonts/icons.svg?16920334#stars') format('svg')
+  font-weight normal
+  font-style normal
+
+.icon:before
+  font-family: "icons"
+  font-style: normal
+  font-weight: normal
+  speak: none
+
+  display: inline-block
+  text-decoration: inherit
+  width: 1em
+  // margin-right: .2em
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  // margin-left: .2em
+  text-align: center
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal
+  text-transform: none
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em
+
+  /* you can be more comfortable with increased icons size */
+  font-size: 120%
+
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3) */
+
+.icon-star-half:before { content: '\e800' } /* half star */
+.icon-star-outline:before { content: '\e801' } /* star outline */
+.icon-star:before { content: '\e802' } /* 'filled star' */
+
+.icon-star-filled
+  color: $orange
+.icon-star-empty
+  color: $grayLight
