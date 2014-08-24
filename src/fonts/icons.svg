@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2014 by original authors @ fontello.com</metadata>
+<defs>
+<font id="stars" horiz-adv-x="1000" >
+<font-face font-family="stars" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="star-half" unicode="&#xe800;" d="m917 444l-300 26-117 276-117-276-300-26v0l0 0 228-197-68-293 257 156 0 0 258-156-69 293 228 197z m-417-256v387l71-168 183-16-139-119 42-179-157 95z" horiz-adv-x="1000" />
+<glyph glyph-name="star-outline" unicode="&#xe801;" d="m917 465l-300 26-117 276-117-276-300-26 228-197-68-293 257 155 258-155-69 293 228 197z m-417-256l-157-95 42 178-139 120 183 16 71 168 71-168 183-16-139-120 42-178-157 95z" horiz-adv-x="1000" />
+<glyph glyph-name="star" unicode="&#xe802;" d="m386 180l199-120-52 227 175 152-231 20-91 213-90-213-232-20 176-152-53-227 199 120z" horiz-adv-x="773" />
+</font>
+</defs>
+</svg>
