@@ -16,7 +16,7 @@ module.exports = class GameBox
     z '.game-box', {onclick: @loadGame}, [
       z 'img', src: @game.icon128Url
       z '.game-box-info', [
-        z 'h3.title', @game.name
+        z 'h3', @game.name
         z 'div', @ratings.render()
       ]
     ]
