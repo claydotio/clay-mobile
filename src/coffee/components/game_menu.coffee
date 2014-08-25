@@ -9,7 +9,7 @@ module.exports = class GameMenu
     ]
   render: =>
     z 'nav.game-menu', _.map @items(), (item) ->
-      isSelected = if item.isSelected then '.isSelected' else ''
+      isSelected = if item.isSelected then '.is-selected' else ''
 
       z "a#{isSelected}[href='#{item.link}']",
         {config: z.route}, "#{item.title}"
