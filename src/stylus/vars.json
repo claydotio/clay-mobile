@@ -5,5 +5,7 @@
   "$white": "#ffffff",
   "$black": "#000000",
   "$grayDark": "#262626",
-  "$grayLight": "#757575"
+  "$grayLight": "#757575",
+
+  "$fontSizeDefault": "1.2rem"
 }
