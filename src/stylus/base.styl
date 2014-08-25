@@ -1,8 +1,11 @@
 @require '../../components/nib/index.styl'
 @require '../../components/normalize.css/normalize.css'
-@require '../../components/components-font-awesome/css/font-awesome.css'
 
 json('./vars.json')
+
+@font-face
+  font-family: 'Roboto'
+  src: url('../fonts/roboto-regular.otf') format("opentype")
 
 @require './module/*'
 
@@ -10,9 +13,14 @@ json('./vars.json')
 // Base Styles
 //
 
+html
+  font-size: 62.5% /* 10px browser default */
+
 body
   background: $bgColor
   color: $black
+  font: $fontSizeDefault 'Roboto'
+
 
 a
   text-decoration: none
