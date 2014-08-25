@@ -34,7 +34,7 @@ module.exports = class InfiniteScrollDir
         @scrollListener()
       .catch log.error
 
-  config: ($el, isInit) =>
+  config: ($el, isInit, ctx) =>
 
     # run once
     if isInit
@@ -45,5 +45,10 @@ module.exports = class InfiniteScrollDir
     # Bind event listeners
     window.addEventListener 'scroll', @scrollListener
     window.addEventListener 'resize', @scrollListener
+
+    ctx.onunload = =>
+      window.removeEventListener 'scroll', @scrollListener
+      window.removeEventListener 'resize', @scrollListener
+
 
     @scrollListener()
