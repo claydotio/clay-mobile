@@ -25,8 +25,6 @@ outFiles =
 paths =
   static: './src/*.*'
   scripts: './src/coffee/**/*.coffee'
-  images: './src/images/*'
-  fonts: './src/fonts/*'
   styles: './src/stylus/**/*.styl'
 
   tests: './test/**/*.coffee'
@@ -46,8 +44,6 @@ gulp.task 'dev', ['assets:dev', 'test:phantom', 'watch'], ->
 gulp.task 'assets:dev', [
   'scripts:dev'
   'styles:dev'
-  'images:dev'
-  'fonts:dev'
   'static:dev'
 ]
 
@@ -55,8 +51,6 @@ gulp.task 'assets:dev', [
 gulp.task 'assets:prod', [
   'scripts:prod'
   'styles:prod'
-  'images:prod'
-  'fonts:prod'
   'static:prod'
 ]
 
@@ -144,16 +138,6 @@ gulp.task 'static:dev', ->
   gulp.src paths.static
     .pipe gulp.dest paths.build
 
-# images/* --> build/images/*
-gulp.task 'images:dev', ->
-  gulp.src paths.images
-    .pipe gulp.dest paths.build + '/images/'
-
-# fonts/* --> build/fonts/*
-gulp.task 'fonts:dev', ->
-  gulp.src paths.fonts
-    .pipe gulp.dest paths.build + '/fonts/'
-
 #
 # Production compilation
 #
@@ -186,13 +170,3 @@ gulp.task 'styles:prod', ->
 gulp.task 'static:prod', ->
   gulp.src paths.static
     .pipe gulp.dest paths.dist
-
-# images/* --> dist/images/*
-gulp.task 'images:prod', ->
-  gulp.src paths.images
-    .pipe gulp.dest paths.dist + '/images/'
-
-# fonts/* --> dist/fonts/*
-gulp.task 'fonts:prod', ->
-  gulp.src paths.fonts
-    .pipe gulp.dest paths.dist + '/fonts/'
