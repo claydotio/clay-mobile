@@ -3,7 +3,7 @@
 
 **Current: V2** game sharing (external)
 **V1** of this spec was for Game Discovery
-V3 will add social stream
+V3 will add social stream (achievements?) and auth (showing a user's name / that they're logged in?)
 
 ### OBJECTIVE
 
