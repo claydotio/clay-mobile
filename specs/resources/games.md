@@ -3,6 +3,10 @@
 - Jelly Slice? Need to talk to Okijin to see if he's able to add now
 - Enclave Games' games
 
+[Pathuku](http://pathuku.clay.io)
+- Android 2.3.5: 7 - a bit stuttery, gray bar at top
+- iOS 6 Webview: 10
+
 [Yummy Cupcake](http://cupcake.clay.io)
 - Android 2.3.5: **Cupcake doesn't load :(**. SVG issue
 - iOS 6 Webview: **Game doesn't load at all :( :(**
@@ -12,7 +16,7 @@
 - iOS 6 Webview: 8
 
 [Battle Fish](http://battlefish.clay.io)
-- Android 2.3.5: Not loading :/ Will try again after S3 change
+- Android 2.3.5: 9
 - iOS 6 Webview: 9
 
 [Zombies Can't Jump](http://dttl.clay.io/)
