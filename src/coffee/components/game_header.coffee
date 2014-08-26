@@ -14,6 +14,6 @@ module.exports = class GameHeader
   render: =>
     z 'header.game-header', [
       z "a.game-header-logo[href=#{@marketplaceUrl}]", [
-        z 'img', src: 'http://clay.io/images/logo-cloud.png'
+        z 'img', src: '//cdn.wtf/d/images/logos/logo.svg'
       ]
     ]
