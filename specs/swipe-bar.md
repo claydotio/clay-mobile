@@ -1,4 +1,3 @@
-
 ## Clay Mobile: Swipe Bar
 
 **Current: V2** game sharing (external)
@@ -8,13 +7,13 @@ V3 will add social stream (achievements?) and auth (showing a user's name / that
 ### OBJECTIVE
 
   1. **Cross-promote between games**
-    - Number of games played per session
+    - Metrics: Number of games played per session
   2. **Push traffic to the marketplace**
-    - DAU of Marketplace, Number of games played per session
+    - Metrics: DAU of Marketplace, Number of games played per session
   3. **Improve retention for games**
-    - Returning visitors
+    - Metrics: Returning visitors
   4. **Give us data about the game**
-    - Average game session length
+    - Metrics: Average game session length
 
 #### SUMMARY OF METRICS
 
