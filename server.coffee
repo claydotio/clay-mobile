@@ -13,7 +13,7 @@ if process.env.NODE_ENV is 'production'
 else
   app.use express['static'](__dirname + '/build')
 
-router.get /^(?!([^.]\w+$))/, (req, res) ->
+router.get '*', (req, res) ->
   res.sendfile indexFile
 
 app.use router
