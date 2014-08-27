@@ -7,5 +7,7 @@
   "$grayDark": "#262626",
   "$grayLight": "#757575",
 
-  "$fontSizeDefault": "1.2rem"
+  "$fontSizeDefault": "1.2rem",
+
+  "$cdnBase": "//cdn.wtf"
 }
