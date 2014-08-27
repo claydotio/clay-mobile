@@ -21,7 +21,8 @@ route = (routes) ->
       view: => @component.render()
 
 # Kik changes app if the url changes, so don't change it
-if kik?.enabled or not window.history?.pushState
+# Also, if someone recieved a link with a hash, respect it
+if kik?.enabled or not window.history?.pushState or window.location.hash
   z.route.mode = 'hash'
 else
   z.route.mode = 'pathname'
