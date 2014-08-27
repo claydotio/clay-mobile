@@ -8,7 +8,7 @@ module.exports = class GameHeader
     protocol = 'http:'
 
     unless host == targetHost
-      protocol = 'card:'
+      protocol = if kik?.enabled then 'card:' else 'http:'
     @marketplaceUrl = "#{protocol}//#{config.APP_HOST}"
 
   render: =>
