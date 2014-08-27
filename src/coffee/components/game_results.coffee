@@ -28,6 +28,6 @@ module.exports = class GameResults
   render: =>
     z 'section.game-results', {config: @infiniteScrollDir.config},
     _.map @gameBoxes(), (gameBox) ->
-      z '.game-results-container', [
-        z 'div', gameBox.render()
+      z '.game-results-box-container', [
+        gameBox.render()
       ]
