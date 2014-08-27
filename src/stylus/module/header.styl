@@ -1,9 +1,18 @@
 .header
   background: $white
-  padding: 10px 10px
-  border-bottom: 2px solid $bgColor
+  height: 50px
+  border-bottom: 1px solid $bgColor
 
 .header-logo
-  > img
-    vertical-align: bottom
-    width: 150px
+  display: inline-block
+  background-image: url($cdnBase'/d/images/logos/logo.svg')
+  background-repeat: no-repeat
+  width: 110px
+  height: 26px
+  margin: 12px 0 12px 50px
+
+.no-svg
+
+  .header-logo
+    background-image: url($cdnBase'/d/images/logos/logo_200.png')
+    background-size: 100% 100%
