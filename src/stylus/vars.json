@@ -9,5 +9,6 @@
 
   "$fontSizeDefault": "1.2rem",
 
-  "$cdnBase": "//cdn.wtf"
+  "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
+  "$logoPng200": "//cdn.wtf/d/images/logos/logo_200.png"
 }

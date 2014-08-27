@@ -39,8 +39,9 @@ unless host == targetHost or config.MOCK
 
 log.info 'App Ready'
 
-# Feature-detection for SVG - we'll want to move this somewhere cleaner
-svgSupport = !! document.createElementNS &&
-             !! document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect
+# TODO: (Austin) Feature-detection for SVG
+# we'll want to move this somewhere cleaner
+svgSupport = !! document.createElementNS?('http://www.w3.org/2000/svg', 'svg')
+                .createSVGRect
 if ! svgSupport
   document.body.className += ' no-svg'
