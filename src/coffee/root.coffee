@@ -21,7 +21,11 @@ route = (routes) ->
       view: => @component.render()
 
 # Kik changes app if the url changes, so don't change it
-z.route.mode = 'hash'
+if kik?.enabled or not window.history?.pushState
+  z.route.mode = 'hash'
+else
+  z.route.mode = 'pathname'
+
 z.route document.getElementById('app'), '/', route(
   '/': GamesPage
   '/game/:key': PlayGamePage
