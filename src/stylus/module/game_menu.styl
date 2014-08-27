@@ -3,7 +3,9 @@
   height: 50px
   font-size: 1.6rem
   font-weight: bold
-  padding: 0 50px
+  padding-left: 20px
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.04)
+  position: relative
 
   > a
     color: $grayLight
@@ -11,7 +13,8 @@
     line-height: 50px
     display: inline-block
     box-sizing: border-box
-    margin-right: 20px
+    margin-right: 10px
+    padding: 0 10px
 
     &:hover
       color: $grayDark
@@ -19,3 +22,6 @@
   > .is-selected
     color: $orange
     border-bottom: 1px solid $orange
+
+    &:hover
+      color: $orange
