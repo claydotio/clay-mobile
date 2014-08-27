@@ -7,7 +7,7 @@ module.exports = class GameMenu
   constructor: ->
     @items = z.prop [
       {title: 'Popular', filter: 'top', link: '/'},
-      {title: 'New Games', filter: 'new', link: '/games/new'}
+      {title: 'New games', filter: 'new', link: '/games/new'}
     ]
 
     # Select item based on filter

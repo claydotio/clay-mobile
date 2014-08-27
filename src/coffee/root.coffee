@@ -31,6 +31,7 @@ z.route document.getElementById('app'), '/', route(
 # If this was loaded as a game page (abc.clay.io), picker marketplace for hit
 host = window.location.host
 targetHost = config.APP_HOST
+
 unless host == targetHost or config.MOCK
   host = host.split '.'
   gameKey = host[0]
@@ -43,5 +44,5 @@ log.info 'App Ready'
 # we'll want to move this somewhere cleaner
 svgSupport = !! document.createElementNS?('http://www.w3.org/2000/svg', 'svg')
                 .createSVGRect
-if ! svgSupport
+unless svgSupport
   document.body.className += ' no-svg'
