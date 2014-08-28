@@ -9,11 +9,14 @@ url = require 'url'
 _ = require 'lodash'
 Promise = require 'bluebird'
 useragent = require 'express-useragent'
+compress = require 'compression'
 
 config = require './src/coffee/config'
 
 app = express()
 router = express.Router()
+
+app.use compress()
 
 indexFile = './build/index.html'
 if process.env.NODE_ENV is 'production'
