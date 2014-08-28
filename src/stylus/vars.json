@@ -10,5 +10,8 @@
   "$fontSizeDefault": "1.2rem",
 
   "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
-  "$logoPng110": "//cdn.wtf/d/images/logos/logo_110.png"
+  "$logoPng110": "//cdn.wtf/d/images/logos/logo_110.png",
+
+  "$marketplaceGameIconWidth": 128,
+  "$marketplaceGameIconHeight": 128
 }
