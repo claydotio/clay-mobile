@@ -13,4 +13,4 @@ resource.extendCollection 'games', (collection) ->
 
   return collection
 
-module.exports = resource.setBaseUrl config.API_URL
+module.exports = resource.setBaseUrl config.API_PATH

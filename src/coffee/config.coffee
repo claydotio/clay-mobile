@@ -1,7 +1,7 @@
 module.exports =
-  API_URL:
+  API_PATH:
     if process.env.MOCK
     then ''
-    else process.env.API_URL or 'http://clay.io/api/v2'
+    else process.env.API_PATH or '/api/v2'
   HOSTNAME: process.env.HOSTNAME or 'clay.io'
   MOCK: process.env.MOCK or false
