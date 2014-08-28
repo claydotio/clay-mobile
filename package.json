@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "node_modules/bower/bin/bower install",
     "test": "node_modules/gulp/bin/gulp.js test",
-    "start": "node_modules/coffee-script/bin/coffee server.coffee",
+    "start": "npm run build && ./node_modules/pm2/bin/pm2 start server.coffee -i max --name clay_mobile --no-daemon -o /var/log/clay/clay_mobile_api.log -e /var/log/clay/clay_mobile_api.error.log",
     "dev": "node_modules/gulp/bin/gulp.js dev",
     "mock": "MOCK=true node_modules/gulp/bin/gulp.js dev",
     "build": "node_modules/gulp/bin/gulp.js build"
@@ -60,5 +60,8 @@
       "coffeeify",
       "envify"
     ]
+  },
+  "dependencies": {
+    "pm2": "0.10.3"
   }
 }
