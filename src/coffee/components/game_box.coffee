@@ -1,6 +1,7 @@
 z = require 'zorium'
 
 RatingsWidget = require './stars'
+vars = require '../../stylus/vars.json'
 
 module.exports = class GameBox
   constructor: (game) ->
@@ -15,8 +16,10 @@ module.exports = class GameBox
 
   render: ->
     z '.game-box', {onclick: @loadGame}, [
-      # TODO: Account for retina (width=128*devicePixelRatio, larger images)
-      z 'img[width=128][height=128]', src: @game.icon128Url
+      z 'img',
+        src: @game.icon128Url
+        width: vars.$marketplaceGameIconWidth,
+        height: vars.$marketplaceGameIconHeight
       z '.game-box-info', [
         z 'h3', @game.name
         z 'div', @ratings.render()
