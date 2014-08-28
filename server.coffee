@@ -84,8 +84,15 @@ renderHomePage = do ->
     rendered
 
 renderGamePage = (gameKey) ->
-  gameUrl = url.parse "#{config.API_URL}/games/findOne?key=#{gameKey}"
-  gameUrl.protocol = 'http'
+  apiPath = url.parse config.API_PATH
+
+  unless apiPath.hostname
+    apiPath.hostname = config.HOSTNAME
+
+  unless apiPath.protocol
+    apiPath.protocol = 'http'
+
+  gameUrl = url.parse "#{url.format(apiPath)}/games/findOne?key=#{gameKey}"
 
   Promise.promisify(request.get, request) url.format(gameUrl)
   .then (response) ->
