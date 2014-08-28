@@ -13,6 +13,11 @@ module.exports = class GamePlayer
   render: =>
     z 'div.game-player', [
       if @game()?.gameUrl
-      then z 'iframe', {src: @game().gameUrl}
-      else z '.game-player-missing', 'Game Not Found'
+      then z 'iframe' +
+                '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
+                '[scrolling=no]',
+              src: @game().gameUrl
+              style: 'height: ' + window.innerHeight + 'px'
+      else
+        z '.game-player-missing', 'Game Not Found'
     ]
