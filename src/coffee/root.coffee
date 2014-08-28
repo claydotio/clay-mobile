@@ -34,11 +34,11 @@ z.route document.getElementById('app'), '/', route(
 )
 
 # If this was loaded as a game page (abc.clay.io), picker marketplace for hit
-host = window.location.host
+hostname = window.location.hostname
 targetHost = config.HOSTNAME
 
-unless host == targetHost or config.MOCK
-  host = host.split '.'
+unless hostname is targetHost or config.MOCK
+  host = hostname.split '.'
   gameKey = host[0]
   z.route "/game/#{gameKey}"
   kik.picker?("http://#{targetHost}", {}, -> null)
