@@ -23,6 +23,10 @@ module.exports = class GameResults
       # force
       z.redraw(true)
 
+      # Stop loading more
+      if games.length == 0
+        return true
+
     .catch log.error
 
   render: =>

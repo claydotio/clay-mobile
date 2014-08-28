@@ -29,9 +29,11 @@ module.exports = class InfiniteScrollDir
     if totalScrolled - totalScrollHeight < SCROLL_THRESHOLD
       @isListening = false
 
-      @loadMore().then =>
+      return @loadMore().then (shouldStop) =>
         @isListening = true
-        @scrollListener()
+
+        unless shouldStop
+          return @scrollListener()
       .catch log.error
 
   config: ($el, isInit, ctx) =>
