@@ -11,7 +11,4 @@ WORKDIR /opt/clay-mobile
 # Install app deps
 RUN npm install
 
-# Compile
-RUN npm run build
-
 CMD ["npm", "start"]
