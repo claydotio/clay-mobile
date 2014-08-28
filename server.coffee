@@ -8,6 +8,7 @@ request = require 'request'
 url = require 'url'
 _ = require 'lodash'
 Promise = require 'bluebird'
+useragent = require 'express-useragent'
 
 config = require './src/coffee/config'
 
@@ -27,12 +28,15 @@ dust.loadSource indexTpl
 
 router.get '/game/:key', (req, res) ->
   gameKey = req.params.key
-  renderGamePage gameKey
+  isKik = req.useragent.isKik
+
+  renderGamePage gameKey, isKik
   .then (html) ->
     res.send html
   .catch (err) ->
     console.error err
-    renderHomePage()
+
+    renderHomePage isKik
     .then (html) ->
       res.send html
     .catch (err) ->
@@ -40,22 +44,24 @@ router.get '/game/:key', (req, res) ->
       res.status(500).send()
 
 router.get '*', (req, res) ->
+  isKik = req.useragent.isKik
+
   if req.hostname isnt config.HOSTNAME
     gameKey = req.hostname.split('.')[0]
 
-    return renderGamePage gameKey
+    return renderGamePage gameKey, isKik
       .then (html) ->
         res.send html
       .catch (err) ->
         console.error err.stack
-        renderHomePage()
+        renderHomePage isKik
         .then (html) ->
           res.send html
         .catch (err) ->
           console.error err
           res.status(500).send()
 
-  renderHomePage()
+  renderHomePage isKik
   .then (html) ->
     res.send html
   .catch (err) ->
@@ -80,10 +86,14 @@ renderHomePage = do ->
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
 
-  return ->
-    rendered
+  renderedKik = Promise.promisify(dust.render, dust) 'index', _.defaults
+    title: 'Free Games'
+    , page
 
-renderGamePage = (gameKey) ->
+  return (isKik) ->
+    if isKik then renderedKik else rendered
+
+renderGamePage = (gameKey, isKik) ->
   apiPath = url.parse config.API_PATH
 
   unless apiPath.hostname
@@ -117,7 +127,27 @@ renderGamePage = (gameKey) ->
       url: "http://#{game.key}.clay.io"
       canonical: "http://#{game.key}.clay.io"
 
+    if isKik
+      page = _.defaults
+        title: 'Free Games'
+        , page
+
     Promise.promisify(dust.render, dust) 'index', page
+
+
+app.use useragent.express()
+
+# Detect Kik
+app.use (req, res, next) ->
+  isKik = /^Kik/.test req.useragent.source
+  isKikBot = /KikBot/.test req.useragent.source
+  isiOSWebView = req.useragent.isMac and
+                 not req.useragent.isSafari and
+                 req.useragent.isMobile
+
+  req.useragent.isKik = isKik or isKikBot or isiOSWebView
+
+  next()
 
 app.use router
 
