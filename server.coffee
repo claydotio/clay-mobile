@@ -18,15 +18,29 @@ router = express.Router()
 
 app.use compress()
 
-indexFile = './build/index.html'
-if process.env.NODE_ENV is 'production'
+# Don't compact whitespace, because it breaks the javascript partial
+dust.optimizers.format = (ctx, node) ->
+  return node
+
+isProduction = process.env.NODE_ENV is 'production'
+inlineSource = false
+
+if isProduction
   app.use express['static'](__dirname + '/dist')
-  indexFile = './dist/index.html'
+  inlineSource = true
+  distJs = dust.compile fs.readFileSync('dist/js/bundle.js', 'utf-8'), 'distjs'
+  distCss = dust.compile fs.readFileSync('dist/css/bundle.css', 'utf-8'),
+    'distcss'
 else
   app.use express['static'](__dirname + '/build')
 
 
 indexTpl = dust.compile fs.readFileSync('index.dust', 'utf-8'), 'index'
+
+if inlineSource
+  dust.loadSource distJs
+  dust.loadSource distCss
+
 dust.loadSource indexTpl
 
 router.get '/game/:key', (req, res) ->
@@ -74,6 +88,7 @@ router.get '*', (req, res) ->
 # Cache rendering
 renderHomePage = do ->
   page =
+    inlineSource: inlineSource
     title: 'Clay.io - Play mobile games on your phone for free'
     description: 'Play mobile games on your phone for free.
                   We bring you the best mobile web games.'
@@ -114,6 +129,7 @@ renderGamePage = (gameKey, isKik) ->
       throw new Error('Game not found')
 
     page =
+      inlineSource: inlineSource
       title: "Play #{game.name} - free mobile games - Clay.io"
       description: "Play #{game.name} on Clay.io, the best free mobile games"
       keywords: "#{game.name}, mobile games,  free mobile games"
