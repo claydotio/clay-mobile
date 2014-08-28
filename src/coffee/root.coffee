@@ -20,6 +20,7 @@ route = (routes) ->
       controller: => @component = new Component(z.route.param)
       view: => @component.render()
 
+# TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
 # Also, if someone recieved a link with a hash, respect it
 if kik?.enabled or not window.history?.pushState or window.location.hash

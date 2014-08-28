@@ -4,8 +4,14 @@
 express = require 'express'
 dust = require 'dustjs-linkedin'
 fs = require 'fs'
-app = express()
+request = require 'request'
+url = require 'url'
+_ = require 'lodash'
+Promise = require 'bluebird'
 
+config = require './src/coffee/config'
+
+app = express()
 router = express.Router()
 
 indexFile = './build/index.html'
@@ -19,8 +25,45 @@ else
 indexTpl = dust.compile fs.readFileSync('index.dust', 'utf-8'), 'index'
 dust.loadSource indexTpl
 
-router.get '*', (req, res) ->
+router.get '/game/:key', (req, res) ->
+  gameKey = req.params.key
+  renderGamePage gameKey
+  .then (html) ->
+    res.send html
+  .catch (err) ->
+    console.error err
+    renderHomePage()
+    .then (html) ->
+      res.send html
+    .catch (err) ->
+      console.error err
+      res.status(500).send()
 
+router.get '*', (req, res) ->
+  if req.hostname isnt config.HOSTNAME
+    gameKey = req.hostname.split('.')[0]
+
+    return renderGamePage gameKey
+      .then (html) ->
+        res.send html
+      .catch (err) ->
+        console.error err.stack
+        renderHomePage()
+        .then (html) ->
+          res.send html
+        .catch (err) ->
+          console.error err
+          res.status(500).send()
+
+  renderHomePage()
+  .then (html) ->
+    res.send html
+  .catch (err) ->
+    console.error err
+    res.status(500).send()
+
+# Cache rendering
+renderHomePage = do ->
   page =
     title: 'Clay.io - Play mobile games on your phone for free'
     description: 'Play mobile games on your phone for free.
@@ -35,12 +78,39 @@ router.get '*', (req, res) ->
     url: 'http://clay.io/'
     canonical: 'http://clay.io'
 
-  dust.render 'index', page, (err, out) ->
-    if err
-      console.error err
-      return res.status(500).send()
+  rendered = Promise.promisify(dust.render, dust) 'index', page
 
-    res.send out
+  return ->
+    rendered
+
+renderGamePage = (gameKey) ->
+  gameUrl = url.parse "#{config.API_URL}/games/findOne?key=#{gameKey}"
+  gameUrl.protocol = 'http'
+
+  Promise.promisify(request.get, request) url.format(gameUrl)
+  .then (response) ->
+    game = JSON.parse response[0].body
+    if _.isEmpty game
+      throw new Error('Game not found')
+
+    page =
+      title: "Play #{game.name} - free mobile games - Clay.io"
+      description: "Play #{game.name} on Clay.io, the best free mobile games"
+      keywords: "#{game.name}, mobile games,  free mobile games"
+      name: "#{game.name} - Clay.io"
+
+      # TODO: (Zoli) This isn't good enough
+      icon256: game.icon128Url
+      icon76: game.icon128Url
+      icon120: game.icon128Url
+      icon152: game.icon128Url
+
+      # TODO: (Zoli) this should be returned by the server
+      icon440x280: "http://cdn.wtf/g/#{game.id}/meta/promo_440.png"
+      url: "http://#{game.key}.clay.io"
+      canonical: "http://#{game.key}.clay.io"
+
+    Promise.promisify(dust.render, dust) 'index', page
 
 app.use router
 

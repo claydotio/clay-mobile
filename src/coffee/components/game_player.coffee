@@ -7,9 +7,8 @@ module.exports = class GamePlayer
   constructor: ({gameKey}) ->
     @gameKey = z.prop gameKey
 
-    z.startComputation
     @game = z.prop Game.all('games').findOne(key: gameKey)
-    @game.then z.endCompuation
+    @game.then z.redraw
 
   render: =>
     z 'div.game-player', [
