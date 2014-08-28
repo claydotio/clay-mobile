@@ -29,6 +29,7 @@
     "gulp-clean": "0.3.1",
     "gulp-coffeelint": "0.3.3",
     "gulp-concat": "2.3.4",
+    "gulp-minify-css": "0.3.7",
     "gulp-nodemon": "1.0.4",
     "gulp-rename": "1.2.0",
     "gulp-run-sequence": "0.3.2",
@@ -63,6 +64,7 @@
   },
   "dependencies": {
     "bluebird": "2.3.2",
+    "compression": "1.0.11",
     "dustjs-linkedin": "2.4.0",
     "express-useragent": "0.1.2",
     "lodash": "2.4.1",

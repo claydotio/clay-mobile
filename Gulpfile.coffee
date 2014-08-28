@@ -13,6 +13,8 @@ stylus = require 'gulp-stylus'
 coffeelint = require 'gulp-coffeelint'
 glob = require 'glob'
 karma = require('karma').server
+minifyCss = require 'gulp-minify-css'
+
 karmaConf = require './karma.defaults'
 
 # Modify NODE_PATH for test require's
@@ -163,6 +165,7 @@ gulp.task 'styles:prod', ->
     .pipe sourcemaps.init()
       .pipe stylus 'include css': true
       .pipe rename outFiles.styles
+      .pipe minifyCss()
     .pipe sourcemaps.write '../maps/'
     .pipe gulp.dest paths.dist + '/css/'
 
