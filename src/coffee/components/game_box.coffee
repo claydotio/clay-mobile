@@ -15,7 +15,8 @@ module.exports = class GameBox
 
   render: ->
     z '.game-box', {onclick: @loadGame}, [
-      z 'img', src: @game.icon128Url
+      # TODO: Account for retina (width=128*devicePixelRatio, larger images)
+      z 'img[width=128][height=128]', src: @game.icon128Url
       z '.game-box-info', [
         z 'h3', @game.name
         z 'div', @ratings.render()
