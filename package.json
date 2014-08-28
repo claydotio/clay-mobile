@@ -62,6 +62,7 @@
     ]
   },
   "dependencies": {
+    "dustjs-linkedin": "2.4.0",
     "pm2": "0.10.3"
   }
 }
