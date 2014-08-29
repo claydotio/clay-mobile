@@ -7,7 +7,7 @@
   2. **Increase Engagement through competition**
     - Metrics: Average game session length, Return visitors
 
--#### SUMMARY OF METRICS
+#### SUMMARY OF METRICS
 
 In order of importance (though all are still very important), along with success criteria:
   - Return visitors

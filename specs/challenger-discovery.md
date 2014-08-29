@@ -23,13 +23,20 @@ In order of importance (though all are still very important), along with success
 
 ### FEATURES
 
-  1. Leaderboards
+  1. Authentication
+    - **Why?** Logins required for this stage (profiles, leaderboards, friends)
+    - Parts of marketplace will work without auth
+      - List of games
+      - Game info page
+      - Play page
+      - Global stream (phase 4)
+  2. Leaderboards
     - **Why?** leads to more encounters per user and more engagement in games (attempting to beat others' scores)
     - Separate spec: [leaderboards.md](leaderboards.md)
-  2. Profiles
+  3. Profiles
     - **Why?** more experiences per user and people love their vanity
     - Separate spec: [profiles.md](profiles.md)
-  3. Friend System
+  4. Friend System **(part of phase 5, skip for now)**
     - **Why?** friends per user, basis of social graph
     - Separate spec: [friends.md](friends.md)
 

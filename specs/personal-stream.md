@@ -11,7 +11,7 @@
   3. **Promote return visits with up-to-date content from friends (the Facebook stream effect)**
     - Metrics: Return visitors
 
--#### SUMMARY OF METRICS
+#### SUMMARY OF METRICS
 
 In order of importance (though all are still very important), along with success criteria:
   - Return visitors

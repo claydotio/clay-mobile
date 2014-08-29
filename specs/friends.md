@@ -11,7 +11,7 @@
   3. **Promote game discovery through friends/connections**
     - Metrics: Games played per session
 
--#### SUMMARY OF METRICS
+#### SUMMARY OF METRICS
 
 In order of importance (though all are still very important), along with success criteria:
   - Return visitors

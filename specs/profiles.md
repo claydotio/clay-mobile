@@ -8,7 +8,7 @@
     - One goal of profile should be to funnel the viewing user into games that the profile user plays
     - Metrics: Games played per session
 
--#### SUMMARY OF METRICS
+#### SUMMARY OF METRICS
 
 In order of importance (though all are still very important), along with success criteria:
   - Encounters per user
