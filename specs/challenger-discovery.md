@@ -9,7 +9,7 @@
     - More friends (usually) means more engagement. People want to play games where their friends are
       - A strong social graph can become an unfair advantage for us
 
--#### SUMMARY OF METRICS
+#### SUMMARY OF METRICS
 
 In order of importance (though all are still very important), along with success criteria:
   - Friends per user
