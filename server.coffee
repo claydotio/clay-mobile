@@ -122,6 +122,7 @@ renderGamePage = (gameKey, isKik) ->
 
   gameUrl = url.parse "#{url.format(apiPath)}/games/findOne?key=#{gameKey}"
 
+  console.log "GET #{url.format(gameUrl)}"
   Promise.promisify(request.get, request) url.format(gameUrl)
   .then (response) ->
     game = JSON.parse response[0].body
