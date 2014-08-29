@@ -27,7 +27,7 @@
     "glob": "4.0.4",
     "gulp": "3.8.6",
     "gulp-clean": "0.3.1",
-    "gulp-coffeelint": "claydotio/gulp-coffeelint",
+    "gulp-coffeelint": "git://github.com/claydotio/gulp-coffeelint.git",
     "gulp-concat": "2.3.4",
     "gulp-minify-css": "0.3.7",
     "gulp-nodemon": "1.0.4",
