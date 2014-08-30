@@ -44,6 +44,7 @@ if inlineSource
 dust.loadSource indexTpl
 
 router.get '/game/:key', (req, res) ->
+  console.log 'AGENT ', req.useragent.source
   gameKey = req.params.key
   isKik = req.useragent.isKik
 
@@ -62,6 +63,7 @@ router.get '/game/:key', (req, res) ->
 
 router.get '*', (req, res) ->
   isKik = req.useragent.isKik
+  console.log 'AGENT ', req.useragent.source
 
   if req.hostname isnt config.HOSTNAME
     gameKey = req.hostname.split('.')[0]
@@ -122,7 +124,7 @@ renderGamePage = (gameKey, isKik) ->
 
   gameUrl = url.parse "#{url.format(apiPath)}/games/findOne?key=#{gameKey}"
 
-  console.log "GET #{url.format(gameUrl)}"
+  console.log 'GET', url.format(gameUrl)
   Promise.promisify(request.get, request) url.format(gameUrl)
   .then (response) ->
     game = JSON.parse response[0].body
@@ -149,7 +151,7 @@ renderGamePage = (gameKey, isKik) ->
 
     if isKik
       page = _.defaults
-        title: 'Free Games'
+        title: "#{game.name}"
         , page
 
     Promise.promisify(dust.render, dust) 'index', page
