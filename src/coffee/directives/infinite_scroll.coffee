@@ -34,7 +34,7 @@ module.exports = class InfiniteScrollDir
 
         unless shouldStop
           return @scrollListener()
-      .catch log.error
+      .catch log.trace
 
   config: ($el, isInit, ctx) =>
 

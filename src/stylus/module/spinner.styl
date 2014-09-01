@@ -1,0 +1,45 @@
+$zIndexSpinnerBeforeAfter = 1
+$zIndexSpinnerBeforeAfterAnimation = 2
+
+@keyframes expand
+  0%
+    transform: scale(0)
+  50%
+    transform: scale(1)
+  100%
+    z-index: $zIndexSpinnerBeforeAfterAnimation
+
+.spinner-container
+  position: relative
+  height: 40px
+
+.spinner
+  position: absolute
+  left: 50%
+  top: 50%
+  margin: -20px 0 0 -20px
+  background-color: $white
+  border-radius: 50%
+  box-shadow: 0 0 0 6.66667px $orange
+  width: 40px
+  height: 40px
+
+.spinner:before, .spinner:after
+  content: ''
+  position: absolute
+  left: 50%
+  top: 50%
+  display: block
+  margin: -21px 0 0 -21px
+  border-radius: 50%
+  z-index: $zIndexSpinnerBeforeAfter
+  width: 42px
+  height: 42px
+
+.spinner:before
+  background: $orange
+  animation: expand 1.6s linear infinite both
+
+.spinner:after
+  background: $white
+  animation: expand 1.6s linear 0.8s infinite both

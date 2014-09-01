@@ -1,0 +1,44 @@
+$zIndexGameRatePromoImageAfter = 1
+$zIndexGameRatePromoImageH1 = 2
+
+.game-rate
+  text-align: center
+  padding: 0 0 10px 0
+
+//////////////
+// PROMO IMAGE
+//////////////
+.game-rate-promo-image
+  width: 100%
+  height: 94px
+  position: relative
+  overflow: hidden
+  background-size: 100% auto
+
+  &:after
+    background: linear-gradient(bottom, $bgColor 0, rgba(0, 0, 0, 0) 100%)
+    width: 100%
+    height: 100%
+    position: absolute
+    content: ''
+    z-index: $zIndexGameRatePromoImageAfter
+    left: 0
+    top: 0
+
+  > h1
+    position: absolute
+    z-index: $zIndexGameRatePromoImageH1
+    bottom: 0
+    margin: 0 0 0 10px
+    text-align: left
+
+///////////
+// CONTENT
+//////////
+.game-rate-message
+  margin: 10px 0
+  color: $grayLight
+  font-weight: bold
+
+.game-rate-stars
+  margin: 0 0 5px 0

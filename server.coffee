@@ -108,7 +108,7 @@ renderGamePage = (gameKey, isKik) ->
   .then (response) ->
     game = JSON.parse response[0].body
     if _.isEmpty game
-      throw new Error('Game not found')
+      throw new Error 'Game not found: ' + gameKey
 
     page =
       title: "Play #{game.name} - free mobile games - Clay.io"

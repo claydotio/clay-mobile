@@ -24,14 +24,20 @@
   text-transform: none
   font-size: 160%
 
-.icon-star:before { content: '\e800' } /* 'filled star' */
-.icon-star-half-fill:before { content: '\e801'; position: absolute } /* half star */
+.icon-star:before { content: '\e800'; } /* '' */
+.icon-star-half-fill:before { content: '\e801'; position: absolute } /* '' */
+.icon-share:before { content: '\e802'; } /* '' */
+.icon-market:before { content: '\e803'; } /* '' */
+.icon-back-arrow:before { content: '\e804'; } /* '' */
+.icon-close:before { content: '\e805'; } /* '' */
+.icon-chevron-left:before { content: '\e806'; } /* '' */
+.icon-chevron-right:before { content: '\e807'; } /* '' */
 
-// Squish stars together a bit more
-.icon-star-half-fill:before, .icon-star:before
-  margin: 0 -0.1em
+.icon-star, .icon-star-half-fill
+  &.is-filled
+    color: $orange
+  &.is-empty
+    color: $grayLight
 
-.icon-star-fill
-  color: $orange
-.icon-star-empty
-  color: $grayLight
+.icon
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
