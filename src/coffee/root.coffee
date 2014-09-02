@@ -11,6 +11,7 @@ log.enableAll()
 
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
+PushToken = require './models/push_token'
 
 window.addEventListener 'fb-flo-reload', z.redraw
 
@@ -35,16 +36,17 @@ z.route document.getElementById('app'), '/', route(
 )
 
 # push tokens let us communicate with kik users after they've left app
+# TODO: (Austin) remove localStorage in favor of anonymous user sessions
 if not localStorage['pushTokenStored']
   kik?.ready? ->
     kik.push.getToken (token) ->
       return if not token
-      PushToken = require './models/push_token'
-      PushToken.all('pushTokens').create
+      PushToken.all('pushTokens').post
         token: token
         source: 'kik'
       .then ->
         localStorage['pushTokenStored'] = 1
+      .catch log.error
 
 # If this was loaded as a game page (abc.clay.io), picker marketplace for hit
 hostname = window.location.hostname
