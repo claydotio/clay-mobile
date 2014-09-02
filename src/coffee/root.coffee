@@ -35,13 +35,16 @@ z.route document.getElementById('app'), '/', route(
 )
 
 # push tokens let us communicate with kik users after they've left app
-kik?.ready ->
-  kik.push.getToken (token) ->
-    return if not token
-    PushToken = require './models/push_token'
-    PushToken.all('pushTokens').create
-      token: token
-      source: 'kik'
+if not localStorage['pushTokenStored']
+  kik?.ready? ->
+    kik.push.getToken (token) ->
+      return if not token
+      PushToken = require './models/push_token'
+      PushToken.all('pushTokens').create
+        token: token
+        source: 'kik'
+      .then ->
+        localStorage['pushTokenStored'] = 1
 
 # If this was loaded as a game page (abc.clay.io), picker marketplace for hit
 hostname = window.location.hostname
