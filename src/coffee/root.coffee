@@ -34,6 +34,15 @@ z.route document.getElementById('app'), '/', route(
   '/games/:filter': GamesPage
 )
 
+# push tokens let us communicate with kik users after they've left app
+kik?.ready ->
+  kik.push.getToken (token) ->
+    return if not token
+    PushToken = require './models/push_token'
+    PushToken.all('pushTokens').create
+      token: token
+      source: 'kik'
+
 # If this was loaded as a game page (abc.clay.io), picker marketplace for hit
 hostname = window.location.hostname
 targetHost = config.HOSTNAME
