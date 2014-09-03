@@ -144,6 +144,7 @@ renderGamePage = (gameKey, isKik) ->
       icon76: game.icon128Url
       icon120: game.icon128Url
       icon152: game.icon128Url
+      iconKik: game.icon128Url
 
       # TODO: (Zoli) this should be returned by the server
       icon440x280: "http://cdn.wtf/g/#{game.id}/meta/promo_440.png"
