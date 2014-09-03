@@ -100,7 +100,8 @@ renderHomePage = do ->
     icon76: '//cdn.wtf/d/images/icons/icon_76.png'
     icon120: '//cdn.wtf/d/images/icons/icon_120.png'
     icon152: '//cdn.wtf/d/images/icons/icon_152.png'
-    icon440x280: 'http://cdn.wtf/d/images/icons/icon_440_280.png'
+    icon440x280: '//cdn.wtf/d/images/icons/icon_440_280.png'
+    iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
     url: 'http://clay.io/'
     canonical: 'http://clay.io'
 
