@@ -100,7 +100,8 @@ renderHomePage = do ->
     icon76: '//cdn.wtf/d/images/icons/icon_76.png'
     icon120: '//cdn.wtf/d/images/icons/icon_120.png'
     icon152: '//cdn.wtf/d/images/icons/icon_152.png'
-    icon440x280: 'http://cdn.wtf/d/images/icons/icon_440_280.png'
+    icon440x280: '//cdn.wtf/d/images/icons/icon_440_280.png'
+    iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
     url: 'http://clay.io/'
     canonical: 'http://clay.io'
 
@@ -143,6 +144,7 @@ renderGamePage = (gameKey, isKik) ->
       icon76: game.icon128Url
       icon120: game.icon128Url
       icon152: game.icon128Url
+      iconKik: game.icon128Url
 
       # TODO: (Zoli) this should be returned by the server
       icon440x280: "http://cdn.wtf/g/#{game.id}/meta/promo_440.png"

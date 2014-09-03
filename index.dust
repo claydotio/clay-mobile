@@ -41,7 +41,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{icon152}">
 
     {! kik !}
-    <link rel="kik-icon" href="{icon256}">
+    <link rel="kik-icon" href="{iconKik}">
     <link rel="canonical" href="{canonical}">
 
     {! misc !}
