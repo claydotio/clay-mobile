@@ -6,7 +6,7 @@
   "dependencies": {
     "lodash": "2.4.1",
     "zorium.js": "https://github.com/claydotio/zorium.js.git#next",
-    "loglevel": "0.6.0",
+    "loglevel": "https://github.com/claydotio/loglevel.git#events",
     "q": "1.0.1",
     "normalize.css": "3.0.1",
     "restangular": "https://github.com/claydotio/restangular.git#noangular",
