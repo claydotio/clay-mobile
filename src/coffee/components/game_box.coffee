@@ -2,6 +2,7 @@ z = require 'zorium'
 
 RatingsWidget = require './stars'
 vars = require '../../stylus/vars.json'
+Experiment = require '../models/experiment'
 
 module.exports = class GameBox
   constructor: (game) ->
@@ -10,6 +11,7 @@ module.exports = class GameBox
 
   loadGame: =>
     ga('send', 'event', 'game_box', 'click', @game.key)
+    Experiment.convert 'game_box_click'
     gameUrl = 'http://' + @game.key + '.' + window.location.host
     z.route '/game/' + @game.key
     kik.picker?(gameUrl, {}, -> null)
