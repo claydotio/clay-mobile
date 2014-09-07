@@ -14,6 +14,8 @@ module.exports = class GameResults
     @infiniteScrollDir = new InfiniteScrollDir(loadMore: @loadMore)
     @gameBoxes = z.prop []
     @gameBoxTheme = z.prop null
+    @Spinner = new (require './spinner')()
+    @isLoading = true
 
     Experiment.getExperiments().then (params) =>
       @gameBoxTheme = z.prop switch params.gameBoxColor
@@ -23,12 +25,17 @@ module.exports = class GameResults
     .catch log.error
 
   loadMore: =>
+    @isLoading = true
+    z.redraw()
+
     GameFilter.getGames
       limit: 10
       skip: @gameBoxes().length
     .then (games) =>
       @gameBoxes @gameBoxes().concat _.map games, (game) ->
         new GameBox(game)
+
+      @isLoading = false
 
       # force
       z.redraw(true)
@@ -41,7 +48,10 @@ module.exports = class GameResults
 
   render: =>
     z 'section.game-results', {config: @infiniteScrollDir.config},
-    _.map @gameBoxes(), (gameBox) =>
+    (_.map @gameBoxes(), (gameBox) =>
       z ".game-results-box-container#{@gameBoxTheme() or ''}", [
         gameBox.render()
       ]
+    ).concat [
+      if @isLoading then z '.game-results-spinner', @Spinner.render()
+    ]
