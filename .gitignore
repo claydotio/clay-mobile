@@ -2,4 +2,5 @@
 /dist
 /build
 /components
+/specs
 npm-debug.log
