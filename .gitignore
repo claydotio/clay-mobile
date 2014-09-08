@@ -3,4 +3,6 @@
 /build
 /components
 /specs
+roadmap.md
+sensitive.coffee
 npm-debug.log
