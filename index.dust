@@ -69,7 +69,13 @@
       ga('create', 'UA-27992080-6', 'auto');
       ga('require', 'displayfeatures');
       ga('send', 'pageview');
-
+    </script>
+    <script>
+      // We save console.log to a temp variable and re-set console.log to
+      // the original version (logClone) since Kik overrides console.log
+      // Kik doing that means we don't see the correct line numbers for logs
+      // without this fix.
+      var logClone = console.log
     </script>
 
     <div id="app"></div>

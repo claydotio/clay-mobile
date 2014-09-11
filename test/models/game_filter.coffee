@@ -1,5 +1,7 @@
 should = require('clay-chai').should()
+
 GameFilter = require 'models/game_filter'
+GameFilter.constructor() # reset
 
 describe 'GameFilterModel', ->
   describe 'State getters/setters', ->

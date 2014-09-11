@@ -130,7 +130,7 @@ renderGamePage = (gameKey, isKik) ->
   .then (response) ->
     game = JSON.parse response[0].body
     if _.isEmpty game
-      throw new Error('Game not found: ' + gameKey)
+      throw new Error 'Game not found: ' + gameKey
 
     page =
       inlineSource: inlineSource

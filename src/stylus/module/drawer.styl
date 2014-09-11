@@ -1,0 +1,178 @@
+$drawerWidth = 234
+$drawerNubRadius = 25
+$drawerContentPadding = 20
+$zIndexDrawerHeader = 1
+$zIndexDrawerPromoImageAfter = 1
+
+// 25px wider than drawer-inner to allow space for drawer-nub w/o neg margins
+.drawer
+  width: ($drawerWidth + $drawerNubRadius) px
+  right: -($drawerWidth)px
+  height: 100%
+  top: 0
+  padding-left: $drawerNubRadius px
+  position: fixed
+  z-index: $zIndexDrawer
+  transform: translateZ(0) /* gpu accelerate */
+  transition: right 0.25s
+  text-align: left
+  pointer-events: none // not supported in ie9/10
+  box-sizing: border-box
+
+  &.is-open
+    right: 0
+
+.drawer-overlay
+  background: $overlayColor
+  position: fixed
+  width: 100%
+  height: 100%
+  display: none
+
+  &.is-open
+    display: block
+
+
+// ~Android 2.3 detection
+.is-slow-device
+  .drawer-overlay
+    display: none // opaque background causes bad performance
+
+//////
+// NUB
+//////
+// invisible, a bit larger that drawer-nub-inner to make easier to expand
+.drawer-nub-padding
+  width: $drawerNubRadius px
+  height: ($drawerNubRadius * 2.5)px
+  position: absolute
+  top: 0
+  /* doing left negative px doesn't work on android (touch events won't fire) */
+  left: 0
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+  pointer-events: all // not supported in ie9/10
+
+  > .drawer-nub
+    cursor: pointer
+    width: $drawerNubRadius px
+    border-top-left-radius: $drawerNubRadius px
+    border-bottom-left-radius: $drawerNubRadius px
+    height: ($drawerNubRadius * 2) px
+    margin-top: 0
+    margin-left: 0
+    background-color: $white
+    border: 1px solid $dividerColor
+    border-right: none
+    box-sizing: border-box
+
+  .icon-chevron-left, .icon-chevron-right
+    font-size: $fontSizeLarge
+    color: $orange
+    &:before
+      margin-top: 3px
+      width: 25px
+
+/////////
+// HEADER
+/////////
+.drawer-header
+  width: 100%
+  height: ($drawerNubRadius * 2) px
+  position: relative
+  z-index: $zIndexDrawerHeader
+  background: $white
+
+  > .drawer-header-logo
+    display: inline-block
+    background-image: url($logoSvg)
+    background-repeat: no-repeat
+    width: 110px
+    height: 26px
+    margin: ($drawerNubRadius - 13) px
+
+.no-svg
+  .drawer-header > .drawer-header-logo
+    background-image: url($logoPng110) // png instead of svg
+    background-size: 100% 100%
+
+.drawer-inner
+  background: $bgColor
+  height: 100%
+  width: 100%
+  // necessary for overflow: auto to work right since this is set to 100% height
+  margin-top: -($drawerNubRadius * 2) px
+  padding-top: ($drawerNubRadius * 2) px
+  box-shadow: -10px 0 10px 0px rgba(0, 0, 0, 0.04)
+  pointer-events: all // not supported in ie9/10
+  overflow: auto
+  box-sizing: border-box
+
+//////////////
+// PROMO IMAGE
+//////////////
+.drawer-promo-image
+  width: 100%
+  height: 132px
+  position: relative
+  overflow: hidden
+  background-size: 100% auto
+
+  &:after
+    background: linear-gradient(bottom, $bgColor 0, rgba(0, 0, 0, 0) 50px)
+    width: 100%
+    height: 100%
+    position: absolute
+    content: ''
+    z-index: zIndexDrawerPromoImageAfter
+    left: 0
+    top: 0
+
+.is-android-2-3
+  // bugs out touch events (overlay takes up whole page)
+  .drawer-promo-image
+    position: static
+    &:after
+      display: none
+
+/////////////
+// MENU ITEMS
+/////////////
+.drawer-menu-items
+  margin: 0
+  padding: 0
+
+  > li
+    display: block
+    list-style-type: none
+
+    > a
+      display: block
+      line-height: 60px
+      font-size: $fontSizeMedium
+      font-weight: bold
+      padding: 0 ($drawerContentPadding)px
+
+      &:active
+        background: $activeBgColor
+
+      > .icon
+        font-size: $fontSizeMedium
+        color: $orange
+        margin-right: 10px
+
+      > .drawer-menu-item
+        display: inline-block
+        vertical-align: top
+
+  > li.divider
+    width: 100%
+    height: 1px
+    background: $dividerColor
+    margin: 10px 0
+
+
+///////////////////
+// CROSS PROMOTION
+///////////////////
+.drawer-cross-promotion
+  padding: 0 ($drawerContentPadding)px

@@ -5,37 +5,34 @@ log = require 'loglevel'
 
 GameFilter = require '../models/game_filter'
 GameBox = require './game_box'
-Experiment = require '../models/experiment'
 InfiniteScrollDir = require '../directives/infinite_scroll'
-
+Spinner = require './spinner'
 
 module.exports = class GameResults
   constructor: ->
-    @infiniteScrollDir = new InfiniteScrollDir(loadMore: @loadMore)
+    @infiniteScrollDir = new InfiniteScrollDir loadMore: @loadMore
     @gameBoxes = z.prop []
-    @gameBoxTheme = z.prop null
-    @Spinner = new (require './spinner')()
-    @isLoading = true
-
-    Experiment.getExperiments().then (params) =>
-      @gameBoxTheme = z.prop switch params.gameBoxColor
+    @gameBoxTheme = z.prop Experiment.getExperiments().then (params) ->
+      switch params.gameBoxColor
         when 'white' then '.theme-background-white'
-        else  null
-      z.redraw()
-    .catch log.error
+        else null
+
+    # use Q for finally and catch
+    # TODO: (Austin) remove Q dependency when Zorium uses Q
+    Q.when @gameBoxTheme
+    .finally z.redraw
+    .catch log.trace
+
+    @Spinner = new Spinner()
+    @isLoading = true
 
   loadMore: =>
-    @isLoading = true
-    z.redraw()
-
     GameFilter.getGames
       limit: 10
       skip: @gameBoxes().length
     .then (games) =>
       @gameBoxes @gameBoxes().concat _.map games, (game) ->
-        new GameBox(game)
-
-      @isLoading = false
+        new GameBox game
 
       # force
       z.redraw(true)
@@ -44,12 +41,11 @@ module.exports = class GameResults
       if games.length == 0
         return true
 
+    .catch log.error
+
   render: =>
     z 'section.game-results', {config: @infiniteScrollDir.config},
-    (_.map @gameBoxes(), (gameBox) =>
-      z ".game-results-box-container#{@gameBoxTheme() or ''}", [
+    _.map @gameBoxes(), (gameBox) ->
+      z '.game-results-box-container', [
         gameBox.render()
       ]
-    ).concat [
-      if @isLoading then z '.game-results-spinner', @Spinner.render()
-    ]

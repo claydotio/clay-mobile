@@ -2,16 +2,25 @@
   "$orange": "#fcaa2f",
   "$blue": "#67afe6",
   "$bgColor": "#f2f2f2",
+  "$dividerColor": "#e6e6e6",
+  "$disabledColor": "#cccccc",
   "$white": "#ffffff",
   "$black": "#000000",
   "$grayDark": "#262626",
   "$grayLight": "#757575",
+  "$activeBgColor": "rgba(0, 0, 0, 0.05)",
+  "$overlayColor": "rgba(0, 0, 0, 0.7)",
 
-  "$fontSizeDefault": "1.2rem",
+  "$fontSizeSmall": "1.2rem",
+  "$fontSizeMedium": "1.6rem",
+  "$fontSizeLarge": "2.4rem",
 
   "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
   "$logoPng110": "//cdn.wtf/d/images/logos/logo_110.png",
 
   "$marketplaceGameIconWidth": 128,
-  "$marketplaceGameIconHeight": 128
+  "$marketplaceGameIconHeight": 128,
+
+  "zIndexModal": 100,
+  "zIndexDrawer": 200
 }

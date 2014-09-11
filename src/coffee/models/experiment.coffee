@@ -23,7 +23,7 @@ class Experiment
       z.request
         method: 'POST'
         url: "#{fcRoot}/users/#{user.flakCannonId}/convert/#{event}"
-    .catch log.error
+    .catch log.trace
 
   # Temporary testing overrides for debugging.
   # TODO: (Zoli) remove in favor of user auth overrides.
