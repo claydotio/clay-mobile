@@ -4,6 +4,7 @@ Q = require 'q'
 log = require 'loglevel'
 
 GameFilter = require '../models/game_filter'
+Experiment = require '../models/experiment'
 GameBox = require './game_box'
 InfiniteScrollDir = require '../directives/infinite_scroll'
 Spinner = require './spinner'
@@ -26,6 +27,8 @@ module.exports = class GameResults
     @Spinner = new Spinner()
     @isLoading = true
 
+    z.redraw()
+
   loadMore: =>
     GameFilter.getGames
       limit: 10
@@ -33,6 +36,8 @@ module.exports = class GameResults
     .then (games) =>
       @gameBoxes @gameBoxes().concat _.map games, (game) ->
         new GameBox game
+
+      @isLoading = false
 
       # force
       z.redraw(true)
@@ -45,7 +50,10 @@ module.exports = class GameResults
 
   render: =>
     z 'section.game-results', {config: @infiniteScrollDir.config},
-    _.map @gameBoxes(), (gameBox) ->
-      z '.game-results-box-container', [
+    (_.map @gameBoxes(), (gameBox) =>
+      z ".game-results-box-container#{@gameBoxTheme() or ''}", [
         gameBox.render()
       ]
+    ).concat [
+      if @isLoading then z '.game-results-spinner', @Spinner.render()
+    ]
