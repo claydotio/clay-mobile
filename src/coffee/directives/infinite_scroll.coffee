@@ -30,9 +30,8 @@ module.exports = class InfiniteScrollDir
       @isListening = false
 
       return @loadMore().then (shouldStop) =>
-        @isListening = true
-
         unless shouldStop
+          @isListening = true
           return @scrollListener()
       .catch log.trace
 

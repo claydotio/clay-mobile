@@ -9,24 +9,42 @@ url = require 'url'
 _ = require 'lodash'
 Promise = require 'bluebird'
 useragent = require 'express-useragent'
+compress = require 'compression'
 
 config = require './src/coffee/config'
 
 app = express()
 router = express.Router()
 
-indexFile = './build/index.html'
-if process.env.NODE_ENV is 'production'
+app.use compress()
+
+# Don't compact whitespace, because it breaks the javascript partial
+dust.optimizers.format = (ctx, node) ->
+  return node
+
+isProduction = process.env.NODE_ENV is 'production'
+inlineSource = false
+
+if isProduction
   app.use express['static'](__dirname + '/dist')
-  indexFile = './dist/index.html'
+  inlineSource = true
+  distJs = dust.compile fs.readFileSync('dist/js/bundle.js', 'utf-8'), 'distjs'
+  distCss = dust.compile fs.readFileSync('dist/css/bundle.css', 'utf-8'),
+    'distcss'
 else
   app.use express['static'](__dirname + '/build')
 
 
 indexTpl = dust.compile fs.readFileSync('index.dust', 'utf-8'), 'index'
+
+if inlineSource
+  dust.loadSource distJs
+  dust.loadSource distCss
+
 dust.loadSource indexTpl
 
 router.get '/game/:key', (req, res) ->
+  console.log 'AGENT ', req.useragent.source
   gameKey = req.params.key
   isKik = req.useragent.isKik
 
@@ -45,6 +63,7 @@ router.get '/game/:key', (req, res) ->
 
 router.get '*', (req, res) ->
   isKik = req.useragent.isKik
+  console.log 'AGENT ', req.useragent.source
 
   if req.hostname isnt config.HOSTNAME
     gameKey = req.hostname.split('.')[0]
@@ -71,16 +90,18 @@ router.get '*', (req, res) ->
 # Cache rendering
 renderHomePage = do ->
   page =
+    inlineSource: inlineSource
     title: 'Clay.io - Play mobile games on your phone for free'
     description: 'Play mobile games on your phone for free.
                   We bring you the best mobile web games.'
     keywords: 'mobile games, phone games, free mobile games, mobile web games'
     name: 'Clay.io'
-    icon256: 'http://cdn.wtf/d/images/icons/icon_256.png'
-    icon76: 'http://cdn.wtf/d/images/icons/icon_76.png'
-    icon120: 'http://cdn.wtf/d/images/icons/icon_120.png'
-    icon152: 'http://cdn.wtf/d/images/icons/icon_152.png'
-    icon440x280: 'http://cdn.wtf/d/images/icons/icon_440_280.png'
+    icon256: '//cdn.wtf/d/images/icons/icon_256.png'
+    icon76: '//cdn.wtf/d/images/icons/icon_76.png'
+    icon120: '//cdn.wtf/d/images/icons/icon_120.png'
+    icon152: '//cdn.wtf/d/images/icons/icon_152.png'
+    icon440x280: '//cdn.wtf/d/images/icons/icon_440_280.png'
+    iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
     url: 'http://clay.io/'
     canonical: 'http://clay.io'
 
@@ -104,6 +125,7 @@ renderGamePage = (gameKey, isKik) ->
 
   gameUrl = url.parse "#{url.format(apiPath)}/games/findOne?key=#{gameKey}"
 
+  console.log 'GET', url.format(gameUrl)
   Promise.promisify(request.get, request) url.format(gameUrl)
   .then (response) ->
     game = JSON.parse response[0].body
@@ -111,6 +133,7 @@ renderGamePage = (gameKey, isKik) ->
       throw new Error 'Game not found: ' + gameKey
 
     page =
+      inlineSource: inlineSource
       title: "Play #{game.name} - free mobile games - Clay.io"
       description: "Play #{game.name} on Clay.io, the best free mobile games"
       keywords: "#{game.name}, mobile games,  free mobile games"
@@ -121,6 +144,7 @@ renderGamePage = (gameKey, isKik) ->
       icon76: game.icon128Url
       icon120: game.icon128Url
       icon152: game.icon128Url
+      iconKik: game.icon128Url
 
       # TODO: (Zoli) this should be returned by the server
       icon440x280: "http://cdn.wtf/g/#{game.id}/meta/promo_440.png"
@@ -129,7 +153,7 @@ renderGamePage = (gameKey, isKik) ->
 
     if isKik
       page = _.defaults
-        title: 'Free Games'
+        title: "#{game.name}"
         , page
 
     Promise.promisify(dust.render, dust) 'index', page

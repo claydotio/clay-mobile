@@ -94,9 +94,6 @@
     "no_unnecessary_fat_arrows": {
         "level": "warn"
     },
-    "non_empty_constructor_needs_parens": {
-        "level": "error"
-    },
     "space_operators": {
         "level": "warn"
     }

@@ -7,18 +7,18 @@
     <meta name="description" content="{description}">
     <meta name="keywords" content="{keywords}">
 
-    <!-- mobile -->
+    {! mobile !}
     <meta name="viewport" content="initial-scale=1.0, width=device-width,
       minimum-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <!-- Schema.org markup for Google+ -->
+    {! Schema.org markup for Google+ !}
     <meta itemprop="name" content="{name}">
     <meta itemprop="description" content="{description}">
     <meta itemprop="image" content="{icon256}">
 
-    <!-- Twitter card -->
+    {! Twitter card !}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@claydotio">
     <meta name="twitter:creator" content="@claydotio">
@@ -26,7 +26,7 @@
     <meta name="twitter:description" content="{description}">
     <meta name="twitter:image:src" content="{icon440x280}">
 
-    <!-- Open Graph -->
+    {! Open Graph !}
     <meta property="og:title" content="{name}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{url}">
@@ -34,23 +34,29 @@
     <meta property="og:description" content="{description}">
     <meta property="og:site_name" content="Clay.io">
 
-    <!-- iOS -->
+    {! iOS !}
     <link rel="apple-touch-icon" href="{icon256}">
     <link rel="apple-touch-icon" sizes="76x76" href="{icon76}">
     <link rel="apple-touch-icon" sizes="120x120" href="{icon120}">
     <link rel="apple-touch-icon" sizes="152x152" href="{icon152}">
 
-    <!-- kik -->
-    <link rel="kik-icon" href="{icon256}">
+    {! kik !}
+    <link rel="kik-icon" href="{iconKik}">
     <link rel="canonical" href="{canonical}">
 
-    <!-- misc -->
+    {! misc !}
     <link rel="shortcut icon" href="http://cdn.wtf/d/images/icons/favicon.ico">
     <link rel="terms" href="http://clay.io/tos">
     <link rel="privacy" href="http://clay.io/privacy">
 
-    <!-- css -->
-    <link href="/css/bundle.css" rel="stylesheet">
+    {! css !}
+    {?inlineSource}
+      <style>
+        {>distcss/}
+      </style>
+    {:else}
+      <link href="/css/bundle.css" rel="stylesheet">
+    {/inlineSource}
   </head>
 
   <body class="src-kik">
@@ -61,6 +67,7 @@
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
       ga('create', 'UA-27992080-6', 'auto');
+      ga('require', 'displayfeatures');
       ga('send', 'pageview');
     </script>
     <script>
@@ -73,16 +80,13 @@
 
     <div id="app"></div>
     <script src="//cdn.kik.com/kik/1.0.9/kik.js"></script>
-    <script>
-    /*!
-     * $script.js JS loader & dependency manager
-     * https://github.com/ded/script.js
-     * (c) Dustin Diaz 2014 | License MIT
-     */
-    ;(function(e,t){typeof module!="undefined"&&module.exports?module.exports=t():typeof define=="function"&&define.amd?define(t):this[e]=t()})("$script",function(){function p(e,t){for(var n=0,i=e.length;n<i;++n)if(!t(e[n]))return r;return 1}function d(e,t){p(e,function(e){return!t(e)})}function v(e,t,n){function g(e){return e.call?e():u[e]}function y(){if(!--h){u[o]=1,s&&s();for(var e in f)p(e.split("|"),g)&&!d(f[e],g)&&(f[e]=[])}}e=e[i]?e:[e];var r=t&&t.call,s=r?t:n,o=r?e.join(""):t,h=e.length;return setTimeout(function(){d(e,function t(e,n){if(e===null)return y();e=!n&&e.indexOf(".js")===-1&&!/^https?:\/\//.test(e)&&c?c+e+".js":e;if(l[e]){o&&(a[o]=1);if(l[e]!=2)return setTimeout(function(){t(e,!0)},0);y()}l[e]=1,o&&(a[o]=1),m(e,y)})},0),v}function m(n,r){var i=e.createElement("script"),u;i.onload=i.onerror=i[o]=function(){if(i[s]&&!/^c|loade/.test(i[s])||u)return;i.onload=i[o]=null,u=1,l[n]=2,r()},i.async=1,i.src=h?n+(n.indexOf("?")===-1?"?":"&")+h:n,t.insertBefore(i,t.lastChild)}var e=document,t=e.getElementsByTagName("head")[0],n="string",r=!1,i="push",s="readyState",o="onreadystatechange",u={},a={},f={},l={},c,h;return v.get=m,v.order=function(e,t,n){(function r(i){i=e.shift(),e.length?v(i,r):v(i,t,n)})()},v.path=function(e){c=e},v.urlArgs=function(e){h=e},v.ready=function(e,t,n){e=e[i]?e:[e];var r=[];return!d(e,function(e){u[e]||r[i](e)})&&p(e,function(e){return u[e]})?t():!function(e){f[e]=f[e]||[],f[e][i](t),n&&n(r)}(e.join("|")),v},v.done=function(e){v([null],e)},v})
-
-    ;$script('/js/bundle.js')
-    </script>
+    {?inlineSource}
+      <script>
+        {>distjs/}
+      </script>
+    {:else}
+      <script src="/js/bundle.js"></script>
+    {/inlineSource}
   </body>
 
 </html>
