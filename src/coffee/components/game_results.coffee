@@ -46,8 +46,6 @@ module.exports = class GameResults
       if games.length == 0
         return true
 
-    .catch log.error
-
   render: =>
     z 'section.game-results', {config: @infiniteScrollDir.config},
     (_.map @gameBoxes(), (gameBox) =>

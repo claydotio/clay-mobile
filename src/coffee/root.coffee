@@ -62,7 +62,7 @@ z.route document.getElementById('app'), '/', route(
 # TODO: (Austin) remove localStorage in favor of anonymous user sessions
 unless localStorage['pushTokenStored']
   kik?.ready? ->
-    kik.push.getToken (token) ->
+    kik.push?.getToken (token) ->
       return unless token
       PushToken.all('pushTokens').post
         token: token

@@ -80,6 +80,9 @@
 
     <div id="app"></div>
     <script src="//cdn.kik.com/kik/1.0.9/kik.js"></script>
+    <script>
+      console.log = logClone
+    </script>
     {?inlineSource}
       <script>
         {>distjs/}

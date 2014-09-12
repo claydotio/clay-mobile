@@ -9,7 +9,7 @@
     "test": "node_modules/gulp/bin/gulp.js test",
     "start": "npm run build && ./node_modules/pm2/bin/pm2 start server.coffee -i max --name clay_mobile --no-daemon -o /var/log/clay/clay_mobile.log -e /var/log/clay/clay_mobile.error.log",
     "dev": "NODE_ENV=developement node_modules/gulp/bin/gulp.js dev",
-    "mock": "MOCK=true node_modules/gulp/bin/gulp.js dev",
+    "mock": "NODE_ENV=developement MOCK=true node_modules/gulp/bin/gulp.js dev",
     "build": "node_modules/gulp/bin/gulp.js build"
   },
   "author": "",
