@@ -123,7 +123,7 @@ renderGamePage = (gameKey, isKik) ->
   unless apiPath.protocol
     apiPath.protocol = 'http'
 
-  gameUrl = url.parse "#{url.format(apiPath)}/games/findOne?key=#{gameKey}"
+  gameUrl = url.resolve url.format(apiPath), "games/findOne?key=#{gameKey}"
 
   console.log 'GET', url.format(gameUrl)
   Promise.promisify(request.get, request) url.format(gameUrl)
@@ -135,7 +135,7 @@ renderGamePage = (gameKey, isKik) ->
     page =
       inlineSource: inlineSource
       title: "Play #{game.name} - free mobile games - Clay.io"
-      description: "Play #{game.name} on Clay.io, the best free mobile games"
+      description: "Play #{game.name}; #{game.description}"
       keywords: "#{game.name}, mobile games,  free mobile games"
       name: "#{game.name} - Clay.io"
 
