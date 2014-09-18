@@ -5,11 +5,16 @@ Q = require 'q'
 
 Game = require '../models/game'
 WindowHeightDir = require '../directives/window_height'
+# FIXME: remove, replace with beforeUnload functionality of components
+LogEngagedPlayDir = require '../directives/log_engaged_play'
 Drawer = require '../components/drawer'
 
 module.exports = class GamePlayer
   constructor: ({gameKey}) ->
     @WindowHeightDir = new WindowHeightDir()
+    # FIXME: remove, replace with beforeUnload functionality of components
+    @LogEngagedPlayDir = new LogEngagedPlayDir(gameKey)
+
     @gameKey = z.prop gameKey
 
     @game = z.prop Game.all('games').findOne(key: gameKey)
@@ -24,7 +29,8 @@ module.exports = class GamePlayer
 
   render: =>
     if @game()?.gameUrl
-      z 'div.game-player',
+      # FIXME: remove, replace with beforeUnload functionality of components
+      z 'div.game-player', {config: @LogEngagedPlayDir.config},
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',

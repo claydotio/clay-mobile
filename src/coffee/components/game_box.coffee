@@ -3,19 +3,23 @@ z = require 'zorium'
 RatingsWidget = require './stars'
 vars = require '../../stylus/vars.json'
 Experiment = require '../models/experiment'
+UrlService = require '../services/url'
 
 module.exports = class GameBox
   constructor: (@game) ->
     @RatingsWidget = new RatingsWidget stars: @game.rating
 
-  loadGame: =>
-    ga('send', 'event', 'game_box', 'click', @game.key)
+  loadGame: (e) =>
+    e?.preventDefault()
+
+    ga? 'send', 'event', 'game_box', 'click', @game.key
     Experiment.convert 'game_box_click'
-    z.route @game.getRoute()
-    kik.picker?('http:' + @game.getSubdomainUrl(), {}, -> null)
+    z.route UrlService.getGameRoute @game
+    kik.picker?('http:' + UrlService.getGameSubdomain @game, {}, -> null)
 
   render: ->
-    z '.game-box', {onclick: @loadGame}, [
+    gameSubdomainUrl = UrlService.getGameSubdomain @game
+    z "a.game-box[href=#{gameSubdomainUrl}]", {onclick: @loadGame}, [
       z 'img',
         src: @game.icon128Url
         width: vars.$marketplaceGameIconWidth,
