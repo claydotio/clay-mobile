@@ -15,8 +15,8 @@ game = (i, isNew) ->
     title += ' with a really long title that is here'
 
   key: i
-  gameUrl: 'http://clay.io'
-  icon128Url: 'http://slime.clay.io/claymedia/icon128.png'
+  gameUrl: 'http://cdn.wtf/g/8/game/'
+  icon128Url: 'http://clay.io/games/slime/claymedia/icon128.png'
   name: title
   description: "This is the description for game #{i}"
   rating: i % 6
@@ -35,6 +35,9 @@ mock = z.prop(new Zock()
     skip = parseInt(res.query.skip, 10) or 0
     _.map _.range(skip, skip + limit), (i) ->
       game i, true
+  .get '/games/findOne'
+  .reply 200, (res) ->
+    game 0
 )
 
 window.XMLHttpRequest = ->
