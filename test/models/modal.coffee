@@ -6,6 +6,8 @@ Modal.constructor() # reset
 class StubComponent
   render: -> null
 
+
+
 describe 'ModalModel', ->
   describe 'Open and Close (set and remove component)', ->
     it 'begins with null component', ->
