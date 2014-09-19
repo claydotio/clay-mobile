@@ -1,5 +1,5 @@
 module.exports =
-  key: 'GAME_KEY'
+  key: 'validgamekey'
   gameUrl: 'GAME_URL'
   icon128Url: 'GAME_ICON_128'
   name: 'GAME_NAME'
