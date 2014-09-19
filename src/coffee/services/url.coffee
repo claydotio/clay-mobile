@@ -32,27 +32,4 @@ class UrlService
   getGameSubdomain: (game) =>
     return "#{@protocol}//#{game.key}.#{@targetHost}"
 
-  # based on https://support.google.com/analytics/answer/1033867?hl=en
-  # but can be changed should we switch to another service
-  #
-  # as of Sept 2014 this isn't being used anywhere. The main use-case for this
-  # is for tracking external links - eg. a callback link for oauth
-  # FIXME: support urls with query string already set
-  addAnalyticsParams: (baseUrl, {source, medium}) ->
-    source ?= 'not_set' # eg promo_image
-    medium ?= 'mobile' # eg mobile, desktop
-
-    googleAnalyticsMapping =
-      utm_source: source
-      utm_medium: medium
-      # magic string left here on purpose. if we decide we need to change
-      # the campaign name, we'll make this a var & option
-      utm_campaign: 'clay_mobile'
-    queryStringArray = []
-    for param, value of googleAnalyticsMapping
-      queryStringArray.push "#{param}=#{encodeURIComponent(value)}"
-    queryString = queryStringArray.join('&')
-
-    return "#{baseUrl}?#{queryString}"
-
 module.exports = new UrlService()
