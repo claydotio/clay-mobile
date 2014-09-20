@@ -81,8 +81,9 @@ module.exports = class Drawer
 
     [
       # TODO: (Austin) some sort of fast-click equivalent on top of mithril
-      z "div.drawer-overlay#{drawerIsOpen}", ontouchstart: @toggleOpenState
-      z "div.drawer#{drawerOverlayIsOpen}",
+      z "div.drawer-overlay#{drawerOverlayIsOpen}",
+        ontouchstart: @toggleOpenState
+      z "div.drawer#{drawerIsOpen}",
         z 'div.drawer-nub-padding', ontouchstart: @toggleOpenState,
           z 'div.drawer-nub',
             z "i.icon.icon-chevron-#{chevronDirection}"
