@@ -13,11 +13,19 @@ describe 'UrlService', ->
     it 'getMarketplaceBase()', ->
       UrlService.getMarketplaceBase().should.match urlRegex
 
-    it 'getMarketplaceGame(game)', ->
-      UrlService.getMarketplaceGame(MockGame).should.match urlRegex
+    it 'getMarketplaceGame({game})', ->
+      UrlService.getMarketplaceGame({game: MockGame}).should.match urlRegex
 
-    it 'getGameRoute(game) (should be relative)', ->
-      UrlService.getGameRoute(MockGame).should.match routeRegex
+    it 'getGameRoute({game}) (should be relative)', ->
+      UrlService.getGameRoute({game: MockGame})
+        .should.match routeRegex
 
-    it 'getGameSubdomain(game)', ->
-      UrlService.getGameSubdomain(MockGame).should.match urlRegex
+    it 'getGameSubdomain({game})', ->
+      UrlService.getGameSubdomain({game: MockGame})
+        .should.match urlRegex
+
+    it 'getGameSubdomain({game, protocol: "card:"}) is card:...', ->
+      options = {game: MockGame, protocol: 'card:'}
+      gameSubdomain = UrlService.getGameSubdomain(options)
+      gameSubdomain.should.match urlRegex
+      gameSubdomain.should.match /^card:/

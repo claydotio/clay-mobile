@@ -21,15 +21,16 @@ class UrlService
     return "#{@protocol}//#{@targetHost}"
 
   # full path to marketplace and game
-  getMarketplaceGame: (game) =>
-    return @getMarketplaceBase() + @getGameRoute game
+  getMarketplaceGame: ({game}) =>
+    return @getMarketplaceBase() + @getGameRoute {game}
 
   # FIXME: game methods should be server-side as class methods in game model
   # relative path to game
-  getGameRoute: (game) ->
+  getGameRoute: ({game}) ->
     return "/game/#{game.key}"
 
-  getGameSubdomain: (game) =>
-    return "#{@protocol}//#{game.key}.#{@targetHost}"
+  getGameSubdomain: ({game, protocol}) =>
+    protocol ?= @protocol
+    return "#{protocol}//#{game.key}.#{@targetHost}"
 
 module.exports = new UrlService()

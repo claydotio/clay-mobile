@@ -17,9 +17,9 @@ module.exports = class GamePromo
     # hard redirect to marketplace / gameRoute
     redirect = =>
       if UrlService.isRootPath()
-        z.route UrlService.getGameRoute @game
+        z.route UrlService.getGameRoute {@game}
       else
-        window.location.href = UrlService.getMarketplaceGame @game
+        window.location.href = UrlService.getMarketplaceGame {@game}
 
     # if ga is loaded in, send the event, then load the marketplace
     if ga
@@ -29,7 +29,7 @@ module.exports = class GamePromo
       redirect()
 
   render: =>
-    gameSubdomainUrl = UrlService.getGameSubdomain @game
+    gameSubdomainUrl = UrlService.getGameSubdomain {@game}
     z "a.game-promo[href=#{gameSubdomainUrl}]", {onclick: @loadGame},
       z 'img',
         src: @game.promo440Url
