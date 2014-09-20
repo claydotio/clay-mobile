@@ -49,24 +49,24 @@ module.exports = class Drawer
   openMarketplace: (e) =>
     e?.preventDefault()
 
-    # technically we could use a URL to track (a la GA URL builder) BUT
-    # Kik things pages with query params are a different app, and it's cleaner
-    # to have all metrics we're tracking in a single format (events)
-
-    # if already on marketplace, keep them there with root route, otherwise
-    # hard redirect to marketplace
-    redirect = ->
-      if UrlService.isRootPath()
-        z.route '/'
-      else
-        window.location.href = UrlService.getMarketplaceBase()
-
     # if ga is loaded in, send the event, then load the marketplace
     if ga
       ga 'send', 'event', 'drawer', 'open_marketplace', @game.key,
-        {hitCallback: redirect}
+        {hitCallback: @redirectToMarketplace}
     else
-      redirect()
+      @redirectToMarketplace()
+
+  # technically we could use a URL to track (a la GA URL builder) BUT
+  # Kik things pages with query params are a different app, and it's cleaner
+  # to have all metrics we're tracking in a single format (events)
+
+  # if already on marketplace, keep them there with root route, otherwise
+  # hard redirect to marketplace
+  redirectToMarketplace: ->
+    if UrlService.isRootPath()
+      z.route '/'
+    else
+      window.location.href = UrlService.getMarketplaceBase()
 
   render: =>
     # drawer state

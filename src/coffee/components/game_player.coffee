@@ -37,7 +37,7 @@ module.exports = class GamePlayer
 
   # if already on marketplace, keep them there with root route, otherwise
   # hard redirect to marketplace
-  redirectToMarketplace = ->
+  redirectToMarketplace: ->
     if UrlService.isRootPath()
       z.route '/'
     else
