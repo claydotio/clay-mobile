@@ -21,6 +21,13 @@ module.exports = class Drawer
   toggleOpenState: (e) =>
     e?.stopPropagation()
     @isOpen = not @isOpen
+
+    # This is a workaround for this Mithril issue:
+    # https://github.com/lhorie/mithril.js/issues/273
+    # Without this, if the game iframe is clicked before the drawer nub
+    # then the iframe is re-loaded because it is the activeElement
+    # during the Mithril DOM-diff
+    window.document.activeElement?.blur()
     z.redraw()
 
     if @isOpen # drawer opened
