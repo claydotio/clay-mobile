@@ -35,19 +35,19 @@ module.exports = class GamePlayer
     .finally z.redraw
     .catch log.trace
 
-  render: =>
-    # if already on marketplace, keep them there with root route, otherwise
-    # hard redirect to marketplace
-    redirectToMarketplace = ->
-      if UrlService.isRootPath()
-        z.route '/'
-      else
-        window.location.href = UrlService.getMarketplaceBase()
+  # if already on marketplace, keep them there with root route, otherwise
+  # hard redirect to marketplace
+  redirectToMarketplace: ->
+    if UrlService.isRootPath()
+      z.route '/'
+    else
+      window.location.href = UrlService.getMarketplaceBase()
 
+  render: =>
     if @isLoading
       z '.game-player-missing',
         @Spinner.render()
-        z 'button.button-ghost', {onclick: redirectToMarketplace},
+        z 'button.button-ghost', {onclick: @redirectToMarketplace},
           'Return to Clay.io'
     else if @game()?.gameUrl
       # FIXME: remove, replace with beforeUnload functionality of components
@@ -63,5 +63,5 @@ module.exports = class GamePlayer
     else
       z '.game-player-missing',
         z 'div', 'Game Not Found'
-        z 'button.button-ghost', {onclick: redirectToMarketplace},
+        z 'button.button-ghost', {onclick: @redirectToMarketplace},
           'Return to Clay.io'
