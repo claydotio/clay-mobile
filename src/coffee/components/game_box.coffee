@@ -14,11 +14,12 @@ module.exports = class GameBox
 
     ga? 'send', 'event', 'game_box', 'click', @game.key
     Experiment.convert 'game_box_click'
-    z.route UrlService.getGameRoute @game
-    kik.picker?('http:' + UrlService.getGameSubdomain @game, {}, -> null)
+    z.route UrlService.getGameRoute {@game}
+    httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http:'})
+    kik.picker?(httpSubDomainUrl, {}, -> null)
 
   render: ->
-    gameSubdomainUrl = UrlService.getGameSubdomain @game
+    gameSubdomainUrl = UrlService.getGameSubdomain {@game}
     z "a.game-box[href=#{gameSubdomainUrl}]", {onclick: @loadGame}, [
       z 'img',
         src: @game.icon128Url
