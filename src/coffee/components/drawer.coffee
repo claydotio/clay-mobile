@@ -11,13 +11,13 @@ GAME_PROMO_HEIGHT = 59
 
 module.exports = class Drawer
   constructor: ({@game}) ->
+    @isOpen = false
     crossPromotionOptions =
       gamePromoWidth: GAME_PROMO_WIDTH
       gamePromoHeight: GAME_PROMO_HEIGHT
     @CrossPromotion = new CrossPromotion crossPromotionOptions
     @GameRate = new GameRate {@game, onRated: -> Modal.closeComponent()}
 
-  isOpen: false
   toggleOpenState: (e) =>
     e?.stopPropagation()
     @isOpen = not @isOpen
