@@ -22,7 +22,7 @@ class UrlService
 
   # full path to marketplace and game
   getMarketplaceGame: ({game}) =>
-    return @getMarketplaceBase() + @getGameRoute {game}
+    return @getMarketplaceBase() + '/#' + @getGameRoute {game}
 
   # FIXME: game methods should be server-side as class methods in game model
   # relative path to game
