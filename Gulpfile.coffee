@@ -70,7 +70,7 @@ gulp.task 'test:phantom', ['scripts:dev', 'scripts:test'], (cb) ->
     browsers: ['PhantomJS']
   }, karmaConf), cb
 
-gulp.task 'scripts:test', ->
+gulp.task 'scripts:test', ['lint:tests'], ->
   testFiles = glob.sync('./test/**/*.coffee')
   browserify
     entries: testFiles
@@ -79,6 +79,12 @@ gulp.task 'scripts:test', ->
   .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.build + '/test/'
+
+# run coffee-lint
+gulp.task 'lint:tests', ->
+  gulp.src paths.tests
+    .pipe coffeelint()
+    .pipe coffeelint.reporter()
 
 #
 # Dev server and watcher
