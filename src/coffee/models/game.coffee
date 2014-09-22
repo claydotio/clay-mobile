@@ -17,13 +17,4 @@ resource.extendCollection 'games', (collection) ->
 
   return collection
 
-resource.extendModel 'games', (model) ->
-  model.getSubdomainUrl = ->
-    '//' + model.key + '.' + window.location.host
-
-  model.getRoute = ->
-    '/game/' + model.key
-
-  return model
-
 module.exports = resource.setBaseUrl config.API_PATH

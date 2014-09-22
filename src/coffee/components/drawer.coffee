@@ -21,7 +21,17 @@ module.exports = class Drawer
   toggleOpenState: (e) =>
     e?.stopPropagation()
     @isOpen = not @isOpen
+
+    # This is a workaround for this Mithril issue:
+    # https://github.com/lhorie/mithril.js/issues/273
+    # Without this, if the game iframe is clicked before the drawer nub
+    # then the iframe is re-loaded because it is the activeElement
+    # during the Mithril DOM-diff
+    window.document.activeElement?.blur()
     z.redraw()
+
+    if @isOpen # drawer opened
+      ga? 'send', 'event', 'drawer', 'open', @game.key
 
   close: (e) =>
     e?.stopPropagation()
@@ -36,10 +46,34 @@ module.exports = class Drawer
       data: {gameKey: @game.key}
     )
 
+    ga? 'send', 'event', 'drawer', 'share', @game.key
+
   rateGame: (e) =>
     e?.preventDefault()
     @close()
     Modal.openComponent @GameRate
+
+  openMarketplace: (e) =>
+    e?.preventDefault()
+
+    # if ga is loaded in, send the event, then load the marketplace
+    if ga
+      ga 'send', 'event', 'drawer', 'open_marketplace', @game.key,
+        {hitCallback: @redirectToMarketplace}
+    else
+      @redirectToMarketplace()
+
+  # technically we could use a URL to track (a la GA URL builder) BUT
+  # Kik things pages with query params are a different app, and it's cleaner
+  # to have all metrics we're tracking in a single format (events)
+
+  # if already on marketplace, keep them there with root route, otherwise
+  # hard redirect to marketplace
+  redirectToMarketplace: ->
+    if UrlService.isRootPath()
+      z.route '/'
+    else
+      window.location.href = UrlService.getMarketplaceBase()
 
   render: =>
     # drawer state
@@ -54,9 +88,10 @@ module.exports = class Drawer
 
     [
       # TODO: (Austin) some sort of fast-click equivalent on top of mithril
-      z "div.drawer-overlay#{drawerIsOpen}", ontouchstart: @toggleOpenState
-      z "div.drawer#{drawerOverlayIsOpen}",
-        z 'div.drawer-nub-padding', onclick: @toggleOpenState,
+      z "div.drawer-overlay#{drawerOverlayIsOpen}",
+        ontouchstart: @toggleOpenState
+      z "div.drawer#{drawerIsOpen}",
+        z 'div.drawer-nub-padding', ontouchstart: @toggleOpenState,
           z 'div.drawer-nub',
             z "i.icon.icon-chevron-#{chevronDirection}"
         z 'div.drawer-header',
@@ -79,6 +114,7 @@ module.exports = class Drawer
               z 'li.divider'
               z 'li',
                 z "a[href=#{UrlService.getMarketplaceBase()}]",
+                onclick: @openMarketplace,
                   z 'i.icon.icon-market'
                   z 'span.drawer-menu-item', 'Browse more games'
             z 'div.drawer-cross-promotion',

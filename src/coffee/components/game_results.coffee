@@ -27,8 +27,6 @@ module.exports = class GameResults
     @Spinner = new Spinner()
     @isLoading = true
 
-    z.redraw()
-
   loadMore: =>
     GameFilter.getGames
       limit: 10
