@@ -115,7 +115,7 @@ renderHomePage = do ->
     if isKik then renderedKik else rendered
 
 renderGamePage = (gameKey, isKik) ->
-  apiPath = url.parse config.API_PATH
+  apiPath = url.parse config.API_PATH + '/'
 
   unless apiPath.hostname
     apiPath.hostname = config.HOSTNAME
