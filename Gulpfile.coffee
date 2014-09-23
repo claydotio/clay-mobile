@@ -14,6 +14,7 @@ coffeelint = require 'gulp-coffeelint'
 glob = require 'glob'
 karma = require('karma').server
 minifyCss = require 'gulp-minify-css'
+rewireify = require 'rewireify'
 
 karmaConf = require './karma.defaults'
 
@@ -75,7 +76,8 @@ gulp.task 'scripts:test', ['lint:tests'], ->
   browserify
     entries: testFiles
     extensions: ['.coffee']
-  .bundle debug: true
+  .transform {global: true}, 'rewireify'
+  .bundle(debug: true)
   .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.build + '/test/'
@@ -127,7 +129,8 @@ gulp.task 'scripts:dev', ['lint:scripts'], ->
   browserify
     entries: entries
     extensions: ['.coffee']
-  .bundle debug: true
+  .transform {global: true}, 'rewireify'
+  .bundle(debug: true)
   .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.build + '/js/'

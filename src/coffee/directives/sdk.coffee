@@ -1,73 +1,104 @@
 _ = require 'lodash'
+kik = require 'kik'
+log = require 'loglevel'
+Q = require 'q'
 
 User = require '../models/user'
 
 module.exports = class SDKDir
-  onMessage: (e) =>
-    data = JSON.parse e.data
-    method = data.method
-    _id = data._id
 
-    if method is 'ping'
-      # pong
-      e.source.postMessage JSON.stringify({_id}), '*'
-
-    else if method is 'auth.getStatus'
-      @authGetStatus()
-      .then (status) ->
-        message = _.defaults {_id}, status
-        e.source.postMessage JSON.stringify(message), '*'
-
-    else if /^kik\.[\w.]+$/
-      caller = null
-      fn = kik
-
-      if /^kik\.getMessage$/.test method
-        caller = null
-        fn = kik.message
-
-      else if /^kik\.isInPicker$/.test method
-        caller = null
-        fn = kik.picker
-
-      else
-        # kik.abc.xyz(), caller is kik.abc, fn is kik.abc.xyz
-        methods = method.split('.').slice 1
-        while methods.length
-          next = methods.shift()
-          caller = fn
-          fn = caller[next]
-
-      if typeof fn is 'function'
-
-        # reply
-        cb = (args...) ->
-          res = args
-          if args.length is 1
-            res = args[0]
-
-          message = _.defaults {_id}, result: res
-          e.source.postMessage JSON.stringify(message), '*'
-
-        fn.apply caller, (data.params or []).concat [cb]
-
-      else
-        message = _.defaults {_id}, result: fn
-        e.source.postMessage JSON.stringify(message), '*'
-
-  authGetStatus: ->
-    User.me().then (user) ->
-      accessToken: user.id
-
-  config: ($el, isInit, ctx) =>
+  config: ($el, isInit, ctx) ->
 
     # run once
     if isInit
       return
 
-    @$iframe = $el
+    window.addEventListener 'message', onMessage
 
-    window.addEventListener 'message', @onMessage
+    ctx.onunload = ->
+      window.removeEventListener 'message', onMessage
 
-    ctx.onunload = =>
-      window.removeEventListener 'message', @onMessage
+
+onMessage = (e) ->
+
+  # Unable to find the source of this event,
+  # may be the browser or chrome extension
+  if e.data is 'process-tick'
+    return
+
+  try
+    data = if _.isObject e.data then e.data else JSON.parse e.data
+    method = data.method
+    params = data.params or []
+    id = data.id
+
+    # Ignore messages without an id (from other apps)
+    unless id
+      return
+
+    log.info '[SDK] Message:', data
+
+  catch err
+    log.trace err
+    return
+
+  fn = methodToFn method
+
+  evalFn e.source, fn, params
+  .then (result) ->
+    message = _.defaults {id}, result: result
+    e.source.postMessage JSON.stringify(message), '*'
+  .catch (err) ->
+    code = switch err.message
+      when 'Method not found'
+        -32601
+      else
+        -1
+
+    message = _.defaults {id}, error: {code, message: err.message}
+
+    e.source.postMessage JSON.stringify(message), '*'
+
+methodToFn = (method) ->
+  switch method
+    when 'ping'
+      -> 'pong'
+
+    when 'auth.getStatus'
+      authGetStatus
+
+    # Kik methods
+    when 'kik.isEnabled'
+      # Kik.send is checked as per documetation
+      -> Boolean kik.send
+
+    when 'kik.send'
+      _.bind kik.send, kik
+
+    when 'kik.browser.setOrientationLock'
+      _.bind kik.browser.setOrientationLock, kik.browser
+
+    when 'kik.metrics.enableGoogleAnalytics'
+      _.bind kik.metrics.enableGoogleAnalytics, kik.metrics
+
+    else -> throw new Error 'Method not found'
+
+evalFn = (source, fn, params) ->
+  Q.Promise (resolve, reject) ->
+
+    # Bind all callback functions
+    boundParams = _.map params, (param) ->
+      if param?._ClayEventListener
+      then (args...) ->
+        id = param._ClayEventListener
+        emitEvent source, "ClayEventListener.#{id}", args
+      else param
+    resolve fn.apply null, boundParams
+
+emitEvent = (source, method, params) ->
+  message = {method, params}
+  source.postMessage JSON.stringify(message), '*'
+
+authGetStatus = ->
+  User.getMe().then (user) ->
+    accessToken: user.id

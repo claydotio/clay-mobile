@@ -7,6 +7,7 @@ Game = require '../models/game'
 WindowHeightDir = require '../directives/window_height'
 # FIXME: remove, replace with beforeUnload functionality of components
 LogEngagedPlayDir = require '../directives/log_engaged_play'
+SDKDir = require '../directives/sdk'
 Drawer = require '../components/drawer'
 Spinner = require '../components/spinner'
 UrlService = require '../services/url'
@@ -16,6 +17,7 @@ module.exports = class GamePlayer
     @WindowHeightDir = new WindowHeightDir()
     # FIXME: remove, replace with beforeUnload functionality of components
     @LogEngagedPlayDir = new LogEngagedPlayDir(gameKey)
+    @SDKDir = new SDKDir()
 
     @Spinner = new Spinner()
 
@@ -57,8 +59,11 @@ module.exports = class GamePlayer
           '[scrolling=no]',
               src: @game().gameUrl
 
-              # This is necessary due a resizing issue on some devices
-              config: @WindowHeightDir.config
+              config: =>
+                # This is necessary due a resizing issue on some devices
+                @WindowHeightDir.config.apply @WindowHeightDir, arguments
+                @SDKDir.config.apply @SDKDir, arguments
+
         @Drawer()?.render()
     else
       z '.game-player-missing',

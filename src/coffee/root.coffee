@@ -1,3 +1,5 @@
+kik = require 'kik'
+
 # Game was loaded in picker
 if kik?.picker?.reply
   kik.picker.reply()
@@ -6,8 +8,9 @@ if kik?.picker?.reply
 _ = require 'lodash'
 z = require 'zorium'
 log = require 'loglevel'
-config = require './config'
+Q = require 'q'
 
+config = require './config'
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
 PushToken = require './models/push_token'
@@ -22,21 +25,23 @@ reportError = ->
     then arg.error.stack
     else arg
 
-  z.request
+  Q z.request
     method: 'POST'
     url: config.API_PATH + '/log'
-    data: {message: JSON.stringify(args)}
+    data:
+      message: args.join ' '
+  .catch (err) ->
+    console?.error err
 
 window.addEventListener 'error', reportError
 window.addEventListener 'fb-flo-reload', z.redraw
 
-log.on 'error', reportError
-log.on 'trace', reportError
-
-unless config.ENV is config.ENVS.PROD
+if config.ENV isnt config.ENVS.PROD
   log.enableAll()
 else
   log.setLevel 'error'
+  log.on 'error', reportError
+  log.on 'trace', reportError
 
 route = (routes) ->
   _.transform routes, (result, Component, route) ->

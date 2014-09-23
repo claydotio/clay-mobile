@@ -1,3 +1,5 @@
+kik = require 'kik'
+
 config = require '../config'
 
 class UrlService

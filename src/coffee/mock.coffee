@@ -21,14 +21,28 @@ game = (i, isNew) ->
   description: "This is the description for game #{i}"
   rating: i % 6
 
+prism =
+  key: 'prism'
+  gameUrl: 'http://192.168.2.98.xip.io:3003'
+  icon128Url: 'http://clay.io/games/slime/claymedia/icon128.png'
+  name: 'Prism'
+  description: 'The most amazing game ever'
+  rating: 5
+
 mock = z.prop(new Zock()
   .logger log.info
+  .post '/users/login/anon'
+  .reply 200, id: 1
+  .post '/users'
+  .reply 200, {params: {}}
   .get '/games/top'
   .reply 200, (res) ->
     limit = parseInt(res.query.limit, 10) or 10
     skip = parseInt(res.query.skip, 10) or 0
-    _.map _.range(skip, skip + limit), (i) ->
-      game i
+    [prism].concat(
+      _.map _.range(skip, skip + limit), (i) ->
+        game i
+    )
   .get '/games/new'
   .reply 200, (res) ->
     limit = parseInt(res.query.limit, 10) or 10
@@ -37,7 +51,7 @@ mock = z.prop(new Zock()
       game i, true
   .get '/games/findOne'
   .reply 200, (res) ->
-    game 0
+    prism
 )
 
 window.XMLHttpRequest = ->
