@@ -5,38 +5,32 @@ log = require 'loglevel'
 User = require './user'
 config = require '../config'
 
+# FIXME: BROKEN
+Q = require 'q'
+
 class Experiment
   constructor: ->
     @experiments = {}
 
-  getExperiments: =>
-    User.getMe().then (user) =>
-      z.request
-        method: 'GET'
-        url: config.FLAK_CANNON_PATH + '/users/' + user.flakCannonId
-      .then (flakCannonUser) =>
-        _.defaults @overrides(), flakCannonUser.params
+  getExperiments: ->
+    # FIXME: BROKEN
+    Q.when {}
+    # User.getMe().then (user) =>
+    #   z.request
+    #     method: 'GET'
+    #     url: config.FLAK_CANNON_PATH + '/users/' + user.flakCannonId
+    #   .then (flakCannonUser) =>
+    #     _.defaults @overrides(), flakCannonUser.params
 
   convert: (event) ->
-    fcRoot = config.FLAK_CANNON_PATH
-    User.getMe().then (user) ->
-      z.request
-        method: 'POST'
-        url: "#{fcRoot}/users/#{user.flakCannonId}/convert/#{event}"
-    .catch log.trace
+    # FIXME: BROKEN
+    Q.when null
 
-  # Temporary testing overrides for debugging.
-  # TODO: (Zoli) remove in favor of user auth overrides.
-  overrides: ->
-    if localStorage['fcOverride']
-      try
-        return JSON.parse localStorage['fcOverride']
-      catch err
-        console.error err
-    return {}
-
-  setExperiment: (key, value) =>
-    @experiments[key] = value
-
+    # fcRoot = config.FLAK_CANNON_PATH
+    # User.getMe().then (user) ->
+    #   z.request
+    #     method: 'POST'
+    #     url: "#{fcRoot}/users/#{user.flakCannonId}/convert/#{event}"
+    # .catch log.trace
 
 module.exports = new Experiment()

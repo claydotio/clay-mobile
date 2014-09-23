@@ -1,44 +1,31 @@
 Q = require 'q'
-z = require 'zorium' # TODO: (Zoli) replace with http lib
-log = require 'loglevel'
-localforage = require 'localforage'
 
+localstore = require '../lib/localstore'
+resource = require '../lib/resource'
 config = require '../config'
 
+resource.extendCollection 'users', (collection) ->
+  me = null
 
-# This is a stub until we have real user support.
-# It is only depended on by the Experiment model.
-class User
-  constructor: ->
-    @me = null
+  collection.getMe = ->
+    if me
+      return Q.when me
 
-  getMe: =>
-    unless @me
-      if localStorage?['me']
-        @me = JSON.parse localStorage['me']
-        return Q.when @me
-      else
-        Q.when z.request
-          method: 'POST'
-          url: config.API_PATH + '/users'
-        .then
+    localstore.get '/users/me'
+    .then (_me) ->
+      if _me
+        return me = resource.setRestangularFields _me
 
-      #   @me = {flakCannonId: localStorage['flakCannonId']}
-      #   log.info 'found flak cannon id', @me
-      #   return Q.when @me
-      #
-      # return Q.when z.request
-      #   method: 'POST'
-      #   url: config.FLAK_CANNON_PATH + '/users'
-      # .then (flakCannonUser) =>
-      #   localStorage['flakCannonId'] = flakCannonUser.id
-      #   @me = {flakCannonId: flakCannonUser.id}
-      #   log.info 'new flak cannon user', @me
-      #   return @me
+      @customGET('me').then (_me) ->
+        localstore.set '/users/me', _me
+        .then ->
+          me = _me
 
-    return Q.when @me
+  collection.setMe = (_me) ->
+    localstore.set '/users/me', _me
+    .then ->
+      me = resource.setRestangularFields _me
 
+  return collection
 
-
-
-module.exports = new User()
+module.exports = resource.setBaseUrl config.API_PATH
