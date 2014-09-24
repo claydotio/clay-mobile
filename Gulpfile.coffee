@@ -73,9 +73,11 @@ gulp.task 'test:phantom', ['scripts:dev', 'scripts:test'], (cb) ->
 gulp.task 'scripts:test', ['lint:tests'], ->
   testFiles = glob.sync('./test/**/*.coffee')
   browserify
+    fullPaths: true
     entries: testFiles
     extensions: ['.coffee']
-  .bundle debug: true
+    debug: true
+  .bundle()
   .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.build + '/test/'
@@ -125,9 +127,11 @@ gulp.task 'scripts:dev', ['lint:scripts'], ->
     entries = [paths.mock].concat entries
 
   browserify
+    fullPaths: true
     entries: entries
     extensions: ['.coffee']
-  .bundle debug: true
+    debug: true
+  .bundle()
   .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.build + '/js/'
@@ -158,6 +162,7 @@ gulp.task 'clean:dist', ->
 # init.coffee --> dist/js/bundle.min.js
 gulp.task 'scripts:prod', ['lint:scripts'], ->
   browserify
+    fullPaths: true
     entries: paths.root
     extensions: ['.coffee']
   .transform {global: true}, 'uglifyify'

@@ -8,6 +8,8 @@ resource.extendCollection 'users', (collection) ->
   me = null
 
   collection.getMe = ->
+    # FIXME: BROKEN
+    me = {id: 1}
     if me
       return Q.when me
 
@@ -22,10 +24,11 @@ resource.extendCollection 'users', (collection) ->
           me = _me
 
   collection.setMe = (_me) ->
+    # FIXME: BROKEN
     localstore.set '/users/me', _me
     .then ->
       me = resource.setRestangularFields _me
 
   return collection
 
-module.exports = resource.setBaseUrl config.API_PATH
+module.exports = resource.setBaseUrl(config.API_PATH).all('users')

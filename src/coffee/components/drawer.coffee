@@ -1,4 +1,5 @@
 z = require 'zorium'
+kik = require 'kik'
 
 config = require '../config'
 CrossPromotion = require './cross_promotion'

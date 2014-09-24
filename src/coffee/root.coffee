@@ -1,3 +1,5 @@
+kik = require 'kik'
+
 # Game was loaded in picker
 if kik?.picker?.reply
   kik.picker.reply()

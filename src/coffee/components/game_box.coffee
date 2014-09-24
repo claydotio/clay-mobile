@@ -1,4 +1,5 @@
 z = require 'zorium'
+kik = require 'kik'
 
 RatingsWidget = require './stars'
 vars = require '../../stylus/vars.json'
