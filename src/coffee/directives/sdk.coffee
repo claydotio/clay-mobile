@@ -8,16 +8,11 @@ parseKikMethod = (method) ->
   caller = null
   fn = kik
 
-  console.log 'parsing', method
-
   # Wrapper methods ontop of kik properties
   switch
     when /^kik\.getMessage$/.test method
-      console.log 'what...'
       caller = null
       fn = kik.message
-
-      console.log 'getMessage'
 
     when /^kik\.isInPicker$/.test method
       caller = null
