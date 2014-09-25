@@ -13,6 +13,7 @@ config = require './config'
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
 PushToken = require './models/push_token'
+reqwest = require 'reqwest'
 
 reportError = ->
 
@@ -24,7 +25,7 @@ reportError = ->
     then arg.error.stack
     else arg
 
-  z.request
+  reqwest
     method: 'POST'
     url: config.API_PATH + '/log'
     data: {message: JSON.stringify(args)}

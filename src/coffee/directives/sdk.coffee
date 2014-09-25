@@ -56,48 +56,50 @@ authGetStatus = ->
     accessToken: user.id
 
 parseKikMethod = (method) ->
-  caller = null
-  fn = kik
 
   # Wrapper methods ontop of kik properties
   switch
     when /^kik\.getMessage$/.test method
-      caller = null
-      fn = kik.message
+      caller: null
+      fn: kik.message
 
     when /^kik\.isInPicker$/.test method
-      caller = null
-      fn = Boolean kik.picker.reply
+      caller: null
+      fn: Boolean kik.picker.reply
 
     when /^kik\.getLinkData$/.test method
-      caller = null
-      fn = kik.linkData
+      caller: null
+      fn: kik.linkData
 
     when /^kik\.isBrowserBackground$/.test method
-      caller = null
-      fn = kik.browser.background
+      caller: null
+      fn: kik.browser.background
 
     when /^kik\.getPlatformOS$/.test method
-      caller = null
-      fn = kik.utils.platform.os
+      caller: null
+      fn: kik.utils.platform.os
 
     when /^kik\.getPlatformBrowser$/.test method
-      caller = null
-      fn = kik.utils.platform.browser
+      caller: null
+      fn: kik.utils.platform.browser
 
     when /^kik\.getPlatformEngine$/.test method
-      caller = null
-      fn = kik.utils.platform.engine
+      caller: null
+      fn: kik.utils.platform.engine
 
     else
       # kik.abc.xyz(), caller is kik.abc, fn is kik.abc.xyz
       methods = method.split('.').slice 1
+      caller = null
+      fn = kik
       while methods.length
         next = methods.shift()
         caller = fn
         fn = caller[next]
 
-  { caller, fn }
+      {caller, fn}
+
+
 
 runKikMethod = (messageData) ->
   new Q.Promise (resolve, reject) ->

@@ -5,48 +5,6 @@ should = require('clay-chai').should()
 SDKDir = require 'directives/sdk'
 User = require 'models/user'
 
-# Stub user dependency
-User.setMe
-  id: 1
-
-# Stub kik dependency
-SDKDir.__set__('kik', {
-  message: 'TEST MESSAGE'
-  picker:
-    reply: -> null
-  linkData: 'TEST DATA'
-  browser:
-    background: false
-    getOrientationLock: -> 'NOT FROM CALLBACK'
-  utils:
-    platform:
-      os: 'TEST OS'
-      browser: 'TEST BROWSER'
-      engine: 'TEST ENGINE'
-
-  unknown1: (s, cb) -> cb [s, 'ONE']
-  unknown2:
-    unknown3: (s, cb) -> cb [s, 'THREE']
-  deep:
-    deep:
-      deep:
-        deep: (s, cb) -> cb [s, 'DEEP']
-  mulipleParams: (cb) -> cb 1, 2, 3
-
-  hasPermission: -> 'NOT FROM CALLBACK'
-  send: -> 'NOT FROM CALLBACK'
-  open: -> 'NOT FROM CALLBACK'
-  metrics:
-    enableGoogleAnalytics: -> 'NOT FROM CALLBACK'
-
-  formHelpers:
-    show: -> 'NOT FROM CALLBACK'
-    hide: -> 'NOT FROM CALLBACK'
-    isEnabled: -> 'NOT FROM CALLBACK'
-  trigger: -> 'NOT FROM CALLBACK'
-})
-
-
 emit = (message) ->
   Q.Promise (resolve, reject) ->
     event = document.createEvent 'Event'
@@ -62,7 +20,49 @@ emit = (message) ->
 
 
 describe 'SDKDir', ->
+
   before ->
+
+    # Stub user dependency
+    User.setMe
+      id: 1
+
+    # Stub kik dependency
+    SDKDir.__set__ 'kik',
+      message: 'TEST MESSAGE'
+      picker:
+        reply: -> null
+      linkData: 'TEST DATA'
+      browser:
+        background: false
+        getOrientationLock: -> 'NOT FROM CALLBACK'
+      utils:
+        platform:
+          os: 'TEST OS'
+          browser: 'TEST BROWSER'
+          engine: 'TEST ENGINE'
+
+      unknown1: (s, cb) -> cb [s, 'ONE']
+      unknown2:
+        unknown3: (s, cb) -> cb [s, 'THREE']
+      deep:
+        deep:
+          deep:
+            deep: (s, cb) -> cb [s, 'DEEP']
+      mulipleParams: (cb) -> cb 1, 2, 3
+
+      hasPermission: -> 'NOT FROM CALLBACK'
+      send: -> 'NOT FROM CALLBACK'
+      open: -> 'NOT FROM CALLBACK'
+      metrics:
+        enableGoogleAnalytics: -> 'NOT FROM CALLBACK'
+
+      formHelpers:
+        show: -> 'NOT FROM CALLBACK'
+        hide: -> 'NOT FROM CALLBACK'
+        isEnabled: -> 'NOT FROM CALLBACK'
+      trigger: -> 'NOT FROM CALLBACK'
+
     directive = new SDKDir()
     $el = document.createElement 'div'
     ctx = {onunload: _.noop}
