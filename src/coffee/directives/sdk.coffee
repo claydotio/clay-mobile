@@ -5,6 +5,56 @@ Q = require 'q'
 
 User = require '../models/user'
 
+module.exports = class SDKDir
+
+  config: ($el, isInit, ctx) =>
+
+    # run once
+    if isInit
+      return
+
+    @$iframe = $el
+
+    window.addEventListener 'message', @onMessage
+
+    ctx.onunload = =>
+      window.removeEventListener 'message', @onMessage
+
+  onMessage: (e) ->
+    try
+      data = JSON.parse e.data
+      method = data.method
+      _id = data._id
+
+    catch err
+      log.trace err
+      return
+
+    (switch
+      when method is 'ping'
+        Q result: 'pong'
+
+      when method is 'auth.getStatus'
+        authGetStatus()
+
+      when /^kik\.[\w.]+$/.test method
+        runKikMethod data
+
+      else Q null
+    ).then (result) ->
+      message = _.defaults {_id}, result: result
+      e.source.postMessage JSON.stringify(message), '*'
+    .catch (err) ->
+      message = _.defaults {_id}, error: err.message
+      e.source.postMessage JSON.stringify(message), '*'
+
+
+
+
+authGetStatus = ->
+  User.getMe().then (user) ->
+    accessToken: user.id
+
 parseKikMethod = (method) ->
   caller = null
   fn = kik
@@ -49,105 +99,53 @@ parseKikMethod = (method) ->
 
   { caller, fn }
 
-module.exports = class SDKDir
-  runKikMethod: (messageData) ->
-    new Q.Promise (resolve, reject) ->
-      method = messageData.method
-      params = messageData.params
+runKikMethod = (messageData) ->
+  new Q.Promise (resolve, reject) ->
+    method = messageData.method
+    params = messageData.params
 
-      notSupported = [
-        'kik.photo.getFromCamera'
-        'kik.photo.getFromGallery'
-        'kik.browser.on'
-        'kik.on'
-        'kik.off'
-        'kik.once'
+    notSupported = [
+      'kik.photo.getFromCamera'
+      'kik.photo.getFromGallery'
+      'kik.browser.on'
+      'kik.on'
+      'kik.off'
+      'kik.once'
+    ]
+
+    if _.contains notSupported, method
+      reject new Error 'METHOD NOT SUPPORTED'
+
+    {caller, fn} = parseKikMethod(method)
+
+    if typeof fn is 'function'
+
+      kikMethodsWithoutCallback = [
+        'kik.hasPermission'
+        'kik.send'
+        'kik.open'
+        'kik.metrics.enableGoogleAnalytics'
+        'kik.browser.getOrientationLock'
+        'kik.formHelpers.show'
+        'kik.formHelpers.hide'
+        'kik.formHelpers.isEnabled'
+        'kik.trigger'
       ]
 
-      if _.contains notSupported, method
-        reject new Error 'METHOD NOT SUPPORTED'
-
-      {caller, fn} = parseKikMethod(method)
-
-      if typeof fn is 'function'
-
-        kikMethodsWithoutCallback = [
-          'kik.hasPermission'
-          'kik.send'
-          'kik.open'
-          'kik.metrics.enableGoogleAnalytics'
-          'kik.browser.getOrientationLock'
-          'kik.formHelpers.show'
-          'kik.formHelpers.hide'
-          'kik.formHelpers.isEnabled'
-          'kik.trigger'
-        ]
-
-        if _.contains kikMethodsWithoutCallback, method
-          res = fn.apply caller, params or []
-          resolve res
-
-        else
-          # reply
-          cb = (args...) ->
-            res = args
-            if args.length is 1
-              res = args[0]
-
-            resolve res
-
-          fn.apply caller, (params or []).concat([cb])
+      if _.contains kikMethodsWithoutCallback, method
+        res = fn.apply caller, params or []
+        resolve res
 
       else
-        resolve fn
+        # reply
+        cb = (args...) ->
+          res = args
+          if args.length is 1
+            res = args[0]
 
-  onMessage: (e) =>
-    try
-      data = JSON.parse e.data
-      method = data.method
-      _id = data._id
+          resolve res
 
-    catch err
-      log.trace err
-      return
+        fn.apply caller, (params or []).concat([cb])
 
-    switch
-      when method is 'ping'
-        # pong
-        e.source.postMessage JSON.stringify({_id}), '*'
-
-      when method is 'auth.getStatus'
-        @authGetStatus()
-        .then (status) ->
-          message = _.defaults {_id}, result: status
-          e.source.postMessage JSON.stringify(message), '*'
-
-      when /^kik\.[\w.]+$/.test method
-        @runKikMethod data
-        .then (result) ->
-          message = _.defaults {_id}, result: result
-          e.source.postMessage JSON.stringify(message), '*'
-        .catch (err) ->
-          message = _.defaults {_id}, error: err.message
-          e.source.postMessage JSON.stringify(message), '*'
-
-
-      else null
-
-
-  authGetStatus: ->
-    User.getMe().then (user) ->
-      accessToken: user.id
-
-  config: ($el, isInit, ctx) =>
-
-    # run once
-    if isInit
-      return
-
-    @$iframe = $el
-
-    window.addEventListener 'message', @onMessage
-
-    ctx.onunload = =>
-      window.removeEventListener 'message', @onMessage
+    else
+      resolve fn
