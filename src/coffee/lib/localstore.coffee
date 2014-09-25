@@ -6,16 +6,12 @@ module.exports =
       unless _.isString key
         return reject new Error 'Key must be a String'
 
-      try
-        value = window.localStorage[key]
+      value = window.localStorage[key]
 
-        if _.isString value
-          return resolve JSON.parse value
+      if _.isString value
+        return resolve JSON.parse value
 
-        resolve()
-
-      catch err
-        reject err
+      resolve()
 
   set: (key, value) ->
     Q.Promise (resolve, reject) ->
@@ -25,21 +21,13 @@ module.exports =
       unless _.isObject value
         return reject new Error 'Value must be an object'
 
-      try
-        window.localStorage[key] = JSON.stringify value
-        resolve value
-
-      catch err
-        reject err
+      window.localStorage[key] = JSON.stringify value
+      resolve value
 
   del: (key) ->
     Q.Promise (resolve, reject) ->
       unless _.isString key
         return reject new Error 'Key must be a String'
 
-      try
-        delete window.localStorage[key]
-        resolve()
-
-      catch err
-        reject err
+      delete window.localStorage[key]
+      resolve()
