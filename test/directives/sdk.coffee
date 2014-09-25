@@ -3,7 +3,13 @@ Q = require 'q'
 should = require('clay-chai').should()
 
 SDKDir = require 'directives/sdk'
+User = require 'models/user'
 
+# Stub user dependency
+User.setMe
+  id: 1
+
+# Stub kik dependency
 SDKDir.__set__('kik', {
   message: 'TEST MESSAGE'
   picker:

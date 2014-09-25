@@ -65,7 +65,7 @@ module.exports = class SDKDir
       ]
 
       if _.contains notSupported, method
-        reject 'METHOD NOT SUPPORTED'
+        reject new Error 'METHOD NOT SUPPORTED'
 
       {caller, fn} = parseKikMethod(method)
 
@@ -128,7 +128,7 @@ module.exports = class SDKDir
           message = _.defaults {_id}, result: result
           e.source.postMessage JSON.stringify(message), '*'
         .catch (err) ->
-          message = _.defaults {_id}, error: err
+          message = _.defaults {_id}, error: err.message
           e.source.postMessage JSON.stringify(message), '*'
 
 
