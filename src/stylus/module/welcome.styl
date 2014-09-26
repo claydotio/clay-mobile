@@ -1,0 +1,41 @@
+.welcome-header
+  width: 100%
+  height: 200px
+  display: table
+  background-image: url($headerOrangeJpg)
+  background-size: auto 100%
+  color: #fff
+  text-align: center
+
+  // necessary to vertically center
+  > .welcome-header-content
+    display: table-cell
+    vertical-align: middle
+
+    > .welcome-header-description
+      color: $grayDark
+      font-size: $fontSizeLarge
+      font-weight: lighter
+      margin-bottom: 10px
+
+    > .welcome-header-username
+      color: #fff
+      font-size: $fontSizeXLarge
+      font-weight: bold
+
+.welcome-content
+  padding: 0 20px
+  text-align: center
+
+  > .welcome-play
+    width: 100%
+
+  > .welcome-content-description
+    font-size: $fontSizeMedium
+    font-weight: lighter
+    margin: 20px 0
+
+  > .welcome-content-input-header
+    font-size: $fontSizeSmall
+    font-weight: bold
+    margin: 20px 0
