@@ -1,3 +1,23 @@
+.button-primary, .button-secondary
+  height: $primaryButtonHeight px
+  border: none
+  border-radius: 20px
+  box-shadow: 1px 1.732px 10px 0px rgba(0, 0, 0, 0.3)
+  box-sizing: border-box
+  padding: 0 20px
+  font-size: $fontSizeMedium
+
+  &:disabled
+    opacity: 0.5
+
+.button-primary
+  background: $orange
+  color: $white
+
+.button-secondary
+  background: $white
+  color: $blue
+
 .button-ghost
   background: none
   border: none

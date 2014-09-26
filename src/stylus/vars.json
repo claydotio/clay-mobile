@@ -15,6 +15,9 @@
   "$fontSizeMedium": "1.6rem",
   "$fontSizeLarge": "2.4rem",
 
+  "$primaryButtonHeight": 40,
+
+  "$cloudSvg": "//cdn.wtf/d/images/logos/logo_cloud.svg",
   "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
   "$logoPng110": "//cdn.wtf/d/images/logos/logo_110.png",
 
