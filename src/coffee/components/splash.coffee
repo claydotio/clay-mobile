@@ -20,5 +20,5 @@ module.exports = class Splash
                 'Can ', z('strong', 'you '),
                 'have the ', z('strong', 'top '), 'score?'
       z 'div.splash-actions', # 80px
-          z 'button.button-primary.splash-login', onclick: @login,
+          z 'button.button-primary.is-full.splash-login', onclick: @login,
             'Sign in to start playing'

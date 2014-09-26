@@ -27,15 +27,31 @@
   padding: 0 20px
   text-align: center
 
-  > .welcome-play
-    width: 100%
-
   > .welcome-content-description
     font-size: $fontSizeMedium
     font-weight: lighter
-    margin: 20px 0
+    // using margin causes margin collapse
+    // (http://www.sitepoint.com/web-foundations/collapsing-margins/)
+    padding: 20px 0
 
   > .welcome-content-input-header
     font-size: $fontSizeSmall
     font-weight: bold
+    // using margin causes margin collapse
+    // (http://www.sitepoint.com/web-foundations/collapsing-margins/)
+    padding: 20px 0
+
+  > .welcome-content-checkboxes > .welcome-content-checkbox-container
+    display: inline-block
+    width: 50%
+    text-align: left
     margin: 20px 0
+
+    // top 2 boxes
+    &:nth-child(1)
+      margin: 0 0 20px 0
+    &:nth-child(2)
+      margin: 0 0 20px 0
+
+  > .welcome-content-start-playing
+    margin-top: 20px
