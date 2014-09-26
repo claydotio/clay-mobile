@@ -76,9 +76,8 @@ gulp.task 'scripts:test', ['lint:tests'], ->
   browserify
     entries: testFiles
     extensions: ['.coffee']
-    debug: true
   .transform {global: true}, 'rewireify'
-  .bundle()
+  .bundle(debug: true)
   .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.build + '/test/'
@@ -130,9 +129,8 @@ gulp.task 'scripts:dev', ['lint:scripts'], ->
   browserify
     entries: entries
     extensions: ['.coffee']
-    debug: true
   .transform {global: true}, 'rewireify'
-  .bundle()
+  .bundle(debug: true)
   .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.build + '/js/'

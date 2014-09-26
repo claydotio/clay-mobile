@@ -1,32 +1,36 @@
-reqwest = require 'reqwest'
+z = require 'zorium'
 _ = require 'lodash'
 log = require 'loglevel'
+Q = require 'q'
 
 User = require './user'
 config = require '../config'
 
-getFlakCannonUser = ->
-  User.getMe().then (user) ->
-    reqwest
-      url: config.FLAK_CANNON_PATH + '/users'
-      method: 'POST'
-      data:
-        id: user.id
 
+# TODO: (Zoli) Remove this in favor of putting it onto the user Object
 class Experiment
+
+  getFlakCannonUser = ->
+    User.getMe().then (user) ->
+      Q z.request
+        url: config.FLAK_CANNON_PATH + '/users'
+        method: 'POST'
+        data:
+          id: user.id
+
 
   constructor: ->
     @flakCannonUser = getFlakCannonUser()
       .catch log.trace
 
-  getExperiments: ->
+  getExperiments: =>
     @flakCannonUser.then (fcUser) ->
       fcUser.params
 
-  convert: (event) ->
+  convert: (event) =>
     fcRoot = config.FLAK_CANNON_PATH
     @flakCannonUser.then (fcUser) ->
-      reqwest
+      Q z.request
         url: "#{fcRoot}/users/#{fcUser.id}/convert/#{event}"
         method: 'POST'
 

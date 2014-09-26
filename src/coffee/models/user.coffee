@@ -6,7 +6,8 @@ config = require '../config'
 
 
 resource.extendCollection 'users', (collection) ->
-  me = collection.customGET('me')
+  me = collection.all('login').customPOST null, 'anon'
+    .catch log.trace
 
   collection.getMe = ->
     me
@@ -15,5 +16,6 @@ resource.extendCollection 'users', (collection) ->
     me = Q _me
 
   return collection
+
 
 module.exports = resource.setBaseUrl(config.API_PATH).all('users')
