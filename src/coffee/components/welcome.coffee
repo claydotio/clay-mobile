@@ -26,5 +26,6 @@ module.exports = class Welcome
         # categories block
         z 'div.welcome-content-input-header', 'What kind of games do you like?'
         @CategoriesForm.render()
-        z 'button.button-primary.is-full.welcome-content-start-playing',
+        # start playing
+        z 'button.button-primary.welcome-content-start-playing.is-full',
           {onclick: @completeSignup}, 'Start playing!'

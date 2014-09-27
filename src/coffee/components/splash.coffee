@@ -10,7 +10,7 @@ module.exports = class Splash
   render: =>
     z 'div.splash',
       z 'div.splash-header',
-        z 'div.splash-header-content-container',
+        z 'div.splash-header-content-container', # necessary for vertical center
           z 'div.splash-header-content',
             z 'div.splash-header-content-logo'
             z 'div.splash-header-content-headlines',
@@ -19,6 +19,6 @@ module.exports = class Splash
               z 'p.splash-header-content-headline',
                 'Can ', z('strong', 'you '),
                 'have the ', z('strong', 'top '), 'score?'
-      z 'div.splash-actions', # 80px
-          z 'button.button-primary.is-full.splash-signup', onclick: @signup,
+      z 'div.splash-actions',
+          z 'button.button-primary.splash-signup.is-full', onclick: @signup,
             'Sign in to start playing'
