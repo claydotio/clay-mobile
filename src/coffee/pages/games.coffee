@@ -14,11 +14,8 @@ module.exports = class GamesPage
     @GameResults = new GameResults()
 
   render: =>
-    (new (require '../components/splash')()).render()
-    ###
     z 'div', [
       z 'div', @Header.render()
       z 'div', @GameMenu.render()
       z 'div', @GameResults.render()
     ]
-    ###
