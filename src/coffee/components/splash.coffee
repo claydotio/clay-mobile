@@ -3,7 +3,7 @@ z = require 'zorium'
 module.exports = class Splash
   constructor: -> null
 
-  login: (e) ->
+  signup: (e) ->
     e?.stopPropagation()
     # TODO
 
@@ -12,13 +12,13 @@ module.exports = class Splash
       z 'div.splash-header',
         z 'div.splash-header-content-container',
           z 'div.splash-header-content',
-            z 'div.splash-header-logo'
-            z 'div.splash-header-headlines',
-              z 'p.splash-header-headline', "It's all about the ",
+            z 'div.splash-header-content-logo'
+            z 'div.splash-header-content-headlines',
+              z 'p.splash-header-content-headline', "It's all about the ",
                                           z('strong', 'challenges')
-              z 'p.splash-header-headline',
+              z 'p.splash-header-content-headline',
                 'Can ', z('strong', 'you '),
                 'have the ', z('strong', 'top '), 'score?'
       z 'div.splash-actions', # 80px
-          z 'button.button-primary.is-full.splash-login', onclick: @login,
+          z 'button.button-primary.is-full.splash-signup', onclick: @signup,
             'Sign in to start playing'

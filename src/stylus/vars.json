@@ -20,9 +20,10 @@
 
   "$primaryButtonHeight": 40,
 
-  "$cloudSvg": "//cdn.wtf/d/images/logos/logo_cloud.svg",
   "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
   "$logoPng110": "//cdn.wtf/d/images/logos/logo_110.png",
+  "$cloudSvg": "//cdn.wtf/d/images/logos/logo_cloud.svg",
+  "$cloudPng140": "//cdn.wtf/d/images/logos/logo_cloud_140.png",
 
   "$headerOrangeJpg": "http://cdn.wtf/d/images/poly/header_orange.jpg",
 

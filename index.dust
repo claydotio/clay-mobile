@@ -68,7 +68,6 @@
 
       ga('create', 'UA-27992080-6', 'auto');
       ga('require', 'displayfeatures');
-      ga('send', 'pageview');
     </script>
     <script>
       // We save console.log to a temp variable and re-set console.log to

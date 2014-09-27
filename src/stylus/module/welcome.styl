@@ -3,7 +3,7 @@
   height: 200px
   display: table
   background-image: url($headerOrangeJpg)
-  background-size: auto 100%
+  background-size: 100% auto
   color: #fff
   text-align: center
 
@@ -12,46 +12,34 @@
     display: table-cell
     vertical-align: middle
 
-    > .welcome-header-description
-      color: $grayDark
-      font-size: $fontSizeLarge
-      font-weight: lighter
-      margin-bottom: 10px
+.welcome-header-description
+  color: $grayDark
+  font-size: $fontSizeLarge
+  font-weight: lighter
+  margin-bottom: 10px
 
-    > .welcome-header-username
-      color: #fff
-      font-size: $fontSizeXLarge
-      font-weight: bold
+.welcome-header-username
+  color: #fff
+  font-size: $fontSizeXLarge
+  font-weight: bold
 
 .welcome-content
   padding: 0 20px
   text-align: center
 
-  > .welcome-content-description
-    font-size: $fontSizeMedium
-    font-weight: lighter
-    // using margin causes margin collapse
-    // (http://www.sitepoint.com/web-foundations/collapsing-margins/)
-    padding: 20px 0
+.welcome-content-description
+  font-size: $fontSizeMedium
+  font-weight: lighter
+  // using margin causes margin collapse
+  // (http://www.sitepoint.com/web-foundations/collapsing-margins/)
+  padding: 20px 0
 
-  > .welcome-content-input-header
-    font-size: $fontSizeSmall
-    font-weight: bold
-    // using margin causes margin collapse
-    // (http://www.sitepoint.com/web-foundations/collapsing-margins/)
-    padding: 20px 0
+.welcome-content-input-header
+  font-size: $fontSizeSmall
+  font-weight: bold
+  // using margin causes margin collapse
+  // (http://www.sitepoint.com/web-foundations/collapsing-margins/)
+  padding: 20px 0
 
-  > .welcome-content-checkboxes > .welcome-content-checkbox-container
-    display: inline-block
-    width: 50%
-    text-align: left
-    margin: 20px 0
-
-    // top 2 boxes
-    &:nth-child(1)
-      margin: 0 0 20px 0
-    &:nth-child(2)
-      margin: 0 0 20px 0
-
-  > .welcome-content-start-playing
-    margin-top: 20px
+.welcome-content-start-playing
+  margin-top: 20px

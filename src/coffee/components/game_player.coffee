@@ -7,8 +7,8 @@ Game = require '../models/game'
 WindowHeightDir = require '../directives/window_height'
 # FIXME: remove, replace with beforeUnload functionality of components
 LogEngagedPlayDir = require '../directives/log_engaged_play'
-Drawer = require '../components/drawer'
-Spinner = require '../components/spinner'
+Drawer = require './drawer'
+Spinner = require './spinner'
 UrlService = require '../services/url'
 
 module.exports = class GamePlayer
