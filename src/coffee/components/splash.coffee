@@ -9,8 +9,8 @@ module.exports = class Splash
 
   render: =>
     z 'div.splash',
-      z 'div.splash-header',
-        z 'div.splash-header-content-container', # necessary for vertical center
+      z 'div.splash-header', # req. for height 100% - space for splash-actions
+        z 'div.splash-header-content-container', # req. for vertical center
           z 'div.splash-header-content',
             z 'div.splash-header-content-logo'
             z 'div.splash-header-content-headlines',
