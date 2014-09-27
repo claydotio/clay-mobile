@@ -7,48 +7,57 @@ User = require '../models/user'
 
 module.exports = class SDKDir
 
-  config: ($el, isInit, ctx) =>
+  config: ($el, isInit, ctx) ->
 
     # run once
     if isInit
       return
 
-    @$iframe = $el
+    window.addEventListener 'message', onMessage
 
-    window.addEventListener 'message', @onMessage
+    ctx.onunload = ->
+      window.removeEventListener 'message', onMessage
 
-    ctx.onunload = =>
-      window.removeEventListener 'message', @onMessage
 
-  onMessage: (e) ->
-    try
-      data = JSON.parse e.data
-      method = data.method
-      _id = data._id
+onMessage = (e) ->
 
-    catch err
-      log.trace err
+  # Unable to find the source of this event,
+  # may be the browser or chrome extension
+  if e.data is 'process-tick'
+    return
+
+  try
+    data = JSON.parse e.data
+    method = data.method
+    id = data.id
+
+    # Ignore messages without an id (from other apps)
+    unless id
       return
 
-    (switch
-      when method is 'ping'
-        Q result: 'pong'
+    log.info '[SDK] Message:', data
 
-      when method is 'auth.getStatus'
-        authGetStatus()
+  catch err
+    log.trace err
+    return
 
-      when /^kik\.[\w.]+$/.test method
-        runKikMethod data
+  (switch
+    when method is 'ping'
+      Q result: 'pong'
 
-      else Q null
-    ).then (result) ->
-      message = _.defaults {_id}, result: result
-      e.source.postMessage JSON.stringify(message), '*'
-    .catch (err) ->
-      message = _.defaults {_id}, error: err.message
-      e.source.postMessage JSON.stringify(message), '*'
+    when method is 'auth.getStatus'
+      authGetStatus()
 
+    when /^kik\.[\w.]+$/.test method
+      runKikMethod data
 
+    else Q null
+  ).then (result) ->
+    message = _.defaults {id}, result: result
+    e.source.postMessage JSON.stringify(message), '*'
+  .catch (err) ->
+    message = _.defaults {id}, error: err.message
+    e.source.postMessage JSON.stringify(message), '*'
 
 
 authGetStatus = ->
@@ -59,6 +68,12 @@ parseKikMethod = (method) ->
 
   # Wrapper methods ontop of kik properties
   switch
+    when /^kik\.isEnabled$/.test method
+
+      # Kik.send is checked as per documetation
+      caller: null
+      fn: Boolean kik.send
+
     when /^kik\.getMessage$/.test method
       caller: null
       fn: kik.message
@@ -128,6 +143,7 @@ runKikMethod = (messageData) ->
         'kik.open'
         'kik.metrics.enableGoogleAnalytics'
         'kik.browser.getOrientationLock'
+        'kik.browser.setOrientationLock'
         'kik.formHelpers.show'
         'kik.formHelpers.hide'
         'kik.formHelpers.isEnabled'
