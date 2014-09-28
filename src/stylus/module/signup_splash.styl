@@ -1,0 +1,62 @@
+$signupSplashActionsHeight = 80
+$signupSplashBlueJpg = '//cdn.wtf/d/images/poly/splash_blue.jpg'
+
+.signup-splash-header
+  // We can get 100% height without position fixed, but it requires all
+  // parent elements to have 100% height (which is too depending on the
+  // environment for the component)
+  position: fixed
+  top: 0
+  bottom: 80px
+  width: 100%
+  box-sizing: border-box
+  background: url($signupSplashBlueJpg)
+  background-size: auto 100%
+  color: #fff
+
+  // necessary to vertically center the content. display: table can't be in
+  // .signup-splash-header because it screws with the top/bottom
+  // absolute positioning
+.signup-splash-header-content-container
+  display: table
+  width: 100%
+  height: 100%
+
+  // wrapper around the logo and headline text so we can vertically center
+  // those as a block
+  > .signup-splash-header-content
+    display: table-cell
+    vertical-align: middle
+
+.signup-splash-header-content-logo
+  margin: 0 auto 100px auto
+  width: 140px
+  height: 100px
+  background: url($cloudSvg) no-repeat
+
+.no-svg
+  .signup-splash-header-content-logo
+    background-image: url($cloudPng140) // png instead of svg
+    background-size: 100% 100%
+
+
+.signup-splash-header-content-headlines
+  font-weight: lighter
+  font-size: $fontSizeLarge
+  text-align: center
+
+.signup-splash-header-content-headline
+  margin: 0 0 30px 0
+
+.signup-splash-actions
+  position: fixed
+  bottom: 0
+  width: 100%
+  height: $signupSplashActionsHeight px
+  padding: 0 20px
+  box-sizing: border-box
+  background: #fff
+  text-align: center
+
+  > .signup-splash-signup
+    margin: (($signupSplashActionsHeight - $primaryButtonHeight) / 2)px 0

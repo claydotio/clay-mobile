@@ -4,6 +4,7 @@
   "$bgColor": "#f2f2f2",
   "$dividerColor": "#e6e6e6",
   "$disabledColor": "#cccccc",
+  "$borderColor": "#e6e6e6",
   "$white": "#ffffff",
   "$black": "#000000",
   "$grayDark": "#262626",
@@ -14,9 +15,21 @@
   "$fontSizeSmall": "1.2rem",
   "$fontSizeMedium": "1.6rem",
   "$fontSizeLarge": "2.4rem",
+  "$fontSizeXLarge": "3.6rem",
+  "$fontSizeXXLarge": "4.2rem",
+
+  "$mediaBreakpointPortraitHeight1": 640,
+
+  "$primaryButtonHeight": 40,
+
+  "$inputBorderRadius": 3,
 
   "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
   "$logoPng110": "//cdn.wtf/d/images/logos/logo_110.png",
+  "$cloudSvg": "//cdn.wtf/d/images/logos/logo_cloud.svg",
+  "$cloudPng140": "//cdn.wtf/d/images/logos/logo_cloud_140.png",
+
+  "$headerOrangeJpg": "//cdn.wtf/d/images/poly/header_orange.jpg",
 
   "$marketplaceGameIconWidth": 128,
   "$marketplaceGameIconHeight": 128,

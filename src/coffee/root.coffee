@@ -61,6 +61,11 @@ z.route document.getElementById('app'), '/', route(
   '/': GamesPage
   '/game/:key': PlayGamePage
   '/games/:filter': GamesPage
+  # FIXME: remove (here for demo/testing purposes only)
+  # note that these incorrectly require components, not pages
+  '/demo/signupSplash': require './components/signup_splash'
+  # FIXME: remove (here for demo/testing purposes only)
+  '/demo/welcome': require './components/welcome'
 )
 
 # push tokens let us communicate with kik users after they've left app

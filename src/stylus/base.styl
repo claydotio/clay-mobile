@@ -39,3 +39,50 @@ h1
 
 h2
   font-size: $fontSizeMedium
+
+input, label
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+
+input[type=text]
+  height: 40px
+  box-sizing: border-box
+  padding: 5px 10px
+  border-radius: $inputBorderRadius px
+  background: $white
+  border: 1px solid $borderColor
+  outline: none
+
+  &.is-full-width
+    width: 100%
+
+  &:focus
+    border: 1px solid $disabledColor
+
+input[type=checkbox]
+  width: 20px
+  height: 20px
+  vertical-align: bottom
+  cursor: pointer
+  // No IE support!
+  appearance: none
+  position: relative
+  outline: 0
+  box-sizing: border-box
+  background: $disabledColor
+  border-radius: $inputBorderRadius px
+  margin: 0 10px
+
+input[type=checkbox]:checked
+  background: $orange
+  color: $white
+  outline: 0
+  &:after
+    // icon font
+    font-family: 'icons'
+    content: '\e808'
+    position: absolute
+    top: 0
+    left: -2px
+    text-align: center
+    width: 25px
+    font-size: 18px
