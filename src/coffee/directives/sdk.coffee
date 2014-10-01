@@ -5,6 +5,11 @@ Q = require 'q'
 
 User = require '../models/user'
 
+
+#
+# SDK listener for Clay.client() calls
+#
+
 module.exports = class SDKDir
 
   config: ($el, isInit, ctx) ->
@@ -18,28 +23,78 @@ module.exports = class SDKDir
     ctx.onunload = ->
       window.removeEventListener 'message', onMessage
 
+###
+# Messages follow the json-rpc 2.0 spec: http://www.jsonrpc.org/specification
+# _clay is added to denote a clay message
 
+# Without an `id` this is a notification
+@typedef {Object} RPCRequest
+@property {Integer} [id]
+@property {String} method
+@property {Array<*>} params
+@property {Boolean} _clay - Must be true
+@property {String} jsonrpc - Must be '2.0'
+
+@typedef {Object} RPCResponse
+@property {Integer} [id]
+@property {*} result
+@property {RPCError} error
+
+@typedef {Object} RPCError
+@property {Integer} code
+@property {String} message
+
+
+# We support EventListeners via ClayEventListener objects in params
+# If a message is recived with this object, we will emit json-rpc nofications,
+# using ClayEventListener.#{id} as the method name
+
+@typedef {Object} ClayEventListener
+@property {Integer} _ClayEventListener - Id for callback fn
+
+
+# Example
+# client.postMessage - RPCRequest
+#   id: 1
+#   method: 'kik.send'
+#   params: [
+#     {text: 'hi'}
+#     {_ClayEventListener: 1}
+#   ]
+#
+#  client.emit - RPCResponse
+#    id: 1
+#    result: 'abc'
+#
+#  And if the second param is called as a function like so:
+#  kik.send(opt, cb) -> cb(12, '34')
+#
+#  client.emit - RPCRequest
+#    method: 'ClayEventListener.1'
+#    params: [12, '34']
+
+###
+
+###
+# Emits RPCResponse object to event source
+@param {RPCRequest} e
+###
 onMessage = (e) ->
 
-  # Unable to find the source of this event,
-  # may be the browser or chrome extension
-  if e.data is 'process-tick'
-    return
-
   try
-    data = if _.isObject e.data then e.data else JSON.parse e.data
+    data = JSON.parse e.data
+
+    unless data._clay and data.jsonrpc is '2.0'
+      throw new Error 'Not a Clay message'
+
     method = data.method
     params = data.params or []
     id = data.id
 
-    # Ignore messages without an id (from other apps)
-    unless id
-      return
-
     log.info '[SDK] Message:', data
 
   catch err
-    log.trace err
+    # Error parsing, ignore (other apps may post messages)
     return
 
   fn = methodToFn method
@@ -49,6 +104,8 @@ onMessage = (e) ->
     message = _.defaults {id}, result: result
     e.source.postMessage JSON.stringify(message), '*'
   .catch (err) ->
+
+    # json-rpc 2.0 error codes
     code = switch err.message
       when 'Method not found'
         -32601
@@ -59,6 +116,12 @@ onMessage = (e) ->
 
     e.source.postMessage JSON.stringify(message), '*'
 
+###
+# Fetch function based on string identifier
+
+@param {String} method
+@returns {Function}
+###
 methodToFn = (method) ->
   switch method
     when 'ping'
@@ -83,6 +146,14 @@ methodToFn = (method) ->
 
     else -> throw new Error 'Method not found'
 
+###
+# Apply params to function, populating event listeners
+
+@param {Window} source
+@param {Function} fn
+@param {Array} params
+@returns {Promise<*>}
+###
 evalFn = (source, fn, params) ->
   Q.Promise (resolve, reject) ->
 
@@ -95,10 +166,23 @@ evalFn = (source, fn, params) ->
       else param
     resolve fn.apply null, boundParams
 
+###
+@param {Window} source
+@param {String} method
+@param {Array} params
+###
 emitEvent = (source, method, params) ->
   message = {method, params}
   source.postMessage JSON.stringify(message), '*'
 
+###
+@typedef AuthStatus
+@property {String} accessToken
+###
+
+###
+@returns {Promise<AuthStatus>}
+###
 authGetStatus = ->
   User.getMe().then (user) ->
-    accessToken: user.id
+    accessToken: String user.id

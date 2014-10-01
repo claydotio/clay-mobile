@@ -62,6 +62,8 @@ module.exports = class GamePlayer
               config: =>
                 # This is necessary due a resizing issue on some devices
                 @WindowHeightDir.config.apply @WindowHeightDir, arguments
+
+                # Bind listeners for SDK Clay.client() calls
                 @SDKDir.config.apply @SDKDir, arguments
 
         @Drawer()?.render()

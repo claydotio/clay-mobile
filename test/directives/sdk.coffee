@@ -8,6 +8,8 @@ User = require 'models/user'
 eventListeners = {}
 
 emit = (message) ->
+  message = _.defaults message, {_clay: true, jsonrpc: '2.0'}
+
   Q.Promise (resolve, reject) ->
     event = document.createEvent 'Event'
     event.initEvent 'message', false, false
@@ -57,11 +59,12 @@ describe 'SDKDir', ->
     emit {method: 'ping', id: 1}
     .then (res) ->
       res.id.should.be 1
+      res.result.should.be 'pong'
 
   it 'auth.getStatus()', ->
     emit {method: 'auth.getStatus', id: 1}
     .then (res) ->
-      res.result.accessToken.should.be 1
+      res.result.accessToken.should.be '1'
 
   describe 'kik methods', ->
     it 'kik.isEnabled', ->
@@ -90,5 +93,5 @@ describe 'SDKDir', ->
       emit {method: 'NONE', id: 1}
       .then (res) ->
         throw new Error 'expected error'
-      , (err) ->
-        null
+      , (res) ->
+        res.error.code.should.be -32601
