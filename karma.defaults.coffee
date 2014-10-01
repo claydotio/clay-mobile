@@ -8,6 +8,12 @@ module.exports =
     # available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha']
 
+    client:
+      useIframe: true
+      captureConsole: true
+      mocha:
+        timeout: 100
+
 
     # list of files / patterns to load in the browser
     files: [

@@ -1,4 +1,6 @@
 z = require 'zorium'
+kik = require 'kik'
+log = require 'loglevel'
 
 RatingsWidget = require './stars'
 vars = require '../../stylus/vars.json'
@@ -13,7 +15,7 @@ module.exports = class GameBox
     e?.preventDefault()
 
     ga? 'send', 'event', 'game_box', 'click', @game.key
-    Experiment.convert 'game_box_click'
+    Experiment.convert('game_box_click').catch log.trace
     z.route UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http:'})
     kik.picker?(httpSubDomainUrl, {}, -> null)
