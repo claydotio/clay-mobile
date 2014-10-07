@@ -1,5 +1,5 @@
 Q = require 'q'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 
 resource = require '../lib/resource'
 config = require '../config'

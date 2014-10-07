@@ -1,5 +1,5 @@
 z = require 'zorium'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 
 config = require '../config'
 RatingsWidget = require './stars'
