@@ -1,6 +1,6 @@
 _ = require 'lodash'
 kik = require 'kik'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 Q = require 'q'
 
 User = require '../models/user'

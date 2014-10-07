@@ -1,6 +1,6 @@
 z = require 'zorium'
 kik = require 'kik'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 
 RatingsWidget = require './stars'
 vars = require '../../stylus/vars.json'

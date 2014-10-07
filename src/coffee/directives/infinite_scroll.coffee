@@ -1,4 +1,4 @@
-log = require 'loglevel'
+log = require 'clay-loglevel'
 
 SCROLL_THRESHOLD = 250
 

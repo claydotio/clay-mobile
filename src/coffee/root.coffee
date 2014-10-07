@@ -12,7 +12,7 @@ if kik?.picker?.reply
 
 _ = require 'lodash'
 z = require 'zorium'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 Q = require 'q'
 
 config = require './config'

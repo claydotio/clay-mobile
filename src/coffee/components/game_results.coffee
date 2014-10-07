@@ -1,7 +1,7 @@
 z = require 'zorium'
 _ = require 'lodash'
 Q = require 'q'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 
 GameFilter = require '../models/game_filter'
 Experiment = require '../models/experiment'

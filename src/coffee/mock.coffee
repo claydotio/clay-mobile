@@ -1,7 +1,7 @@
 _ = require 'lodash'
 Zock = require 'zock'
 z = require 'zorium'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 
 game = (i, isNew) ->
   title = "game #{i}"
