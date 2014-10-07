@@ -2,8 +2,13 @@ kik = require 'kik'
 
 # Game was loaded in picker
 if kik?.picker?.reply
-  kik.picker.reply()
-  throw new Error('ignore')
+  closePicker = ->
+    kik.picker.reply()
+  # if ga is loaded in, send the event, then open the picker
+  if ga
+    ga 'send', 'event', 'kik_picker', 'reply', {hitCallback: closePicker}
+  else
+    closePicker()
 
 _ = require 'lodash'
 z = require 'zorium'
