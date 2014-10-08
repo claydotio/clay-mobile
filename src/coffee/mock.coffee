@@ -34,7 +34,7 @@ mock = z.prop(new Zock()
   .post '/users/login/anon'
   .reply 200, id: 1
   .post '/users'
-  .reply 200, {params: {}}
+  .reply 200, {params: {}, id: 1}
   .get '/games/top'
   .reply 200, (res) ->
     limit = parseInt(res.query.limit, 10) or 10
