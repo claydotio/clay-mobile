@@ -1,4 +1,6 @@
 kik = require 'kik'
+# FIXME: clean up this file. all miscellaneous stuff is being placed here
+# for the sake of time
 
 # Game was loaded in picker
 if kik?.picker?.reply
@@ -80,6 +82,9 @@ unless localStorage['pushTokenStored']
       .then ->
         localStorage['pushTokenStored'] = 1
       .catch log.trace
+
+# track kik metrics (users sending messages, etc...)
+kik?.metrics?.enableGoogleAnalytics?()
 
 # If this was loaded as a game page (abc.clay.io), picker marketplace for hit
 hostname = window.location.hostname
