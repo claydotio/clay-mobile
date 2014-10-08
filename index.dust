@@ -81,6 +81,7 @@
     <div id="app"></div>
     <script src="//cdn.kik.com/kik/1.0.9/kik.js"></script>
     <script>
+      // restore console.log (since kik messes with it)
       console.log = logClone
     </script>
     {?inlineSource}
