@@ -21,6 +21,9 @@ config = require './config'
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
 PushToken = require './models/push_token'
+User = require './models/user'
+
+ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 
 reportError = ->
 
@@ -42,6 +45,11 @@ reportError = ->
 
 window.addEventListener 'error', reportError
 window.addEventListener 'fb-flo-reload', z.redraw
+
+window.setTimeout ->
+  User.logEngagedActivity()
+  .catch log.trace
+, ENGAGED_ACTIVITY_TIME
 
 if config.ENV isnt config.ENVS.PROD
   log.enableAll()
