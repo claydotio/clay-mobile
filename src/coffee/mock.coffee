@@ -32,7 +32,9 @@ prism =
 mock = z.prop(new Zock()
   .logger log.info
   .post '/users/login/anon'
-  .reply 200, id: 1
+  .reply 200, id: 1, accessToken: 'thisisanaccesstoken'
+  .post '/users/me/lastEngagedActivity'
+  .reply 200
   .post '/users'
   .reply 200, {params: {}, id: 1}
   .get '/games/top'
