@@ -73,6 +73,11 @@ gulp.task 'test:phantom', ['scripts:dev', 'scripts:test'], (cb) ->
 
 gulp.task 'scripts:test', ['lint:tests'], ->
   testFiles = glob.sync('./test/**/*.coffee')
+
+  # Order matters because mock overrides window.XMLHttpRequest
+  if isMockingApi
+    testFiles = [paths.mock].concat testFiles
+
   browserify
     entries: testFiles
     extensions: ['.coffee']
