@@ -1,0 +1,109 @@
+// I have no idea how to do this AS A LOOP without using a background image.
+// The problem is with a spinner we'd have to constantly chop off the top
+// elements and append them to the end so that a continuous loop of images
+// is shown. Currently this starts at the 2nd image and ends at second to last
+// with no repeating of images
+
+/*
+// using transition instead
+// code for this is actually in meet.coffee
+@-webkit-keyframes spin
+  0%
+    top: 0
+  100%
+    top: 150px
+*/
+
+
+// TODO: should this vertical centering go here in the modal?
+.meet
+  display: table
+  width: 100%
+  height: 100%
+
+  // wrapper around the content we want to vertically center
+  > .meet-content
+    display: table-cell
+    vertical-align: middle
+    text-align: center
+
+.meet-spinner
+  width: 100%
+  height: $experimentMeetSpinnerHeight px
+  position: relative
+  background: $white
+  border-top: 1px solid $dividerColor
+  border-bottom: 1px solid $dividerColor
+  box-sizing: border-box
+  overflow: hidden
+  &:after
+    position: absolute
+    z-index: 1
+    height: 100%
+    width: 100%
+    top: 0
+    left: 0
+    content: ''
+    background: linear-gradient(rgba(242,242,242,0) 70%, rgba(242,242,242,0.9) 100%), linear-gradient(rgba(242,242,242,1) 0%, rgba(242,242,242,0) 30%)
+    //-webkit-gradient( linear, 0 0, 0 100%, from( rgba( 0, 0, 0, 0.5) ), to( rgba( 0, 0, 0, 0.5 ) ), color-stop( 0.25, transparent ), color-stop( 0.75, transparent ) )
+    pointer-events: none // not supported in ie9/10
+
+.meet-spinner-list
+  position: relative // `top` gets changed in spin animation
+  // start if off on user/game #2
+  $experimentMeetImageSizeWithMargins = $experimentMeetImageSize + 2 * $experimentMeetImageYMargin
+  top: (-1 * $experimentMeetImageSizeWithMargins + ($experimentMeetSpinnerHeight - $experimentMeetImageSizeWithMargins) / 2) px
+  transition: top 2s
+  list-style-type: none
+  margin: 0
+  padding: 0
+  > li > img
+    width: $experimentMeetImageSize px
+    height: $experimentMeetImageSize px
+    padding: ($experimentMeetImageYMargin)px 0 // margin collapses
+    display: block
+
+.meet-spinner-user, .meet-spinner-users
+  position: absolute
+  width: $experimentMeetImageSize px
+  left: 50%
+  margin-left: -($experimentMeetImageSize) px
+
+.meet-spinner-game, .meet-spinner-games
+  position: absolute
+  width: $experimentMeetImageSize px
+  right: 50%
+  margin-right: -($experimentMeetImageSize) px
+
+.meet-spinner-labels
+  clear: both
+  font-size: $fontSizeSmall
+  color: $grayLight
+  font-weight: bold
+  padding: 5px 0 10px 0 // prevent margin collapse
+
+.meet-spinner-try-again
+  width: 50px
+  height: 50px
+  border-radius: 25px
+  background: $blue
+  position: absolute
+  left: 50%
+  top: 50%
+  margin-left: -25px
+  margin-top: -25px
+
+  .icon-dice
+    font-size: $fontSizeMedium
+    color: #fff
+
+.meet-challenge
+  font-size: $fontSizeMedium
+  margin: 15px 0
+
+.meet-button
+  position: relative
+
+.meet-button-challenge-icon
+  position: absolute
+  right: 5px

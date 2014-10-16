@@ -21,6 +21,10 @@
   "$marketplaceGameIconWidth": 128,
   "$marketplaceGameIconHeight": 128,
 
-  "zIndexModal": 100,
-  "zIndexDrawer": 200
+  "$zIndexModal": 100,
+  "$zIndexDrawer": 200,
+
+  "$experimentMeetSpinnerHeight": 250,
+  "$experimentMeetImageSize": 160,
+  "$experimentMeetImageYMargin": 5
 }

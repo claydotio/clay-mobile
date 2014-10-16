@@ -11,6 +11,11 @@ log = require 'loglevel'
 Q = require 'q'
 
 config = require './config'
+# START EXPERIMENT: meet
+ExperimentMeetPage = require '../experiments/meet/coffee/pages/meet'
+ExperimentGamesPage = require '../experiments/meet/coffee/pages/games'
+Experiment = require './models/experiment'
+# END EXPERIMENT: meet
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
 PushToken = require './models/push_token'
@@ -57,11 +62,25 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.route.mode = 'pathname'
 
-z.route document.getElementById('app'), '/', route(
-  '/': GamesPage
-  '/game/:key': PlayGamePage
-  '/games/:filter': GamesPage
-)
+
+# START EXPERIMENT: meet
+Experiment.getExperiments().then (params) ->
+  console.log params.homePage
+  if params.homePage is 'meet'
+    HomePage = ExperimentMeetPage
+    GamesListPage = ExperimentGamesPage
+  else
+    HomePage = GamesPage
+    GamesListPage = GamesPage
+
+  z.route document.getElementById('app'), '/', route(
+    '/': HomePage
+    '/meet': ExperimentMeetPage
+    '/games': GamesListPage
+    '/game/:key': PlayGamePage
+    '/games/:filter': GamesPage
+  )
+# END EXPERIMENT: meet
 
 # push tokens let us communicate with kik users after they've left app
 # TODO: (Austin) remove localStorage in favor of anonymous user sessions
