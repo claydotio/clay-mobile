@@ -31,7 +31,7 @@ if kik?.picker?.reply
       kik.picker.reply()
     .catch (err) ->
       log.trace err
-  return # stop executing code
+  throw new Error 'Stop code execution'
 
 reportError = ->
 
@@ -105,6 +105,8 @@ if shouldRouteToGamePage
     kik?.picker?(marketplaceBaseUrl, {}, -> null)
 
   z.route "/game/#{gameKey}"
+else
+  PushToken.all('pushTokens').createForMarketplace()
 
 log.info 'App Ready'
 
