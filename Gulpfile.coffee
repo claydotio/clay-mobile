@@ -170,6 +170,7 @@ gulp.task 'scripts:prod', ['lint:scripts'], ->
     extensions: ['.coffee']
   .transform {global: true}, 'uglifyify'
   .bundle()
+  .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.dist + '/js/'
 
