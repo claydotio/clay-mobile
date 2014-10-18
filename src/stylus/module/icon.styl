@@ -22,10 +22,10 @@
   /* For safety - reset parent styles, that can break glyph codes*/
   font-variant: normal
   text-transform: none
-  font-size: 160%
+  font-size: 100%
 
 .icon-star:before { content: '\e800'; } /* '' */
-.icon-star-half-fill:before { content: '\e801'; position: absolute } /* '' */
+.icon-star-half-fill:before { content: '\e801'; } /* '' */
 .icon-share:before { content: '\e802'; } /* '' */
 .icon-market:before { content: '\e803'; } /* '' */
 .icon-back-arrow:before { content: '\e804'; } /* '' */
@@ -74,6 +74,21 @@
     color: $orange
   &.is-empty
     color: $grayLight
+
+// properly handle a half-filled star
+.icon-star-half-fill
+  position: relative
+
+  &:before
+    position: relative
+    z-index: 1
+
+  .icon-star:before
+    position: absolute
+    z-index: 0
+    left: 0
+    bottom: 0
+
 
 .icon
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0)

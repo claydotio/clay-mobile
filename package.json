@@ -1,15 +1,16 @@
 {
   "name": "clay-mobile",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "server.js",
   "scripts": {
     "postinstall": "node_modules/bower/bin/bower install",
-    "test": "node_modules/gulp/bin/gulp.js test",
+    "test": "NODE_ENV=test node_modules/gulp/bin/gulp.js test",
     "start": "npm run build && ./node_modules/pm2/bin/pm2 start server.coffee -i max --name clay_mobile --no-daemon -o /var/log/clay/clay_mobile.log -e /var/log/clay/clay_mobile.error.log",
-    "dev": "NODE_ENV=developement node_modules/gulp/bin/gulp.js dev",
-    "mock": "NODE_ENV=developement MOCK=true node_modules/gulp/bin/gulp.js dev",
+    "dev": "NODE_ENV=development node_modules/gulp/bin/gulp.js dev",
+    "mock": "NODE_ENV=development MOCK=true node_modules/gulp/bin/gulp.js dev",
+    "watch-tests": "NODE_ENV=test node_modules/gulp/bin/gulp.js watch:test",
     "build": "node_modules/gulp/bin/gulp.js build"
   },
   "author": "",
@@ -53,7 +54,7 @@
   "browser": {
     "lodash": "./components/lodash/dist/lodash.js",
     "zorium": "./components/zorium.js/mithril.js",
-    "loglevel": "./components/loglevel/dist/loglevel.js",
+    "clay-loglevel": "./components/clay-loglevel/dist/loglevel.js",
     "q": "./components/q/q.js",
     "restangular": "./components/restangular/dist/restangular.js",
     "zock": "./components/zock/zock.js"

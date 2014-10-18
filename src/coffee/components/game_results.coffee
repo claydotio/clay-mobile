@@ -1,7 +1,7 @@
 z = require 'zorium'
 _ = require 'lodash'
 Q = require 'q'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 
 GameFilter = require '../models/game_filter'
 Experiment = require '../models/experiment'
@@ -13,16 +13,6 @@ module.exports = class GameResults
   constructor: ->
     @infiniteScrollDir = new InfiniteScrollDir loadMore: @loadMore
     @gameBoxes = z.prop []
-    @gameBoxTheme = z.prop Experiment.getExperiments().then (params) ->
-      switch params.gameBoxColor
-        when 'white' then '.theme-background-white'
-        else null
-
-    # use Q for finally and catch
-    # TODO: (Austin) remove Q dependency when Zorium uses Q
-    Q.when @gameBoxTheme
-    .finally z.redraw
-    .catch log.trace
 
     @Spinner = new Spinner()
     @isLoading = true
@@ -46,8 +36,8 @@ module.exports = class GameResults
 
   render: =>
     z 'section.game-results', {config: @infiniteScrollDir.config},
-    (_.map @gameBoxes(), (gameBox) =>
-      z ".game-results-box-container#{@gameBoxTheme() or ''}", [
+    (_.map @gameBoxes(), (gameBox) ->
+      z '.game-results-box-container', [
         gameBox.render()
       ]
     ).concat [

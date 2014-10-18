@@ -1,14 +1,11 @@
-kik = require 'kik'
-
-# Game was loaded in picker
-if kik?.picker?.reply
-  kik.picker.reply()
-  throw new Error('ignore')
+# FIXME: clean up this file. all miscellaneous stuff is being placed here
+# for the sake of time
 
 _ = require 'lodash'
 z = require 'zorium'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 Q = require 'q'
+kik = require 'kik'
 
 config = require './config'
 # START EXPERIMENT: meet
@@ -19,6 +16,27 @@ Experiment = require './models/experiment'
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
 PushToken = require './models/push_token'
+User = require './models/user'
+UrlService = require './services/url'
+
+ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
+
+# Marketplace or game was loaded in picker
+if kik?.picker?.reply
+  if UrlService.isRootPath() # marketplace
+    PushToken.all('pushTokens').createForMarketplace()
+    .finally ->
+      kik.picker.reply()
+    .catch (err) ->
+      log.trace err
+  else # game subdomain
+    gameKey = UrlService.getSubdomain()
+    PushToken.all('pushTokens').createByGameKey gameKey
+    .finally ->
+      kik.picker.reply()
+    .catch (err) ->
+      log.trace err
+  throw new Error 'Stop code execution'
 
 reportError = ->
 
@@ -40,6 +58,11 @@ reportError = ->
 
 window.addEventListener 'error', reportError
 window.addEventListener 'fb-flo-reload', z.redraw
+
+window.setTimeout ->
+  User.logEngagedActivity()
+  .catch log.trace
+, ENGAGED_ACTIVITY_TIME
 
 if config.ENV isnt config.ENVS.PROD
   log.enableAll()
@@ -82,31 +105,27 @@ Experiment.getExperiments().then (params) ->
   )
 # END EXPERIMENT: meet
 
-# push tokens let us communicate with kik users after they've left app
-# TODO: (Austin) remove localStorage in favor of anonymous user sessions
-unless localStorage['pushTokenStored']
-  kik?.ready? ->
-    kik.push?.getToken (token) ->
-      return unless token
-      PushToken.all('pushTokens').post
-        token: token
-        source: 'kik'
-      .then ->
-        localStorage['pushTokenStored'] = 1
-      .catch log.trace
-
-# If this was loaded as a game page (abc.clay.io), picker marketplace for hit
-hostname = window.location.hostname
-targetHost = config.HOSTNAME
+# track kik metrics (users sending messages, etc...)
+kik?.metrics?.enableGoogleAnalytics?()
 
 # Passed via message to denote game (share button in drawer uses this)
 kikGameKey = kik?.message?.gameKey
 
-if kikGameKey or (hostname isnt targetHost and not config.MOCK)
-  host = hostname.split '.'
-  gameKey = if kikGameKey then kikGameKey else host[0]
+shouldRouteToGamePage = kikGameKey or
+                        (not UrlService.isRootPath() and not config.MOCK)
+if shouldRouteToGamePage
+  if kikGameKey
+    gameKey = kikGameKey
+  else # subdomain
+    gameKey = UrlService.getSubdomain()
+    PushToken.all('pushTokens').createByGameKey gameKey
+    # marketplace in picker
+    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+    kik?.picker?(marketplaceBaseUrl, {}, -> null)
+
   z.route "/game/#{gameKey}"
-  kik.picker?("http://#{targetHost}", {}, -> null)
+else
+  PushToken.all('pushTokens').createForMarketplace()
 
 log.info 'App Ready'
 

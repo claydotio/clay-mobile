@@ -40,7 +40,7 @@ paths =
 isMockingApi = process.env.MOCK
 
 # start the dev server, and auto-update
-gulp.task 'dev', ['assets:dev', 'test:phantom', 'watch'], ->
+gulp.task 'dev', ['assets:dev', 'watch:dev'], ->
   gulp.start 'server'
 
 # compile sources: src/* -> build/*
@@ -72,7 +72,8 @@ gulp.task 'test:phantom', ['scripts:dev', 'scripts:test'], (cb) ->
   }, karmaConf), cb
 
 gulp.task 'scripts:test', ['lint:tests'], ->
-  testFiles = glob.sync('./test/**/*.coffee')
+  testFiles = [paths.mock].concat glob.sync(paths.tests)
+
   browserify
     entries: testFiles
     extensions: ['.coffee']
@@ -99,9 +100,11 @@ gulp.task 'server', ->
   nodemon {script: 'server.coffee', ext: 'null', ignore: ['**/*.*']}
 
 
-gulp.task 'watch', ->
-  gulp.watch paths.scripts, ['scripts:dev', 'test:phantom']
+gulp.task 'watch:dev', ->
+  gulp.watch paths.scripts, ['scripts:dev']
   gulp.watch paths.styles, ['styles:dev']
+
+gulp.task 'watch:test', ->
   gulp.watch paths.tests, ['test:phantom']
 
 # run coffee-lint
@@ -165,6 +168,7 @@ gulp.task 'scripts:prod', ['lint:scripts'], ->
     extensions: ['.coffee']
   .transform {global: true}, 'uglifyify'
   .bundle()
+  .on 'error', errorHandler
   .pipe source outFiles.scripts
   .pipe gulp.dest paths.dist + '/js/'
 

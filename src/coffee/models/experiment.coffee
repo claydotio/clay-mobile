@@ -1,6 +1,6 @@
 z = require 'zorium'
 _ = require 'lodash'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 Q = require 'q'
 
 User = require './user'

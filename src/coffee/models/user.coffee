@@ -1,8 +1,9 @@
 Q = require 'q'
-log = require 'loglevel'
+log = require 'clay-loglevel'
 
 resource = require '../lib/resource'
 config = require '../config'
+
 
 
 resource.extendCollection 'users', (collection) ->
@@ -14,6 +15,19 @@ resource.extendCollection 'users', (collection) ->
 
   collection.setMe = (_me) ->
     me = Q _me
+
+  collection.logEngagedActivity = ->
+    me.then (me) ->
+      # TODO: (Zoli) remove after merging experiment and user model
+      # WARNING: This is a circular dependency
+      Experiment = require './experiment'
+      Q.spread [
+        Experiment.convert('engaged_activity').catch log.trace
+        collection.all('me').customPOST null,
+          'lastEngagedActivity',
+          {accessToken: me.accessToken}
+      ], (exp, res) ->
+        res
 
   return collection
 
