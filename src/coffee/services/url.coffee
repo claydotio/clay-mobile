@@ -3,25 +3,16 @@ kik = require 'kik'
 config = require '../config'
 
 host = window.location.host
+hostname = window.location.hostname
 
 class UrlService
-  constructor: ->
-    @targetHost = config.HOSTNAME
-
-    @protocol = 'http'
-
-    # if on subdomain (game page), don't use card:// protocol
-    unless host is @targetHost
-      @protocol = if kik?.enabled then 'card' else 'http'
-
   # clay.io/whatever => true, subdomain.clay.io/whatever => false
-  isRootPath: =>
-    @targetHost = config.HOSTNAME
-    return host is @targetHost
+  isRootPath: ->
+    return hostname is config.HOSTNAME
 
   getMarketplaceBase: ({protocol} = {}) =>
-    protocol ?= @protocol
-    return "#{protocol}://#{@targetHost}"
+    protocol ?= if kik?.enabled and @isRootPath() then 'card' else 'http'
+    return "#{protocol}://#{config.HOSTNAME}"
 
   # full path to marketplace and game
   getMarketplaceGame: ({protocol, game}) =>
@@ -34,14 +25,15 @@ class UrlService
 
   # returns the full url to a game's subdomain page (eg http://slime.clay.io)
   getGameSubdomain: ({game, protocol}) =>
-    protocol ?= @protocol
-    return "#{protocol}://#{game.key}.#{@targetHost}"
+    protocol ?= if kik?.enabled and @isRootPath() then 'card' else 'http'
+    return "#{protocol}://#{game.key}.#{config.HOSTNAME}"
 
   # url is optional, if undefined, uses current url (window.location.host)
   getSubdomain: ({url} = {}) ->
     url ?= host
     subdomainRegex = /(?:(?:http|card)[s]*\:\/\/)*(.*?)\.(?=[^\/]*\..{2,5})/i
     matches = subdomainRegex.exec(url)
-    if matches and matches[1] then matches[1] else null
+
+    matches?[1] or null
 
 module.exports = new UrlService()
