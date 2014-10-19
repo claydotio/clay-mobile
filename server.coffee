@@ -7,11 +7,10 @@ _ = require 'lodash'
 Promise = require 'bluebird'
 useragent = require 'express-useragent'
 compress = require 'compression'
-session = require 'express-session'
 log = require 'loglevel'
+cookieParser = require 'cookie-parser'
 
 config = require './src/coffee/config'
-serverConfig = require './server_config'
 
 router = express.Router()
 log.enableAll()
@@ -30,20 +29,64 @@ dust.loadSource distCss
 dust.loadSource indexTpl
 
 
+apiRequestUrl = (path) ->
+  apiPath = url.parse config.API_PATH + '/'
+
+  unless apiPath.hostname
+    apiPath.hostname = config.HOSTNAME
+
+  unless apiPath.protocol
+    apiPath.protocol = 'http'
+
+  url.format url.resolve url.format(apiPath), path
+
 # Middlewares
+claySessionParser = ->
+  (req, res, next) ->
+    req.clay = {}
+    req.clay.me = null
+
+    loginUrl = apiRequestUrl 'users/login/anon'
+    meUrl = apiRequestUrl 'users/me'
+    accessToken = req.cookies.accessToken
+
+    if accessToken
+      Promise.promisify(request.get, request) meUrl, {qs: {accessToken}}
+      .spread (res, body) ->
+        req.clay.me = JSON.parse body
+        next()
+      .catch (err) ->
+        log.trace err
+
+        # Getting user failed, create a new one
+        Promise.promisify(request.post, request) loginUrl
+        .spread (res, body) ->
+          req.clay.me = JSON.parse body
+          next()
+        .catch (err) ->
+          log.trace err
+          next()
+    else
+      Promise.promisify(request.post, request) loginUrl
+      .spread (res, body) ->
+        req.clay.me = JSON.parse body
+        next()
+      .catch (err) ->
+        log.trace err
+        next()
+
 app = express()
 
 app.use compress()
-app.use useragent.express()
 if config.ENV is config.ENVS.PROD
 then app.use express['static'](__dirname + '/dist')
 else app.use express['static'](__dirname + '/build')
 
 # After checking static files
+app.use cookieParser()
+app.use claySessionParser()
+app.use useragent.express()
 app.use router
-
-app.listen process.env.PORT or 3000
-log.info 'Listening on port', process.env.PORT or 3000
 
 
 # Development
@@ -71,13 +114,13 @@ router.get '/game/:key', (req, res) ->
   log.info 'AGENT ', req.useragent.source
   gameKey = req.params.key
 
-  renderGamePage gameKey
+  renderGamePage gameKey, req.clay.me
   .then (html) ->
     res.send html
   .catch (err) ->
     log.trace err
 
-    renderHomePage()
+    renderHomePage(req.clay.me)
     .then (html) ->
       res.send html
     .catch (err) ->
@@ -87,23 +130,23 @@ router.get '/game/:key', (req, res) ->
 router.get '*', (req, res) ->
   log.info 'AGENT ', req.useragent.source
 
-  # Game Subdomain
-  if req.hostname isnt config.HOSTNAME
+  # Game Subdomain - 0.0.0.0 used when testing locally
+  if req.hostname isnt config.HOSTNAME and req.hostname isnt '0.0.0.0'
     gameKey = req.hostname.split('.')[0]
 
-    return renderGamePage gameKey
+    return renderGamePage gameKey, req.clay.me
       .then (html) ->
         res.send html
       .catch (err) ->
         log.trace err
-        renderHomePage()
+        renderHomePage(req.clay.me)
         .then (html) ->
           res.send html
         .catch (err) ->
           log.trace err
           res.status(500).send()
 
-  renderHomePage()
+  renderHomePage(req.clay.me)
   .then (html) ->
     res.send html
   .catch (err) ->
@@ -127,27 +170,22 @@ renderHomePage = do ->
     iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
     url: 'http://clay.io/'
     canonical: 'http://clay.io'
+    me: 'REPLACE_WITH_ME'
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
 
-  ->
-    rendered
+  (me) ->
+    rendered.then (html) ->
+      html.replace 'REPLACE_WITH_ME', JSON.stringify me
 
-renderGamePage = (gameKey) ->
-  apiPath = url.parse config.API_PATH + '/'
+renderGamePage = (gameKey, me) ->
 
-  unless apiPath.hostname
-    apiPath.hostname = config.HOSTNAME
+  gameUrl = apiRequestUrl "games/findOne?key=#{gameKey}"
 
-  unless apiPath.protocol
-    apiPath.protocol = 'http'
-
-  gameUrl = url.resolve url.format(apiPath), "games/findOne?key=#{gameKey}"
-
-  log.info 'GET', url.format(gameUrl)
-  Promise.promisify(request.get, request) url.format(gameUrl)
-  .then (response) ->
-    game = JSON.parse response[0].body
+  log.info 'GET', gameUrl
+  Promise.promisify(request.get, request) gameUrl
+  .spread (res, body) ->
+    game = JSON.parse body
     if _.isEmpty game
       throw new Error 'Game not found: ' + gameKey
 
@@ -170,4 +208,8 @@ renderGamePage = (gameKey) ->
       url: "http://#{game.key}.clay.io"
       canonical: "http://#{game.key}.clay.io"
 
+      me: JSON.stringify me
+
     Promise.promisify(dust.render, dust) 'index', page
+
+module.exports = app
