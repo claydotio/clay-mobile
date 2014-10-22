@@ -209,11 +209,10 @@ shuffle = (array) ->
     array[index] = temp
   array
 
-users = shuffle users
-games = shuffle games
-
 module.exports = class Meet
   constructor: ->
+    shuffle users
+    shuffle games
     @currentUser = users[1] # 2nd user
     @currentGame = games[1] # 2nd game
 
@@ -223,10 +222,10 @@ module.exports = class Meet
     # always show the 10th person (user/game arrays are shuffled)
     newPersonIndex = 18 #Math.floor(Math.random() * games.length)
 
-    imageMargin = vars.$experimentMeetImageYMargin
-    imageHeight = vars.$experimentMeetImageSize
-    imageHeightWithMargin = vars.$experimentMeetImageSize + 2 * imageMargin
-    spinnerHeight = vars.$experimentMeetSpinnerHeight
+    imageMargin = vars.$hackMeetImageYMargin
+    imageHeight = vars.$hackMeetImageSize
+    imageHeightWithMargin = vars.$hackMeetImageSize + 2 * imageMargin
+    spinnerHeight = vars.$hackMeetSpinnerHeight
     baseTopPos = -1 * imageHeightWithMargin +
                  (spinnerHeight - imageHeightWithMargin) / 2
     # skip over 2 images
@@ -273,7 +272,7 @@ module.exports = class Meet
     z.redraw()
 
   acceptChallenge: =>
-    # send user to the selected game, ignore the score for now (experiment)
+    # send user to the selected game, ignore the score for now (hack)
     # TODO: this code is copied from game_box.coffee. We might want a
     # service to send people to games?
     z.route UrlService.getGameRoute {game: @currentGame}
@@ -292,16 +291,16 @@ module.exports = class Meet
               z 'li',
                 z "img.meet-spinner-user-image-#{i}",
                   src: user.pic
-                  width: vars.$experimentMeetImageSize
-                  height: vars.$experimentMeetImageSize
+                  width: vars.$hackMeetImageSize
+                  height: vars.$hackMeetImageSize
 
           z 'ul.meet-spinner-list.meet-spinner-games',
             for game, i in games
               z 'li',
                 z "img.meet-spinner-game-image-#{i}",
                   src: game.pic
-                  width: vars.$experimentMeetImageSize
-                  height: vars.$experimentMeetImageSize
+                  width: vars.$hackMeetImageSize
+                  height: vars.$hackMeetImageSize
 
 
           z 'button.meet-spinner-try-again', onclick: @spin,
@@ -311,13 +310,13 @@ module.exports = class Meet
           z 'div.meet-spinner-user', 'Austin Hallock'
           z 'div.meet-spinner-game', 'Treasure Arena'
 
-        z 'div.l-container',
+        z 'div.l-content-container',
           z 'div.meet-challenge', 'They scored ',
             z 'strong',
               (Math.round @currentGame.fakeScore * @currentUser.scoreMultiplier)
               .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') # prettify
             ' points'
-          z 'button.button-primary.is-full-width.meet-button',
+          z 'button.button-primary.is-block.meet-button',
             {onclick: @acceptChallenge},
             'I can beat that!',
             z 'span.meet-button-challenge-icon',

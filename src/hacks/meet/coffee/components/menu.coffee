@@ -6,7 +6,7 @@ Navigation = require '../models/navigation'
 module.exports = class Menu
   constructor: ->
     @items = z.prop [
-      {title: 'Meet', route: '/meet', page: 'meet'},
+      {title: 'Meet', link: '/meet', page: 'meet'},
       {title: 'Games', link: '/games', page: 'games'}
     ]
 

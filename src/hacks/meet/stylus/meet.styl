@@ -27,9 +27,14 @@
     vertical-align: middle
     text-align: center
 
+    > h2
+      display: none
+      @media (min-height: 520px)
+        display: block
+
 .meet-spinner
   width: 100%
-  height: $experimentMeetSpinnerHeight px
+  height: $hackMeetSpinnerHeight px
   position: relative
   background: $white
   border-top: 1px solid $dividerColor
@@ -51,29 +56,29 @@
 .meet-spinner-list
   position: relative // `top` gets changed in spin animation
   // start if off on user/game #2
-  $experimentMeetImageSizeWithMargins = $experimentMeetImageSize + 2 * $experimentMeetImageYMargin
-  top: (-1 * $experimentMeetImageSizeWithMargins + ($experimentMeetSpinnerHeight - $experimentMeetImageSizeWithMargins) / 2) px
+  $hackMeetImageSizeWithMargins = $hackMeetImageSize + 2 * $hackMeetImageYMargin
+  top: (-1 * $hackMeetImageSizeWithMargins + ($hackMeetSpinnerHeight - $hackMeetImageSizeWithMargins) / 2) px
   transition: top 2s
   list-style-type: none
   margin: 0
   padding: 0
   > li > img
-    width: $experimentMeetImageSize px
-    height: $experimentMeetImageSize px
-    padding: ($experimentMeetImageYMargin)px 0 // margin collapses
+    width: $hackMeetImageSize px
+    height: $hackMeetImageSize px
+    padding: ($hackMeetImageYMargin)px 0 // margin collapses
     display: block
 
 .meet-spinner-user, .meet-spinner-users
   position: absolute
-  width: $experimentMeetImageSize px
+  width: $hackMeetImageSize px
   left: 50%
-  margin-left: -($experimentMeetImageSize) px
+  margin-left: -($hackMeetImageSize) px
 
 .meet-spinner-game, .meet-spinner-games
   position: absolute
-  width: $experimentMeetImageSize px
+  width: $hackMeetImageSize px
   right: 50%
-  margin-right: -($experimentMeetImageSize) px
+  margin-right: -($hackMeetImageSize) px
 
 .meet-spinner-labels
   clear: both
@@ -94,11 +99,11 @@
   margin-top: -25px
 
   .icon-dice
-    font-size: $fontSizeMedium
+    font-size: $fontSizeLarge
     color: #fff
 
 .meet-challenge
-  font-size: $fontSizeMedium
+  font-size: $fontSizeLarge
   margin: 15px 0
 
 .meet-button
@@ -106,4 +111,4 @@
 
 .meet-button-challenge-icon
   position: absolute
-  right: 5px
+  right: 20px
