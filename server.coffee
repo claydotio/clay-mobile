@@ -20,12 +20,15 @@ log.enableAll()
 dust.optimizers.format = (ctx, node) -> node
 
 indexTpl = dust.compile fs.readFileSync('index.dust', 'utf-8'), 'index'
-distJs = dust.compile fs.readFileSync('dist/js/bundle.js', 'utf-8'), 'distjs'
-distCss = dust.compile fs.readFileSync('dist/css/bundle.css', 'utf-8'),
-  'distcss'
 
-dust.loadSource distJs
-dust.loadSource distCss
+if config.ENV is config.ENVS.PROD
+  distJs = dust.compile fs.readFileSync('dist/js/bundle.js', 'utf-8'), 'distjs'
+  distCss = dust.compile fs.readFileSync('dist/css/bundle.css', 'utf-8'),
+    'distcss'
+
+  dust.loadSource distJs
+  dust.loadSource distCss
+
 dust.loadSource indexTpl
 
 

@@ -114,7 +114,7 @@ describe 'index.dust', ->
 
     it 'Injects null if anonymous user request fails', ->
       # Let request time out
-      @timeout(5000)
+      @timeout(10000)
 
       injectedNull =
         '<script>' +

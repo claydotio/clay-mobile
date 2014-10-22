@@ -69,7 +69,7 @@ gulp.task 'test', ['scripts:dev', 'scripts:test', 'test:server'], (cb) ->
   karma.start _.defaults(singleRun: true, karmaConf), process.exit
 
 # gulp-mocha will never exit on its own.
-gulp.task 'test:server', ->
+gulp.task 'test:server', ['scripts:test'], ->
   gulp.src paths.serverTests
     .pipe mocha()
 
