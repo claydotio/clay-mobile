@@ -7,8 +7,15 @@ config = require '../config'
 
 
 resource.extendCollection 'users', (collection) ->
-  me = collection.all('login').customPOST null, 'anon'
-    .catch log.trace
+  me = if window._Clay?.me
+  then Q.resolve window._Clay.me
+  else collection.all('login').customPOST null, 'anon'
+
+  # Save accessToken in cookie
+  me = me.then (user) ->
+    document.cookie = "accessToken=#{user.accessToken}"
+
+  me.catch log.trace
 
   collection.getMe = ->
     me
