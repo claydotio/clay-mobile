@@ -3,7 +3,7 @@ Flare = require 'flare-gun'
 nock = require 'nock'
 should = require('clay-chai').should()
 
-app = require './server'
+app = require '../server'
 
 flare = new Flare().express(app)
   .actor 'anon', {}
@@ -91,7 +91,7 @@ describe 'index.dust', ->
         .get '/'
         .flare (flare) ->
           flare.res.body.should.contain injectedUser
-        .get '/'
+        .get '/game/slime'
         .flare (flare) ->
           flare.res.body.should.contain injectedUser
     it 'Injects anonymous user object if invalid token', ->
@@ -103,7 +103,7 @@ describe 'index.dust', ->
         .get '/'
         .flare (flare) ->
           flare.res.body.should.contain injectedAnon
-        .get '/'
+        .get '/game/slime'
         .flare (flare) ->
           flare.res.body.should.contain injectedAnon
 
@@ -127,6 +127,6 @@ describe 'index.dust', ->
         .get '/'
         .flare (flare) ->
           flare.res.body.should.contain injectedNull
-        .get '/'
+        .get '/game/slime'
         .flare (flare) ->
           flare.res.body.should.contain injectedNull

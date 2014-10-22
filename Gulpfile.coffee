@@ -31,8 +31,8 @@ paths =
   scripts: './src/coffee/**/*.coffee'
   styles: './src/stylus/**/*.styl'
 
-  tests: './test/**/*.coffee'
-  serverTests: './test-server.coffee'
+  tests: './test/*/*.coffee'
+  serverTests: './test/server.coffee'
   root: './src/coffee/root.coffee'
   mock: './src/coffee/mock.coffee'
   baseStyle: './src/stylus/base.styl'

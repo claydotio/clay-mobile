@@ -32,6 +32,7 @@ if config.ENV is config.ENVS.PROD
 dust.loadSource indexTpl
 
 
+# TODO: (Zoli) make pretty
 apiRequestUrl = (path) ->
   apiPath = url.parse config.API_PATH + '/'
 

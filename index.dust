@@ -84,6 +84,7 @@
       // restore console.log (since kik messes with it)
       console.log = logClone
     </script>
+    {! Inject current user to prevent round-trip !}
     <script>window._Clay={};window._Clay.me={me|s};</script>
     {?inlineSource}
       <script>
