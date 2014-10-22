@@ -31,8 +31,8 @@ paths =
   scripts: './src/coffee/**/*.coffee'
   styles: './src/stylus/**/*.styl'
 
-  tests: './test/**/*.coffee'
-  serverTests: './test-server.coffee'
+  tests: './test/*/*.coffee'
+  serverTests: './test/server.coffee'
   root: './src/coffee/root.coffee'
   mock: './src/coffee/mock.coffee'
   baseStyle: './src/stylus/base.styl'
@@ -69,7 +69,7 @@ gulp.task 'test', ['scripts:dev', 'scripts:test', 'test:server'], (cb) ->
   karma.start _.defaults(singleRun: true, karmaConf), process.exit
 
 # gulp-mocha will never exit on its own.
-gulp.task 'test:server', ->
+gulp.task 'test:server', ['scripts:test'], ->
   gulp.src paths.serverTests
     .pipe mocha()
 

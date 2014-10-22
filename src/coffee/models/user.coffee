@@ -14,6 +14,7 @@ resource.extendCollection 'users', (collection) ->
   # Save accessToken in cookie
   me = me.then (user) ->
     document.cookie = "accessToken=#{user.accessToken}"
+    return user
 
   me.catch log.trace
 
