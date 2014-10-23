@@ -1,10 +1,12 @@
 z = require 'zorium'
 kik = require 'kik'
+log = require 'clay-loglevel'
 
 config = require '../config'
 CrossPromotion = require './cross_promotion'
 GameRate = require './game_rate'
 Modal = require '../models/modal'
+User = require '../models/user'
 UrlService = require '../services/url'
 
 GAME_PROMO_WIDTH = 92
@@ -18,6 +20,14 @@ module.exports = class Drawer
       gamePromoHeight: GAME_PROMO_HEIGHT
     @CrossPromotion = new CrossPromotion crossPromotionOptions
     @GameRate = new GameRate {@game, onRated: -> Modal.closeComponent()}
+
+    @drawerShareTheme = z.prop null
+    User.getExperiments().then (params) =>
+      @drawerShareTheme = z.prop switch params.drawerShare
+        when 'big' then '.theme-big-share'
+        else  null
+      z.redraw()
+    .catch log.trace
 
   toggleOpenState: (e) =>
     e?.stopPropagation()
@@ -104,7 +114,7 @@ module.exports = class Drawer
           z 'div.drawer-content',
             z 'ul.drawer-menu-items',
               z 'li',
-                z 'a[href=#]', onclick: @shareGame,
+                z "a[href=#]#{@drawerShareTheme() or ''}", onclick: @shareGame,
                   z 'i.icon.icon-share'
                   z 'span.drawer-menu-item', 'Share game'
               # TODO: (Austin) Re-enable when we have user accounts
