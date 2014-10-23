@@ -8,6 +8,10 @@ Q = require 'q'
 kik = require 'kik'
 
 config = require './config'
+# START HACK: meet
+HackMeetPage = require '../hacks/meet/coffee/pages/meet'
+HackGamesPage = require '../hacks/meet/coffee/pages/games'
+# END HACK: meet
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
 PushToken = require './models/push_token'
@@ -104,11 +108,23 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.route.mode = 'pathname'
 
-z.route document.getElementById('app'), '/', route(
-  '/': GamesPage
-  '/game/:key': PlayGamePage
-  '/games/:filter': GamesPage
-)
+# START HACK: meet
+User.getExperiments().then (params) ->
+  if params.homePage is 'meet'
+    HomePage = HackMeetPage
+    GamesListPage = HackGamesPage
+  else
+    HomePage = GamesPage
+    GamesListPage = GamesPage
+
+  z.route document.getElementById('app'), '/', route(
+    '/': HomePage
+    '/meet': HackMeetPage
+    '/games': GamesListPage
+    '/game/:key': PlayGamePage
+    '/games/:filter': GamesPage
+  )
+# END HACK: meet
 
 # track kik metrics (users sending messages, etc...)
 kik?.metrics?.enableGoogleAnalytics?()
