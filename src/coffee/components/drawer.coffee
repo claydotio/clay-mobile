@@ -44,7 +44,7 @@ module.exports = class Drawer
       title: "Play #{@game.name}!"
       text: @game.description
       pic: @game.icon128Url
-      data: {gameKey: @game.key}
+      data: {gameKey: @game.key, share: true}
     )
 
     ga? 'send', 'event', 'drawer', 'share', @game.key

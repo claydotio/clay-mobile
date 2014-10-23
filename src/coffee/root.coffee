@@ -54,9 +54,15 @@ reportError = ->
 window.addEventListener 'error', reportError
 window.addEventListener 'fb-flo-reload', z.redraw
 
+isFromShare = ->
+  kik?.message?.share
+
 window.setTimeout ->
   User.logEngagedActivity()
   .catch log.trace
+
+  if isFromShare()
+    User.convertExperiment 'engaged_share'
 , ENGAGED_ACTIVITY_TIME
 
 if config.ENV isnt config.ENVS.PROD
