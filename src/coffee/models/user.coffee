@@ -1,5 +1,7 @@
 Q = require 'q'
 log = require 'clay-loglevel'
+z = require 'zorium'
+_ = require 'lodash'
 
 resource = require '../lib/resource'
 config = require '../config'
@@ -7,8 +9,24 @@ config = require '../config'
 
 
 resource.extendCollection 'users', (collection) ->
-  me = collection.all('login').customPOST null, 'anon'
-    .catch log.trace
+  me = if window._Clay?.me
+  then Q.resolve window._Clay.me
+  else collection.all('login').customPOST null, 'anon'
+
+  # Save accessToken in cookie
+  me = me.then (user) ->
+    document.cookie = "accessToken=#{user.accessToken}"
+    return user
+
+  me.catch log.trace
+
+  experiments = me.then (user) ->
+    Q z.request
+      url: config.FLAK_CANNON_PATH + '/experiments'
+      method: 'POST'
+      data:
+        id: user.id
+  .catch log.trace
 
   collection.getMe = ->
     me
@@ -18,16 +36,27 @@ resource.extendCollection 'users', (collection) ->
 
   collection.logEngagedActivity = ->
     me.then (me) ->
-      # TODO: (Zoli) remove after merging experiment and user model
-      # WARNING: This is a circular dependency
-      Experiment = require './experiment'
       Q.spread [
-        Experiment.convert('engaged_activity').catch log.trace
+        collection.convertExperiment('engaged_activity').catch log.trace
         collection.all('me').customPOST null,
           'lastEngagedActivity',
           {accessToken: me.accessToken}
       ], (exp, res) ->
         res
+
+  collection.getExperiments = ->
+    return experiments
+
+  collection.convertExperiment = (event, {uniq} = {}) ->
+    me.then (user) ->
+      Q z.request
+        url: config.FLAK_CANNON_PATH + '/conversions'
+        method: 'POST'
+        data:
+          event: event
+          uniq: uniq
+          data:
+            id: user.id
 
   return collection
 

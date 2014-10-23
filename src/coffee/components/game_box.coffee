@@ -4,7 +4,7 @@ log = require 'clay-loglevel'
 
 RatingsWidget = require './stars'
 vars = require '../../stylus/vars.json'
-Experiment = require '../models/experiment'
+User = require '../models/user'
 UrlService = require '../services/url'
 
 module.exports = class GameBox
@@ -15,7 +15,7 @@ module.exports = class GameBox
     e?.preventDefault()
 
     ga? 'send', 'event', 'game_box', 'click', @game.key
-    Experiment.convert('game_box_click').catch log.trace
+    User.convertExperiment('game_box_click').catch log.trace
     z.route UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
     kik.picker?(httpSubDomainUrl, {}, -> null)

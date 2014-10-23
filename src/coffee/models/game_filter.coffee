@@ -13,8 +13,8 @@ class GameFilter
 
   getGames: (params) ->
     if @label == 'new'
-      return Game.all('games').getNew(params)
+      return Game.getNew(params)
     else
-      return Game.all('games').getTop(params)
+      return Game.getTop(params)
 
 module.exports = new GameFilter()

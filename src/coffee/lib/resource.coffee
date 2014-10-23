@@ -13,7 +13,7 @@ serializeQueryString = (obj, prefix) ->
     v = obj[p]
     str.push (
       if typeof v is 'object'
-      then serialize(v, k)
+      then serializeQueryString(v, k)
       else encodeURIComponent(k) + '=' + encodeURIComponent(v)
     )
   str.join '&'

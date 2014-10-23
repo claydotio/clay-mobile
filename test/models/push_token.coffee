@@ -11,7 +11,7 @@ describe 'PushToken', ->
       PushToken.__set__ 'kik', null
 
     it 'Attempts to create push token and promise rejects (no Kik)', ->
-      PushToken.all('pushTokens').createByGameId MockGame.id
+      PushToken.createByGameId MockGame.id
       .then ->
         throw new Error 'Expected error'
       , (err) ->
@@ -32,18 +32,18 @@ describe 'PushToken', ->
       localStorage.clear()
 
     it 'Attempts to create push token by gameId and resolves', ->
-      PushToken.all('pushTokens').createByGameId MockGame.id
+      PushToken.createByGameId MockGame.id
 
     it 'Attempts to create push token by gameKey and resolves', ->
-      PushToken.all('pushTokens').createByGameKey MockGame.key
+      PushToken.createByGameKey MockGame.key
 
     it 'Attempts to create push token for marketplace and resolves', ->
-      PushToken.all('pushTokens').createForMarketplace()
+      PushToken.createForMarketplace()
 
     it 'Attempts to create multiple push tokens and fails', ->
-      PushToken.all('pushTokens').createByGameId MockGame.id
+      PushToken.createByGameId MockGame.id
       .then ->
-        PushToken.all('pushTokens').createByGameId MockGame.id
+        PushToken.createByGameId MockGame.id
       .then ->
         throw new Error 'Expected error'
       , (err) ->

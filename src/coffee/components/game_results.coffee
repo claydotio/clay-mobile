@@ -4,7 +4,6 @@ Q = require 'q'
 log = require 'clay-loglevel'
 
 GameFilter = require '../models/game_filter'
-Experiment = require '../models/experiment'
 GameBox = require './game_box'
 InfiniteScrollDir = require '../directives/infinite_scroll'
 Spinner = require './spinner'

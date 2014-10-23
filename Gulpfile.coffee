@@ -15,6 +15,7 @@ glob = require 'glob'
 karma = require('karma').server
 minifyCss = require 'gulp-minify-css'
 rewireify = require 'rewireify'
+mocha = require 'gulp-mocha'
 
 karmaConf = require './karma.defaults'
 
@@ -30,7 +31,8 @@ paths =
   scripts: './src/coffee/**/*.coffee'
   styles: './src/stylus/**/*.styl'
 
-  tests: './test/**/*.coffee'
+  tests: './test/*/*.coffee'
+  serverTests: './test/server.coffee'
   root: './src/coffee/root.coffee'
   mock: './src/coffee/mock.coffee'
   baseStyle: './src/stylus/base.styl'
@@ -62,8 +64,14 @@ gulp.task 'build', (cb) ->
   runSequence 'clean:dist', 'assets:prod', cb
 
 # tests
-gulp.task 'test', ['scripts:dev', 'scripts:test'], (cb) ->
-  karma.start _.defaults(singleRun: true, karmaConf), cb
+# process.exit is added due to gulp-mocha (test:server) hanging
+gulp.task 'test', ['scripts:dev', 'scripts:test', 'test:server'], (cb) ->
+  karma.start _.defaults(singleRun: true, karmaConf), process.exit
+
+# gulp-mocha will never exit on its own.
+gulp.task 'test:server', ['scripts:test'], ->
+  gulp.src paths.serverTests
+    .pipe mocha()
 
 gulp.task 'test:phantom', ['scripts:dev', 'scripts:test'], (cb) ->
   karma.start _.defaults({
@@ -97,7 +105,7 @@ gulp.task 'lint:tests', ->
 gulp.task 'server', ->
 
   # Don't actually watch for changes, just run the server
-  nodemon {script: 'server.coffee', ext: 'null', ignore: ['**/*.*']}
+  nodemon {script: 'bin/server.coffee', ext: 'null', ignore: ['**/*.*']}
 
 
 gulp.task 'watch:dev', ->

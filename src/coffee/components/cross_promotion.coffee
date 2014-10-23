@@ -8,7 +8,7 @@ GamePromo = require './game_promo'
 
 module.exports = class CrossPromotion
   constructor: ({gamePromoWidth, gamePromoHeight}) ->
-    @gamePromos = z.prop Game.all('games').getTop(limit: 6).then (games) ->
+    @gamePromos = z.prop Game.getTop(limit: 6).then (games) ->
       _.map games, (game) ->
         new GamePromo {game, width: gamePromoWidth, height: gamePromoHeight}
 
