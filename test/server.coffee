@@ -106,27 +106,3 @@ describe 'index.dust', ->
         .get '/game/slime'
         .flare (flare) ->
           flare.res.body.should.contain injectedAnon
-
-  # Warning, mocked routes are disabled from here on
-  describe 'graceful degredation', ->
-    before ->
-      nock.restore()
-
-    it 'Injects null if anonymous user request fails', ->
-      # Let request time out
-      @timeout(10000)
-
-      injectedNull =
-        '<script>' +
-        'window._Clay={};' +
-        'window._Clay.me=null;' +
-        '</script>'
-
-      flare
-        .as 'anon'
-        .get '/'
-        .flare (flare) ->
-          flare.res.body.should.contain injectedNull
-        .get '/game/slime'
-        .flare (flare) ->
-          flare.res.body.should.contain injectedNull
