@@ -24,7 +24,7 @@ module.exports = class GamePlayer
     @isLoading = true
     @gameKey = z.prop gameKey
 
-    @game = z.prop Game.all('games').findOne(key: gameKey)
+    @game = z.prop Game.findOne(key: gameKey)
     @game.then =>
       @isLoading = false
 

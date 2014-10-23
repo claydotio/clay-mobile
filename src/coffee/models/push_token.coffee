@@ -11,7 +11,7 @@ resource.extendCollection 'pushTokens', (collection) ->
     collection.createByGameId(null)
 
   collection.createByGameKey = (gameKey) ->
-    Game.all('games').findOne(key: gameKey)
+    Game.findOne(key: gameKey)
     .then (game) ->
       collection.createByGameId(game.id)
 
@@ -39,4 +39,4 @@ resource.extendCollection 'pushTokens', (collection) ->
 
   return collection
 
-module.exports = resource.setBaseUrl config.API_PATH
+module.exports = resource.setBaseUrl(config.API_PATH).all('pushTokens')

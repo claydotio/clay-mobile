@@ -19,14 +19,14 @@ ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 # Marketplace or game was loaded in picker
 if kik?.picker?.reply
   if UrlService.isRootPath() # marketplace
-    PushToken.all('pushTokens').createForMarketplace()
+    PushToken.createForMarketplace()
     .finally ->
       kik.picker.reply()
     .catch (err) ->
       log.trace err
   else # game subdomain
     gameKey = UrlService.getSubdomain()
-    PushToken.all('pushTokens').createByGameKey gameKey
+    PushToken.createByGameKey gameKey
     .finally ->
       kik.picker.reply()
     .catch (err) ->
@@ -105,14 +105,14 @@ if shouldRouteToGamePage
     gameKey = kikGameKey
   else # subdomain
     gameKey = UrlService.getSubdomain()
-    PushToken.all('pushTokens').createByGameKey gameKey
+    PushToken.createByGameKey gameKey
     # marketplace in picker
     marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
     kik?.picker?(marketplaceBaseUrl, {}, -> null)
 
   z.route "/game/#{gameKey}"
 else
-  PushToken.all('pushTokens').createForMarketplace()
+  PushToken.createForMarketplace()
 
 log.info 'App Ready'
 

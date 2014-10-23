@@ -6,7 +6,7 @@ module.exports =
   FLAK_CANNON_PATH:
     if process.env.MOCK or process.env.NODE_ENV is 'test'
     then ''
-    else process.env.FLAK_CANNON_PATH or '/api/fc/v1'
+    else process.env.FLAK_CANNON_PATH or '/api/fc/v2'
   HOSTNAME: process.env.HOSTNAME or 'clay.io'
   MOCK: process.env.MOCK or false
   ENV: process.env.NODE_ENV or 'production'
