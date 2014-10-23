@@ -26,6 +26,7 @@ resource.extendCollection 'users', (collection) ->
       method: 'POST'
       data:
         id: user.id
+      background: true
   .catch log.trace
 
   collection.getMe = ->
@@ -52,6 +53,7 @@ resource.extendCollection 'users', (collection) ->
       Q z.request
         url: config.FLAK_CANNON_PATH + '/conversions'
         method: 'POST'
+        background: true
         data:
           event: event
           uniq: uniq
