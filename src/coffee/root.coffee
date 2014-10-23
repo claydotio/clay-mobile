@@ -49,6 +49,7 @@ reportError = ->
     url: config.API_PATH + '/log'
     data:
       message: args.join ' '
+    background: true
   .catch (err) ->
     console?.error err
 
