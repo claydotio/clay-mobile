@@ -71,9 +71,9 @@ window.setTimeout ->
 
   if isFromShare and not hasVisitedBefore
     # Kik clears tokens often. Use their anon-token to identify users
-    # The anon-token is unique for each 'app', so always use the
+    # The anon-token is unique for each 'app', so always use the marketplace one
     if kik.enabled
-      unless kikAnonymousToken
+      if not kikAnonymousToken
         kik.getAnonymousUser (token) ->
           User.convertExperiment 'engaged_share', {uniq: token}
       else

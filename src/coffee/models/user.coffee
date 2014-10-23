@@ -47,16 +47,14 @@ resource.extendCollection 'users', (collection) ->
   collection.getExperiments = ->
     return experiments
 
-  collection.convertExperiment = (event, options) ->
-    options = _.defaults options or {}, {uniq: null}
-
+  collection.convertExperiment = (event, {uniq} = {}) ->
     me.then (user) ->
       Q z.request
         url: config.FLAK_CANNON_PATH + '/conversions'
         method: 'POST'
         data:
           event: event
-          uniq: options.uniq
+          uniq: uniq
           data:
             id: user.id
 
