@@ -1,6 +1,7 @@
 Q = require 'q'
 log = require 'clay-loglevel'
 z = require 'zorium'
+_ = require 'lodash'
 
 resource = require '../lib/resource'
 config = require '../config'
@@ -46,13 +47,16 @@ resource.extendCollection 'users', (collection) ->
   collection.getExperiments = ->
     return experiments
 
-  collection.convertExperiment = (event) ->
+  collection.convertExperiment = (event, options) ->
+    options = _.defaults options or {}, {uniq: null}
+
     me.then (user) ->
       Q z.request
         url: config.FLAK_CANNON_PATH + '/conversions'
         method: 'POST'
         data:
           event: event
+          uniq: options.uniq
           data:
             id: user.id
 

@@ -21,7 +21,8 @@ if kik?.picker?.reply
   if UrlService.isRootPath() # marketplace
     PushToken.createForMarketplace()
     .finally ->
-      kik.picker.reply()
+      kik.getAnonymousUser (token) ->
+        kik.picker.reply {token}
     .catch (err) ->
       log.trace err
   else # game subdomain
@@ -54,15 +55,31 @@ reportError = ->
 window.addEventListener 'error', reportError
 window.addEventListener 'fb-flo-reload', z.redraw
 
-isFromShare = ->
+isFromShare = do ->
   kik?.message?.share
+
+hasVisitedBefore = do ->
+  _.contains document.cookie, 'accessToken'
+
+# This is set if on kik and on a subdomain
+# using the picker trigger for push tokens
+kikAnonymousToken = null
 
 window.setTimeout ->
   User.logEngagedActivity()
   .catch log.trace
 
-  if isFromShare()
-    User.convertExperiment 'engaged_share'
+  if isFromShare and not hasVisitedBefore
+    # Kik clears tokens often. Use their anon-token to identify users
+    # The anon-token is unique for each 'app', so always use the
+    if kik.enabled
+      unless kikAnonymousToken
+        kik.getAnonymousUser (token) ->
+          User.convertExperiment 'engaged_share', {uniq: token}
+      else
+        User.convertExperiment 'engaged_share', {uniq: kikAnonymousToken}
+    else
+      User.convertExperiment 'engaged_share'
 , ENGAGED_ACTIVITY_TIME
 
 if config.ENV isnt config.ENVS.PROD
@@ -106,9 +123,12 @@ if shouldRouteToGamePage
   else # subdomain
     gameKey = UrlService.getSubdomain()
     PushToken.createByGameKey gameKey
-    # marketplace in picker
+    # marketplace in picker, causing it to appear in side-bar
+    # This is also used to pass the marketplace anon-user token
+    # which is used for tracking uniq share conversions
     marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-    kik?.picker?(marketplaceBaseUrl, {}, -> null)
+    kik?.picker? marketplaceBaseUrl, {}, (res) ->
+      kikAnonymousToken = res.token
 
   z.route "/game/#{gameKey}"
 else
