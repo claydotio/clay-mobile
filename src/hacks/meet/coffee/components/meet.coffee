@@ -277,7 +277,7 @@ module.exports = class Meet
     # service to send people to games?
     z.route UrlService.getGameRoute {game: @currentGame}
     httpSubDomainUrl = UrlService.getGameSubdomain
-      game: @currentGame, protocol: 'http:'
+      game: @currentGame, protocol: 'http'
     kik.picker?(httpSubDomainUrl, {}, -> null)
 
   render: =>
