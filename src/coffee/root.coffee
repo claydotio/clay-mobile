@@ -73,19 +73,19 @@ kikAnonymousToken = null
 window.setTimeout ->
   User.logEngagedActivity()
   .catch log.trace
-
-  if isFromShare and not hasVisitedBefore
-    # Kik clears tokens often. Use their anon-token to identify users
-    # The anon-token is unique for each 'app', so always use the marketplace one
-    if kik.enabled
-      if not kikAnonymousToken
-        kik.getAnonymousUser (token) ->
-          User.convertExperiment 'engaged_share', {uniq: token}
-      else
-        User.convertExperiment 'engaged_share', {uniq: kikAnonymousToken}
-    else
-      User.convertExperiment 'engaged_share'
 , ENGAGED_ACTIVITY_TIME
+
+if isFromShare and not hasVisitedBefore
+  # Kik clears tokens often. Use their anon-token to identify users
+  # The anon-token is unique for each 'app', so always use the marketplace one
+  if kik.enabled
+    if not kikAnonymousToken
+      kik.getAnonymousUser (token) ->
+        User.convertExperiment 'new_unique_from_share', {uniq: token}
+    else
+      User.convertExperiment 'new_unique_from_share', {uniq: kikAnonymousToken}
+  else
+    User.convertExperiment 'new_unique_from_share'
 
 if config.ENV isnt config.ENVS.PROD
   log.enableAll()
