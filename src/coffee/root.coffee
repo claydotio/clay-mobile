@@ -111,16 +111,27 @@ else
 # START HACK: meet
 User.getExperiments().then (params) ->
   if params.homePage is 'meet'
-    HomePage = HackMeetPage
-    GamesListPage = HackGamesPage
+    z.route document.getElementById('app'), '/', route(
+      '/': HackMeetPage
+      '/meet': HackMeetPage
+      '/games': HackGamesPage
+      '/game/:key': PlayGamePage
+      '/games/:filter': GamesPage
+    )
   else
-    HomePage = GamesPage
-    GamesListPage = GamesPage
+    z.route document.getElementById('app'), '/', route(
+      '/': GamesPage
+      '/games': GamesPage
+      '/game/:key': PlayGamePage
+      '/games/:filter': GamesPage
+    )
+
+.catch (err) ->
+  log.trace err
 
   z.route document.getElementById('app'), '/', route(
-    '/': HomePage
-    '/meet': HackMeetPage
-    '/games': GamesListPage
+    '/': GamesPage
+    '/games': GamesPage
     '/game/:key': PlayGamePage
     '/games/:filter': GamesPage
   )

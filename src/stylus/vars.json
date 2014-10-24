@@ -14,6 +14,8 @@
   "$fontSizeSmall": "1.2rem",
   "$fontSizeMedium": "1.6rem",
   "$fontSizeLarge": "2.4rem",
+  "$fontSizeXLarge": "3.6rem",
+  "$fontSizeXXLarge": "4.2rem",
 
   "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
   "$logoPng110": "//cdn.wtf/d/images/logos/logo_110.png",

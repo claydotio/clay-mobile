@@ -307,8 +307,8 @@ module.exports = class Meet
             z 'i.icon.icon-dice'
 
         z 'div.meet-spinner-labels',
-          z 'div.meet-spinner-user', 'Austin Hallock'
-          z 'div.meet-spinner-game', 'Treasure Arena'
+          z 'div.meet-spinner-user', @currentUser.name
+          z 'div.meet-spinner-game', @currentGame.name
 
         z 'div.l-content-container',
           z 'div.meet-challenge', 'They scored ',
