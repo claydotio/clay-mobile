@@ -135,32 +135,35 @@ User.getExperiments().then (params) ->
     '/game/:key': PlayGamePage
     '/games/:filter': GamesPage
   )
+.finally ->
+  # track kik metrics (users sending messages, etc...)
+  kik?.metrics?.enableGoogleAnalytics?()
+
+  # Passed via message to denote game (share button in drawer uses this)
+  kikGameKey = kik?.message?.gameKey
+
+  shouldRouteToGamePage = kikGameKey or
+                          (not UrlService.isRootPath() and not config.MOCK)
+  if shouldRouteToGamePage
+    if kikGameKey
+      gameKey = kikGameKey
+    else # subdomain
+      gameKey = UrlService.getSubdomain()
+      PushToken.createByGameKey gameKey
+      # marketplace in picker, causing it to appear in side-bar
+      # This is also used to pass the marketplace anon-user token
+      # which is used for tracking uniq share conversions
+      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+      kik?.picker? marketplaceBaseUrl, {}, (res) ->
+        kikAnonymousToken = res.token
+
+    z.route "/game/#{gameKey}"
+  else
+    PushToken.createForMarketplace()
+
 # END HACK: meet
 
-# track kik metrics (users sending messages, etc...)
-kik?.metrics?.enableGoogleAnalytics?()
 
-# Passed via message to denote game (share button in drawer uses this)
-kikGameKey = kik?.message?.gameKey
-
-shouldRouteToGamePage = kikGameKey or
-                        (not UrlService.isRootPath() and not config.MOCK)
-if shouldRouteToGamePage
-  if kikGameKey
-    gameKey = kikGameKey
-  else # subdomain
-    gameKey = UrlService.getSubdomain()
-    PushToken.createByGameKey gameKey
-    # marketplace in picker, causing it to appear in side-bar
-    # This is also used to pass the marketplace anon-user token
-    # which is used for tracking uniq share conversions
-    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-    kik?.picker? marketplaceBaseUrl, {}, (res) ->
-      kikAnonymousToken = res.token
-
-  z.route "/game/#{gameKey}"
-else
-  PushToken.createForMarketplace()
 
 log.info 'App Ready'
 
