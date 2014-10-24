@@ -92,18 +92,19 @@
   height: 50px
   border-radius: 25px
   background: $blue
+  box-shadow: 0px 0px 30px 0px rgba(38, 38, 38, 0.5)
   position: absolute
   left: 50%
   top: 50%
   margin-left: -25px
   margin-top: -25px
 
-  .icon-dice
+  > .icon-dice
     font-size: $fontSizeLarge
     color: #fff
 
 .meet-challenge
-  font-size: $fontSizeLarge
+  font-size: $fontSizeMedium
   margin: 15px 0
 
 .meet-button
@@ -112,3 +113,6 @@
 .meet-button-challenge-icon
   position: absolute
   right: 20px
+  top: 5px
+  > .icon-challenge
+    font-size: $fontSizeLarge
