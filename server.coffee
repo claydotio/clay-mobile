@@ -36,8 +36,8 @@ dust.loadSource indexTpl
 apiRequestUrl = (path) ->
   apiPath = url.parse config.API_PATH + '/'
 
-  unless apiPath.hostname
-    apiPath.hostname = config.HOSTNAME
+  unless apiPath.host
+    apiPath.host = config.HOST
 
   unless apiPath.protocol
     apiPath.protocol = 'http'
@@ -133,10 +133,11 @@ router.get '/game/:key', (req, res) ->
 
 router.get '*', (req, res) ->
   log.info 'AGENT ', req.useragent.source
+  host = req.headers.host
 
-  # Game Subdomain - 0.0.0.0 used when testing locally
-  if req.hostname isnt config.HOSTNAME and req.hostname isnt '0.0.0.0'
-    gameKey = req.hostname.split('.')[0]
+  # Game Subdomain - 0.0.0.0 used when running tests locally
+  if host isnt config.HOST and host isnt '0.0.0.0'
+    gameKey = host.split('.')[0]
 
     return renderGamePage gameKey, req.clay.me
       .then (html) ->
