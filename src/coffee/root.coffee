@@ -87,6 +87,17 @@ if isFromShare and not hasVisitedBefore
   else
     User.convertExperiment 'new_unique_from_share'
 
+# track A/B tests in Google Analytics
+# Google's intended solution for this is custom dimensions
+# https://developers.google.com/analytics/devguides/platform/customdimsmets
+# however, that requires adding each dimension inside of FA's admin panel.
+# using events we can get the same results with a filter for users with
+# specific events
+User.getExperiments().then (params) ->
+  return unless ga
+  for experimentParam, experimentTestGroup of params
+    ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
+
 if config.ENV isnt config.ENVS.PROD
   log.enableAll()
 else
