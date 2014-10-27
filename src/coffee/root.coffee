@@ -60,11 +60,15 @@ reportError = ->
 window.addEventListener 'error', reportError
 window.addEventListener 'fb-flo-reload', z.redraw
 
-isFromShare = do ->
-  kik?.message?.share
+shareOriginUserId = kik?.message?.share?.originUserId
 
-hasVisitedBefore = do ->
-  _.contains document.cookie, 'accessToken'
+if shareOriginUserId
+  User.setExperimentsFrom shareOriginUserId
+  .catch log.trace
+  User.convertExperiment 'hit_from_share'
+  .catch log.trace
+
+hasVisitedBefore = _.contains document.cookie, 'accessToken'
 
 # This is set if on kik and on a subdomain
 # using the picker trigger for push tokens
@@ -75,17 +79,20 @@ window.setTimeout ->
   .catch log.trace
 , ENGAGED_ACTIVITY_TIME
 
-if isFromShare and not hasVisitedBefore
+if shareOriginUserId and not hasVisitedBefore
   # Kik clears tokens often. Use their anon-token to identify users
   # The anon-token is unique for each 'app', so always use the marketplace one
   if kik.enabled
     if not kikAnonymousToken
       kik.getAnonymousUser (token) ->
         User.convertExperiment 'new_unique_from_share', {uniq: token}
+        .catch log.trace
     else
       User.convertExperiment 'new_unique_from_share', {uniq: kikAnonymousToken}
+      .catch log.trace
   else
     User.convertExperiment 'new_unique_from_share'
+    .catch log.trace
 
 if config.ENV isnt config.ENVS.PROD
   log.enableAll()
