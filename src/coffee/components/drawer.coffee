@@ -50,12 +50,14 @@ module.exports = class Drawer
 
   shareGame: (e) =>
     e?.preventDefault()
-    kik?.send?(
-      title: "Play #{@game.name}!"
-      text: @game.description
-      pic: @game.icon128Url
-      data: {gameKey: @game.key, share: true}
-    )
+    User.getMe (user) ->
+      kik?.send?(
+        title: "Play #{@game.name}!"
+        text: @game.description
+        pic: @game.icon128Url
+        data: {gameKey: @game.key, share: {originUserId: user.id}}
+      )
+    .catch log.trace
 
     ga? 'send', 'event', 'drawer', 'share', @game.key
 

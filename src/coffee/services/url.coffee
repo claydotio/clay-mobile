@@ -3,16 +3,15 @@ kik = require 'kik'
 config = require '../config'
 
 host = window.location.host
-hostname = window.location.hostname
 
 class UrlService
   # clay.io/whatever => true, subdomain.clay.io/whatever => false
   isRootPath: ->
-    return hostname is config.HOSTNAME
+    return host is config.HOST
 
-  getMarketplaceBase: ({protocol} = {}) =>
-    protocol ?= if kik?.enabled and @isRootPath() then 'card' else 'http'
-    return "#{protocol}://#{config.HOSTNAME}"
+  getMarketplaceBase: ({protocol} = {}) ->
+    protocol ?= if kik?.enabled then 'card' else 'http'
+    return "#{protocol}://#{config.HOST}"
 
   # full path to marketplace and game
   getMarketplaceGame: ({protocol, game}) =>
@@ -26,7 +25,7 @@ class UrlService
   # returns the full url to a game's subdomain page (eg http://slime.clay.io)
   getGameSubdomain: ({game, protocol}) =>
     protocol ?= if kik?.enabled and @isRootPath() then 'card' else 'http'
-    return "#{protocol}://#{game.key}.#{config.HOSTNAME}"
+    return "#{protocol}://#{game.key}.#{config.HOST}"
 
   # url is optional, if undefined, uses current url (window.location.host)
   getSubdomain: ({url} = {}) ->

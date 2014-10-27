@@ -74,16 +74,18 @@ else
   log.on 'error', reportError
   log.on 'trace', reportError
 
-
 ############
 # Z-FACTOR #
 ############
+shareOriginUserId = kik?.message?.share?.originUserId
 
-isFromShare = do ->
-  kik?.message?.share
+if shareOriginUserId
+  User.setExperimentsFrom shareOriginUserId
+  .catch log.trace
+  User.convertExperiment 'hit_from_share'
+  .catch log.trace
 
-hasVisitedBefore = do ->
-  _.contains document.cookie, 'accessToken'
+hasVisitedBefore = _.contains document.cookie, 'accessToken'
 
 #####################
 # ENGAGED GAMEPLAYS #
@@ -96,19 +98,22 @@ kikAnonymousToken = null
 window.setTimeout ->
   User.logEngagedActivity()
   .catch log.trace
-
-  if isFromShare and not hasVisitedBefore
-    # Kik clears tokens often. Use their anon-token to identify users
-    # The anon-token is unique for each 'app', so always use the marketplace one
-    if kik.enabled
-      if not kikAnonymousToken
-        kik.getAnonymousUser (token) ->
-          User.convertExperiment 'engaged_share', {uniq: token}
-      else
-        User.convertExperiment 'engaged_share', {uniq: kikAnonymousToken}
-    else
-      User.convertExperiment 'engaged_share'
 , ENGAGED_ACTIVITY_TIME
+
+if shareOriginUserId and not hasVisitedBefore
+  # Kik clears tokens often. Use their anon-token to identify users
+  # The anon-token is unique for each 'app', so always use the marketplace one
+  if kik.enabled
+    if not kikAnonymousToken
+      kik.getAnonymousUser (token) ->
+        User.convertExperiment 'new_unique_from_share', {uniq: token}
+        .catch log.trace
+    else
+      User.convertExperiment 'new_unique_from_share', {uniq: kikAnonymousToken}
+      .catch log.trace
+  else
+    User.convertExperiment 'new_unique_from_share'
+    .catch log.trace
 
 ####################
 # GOOGLE ANALYTICS #
