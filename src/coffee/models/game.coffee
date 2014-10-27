@@ -1,4 +1,5 @@
 resource = require '../lib/resource'
+localstore = require '../lib/localstore'
 config = require '../config'
 
 resource.extendCollection 'games', (collection) ->
@@ -14,6 +15,15 @@ resource.extendCollection 'games', (collection) ->
 
   collection.findOne = (query) ->
     @customGET('findOne', query)
+
+  collection.incrementPlayCount = (gameKey) ->
+    gamePlayCountKey = "game:playCount:#{gameKey}"
+    localstore.get gamePlayCountKey
+    .then (gamePlayObject) ->
+      gamePlayCount = if gamePlayObject?.count then gamePlayObject.count else 0
+      localstore.set gamePlayCountKey, {count: gamePlayCount + 1}
+    .then (gamePlayObject) ->
+      gamePlayObject.count
 
   return collection
 

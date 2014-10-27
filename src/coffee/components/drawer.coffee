@@ -8,6 +8,7 @@ GameRate = require './game_rate'
 Modal = require '../models/modal'
 User = require '../models/user'
 UrlService = require '../services/url'
+KikService = require '../services/kik'
 
 GAME_PROMO_WIDTH = 92
 GAME_PROMO_HEIGHT = 59
@@ -50,19 +51,15 @@ module.exports = class Drawer
 
   shareGame: (e) =>
     e?.preventDefault()
-    kik?.send?(
-      title: "Play #{@game.name}!"
-      text: @game.description
-      pic: @game.icon128Url
-      data: {gameKey: @game.key, share: true}
-    )
+    KikService.shareGame @game
+    .catch log.trace
 
     ga? 'send', 'event', 'drawer', 'share', @game.key
 
   rateGame: (e) =>
     e?.preventDefault()
     @close()
-    Modal.openComponent @GameRate
+    Modal.openComponent {component: @GameRate}
 
   openMarketplace: (e) =>
     e?.preventDefault()

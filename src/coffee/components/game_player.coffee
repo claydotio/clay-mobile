@@ -4,6 +4,7 @@ log = require 'clay-loglevel'
 Q = require 'q'
 
 Game = require '../models/game'
+User = require '../models/user'
 WindowHeightDir = require '../directives/window_height'
 # FIXME: remove, replace with beforeUnload functionality of components
 LogEngagedPlayDir = require '../directives/log_engaged_play'
@@ -11,6 +12,8 @@ SDKDir = require '../directives/sdk'
 Drawer = require '../components/drawer'
 Spinner = require '../components/spinner'
 UrlService = require '../services/url'
+Modal = require '../models/modal'
+GameShare = require '../components/game_share'
 
 module.exports = class GamePlayer
   constructor: ({gameKey}) ->
@@ -28,6 +31,13 @@ module.exports = class GamePlayer
     @game.then =>
       @isLoading = false
 
+    @onFirstRender = _.once =>
+      @showShareModalPromise = Game.incrementPlayCount(gameKey)
+      .then (playCount) =>
+        shouldShowModal = playCount is 3
+        if shouldShowModal
+          @showShareModal()
+
     @Drawer = z.prop @game.then (game) ->
       new Drawer {game}
 
@@ -36,6 +46,17 @@ module.exports = class GamePlayer
     Q.when @Drawer
     .finally z.redraw
     .catch log.trace
+
+  showShareModal: =>
+    @game.then (game) ->
+      User.getExperiments().then (params) ->
+        theme = params.gameShareModal
+
+        if theme isnt 'control'
+          Modal.openComponent(
+            component: new GameShare({game, theme})
+            theme: theme
+          )
 
   # if already on marketplace, keep them there with root route, otherwise
   # hard redirect to marketplace
@@ -46,6 +67,8 @@ module.exports = class GamePlayer
       window.location.href = UrlService.getMarketplaceBase()
 
   render: =>
+    @onFirstRender()
+
     if @isLoading
       z '.game-player-missing',
         @Spinner.render()

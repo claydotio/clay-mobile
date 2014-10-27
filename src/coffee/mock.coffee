@@ -81,6 +81,8 @@ mock = z.prop(new Zock()
   .get '/games/findOne'
   .reply 200, (res) ->
     prism
+  .post '/experiments'
+  .reply 200, {}
   .post '/pushTokens'
   .reply 200, (res) ->
     {gameId: prism.id, token: 'mocked_token'}

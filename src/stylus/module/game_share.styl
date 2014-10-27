@@ -1,0 +1,101 @@
+.game-share.theme-basic
+  $gameShareHeaderHeight = 50
+
+  .game-share-header
+    position: relative
+    overflow: hidden
+    height: $gameShareHeaderHeight px
+    padding: 0 20px
+    background: $white
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.3)
+
+  .game-share-title
+    margin: 0
+    line-height: 50px
+    font-size: $fontSizeLarge
+
+  .game-share-content
+    padding: 20px
+    text-align: center
+    font-size: $fontSizeMedium
+
+  .game-share-message
+    font-weight: bold
+    margin-bottom: 20px
+
+
+.game-share.theme-bottom-dock
+  padding: 20px 0
+
+  .game-share-header
+    overflow: hidden
+    margin-bottom: 20px
+
+    > .game-share-header-descriptor
+      text-transform: uppercase
+      color: $black
+      font-weight: bold
+      margin: 5px 0
+      font-size: $fontSizeSmall
+
+    > .game-share-title
+      margin: 0
+      color: $blue
+      font-size: $fontSizeLarge
+      font-weight: lighter
+
+  .game-share-buttons
+    text-align: right
+
+    > .game-share-not-now
+      color: $grayLight
+      margin-right: 10px
+
+.game-share.theme-background-image
+  $zIndexGameShareHeaderAfter = 0
+  $zIndexGameShareHeaderText = 1
+
+  .game-share-header
+    position: relative
+    overflow: hidden
+    background-size: 100% auto
+    background-position: 0 50%
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.3)
+    height: 110px
+    color: $white
+
+    &:after
+      position: absolute
+      z-index: $zIndexGameShareHeaderAfter
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      background: rgba(0, 0, 0, 0.5)
+      content: ''
+
+    > .game-share-header-text
+      position: absolute
+      bottom: 20px
+      left: 20px
+      z-index: $zIndexGameShareHeaderText
+
+      > .game-share-header-descriptor
+        text-transform: uppercase
+        font-size: $fontSizeSmall
+        font-weight: bold
+        margin: 5px 0
+
+      > .game-share-title
+        margin: 0
+        font-size: $fontSizeLarge
+
+  > .game-share-content
+    padding: 20px
+    text-align: center
+    font-size: $fontSizeMedium
+
+    > .game-share-not-now
+      margin-top: 10px
+      background: $white
+      color: $blue

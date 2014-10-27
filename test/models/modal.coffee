@@ -1,7 +1,6 @@
 should = require('clay-chai').should()
 
 Modal = require 'models/modal'
-Modal.constructor() # reset
 
 class StubComponent
   render: -> null
@@ -10,20 +9,35 @@ class StubComponent
 
 describe 'ModalModel', ->
   describe 'Open and Close (set and remove component)', ->
+    beforeEach ->
+      Modal.constructor() # reset
+
     it 'begins with null component', ->
       should.not.exist(Modal.component)
 
     it 'openComponent(), with component', ->
-      Stub = new StubComponent()
-      Modal.openComponent Stub
-      Modal.component.should.be Stub
+      component = new StubComponent()
+      Modal.openComponent {component}
+      Modal.component.should.be component
+
+    it 'openComponent(), with component, theme', ->
+      component = new StubComponent()
+      theme = '.theme-something'
+      Modal.openComponent {component, theme}
+      Modal.theme.should.be theme
+
+    it 'openComponent() resets theme', ->
+      component = new StubComponent()
+      Modal.openComponent {component, theme: '.theme-something'}
+      Modal.openComponent {component}
+      should.not.exist(Modal.theme)
 
     it 'openComponent(), with null component', ->
-      Modal.openComponent null
+      Modal.openComponent {component: null}
       should.not.exist(Modal.component)
 
     it 'closeComponent()', ->
-      Stub = new StubComponent()
-      Modal.openComponent Stub
+      component = new StubComponent()
+      Modal.openComponent {component}
       Modal.closeComponent()
       should.not.exist(Modal.component)
