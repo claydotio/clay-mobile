@@ -27,13 +27,12 @@ resource.extendCollection 'users', (collection) ->
       data:
         userId: user.id
       background: true
-  .catch log.trace
 
-  collection.getMe = ->
-    me
+  experiments.catch log.trace
 
-  collection.setMe = (_me) ->
-    me = Q _me
+  collection.getMe = -> me
+
+  collection.setMe = (_me) -> me = Q _me
 
   collection.logEngagedActivity = ->
     me.then (me) ->
@@ -45,8 +44,7 @@ resource.extendCollection 'users', (collection) ->
       ], (exp, res) ->
         res
 
-  collection.getExperiments = ->
-    return experiments
+  collection.getExperiments = -> experiments
 
   collection.setExperimentsFrom = (shareOriginUserId) ->
     experiments = me.then (user) ->
