@@ -8,10 +8,6 @@ Q = require 'q'
 kik = require 'kik'
 
 config = require './config'
-# START HACK: meet
-HackMeetPage = require '../hacks/meet/coffee/pages/meet'
-HackGamesPage = require '../hacks/meet/coffee/pages/games'
-# END HACK: meet
 GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
 PushToken = require './models/push_token'
@@ -126,61 +122,37 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.route.mode = 'pathname'
 
-# START HACK: meet
-User.getExperiments().then (params) ->
-  if params.homePage is 'meet'
-    z.route document.getElementById('app'), '/', route(
-      '/': HackMeetPage
-      '/meet': HackMeetPage
-      '/games': HackGamesPage
-      '/game/:key': PlayGamePage
-      '/games/:filter': GamesPage
-    )
-  else
-    z.route document.getElementById('app'), '/', route(
-      '/': GamesPage
-      '/games': GamesPage
-      '/game/:key': PlayGamePage
-      '/games/:filter': GamesPage
-    )
+z.route document.getElementById('app'), '/', route(
+  '/': GamesPage
+  '/games': GamesPage
+  '/game/:key': PlayGamePage
+  '/games/:filter': GamesPage
+)
 
-.catch (err) ->
-  log.trace err
+# track kik metrics (users sending messages, etc...)
+kik?.metrics?.enableGoogleAnalytics?()
 
-  z.route document.getElementById('app'), '/', route(
-    '/': GamesPage
-    '/games': GamesPage
-    '/game/:key': PlayGamePage
-    '/games/:filter': GamesPage
-  )
-.finally ->
-  # track kik metrics (users sending messages, etc...)
-  kik?.metrics?.enableGoogleAnalytics?()
+# Passed via message to denote game (share button in drawer uses this)
+kikGameKey = kik?.message?.gameKey
 
-  # Passed via message to denote game (share button in drawer uses this)
-  kikGameKey = kik?.message?.gameKey
+shouldRouteToGamePage = kikGameKey or
+                        (not UrlService.isRootPath() and not config.MOCK)
+if shouldRouteToGamePage
+  if kikGameKey
+    gameKey = kikGameKey
+  else # subdomain
+    gameKey = UrlService.getSubdomain()
+    PushToken.createByGameKey gameKey
+    # marketplace in picker, causing it to appear in side-bar
+    # This is also used to pass the marketplace anon-user token
+    # which is used for tracking uniq share conversions
+    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+    kik?.picker? marketplaceBaseUrl, {}, (res) ->
+      kikAnonymousToken = res.token
 
-  shouldRouteToGamePage = kikGameKey or
-                          (not UrlService.isRootPath() and not config.MOCK)
-  if shouldRouteToGamePage
-    if kikGameKey
-      gameKey = kikGameKey
-    else # subdomain
-      gameKey = UrlService.getSubdomain()
-      PushToken.createByGameKey gameKey
-      # marketplace in picker, causing it to appear in side-bar
-      # This is also used to pass the marketplace anon-user token
-      # which is used for tracking uniq share conversions
-      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-      kik?.picker? marketplaceBaseUrl, {}, (res) ->
-        kikAnonymousToken = res.token
-
-    z.route "/game/#{gameKey}"
-  else
-    PushToken.createForMarketplace()
-
-# END HACK: meet
-
+  z.route "/game/#{gameKey}"
+else
+  PushToken.createForMarketplace()
 
 
 log.info 'App Ready'
