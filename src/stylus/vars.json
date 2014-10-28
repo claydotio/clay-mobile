@@ -24,9 +24,5 @@
   "$marketplaceGameIconHeight": 128,
 
   "$zIndexModal": 100,
-  "$zIndexDrawer": 200,
-
-  "$hackMeetSpinnerHeight": 250,
-  "$hackMeetImageSize": 160,
-  "$hackMeetImageYMargin": 5
+  "$zIndexDrawer": 200
 }
