@@ -5,15 +5,15 @@ resource.extendCollection 'games', (collection) ->
   collection.getTop = ({limit, skip}) ->
     skip ?= 0
     limit ?= 10
-    @customGETLIST('top', {limit: limit, skip: skip})
+    collection.customGETLIST('top', {limit: limit, skip: skip})
 
   collection.getNew = ({limit, skip}) ->
     skip ?= 0
     limit ?= 10
-    @customGETLIST('new', {limit: limit, skip: skip})
+    collection.customGETLIST('new', {limit: limit, skip: skip})
 
   collection.findOne = (query) ->
-    @customGET('findOne', query)
+    collection.customGET('findOne', query)
 
   return collection
 

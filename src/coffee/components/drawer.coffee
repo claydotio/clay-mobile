@@ -50,7 +50,7 @@ module.exports = class Drawer
 
   shareGame: (e) =>
     e?.preventDefault()
-    User.getMe (user) ->
+    User.getMe (user) =>
       kik?.send?(
         title: "Play #{@game.name}!"
         text: @game.description
