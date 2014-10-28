@@ -20,6 +20,10 @@ UrlService = require './services/url'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 
+##############
+# KIK PICKER #
+##############
+
 # Marketplace or game was loaded in picker
 if kik?.picker?.reply
   if UrlService.isRootPath() # marketplace
@@ -38,8 +42,11 @@ if kik?.picker?.reply
       log.trace err
   throw new Error 'Stop code execution'
 
-reportError = ->
+###########
+# LOGGING #
+###########
 
+reportError = ->
   # Remove the circular dependency within error objects
   args = _.map arguments, (arg) ->
     if arg instanceof Error
@@ -60,6 +67,16 @@ reportError = ->
 window.addEventListener 'error', reportError
 window.addEventListener 'fb-flo-reload', z.redraw
 
+if config.ENV isnt config.ENVS.PROD
+  log.enableAll()
+else
+  log.setLevel 'error'
+  log.on 'error', reportError
+  log.on 'trace', reportError
+
+############
+# Z-FACTOR #
+############
 shareOriginUserId = kik?.message?.share?.originUserId
 
 if shareOriginUserId
@@ -69,6 +86,10 @@ if shareOriginUserId
   .catch log.trace
 
 hasVisitedBefore = _.contains document.cookie, 'accessToken'
+
+#####################
+# ENGAGED GAMEPLAYS #
+#####################
 
 # This is set if on kik and on a subdomain
 # using the picker trigger for push tokens
@@ -94,6 +115,10 @@ if shareOriginUserId and not hasVisitedBefore
     User.convertExperiment 'new_unique_from_share'
     .catch log.trace
 
+####################
+# GOOGLE ANALYTICS #
+####################
+
 # track A/B tests in Google Analytics
 # Google's intended solution for this is custom dimensions
 # https://developers.google.com/analytics/devguides/platform/customdimsmets
@@ -105,18 +130,15 @@ User.getExperiments().then (params) ->
   for experimentParam, experimentTestGroup of params
     ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
 
-if config.ENV isnt config.ENVS.PROD
-  log.enableAll()
-else
-  log.setLevel 'error'
-  log.on 'error', reportError
-  log.on 'trace', reportError
-
 route = (routes) ->
   _.transform routes, (result, Component, route) ->
     result[route] =
       controller: => @component = new Component(z.route.param)
       view: => @component.render()
+
+###########
+# ROUTING #
+###########
 
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
@@ -182,8 +204,12 @@ User.getExperiments().then (params) ->
 # END HACK: meet
 
 
-
 log.info 'App Ready'
+
+
+##########################
+# CSS / DEVICE DETECTION #
+##########################
 
 # TODO: (Austin) Feature-detection for SVG, slow devices
 # we'll want to move this somewhere cleaner
