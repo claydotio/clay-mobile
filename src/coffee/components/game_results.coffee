@@ -22,7 +22,7 @@ module.exports = class GameResults
       skip: @gameBoxes().length
     .then (games) =>
       @gameBoxes @gameBoxes().concat _.map games, (game) ->
-        new GameBox game
+        new GameBox {game}
 
       @isLoading = false
 

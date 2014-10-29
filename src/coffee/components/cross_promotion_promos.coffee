@@ -6,7 +6,7 @@ log = require 'clay-loglevel'
 Game = require '../models/game'
 GamePromo = require './game_promo'
 
-module.exports = class CrossPromotion
+module.exports = class CrossPromotionPromos
   constructor: ({gamePromoWidth, gamePromoHeight}) ->
     @gamePromos = z.prop Game.getTop(limit: 6).then (games) ->
       _.map games, (game) ->
@@ -19,7 +19,7 @@ module.exports = class CrossPromotion
     .catch log.trace
 
   render: =>
-    z 'div.cross-promotion',
+    z 'div.cross-promotion-promos',
       _.map @gamePromos(), (GamePromo) ->
-        z 'div.cross-promotion-game-promo',
+        z 'div.cross-promotion-promos-game-promo',
           GamePromo.render()

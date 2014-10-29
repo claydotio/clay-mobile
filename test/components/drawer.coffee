@@ -1,28 +1,57 @@
 should = require('clay-chai').should()
+_ = require ('lodash-contrib')
 
 Drawer = require 'components/drawer'
-
 MockGame = require '../_models/game'
+
+domWalker = _.walk ($node) ->
+  return $node?.children
+
+hasClass = ($node, className) ->
+  _.contains $node?.attrs.className?.split(' '), className
 
 describe 'Drawer', ->
 
-  it 'begins closed', ->
-    DrawerComponent = new Drawer(MockGame)
-
-    DrawerComponent.isOpen.should.be.false
-
   it 'toggles properly', ->
-    DrawerComponent = new Drawer(MockGame)
+    DrawerComponent = new Drawer({game: MockGame})
 
-    DrawerComponent.toggleOpenState()
-    DrawerComponent.isOpen.should.be.true
+    # stub nub
+    DrawerComponent.Nub =
+      isOpen: false
+      toggleOpenState: ->
+        DrawerComponent.Nub.isOpen = not DrawerComponent.Nub.isOpen
+      render: -> null
 
-    DrawerComponent.toggleOpenState()
-    DrawerComponent.isOpen.should.be.false
+    DrawerComponent.Nub.toggleOpenState()
+
+    $ = DrawerComponent.render()
+    $drawer = _.find $, ($nodeSet) ->
+      domWalker.find $nodeSet, ($node) ->
+        return hasClass $node, 'drawer'
+
+    hasClass($drawer, 'is-open').should.be.true
+
+    DrawerComponent.Nub.toggleOpenState()
+
+    $ = DrawerComponent.render()
+    $drawer = _.find $, ($nodeSet) ->
+      domWalker.find $nodeSet, ($node) ->
+        return hasClass $node, 'drawer'
+
+    hasClass($drawer, 'is-open').should.be.false
 
   it 'closes properly', ->
     DrawerComponent = new Drawer(MockGame)
-    DrawerComponent.toggleOpenState()
+
+    # stub nub
+    DrawerComponent.Nub =
+      isOpen: false
+      toggleOpenState: ->
+        DrawerComponent.Nub.isOpen = not DrawerComponent.Nub.isOpen
+      render: -> null
+
+    DrawerComponent.Nub.toggleOpenState()
+    DrawerComponent.Nub.isOpen.should.be.true
 
     DrawerComponent.close()
-    DrawerComponent.isOpen.should.be.false
+    DrawerComponent.Nub.isOpen.should.be.false

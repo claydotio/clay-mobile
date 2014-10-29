@@ -28,14 +28,19 @@ module.exports = class GamePlayer
     @game.then =>
       @isLoading = false
 
-    @Drawer = z.prop @game.then (game) ->
-      new Drawer {game}
+    @onFirstRender = _.once =>
+      @showShareModalPromise = Game.incrementPlayCount(gameKey)
+      .then (playCount) =>
+        shouldShowModal = playCount is 3
+        if shouldShowModal
+          @showShareModal()
 
-    # use Q for finally and catch
-    # TODO: (Austin) remove Q dependency when Zorium uses Q
-    Q.when @Drawer
-    .finally z.redraw
-    .catch log.trace
+    @Drawer = z.prop Q.spread [
+      @game, User.getExperiments()
+    ], (game, params) ->
+      theme = params.drawer
+
+      new Drawer {game, theme}
 
   # if already on marketplace, keep them there with root route, otherwise
   # hard redirect to marketplace
