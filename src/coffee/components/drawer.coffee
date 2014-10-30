@@ -22,14 +22,6 @@ module.exports = class Drawer
     @CrossPromotion = new CrossPromotion crossPromotionOptions
     @GameRate = new GameRate {@game, onRated: -> Modal.closeComponent()}
 
-    @drawerShareTheme = z.prop null
-    User.getExperiments().then (params) =>
-      @drawerShareTheme = z.prop switch params.drawerShare
-        when 'big' then '.theme-big-share'
-        else  null
-      z.redraw()
-    .catch log.trace
-
   toggleOpenState: (e) =>
     e?.stopPropagation()
     @isOpen = not @isOpen
@@ -111,7 +103,7 @@ module.exports = class Drawer
           z 'div.drawer-content',
             z 'ul.drawer-menu-items',
               z 'li',
-                z "a[href=#]#{@drawerShareTheme() or ''}", onclick: @shareGame,
+                z 'a[href=#]', onclick: @shareGame,
                   z 'i.icon.icon-share'
                   z 'span.drawer-menu-item', 'Share game'
               # TODO: (Austin) Re-enable when we have user accounts
