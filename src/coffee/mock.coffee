@@ -6,6 +6,7 @@ log = require 'clay-loglevel'
 # Bind polyfill (phantomjs doesn't support bind)
 # Tossing this in here is terrible practice, don't ever do it
 # This is a short-term fix until we have a more elegant bind polyfill
+# coffeelint: disable=missing_fat_arrows
 unless Function::bind
   Function::bind = (oThis) ->
 
@@ -27,6 +28,7 @@ unless Function::bind
     fNOP:: = @prototype
     fBound:: = new fNOP()
     fBound
+# coffeelint: disable=missing_fat_arrows
 
 game = (i, isNew) ->
   title = "game #{i}"

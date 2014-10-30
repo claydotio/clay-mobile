@@ -25,15 +25,14 @@ resource.extendCollection 'users', (collection) ->
       url: config.FLAK_CANNON_PATH + '/experiments'
       method: 'POST'
       data:
-        id: user.id
+        userId: user.id
       background: true
-  .catch log.trace
 
-  collection.getMe = ->
-    me
+  experiments.catch log.trace
 
-  collection.setMe = (_me) ->
-    me = Q _me
+  collection.getMe = -> me
+
+  collection.setMe = (_me) -> me = Q _me
 
   collection.logEngagedActivity = ->
     me.then (me) ->
@@ -45,8 +44,17 @@ resource.extendCollection 'users', (collection) ->
       ], (exp, res) ->
         res
 
-  collection.getExperiments = ->
-    return experiments
+  collection.getExperiments = -> experiments
+
+  collection.setExperimentsFrom = (shareOriginUserId) ->
+    experiments = me.then (user) ->
+      Q z.request
+        url: config.FLAK_CANNON_PATH + '/experiments'
+        method: 'POST'
+        data:
+          fromUserId: shareOriginUserId
+          userId: user.id
+        background: true
 
   collection.convertExperiment = (event, {uniq} = {}) ->
     me.then (user) ->
@@ -57,8 +65,7 @@ resource.extendCollection 'users', (collection) ->
         data:
           event: event
           uniq: uniq
-          data:
-            id: user.id
+          userId: user.id
 
   return collection
 
