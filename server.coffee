@@ -12,6 +12,8 @@ cookieParser = require 'cookie-parser'
 
 config = require './src/coffee/config'
 
+API_REQUEST_TIMEOUT = 1000 # 1 second
+
 router = express.Router()
 log.enableAll()
 
@@ -56,6 +58,7 @@ claySessionParser = ->
 
     if accessToken
       Promise.promisify(request.get, request) meUrl, {qs: {accessToken}}
+      .timeout API_REQUEST_TIMEOUT
       .spread (res, body) ->
         req.clay.me = JSON.parse body
         next()
@@ -64,6 +67,7 @@ claySessionParser = ->
 
         # Getting user failed, create a new one
         Promise.promisify(request.post, request) loginUrl
+        .timeout API_REQUEST_TIMEOUT
         .spread (res, body) ->
           req.clay.me = JSON.parse body
           next()
@@ -72,6 +76,7 @@ claySessionParser = ->
           next()
     else
       Promise.promisify(request.post, request) loginUrl
+      .timeout API_REQUEST_TIMEOUT
       .spread (res, body) ->
         req.clay.me = JSON.parse body
         next()
@@ -189,6 +194,7 @@ renderGamePage = (gameKey, me) ->
 
   log.info 'GET', gameUrl
   Promise.promisify(request.get, request) gameUrl
+  .timeout API_REQUEST_TIMEOUT
   .spread (res, body) ->
     game = JSON.parse body
     if _.isEmpty game
