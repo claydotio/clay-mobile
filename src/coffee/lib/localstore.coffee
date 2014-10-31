@@ -1,4 +1,5 @@
 Q = require 'q'
+_ = require 'lodash'
 
 module.exports =
   get: (key) ->

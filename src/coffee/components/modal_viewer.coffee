@@ -8,12 +8,12 @@ module.exports = class ModalViewer
     e?.preventDefault()
     Modal.closeComponent()
 
-  render: =>
+  render: ->
     return unless Modal.component
 
-    z 'div.modal-overlay',
-      z 'div.modal-container',
-        z 'div.modal',
-          z 'a.modal-close[href=#]', onclick: @close,
-            z 'i.icon.icon-close'
+    theme = if Modal.theme then ".theme-#{Modal.theme}" else ''
+
+    z "div.modal-viewer-overlay#{theme}",
+      z 'div.modal-viewer-container',
+        z 'div.modal-viewer',
           Modal.component.render()

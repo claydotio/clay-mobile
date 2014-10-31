@@ -28,7 +28,7 @@ describe 'PushToken', ->
 
     # reset localstorage after each test since we store a value that denotes
     # a token has been stored to prevent posting superfluously
-    afterEach ->
+    beforeEach ->
       localStorage.clear()
 
     it 'Attempts to create push token by gameId and resolves', ->

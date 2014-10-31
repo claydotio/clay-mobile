@@ -1,6 +1,4 @@
-$zIndexModalIconClose = 1
-
-.modal-overlay
+.modal-viewer-overlay
   background: $overlayColor
   position: fixed
   z-index: $zIndexModal
@@ -9,29 +7,30 @@ $zIndexModalIconClose = 1
   height: 100%
 
 // necessary for flexible-height verically centered
-.modal-container
+.modal-viewer-container
   display: table-cell
   vertical-align: middle
   width: 100%
   padding: 20px
 
-.modal
+.modal-viewer
   width: 100%
-  max-width: 328px
+  max-width: 320px
   margin: 0 auto
   background: $bgColor
   border-radius: 3px
   overflow: hidden // chop off unrounded corners in children elements
   position: relative
 
-  > .modal-close
-    position: absolute
-    top: 5px
-    right: 5px
-    opacity: 0.75
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.75)
-    z-index: $zIndexModalIconClose
+.modal-viewer-overlay.theme-bottom-dock
+  display: block
 
-    > .icon-close
-      color: $white
-      font-size: $fontSizeMedium
+  .modal-viewer-container
+    display: block
+    position: absolute
+    bottom: 0
+    padding: 0
+
+  .modal-viewer
+    max-width: none
+    border-radius: 0
