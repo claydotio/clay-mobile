@@ -46,8 +46,19 @@ apiRequestUrl = (path) ->
 
   url.format url.resolve url.format(apiPath), path
 
+fcApiRequestUrl = (path) ->
+  apiPath = url.parse config.FLAK_CANNON_PATH + '/'
+
+  unless apiPath.host
+    apiPath.host = config.HOST
+
+  unless apiPath.protocol
+    apiPath.protocol = 'http'
+
+  url.format url.resolve url.format(apiPath), path
+
 # Middlewares
-claySessionParser = ->
+clayUserSessionParser = ->
   (req, res, next) ->
     req.clay = {}
     req.clay.me = null
@@ -84,6 +95,23 @@ claySessionParser = ->
         log.trace err
         next()
 
+clayFlakCannonSessionParser = ->
+  (req, res, next) ->
+    me = req.clay?.me
+    unless me
+      return next()
+
+    experimentsUrl = fcApiRequestUrl 'experiments'
+    Promise.promisify(request.post, request) experimentsUrl,
+      {json: userId: me.id}
+    .timeout API_REQUEST_TIMEOUT
+    .spread (res, body) ->
+      req.clay.experiments = body
+      next()
+    .catch (err) ->
+      log.trace err
+      next()
+
 app = express()
 
 app.use compress()
@@ -93,7 +121,8 @@ else app.use express['static'](__dirname + '/build')
 
 # After checking static files
 app.use cookieParser()
-app.use claySessionParser()
+app.use clayUserSessionParser()
+app.use clayFlakCannonSessionParser()
 app.use useragent.express()
 app.use router
 
@@ -123,13 +152,13 @@ router.get '/game/:key', (req, res) ->
   log.info 'AGENT ', req.useragent.source
   gameKey = req.params.key
 
-  renderGamePage gameKey, req.clay.me
+  renderGamePage gameKey, req.clay.me, req.clay.experiments
   .then (html) ->
     res.send html
   .catch (err) ->
     log.trace err
 
-    renderHomePage(req.clay.me)
+    renderHomePage(req.clay.me, req.clay.experiments)
     .then (html) ->
       res.send html
     .catch (err) ->
@@ -144,19 +173,19 @@ router.get '*', (req, res) ->
   if host isnt config.HOST and host isnt '0.0.0.0'
     gameKey = host.split('.')[0]
 
-    return renderGamePage gameKey, req.clay.me
+    return renderGamePage gameKey, req.clay.me, req.clay.experiments
       .then (html) ->
         res.send html
       .catch (err) ->
         log.trace err
-        renderHomePage(req.clay.me)
+        renderHomePage(req.clay.me, req.clay.experiments)
         .then (html) ->
           res.send html
         .catch (err) ->
           log.trace err
           res.status(500).send()
 
-  renderHomePage(req.clay.me)
+  renderHomePage(req.clay.me, req.clay.experiments)
   .then (html) ->
     res.send html
   .catch (err) ->
@@ -181,14 +210,16 @@ renderHomePage = do ->
     url: 'http://clay.io/'
     canonical: 'http://clay.io'
     me: 'REPLACE_WITH_ME'
+    experiments: 'REPLACE_WITH_EXPERIMENTS'
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
 
-  (me) ->
+  (me, experiments) ->
     rendered.then (html) ->
       html.replace 'REPLACE_WITH_ME', JSON.stringify me
+      .replace 'REPLACE_WITH_EXPERIMENTS', JSON.stringify experiments
 
-renderGamePage = (gameKey, me) ->
+renderGamePage = (gameKey, me, experiments) ->
 
   gameUrl = apiRequestUrl "games/findOne?key=#{gameKey}"
 
@@ -220,6 +251,7 @@ renderGamePage = (gameKey, me) ->
       canonical: "http://#{game.key}.clay.io"
 
       me: JSON.stringify me
+      experiments: JSON.stringify experiments
 
     Promise.promisify(dust.render, dust) 'index', page
 
