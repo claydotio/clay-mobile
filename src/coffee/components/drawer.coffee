@@ -3,51 +3,37 @@ kik = require 'kik'
 log = require 'clay-loglevel'
 
 config = require '../config'
-CrossPromotion = require './cross_promotion'
-GameRate = require './game_rate'
+CrossPromotionBoxes = require './cross_promotion_boxes'
+CrossPromotionPromos = require './cross_promotion_promos'
+Nub = require './nub'
 Modal = require '../models/modal'
 User = require '../models/user'
 UrlService = require '../services/url'
 KikService = require '../services/kik'
 
+GAME_BOX_ICON_SIZE = 118
 GAME_PROMO_WIDTH = 92
 GAME_PROMO_HEIGHT = 59
 
 module.exports = class Drawer
-  constructor: ({@game}) ->
-    @isOpen = false
-    crossPromotionOptions =
-      gamePromoWidth: GAME_PROMO_WIDTH
-      gamePromoHeight: GAME_PROMO_HEIGHT
-    @CrossPromotion = new CrossPromotion crossPromotionOptions
-    @GameRate = new GameRate {@game, onRated: -> Modal.closeComponent()}
+  constructor: ({@game, @theme}) ->
+    @CrossPromotion = if @theme is 'orange' then \
+      new CrossPromotionBoxes iconSize: GAME_BOX_ICON_SIZE
+    else
+      new CrossPromotionPromos
+        gamePromoWidth: GAME_PROMO_WIDTH
+        gamePromoHeight: GAME_PROMO_HEIGHT
 
-    @drawerShareTheme = z.prop null
-    User.getExperiments().then (params) =>
-      @drawerShareTheme = z.prop switch params.drawerShare
-        when 'big' then '.theme-big-share'
-        else  null
-      z.redraw()
-    .catch log.trace
-
-  toggleOpenState: (e) =>
-    e?.stopPropagation()
-    @isOpen = not @isOpen
-
-    # This is a workaround for this Mithril issue:
-    # https://github.com/lhorie/mithril.js/issues/273
-    # Without this, if the game iframe is clicked before the drawer nub
-    # then the iframe is re-loaded because it is the activeElement
-    # during the Mithril DOM-diff
-    window.document.activeElement?.blur()
-    z.redraw()
-
-    if @isOpen # drawer opened
-      ga? 'send', 'event', 'drawer', 'open', @game.key
+    @Nub = new Nub
+      theme: if @theme is 'orange' then 'transparent-menu' else 'control'
+      onToggle: =>
+        if @Nub.isOpen # drawer opened
+          ga? 'send', 'event', 'drawer', 'open', @game.key
+          User.convertExperiment 'drawer_open'
 
   close: (e) =>
-    e?.stopPropagation()
-    @isOpen = false
+    e?.preventDefault()
+    @Nub.isOpen = false
 
   shareGame: (e) =>
     e?.preventDefault()
@@ -55,11 +41,6 @@ module.exports = class Drawer
     .catch log.trace
 
     ga? 'send', 'event', 'drawer', 'share', @game.key
-
-  rateGame: (e) =>
-    e?.preventDefault()
-    @close()
-    Modal.openComponent {component: @GameRate}
 
   openMarketplace: (e) =>
     e?.preventDefault()
@@ -84,47 +65,75 @@ module.exports = class Drawer
       window.location.href = UrlService.getMarketplaceBase()
 
   render: =>
-    # drawer state
-    if @isOpen
+    if @Nub.isOpen
       drawerIsOpen = '.is-open'
       drawerOverlayIsOpen = '.is-open'
-      chevronDirection = 'right'
     else
       drawerIsOpen = ''
       drawerOverlayIsOpen = ''
-      chevronDirection = 'left'
 
+    # TODO: (Austin) some sort of fast-click equivalent on top of mithril
     [
-      # TODO: (Austin) some sort of fast-click equivalent on top of mithril
       z "div.drawer-overlay#{drawerOverlayIsOpen}",
-        ontouchstart: @toggleOpenState
-      z "div.drawer#{drawerIsOpen}",
-        z 'div.drawer-nub-padding', ontouchstart: @toggleOpenState,
-          z 'div.drawer-nub',
-            z "i.icon.icon-chevron-#{chevronDirection}"
-        z 'div.drawer-header',
-          # making the logo link to Clay causes too many mis-clicks on close nub
-          z 'div.drawer-header-logo'
-        z 'div.drawer-inner',
-          z 'div.drawer-promo-image',
-            style: "background-image: url(#{@game.promo440Url})"
-          z 'div.drawer-content',
-            z 'ul.drawer-menu-items',
-              z 'li',
-                z "a[href=#]#{@drawerShareTheme() or ''}", onclick: @shareGame,
-                  z 'i.icon.icon-share'
-                  z 'span.drawer-menu-item', 'Share game'
-              # TODO: (Austin) Re-enable when we have user accounts
-              #z 'li',
-                #z 'a[href=#]', onclick: @rateGame,
-                  #z 'i.icon.icon-star'
-                  #z 'span.drawer-menu-item', 'Rate game'
-              z 'li.divider'
-              z 'li',
-                z "a[href=#{UrlService.getMarketplaceBase()}]",
+        ontouchstart: @close
+
+      if @theme is 'orange' then \
+        z 'div.drawer-nub.theme-orange',
+          @Nub.render()
+
+      if @theme is 'orange' then \
+        z "div.drawer#{drawerIsOpen}.theme-orange",
+          z 'div.drawer-header',
+            z 'a[href=#].drawer-close',
+              onclick: @close,
+              z 'i.icon.icon-close'
+            z 'a[href=#{UrlService.getMarketplaceBase()].drawer-home',
+              onclick: @openMarketplace,
+              z 'i.icon.icon-home'
+          z 'div.drawer-inner',
+            z 'div.drawer-promo',
+              style: "background-image: url(#{@game.promo440Url})",
+              z 'div.drawer-promo-text',
+                z 'div.drawer-promo-descriptor', "You're playing"
+                z 'h1.drawer-promo-title', @game.name
+            z 'div.drawer-content',
+              z '.drawer-share',
+                z 'div.drawer-share-inner',
+                  z 'button.button-primary.is-block.drawer-share-button',
+                    onclick: @shareGame,
+                    z 'i.icon.icon-share'
+                    'Share with friends'
+              z "a[href=#{UrlService.getMarketplaceBase()}]
+                .drawer-marketplace-link",
                 onclick: @openMarketplace,
-                  z 'i.icon.icon-market'
-                  z 'span.drawer-menu-item', 'Browse more games'
-            z 'div.drawer-cross-promotion',
-              @CrossPromotion.render()
+                z 'i.icon.icon-heart'
+                z 'span.drawer-menu-item', 'Recommended games'
+              z 'div.drawer-cross-promotion',
+                @CrossPromotion.render()
+                z 'button.button-secondary.is-block.drawer-browse-more',
+                  onclick: @openMarketplace,
+                  'Browse more games'
+      else
+        z "div.drawer#{drawerIsOpen}.theme-control",
+          z 'div.drawer-nub', # nub moves with drawer
+            @Nub.render()
+          z 'div.drawer-header',
+            z 'div.drawer-header-logo'
+          z 'div.drawer-inner',
+            z 'div.drawer-promo',
+              style: "background-image: url(#{@game.promo440Url})"
+            z 'div.drawer-content',
+              z 'ul.drawer-menu-items',
+                z 'li',
+                  z 'a[href=#]', onclick: @shareGame,
+                    z 'i.icon.icon-share'
+                    z 'span.drawer-menu-item', 'Share game'
+                z 'li.drawer-menu-divider'
+                z 'li',
+                  z "a[href=#{UrlService.getMarketplaceBase()}]",
+                  onclick: @openMarketplace,
+                    z 'i.icon.icon-market'
+                    z 'span.drawer-menu-item', 'Browse more games'
+              z 'div.drawer-cross-promotion',
+                @CrossPromotion.render()
     ]

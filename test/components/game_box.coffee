@@ -8,7 +8,7 @@ MockGame = require '../_models/game'
 describe 'GameBox', ->
 
   it 'sets image size', ->
-    $ = new GameBox(MockGame).render()
+    $ = new GameBox({game: MockGame, iconSize: 100}).render()
 
-    _.find($.children, {tag: 'img'}).attrs.width.should.be.a.Number
-    _.find($.children, {tag: 'img'}).attrs.height.should.be.a.Number
+    _.find($.children, {tag: 'img'}).attrs.width.should.be 100
+    _.find($.children, {tag: 'img'}).attrs.height.should.be 100

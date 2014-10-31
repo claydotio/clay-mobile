@@ -3,12 +3,13 @@ kik = require 'kik'
 log = require 'clay-loglevel'
 
 RatingsWidget = require './stars'
-vars = require '../../stylus/vars.json'
+styleConfig = require '../../stylus/vars.json'
 User = require '../models/user'
 UrlService = require '../services/url'
 
 module.exports = class GameBox
-  constructor: (@game) ->
+  constructor: ({@game, @iconSize}) ->
+    @iconSize ?= styleConfig.$marketplaceGameIconWidth
     @RatingsWidget = new RatingsWidget stars: @game.rating
 
   loadGame: (e) =>
@@ -25,8 +26,8 @@ module.exports = class GameBox
     z "a.game-box[href=#{gameSubdomainUrl}]", {onclick: @loadGame}, [
       z 'img',
         src: @game.icon128Url
-        width: vars.$marketplaceGameIconWidth,
-        height: vars.$marketplaceGameIconHeight
+        width: @iconSize,
+        height: @iconSize
       z '.game-box-info', [
         z 'h3', @game.name
         @RatingsWidget.render()

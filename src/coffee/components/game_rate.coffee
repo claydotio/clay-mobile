@@ -25,7 +25,7 @@ module.exports = class GameRate
     disabled = if @RatingsWidget.getStarCount() == 0 then '[disabled]' else ''
 
     z 'div.game-rate',
-      z 'div.game-rate-promo-image',
+      z 'div.game-rate-promo',
         style: "background-image: url(#{@game.promo440Url})"
         z 'h1', "Rate #{@game.name}"
       z 'p.game-rate-message', 'Help great games stand out!'

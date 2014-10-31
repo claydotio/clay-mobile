@@ -38,14 +38,12 @@ module.exports = class GamePlayer
         if shouldShowModal
           @showShareModal()
 
-    @Drawer = z.prop @game.then (game) ->
-      new Drawer {game}
+    @Drawer = z.prop Q.spread [
+      @game, User.getExperiments()
+    ], (game, params) ->
+      theme = params.drawer
 
-    # use Q for finally and catch
-    # TODO: (Austin) remove Q dependency when Zorium uses Q
-    Q.when @Drawer
-    .finally z.redraw
-    .catch log.trace
+      new Drawer {game, theme}
 
   showShareModal: =>
     @game.then (game) ->
