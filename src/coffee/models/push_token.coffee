@@ -32,8 +32,11 @@ resource.extendCollection 'pushTokens', (collection) ->
               localStorage['pushTokenStored'] = 1
               resolve()
             .catch (err) ->
+              # FIXME: This should store on HTTP 400 if the token already exists
+              # however Mithril doesn't like non-json responses, so the
+              # error isn't clean
+              localStorage['pushTokenStored'] = 1
               reject new Error err
-              log.trace err
       else
         reject new Error 'Kik not loaded - unable to get push token'
 
