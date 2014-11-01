@@ -1,6 +1,7 @@
 z = require 'zorium'
 kik = require 'kik'
 log = require 'clay-loglevel'
+_ = require 'lodash'
 
 config = require '../config'
 ModalClose = require './modal_close'
@@ -11,6 +12,8 @@ KikService = require '../services/kik'
 module.exports = class GameShare
   constructor: ({@game, @theme}) ->
     @ModalClose = new ModalClose()
+    @onFirstRender = _.once =>
+      ga? 'send', 'event', 'game_share_modal', 'open', @game.key
 
   close: (e) ->
     e?.preventDefault()
@@ -26,6 +29,8 @@ module.exports = class GameShare
     ga? 'send', 'event', 'game_share_modal', 'share', @game.key
 
   render: =>
+    @onFirstRender()
+
     switch @theme
       when 'bottom-dock'
       then \
