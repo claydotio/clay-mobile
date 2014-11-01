@@ -9,8 +9,8 @@ config = require '../config'
 
 
 resource.extendCollection 'users', (collection) ->
-  me = if window._Clay?.me
-  then Q.resolve window._Clay.me
+  me = if window._clay?.me
+  then Q.resolve window._clay.me
   else collection.all('login').customPOST null, 'anon'
 
   # Save accessToken in cookie
@@ -20,7 +20,9 @@ resource.extendCollection 'users', (collection) ->
 
   me.catch log.trace
 
-  experiments = me.then (user) ->
+  experiments = if window._clay?.experiments
+  then Q.resolve window._clay.experiments
+  else me.then (user) ->
     Q z.request
       url: config.FLAK_CANNON_PATH + '/experiments'
       method: 'POST'

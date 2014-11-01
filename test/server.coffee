@@ -35,6 +35,9 @@ nock 'http://clay.io'
   .reply 200,
     id: ME_USER_ID
     accessToken: ME_ACCESS_TOKEN
+  .post '/experiments'
+  .reply 200,
+    login_button: 'red'
 
 describe 'index.dust', ->
   describe 'Basic page responses', ->
@@ -61,17 +64,15 @@ describe 'index.dust', ->
   describe 'User object injection', ->
     injectedAnon =
       '<script>' +
-      'window._Clay={};' +
-      'window._Clay.me=' +
-      "{\"id\":#{ANON_USER_ID},\"accessToken\":\"#{ANON_ACCESS_TOKEN}\"};" +
-      '</script>'
+      'window._clay={};' +
+      'window._clay.me=' +
+      "{\"id\":#{ANON_USER_ID},\"accessToken\":\"#{ANON_ACCESS_TOKEN}\"};"
 
     injectedUser =
       '<script>' +
-      'window._Clay={};' +
-      'window._Clay.me=' +
-      "{\"id\":#{ME_USER_ID},\"accessToken\":\"#{ME_ACCESS_TOKEN}\"};" +
-      '</script>'
+      'window._clay={};' +
+      'window._clay.me=' +
+      "{\"id\":#{ME_USER_ID},\"accessToken\":\"#{ME_ACCESS_TOKEN}\"};"
 
     it 'Injects anonymous user object if no auth_token cookie provided', ->
       flare
@@ -106,3 +107,15 @@ describe 'index.dust', ->
         .get '/game/slime'
         .flare (flare) ->
           flare.res.body.should.contain injectedAnon
+
+  describe 'Experiments object injection', ->
+    injectedExperiments = 'window._clay.experiments={"login_button":"red"}'
+
+    it 'Injects a users experiments', ->
+      flare
+        .get '/'
+        .flare (flare) ->
+          flare.res.body.should.contain injectedExperiments
+        .get '/game/slime'
+        .flare (flare) ->
+          flare.res.body.should.contain injectedExperiments
