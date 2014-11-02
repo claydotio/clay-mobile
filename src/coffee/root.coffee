@@ -193,7 +193,7 @@ unless svgSupport
 
 isAndroid2 = ->
   # Android 2.x detection
-  parseInt(navigator.userAgent.match(/Android\s([0-9\.]*)/)?[1], 10) == 2
+  parseInt(navigator.userAgent.match(/Android\s([0-9\.]*)/)?[1], 10) is 2
 
 isSlowDevice = isAndroid2
 

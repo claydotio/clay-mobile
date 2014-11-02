@@ -30,7 +30,7 @@ module.exports = class GameResults
       z.redraw(true)
 
       # Stop loading more
-      if games.length == 0
+      if games.length is 0
         return true
 
   render: =>

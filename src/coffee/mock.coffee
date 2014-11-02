@@ -38,7 +38,7 @@ game = (i, isNew) ->
     title = 'new ' + title
 
   # Every 5th game has a long title
-  if i % 5 == 0
+  if i % 5 is 0
     title += ' with a really long title that is here'
 
   id: i
