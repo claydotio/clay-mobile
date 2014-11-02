@@ -4,7 +4,7 @@ should = require('clay-chai').should()
 GamePlayer = require 'components/game_player'
 Modal = require 'models/modal'
 
-MockGame = require '../_models/game'
+MockGame = require '../../_models/game'
 
 describe 'GamePlayer', ->
   it 'shows share modal on 3rd visit', ->

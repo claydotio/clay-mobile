@@ -1,21 +1,19 @@
 _ = require 'lodash'
 gulp = require 'gulp'
-gutil = require 'gulp-util'
 concat = require 'gulp-concat'
 nodemon = require 'gulp-nodemon'
 rename = require 'gulp-rename'
-browserify = require 'browserify'
 clean = require 'gulp-clean'
 sourcemaps = require 'gulp-sourcemaps'
-source = require 'vinyl-source-stream'
 runSequence = require 'gulp-run-sequence'
 stylus = require 'gulp-stylus'
 coffeelint = require 'gulp-coffeelint'
-glob = require 'glob'
 karma = require('karma').server
 minifyCss = require 'gulp-minify-css'
-rewireify = require 'rewireify'
 mocha = require 'gulp-mocha'
+RewirePlugin = require 'rewire-webpack'
+webpack = require 'gulp-webpack'
+webpackSource = require 'webpack'
 
 karmaConf = require './karma.defaults'
 
@@ -35,6 +33,7 @@ paths =
   serverTests: './test/server.coffee'
   root: './src/coffee/root.coffee'
   mock: './src/coffee/mock.coffee'
+  rootTests: './test/index.coffee'
   baseStyle: './src/stylus/base.styl'
   dist: './dist/'
   build: './build/'
@@ -65,7 +64,13 @@ gulp.task 'build', (cb) ->
 
 # tests
 # process.exit is added due to gulp-mocha (test:server) hanging
-gulp.task 'test', ['scripts:dev', 'scripts:test', 'test:server'], (cb) ->
+gulp.task 'test', [
+    'scripts:dev'
+    'scripts:test'
+    'test:server'
+    'lint:tests'
+    'lint:scripts'
+  ], (cb) ->
   karma.start _.defaults(singleRun: true, karmaConf), process.exit
 
 # gulp-mocha will never exit on its own.
@@ -73,23 +78,37 @@ gulp.task 'test:server', ['scripts:test'], ->
   gulp.src paths.serverTests
     .pipe mocha()
 
-gulp.task 'test:phantom', ['scripts:dev', 'scripts:test'], (cb) ->
+gulp.task 'test:phantom', ['scripts:test'], (cb) ->
   karma.start _.defaults({
     singleRun: true,
     browsers: ['PhantomJS']
   }, karmaConf), cb
 
-gulp.task 'scripts:test', ['lint:tests'], ->
-  testFiles = [paths.mock].concat glob.sync(paths.tests)
+gulp.task 'scripts:test', ->
 
-  browserify
-    entries: testFiles
-    extensions: ['.coffee']
-  .transform {global: true}, 'rewireify'
-  .bundle(debug: true)
-  .on 'error', errorHandler
-  .pipe source outFiles.scripts
+  gulp.src paths.rootTests
+  .pipe webpack
+    module:
+      postLoaders: [
+        { test: /\.coffee$/, loader: 'transform/cacheable?envify' }
+      ]
+      loaders: [
+        { test: /\.coffee$/, loader: 'coffee-loader' }
+        { test: /\.json$/, loader: 'json-loader' }
+      ]
+    externals:
+      kik: '{}'
+    plugins: [
+      new RewirePlugin()
+    ]
+    resolve:
+      extensions: ['.coffee', '.js', '.json', '']
+      # browser-builtins is for modules requesting native node modules
+      modulesDirectories: ['web_modules', 'node_modules', './src/coffee',
+      './node_modules/browser-builtins/builtin']
+  .pipe rename 'bundle.js'
   .pipe gulp.dest paths.build + '/test/'
+
 
 # run coffee-lint
 gulp.task 'lint:tests', ->
@@ -125,26 +144,32 @@ gulp.task 'lint:scripts', ->
 # Dev compilation
 #
 
-errorHandler = ->
-  gutil.log.apply null, arguments
-  @emit 'end'
-
 # init.coffee --> build/js/bundle.js
-gulp.task 'scripts:dev', ['lint:scripts'], ->
+gulp.task 'scripts:dev', ->
   entries = [paths.root]
 
   # Order matters because mock overrides window.XMLHttpRequest
   if isMockingApi
     entries = [paths.mock].concat entries
 
-  browserify
-    entries: entries
-    extensions: ['.coffee']
-  .transform {global: true}, 'rewireify'
-  .bundle(debug: true)
-  .on 'error', errorHandler
-  .pipe source outFiles.scripts
+  gulp.src entries
+  .pipe webpack
+    module:
+      postLoaders: [
+        { test: /\.coffee$/, loader: 'transform/cacheable?envify' }
+      ]
+      loaders: [
+        { test: /\.coffee$/, loader: 'coffee-loader' }
+        { test: /\.json$/, loader: 'json-loader' }
+      ]
+    devtool: '#eval-source-map'
+    externals:
+      kik: 'kik'
+    resolve:
+      extensions: ['.coffee', '.js', '.json', '']
+  .pipe rename 'bundle.js'
   .pipe gulp.dest paths.build + '/js/'
+
 
 # css/style.css --> build/css/bundle.css
 gulp.task 'styles:dev', ->
@@ -170,14 +195,25 @@ gulp.task 'clean:dist', ->
     .pipe clean()
 
 # init.coffee --> dist/js/bundle.min.js
-gulp.task 'scripts:prod', ['lint:scripts'], ->
-  browserify
-    entries: paths.root
-    extensions: ['.coffee']
-  .transform {global: true}, 'uglifyify'
-  .bundle()
-  .on 'error', errorHandler
-  .pipe source outFiles.scripts
+gulp.task 'scripts:prod', ->
+  gulp.src paths.root
+  .pipe webpack
+    module:
+      postLoaders: [
+        { test: /\.coffee$/, loader: 'transform/cacheable?envify' }
+      ]
+      loaders: [
+        { test: /\.coffee$/, loader: 'coffee-loader' }
+        { test: /\.json$/, loader: 'json-loader' }
+      ]
+    plugins: [
+      new webpackSource.optimize.UglifyJsPlugin()
+    ]
+    externals:
+      kik: 'kik'
+    resolve:
+      extensions: ['.coffee', '.js', '.json', '']
+  .pipe rename 'bundle.js'
   .pipe gulp.dest paths.dist + '/js/'
 
 # css/style.css --> dist/css/bundle.min.css

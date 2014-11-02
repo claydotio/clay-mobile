@@ -1,5 +1,4 @@
 z = require 'zorium'
-config = require 'config'
 
 UrlService = require '../services/url'
 

@@ -5,7 +5,7 @@ should = require('clay-chai').should()
 Modal = require 'models/modal'
 Modal.constructor() # reset
 
-MockGame = require '../_models/game'
+MockGame = require '../../_models/game'
 ModalClose = require 'components/modal_close'
 
 class StubComponent

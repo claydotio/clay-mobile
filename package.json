@@ -17,16 +17,14 @@
   "license": "",
   "devDependencies": {
     "bower": "1.3.8",
-    "browserify": "4.2.3",
-    "browserify-shim": "3.7.0",
+    "browser-builtins": "3.2.0",
     "clay-chai": "0.0.2",
+    "coffee-loader": "0.7.2",
     "coffee-script": "1.7.1",
-    "coffeeify": "0.6.0",
     "envify": "3.0.0",
     "express": "4.5.1",
     "fb-flo": "0.2.1",
     "flare-gun": "0.4.0",
-    "glob": "4.0.4",
     "gulp": "3.8.6",
     "gulp-clean": "0.3.1",
     "gulp-coffeelint": "0.4.0",
@@ -38,41 +36,33 @@
     "gulp-run-sequence": "0.3.2",
     "gulp-sourcemaps": "0.4.5",
     "gulp-stylus": "1.0.4",
-    "gulp-util": "2.2.20",
+    "gulp-webpack": "1.0.0",
     "istanbul": "0.3.2",
     "joi": "4.7.0",
+    "json-loader": "0.5.1",
     "karma": "0.12.17",
-    "karma-browserify": "0.2.1",
     "karma-chrome-launcher": "0.1.4",
     "karma-coffee-preprocessor": "0.2.1",
     "karma-firefox-launcher": "0.1.3",
     "karma-mocha": "0.1.6",
     "karma-phantomjs-launcher": "0.1.4",
+    "karma-webpack": "1.3.1",
     "lodash": "2.4.1",
     "lodash-contrib": "241.4.14",
     "mocha": "1.20.1",
     "nock": "0.48.1",
-    "rewireify": "0.0.9",
-    "uglifyify": "2.5.0",
-    "vinyl-source-stream": "0.1.1"
+    "rewire": "2.1.2",
+    "rewire-webpack": "0.2.0",
+    "transform-loader": "0.2.1",
+    "webpack": "1.4.11",
+    "webpack-dev-server": "1.6.5"
   },
   "browser": {
-    "lodash": "./components/lodash/dist/lodash.js",
     "zorium": "./components/zorium.js/mithril.js",
     "clay-loglevel": "./components/clay-loglevel/dist/loglevel.js",
     "q": "./components/q/q.js",
     "restangular": "./components/restangular/dist/restangular.js",
     "zock": "./components/zock/zock.js"
-  },
-  "browserify-shim": {
-    "kik": "global:kik"
-  },
-  "browserify": {
-    "transform": [
-      "coffeeify",
-      "envify",
-      "browserify-shim"
-    ]
   },
   "dependencies": {
     "bluebird": "2.3.2",

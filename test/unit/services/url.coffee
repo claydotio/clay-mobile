@@ -1,10 +1,11 @@
 should = require('clay-chai').should()
+rewire = require 'rewire'
 
-MockGame = require '../_models/game'
-UrlService = require 'services/url'
+MockGame = require '../../_models/game'
+UrlService = rewire 'services/url'
 UrlService.constructor() # reset
 
-urlRegex = require '../lib/url_regex'
+urlRegex = require '../../lib/url_regex'
 # routes shouldn't have - or _
 routeRegex = /^[a-zA-Z0-9\/]+$/
 
