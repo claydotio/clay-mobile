@@ -4,6 +4,7 @@ FROM dockerfile/nodejs:latest
 RUN apt-get install -y git
 
 # Add source
+ADD ./node_modules /opt/clay-mobile/node_modules
 ADD . /opt/clay-mobile
 
 WORKDIR /opt/clay-mobile
