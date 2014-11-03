@@ -13,7 +13,7 @@ module.exports = class GameMenu
     # Select item based on filter
     filter = GameFilter.getFilter()
     for item in @items()
-      if item.filter == filter
+      if item.filter is filter
         item.isSelected = true
 
   render: =>

@@ -22,7 +22,7 @@ module.exports = class GameRate
     .catch log.trace
 
   render: =>
-    disabled = if @RatingsWidget.getStarCount() == 0 then '[disabled]' else ''
+    disabled = if @RatingsWidget.getStarCount() is 0 then '[disabled]' else ''
 
     z 'div.game-rate',
       z 'div.game-rate-promo',

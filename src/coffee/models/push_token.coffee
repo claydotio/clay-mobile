@@ -20,7 +20,7 @@ resource.extendCollection 'pushTokens', (collection) ->
       # TODO: (Austin) remove localStorage in favor of anonymous user sessions
       if localStorage['pushTokenStored']
         reject new Error 'Token already created'
-      else if kik && kik.ready && kik.push
+      else if kik and kik.ready and kik.push
         kik.ready ->
           kik.push.getToken (token) ->
             unless token

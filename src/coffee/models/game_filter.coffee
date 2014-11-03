@@ -12,7 +12,7 @@ class GameFilter
     @label
 
   getGames: (params) ->
-    if @label == 'new'
+    if @label is 'new'
       return Game.getNew(params)
     else
       return Game.getTop(params)
