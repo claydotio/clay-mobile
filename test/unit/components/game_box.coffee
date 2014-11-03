@@ -3,7 +3,7 @@ should = require('clay-chai').should()
 
 GameBox = require 'components/game_box'
 
-MockGame = require '../_models/game'
+MockGame = require '../../_models/game'
 
 describe 'GameBox', ->
 

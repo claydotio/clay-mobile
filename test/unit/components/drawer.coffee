@@ -2,7 +2,7 @@ should = require('clay-chai').should()
 _ = require ('lodash-contrib')
 
 Drawer = require 'components/drawer'
-MockGame = require '../_models/game'
+MockGame = require '../../_models/game'
 
 domWalker = _.walk ($node) ->
   return $node?.children

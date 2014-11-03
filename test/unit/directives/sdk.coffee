@@ -1,8 +1,9 @@
 _ = require 'lodash'
 Q = require 'q'
 should = require('clay-chai').should()
+rewire = require 'rewire'
 
-SDKDir = require 'directives/sdk'
+SDKDir = rewire 'directives/sdk'
 User = require 'models/user'
 
 eventListeners = {}

@@ -94,7 +94,13 @@
     "no_unnecessary_fat_arrows": {
         "level": "warn"
     },
+    "non_empty_constructor_needs_parens": {
+        "level": "ignore"
+    },
     "space_operators": {
+        "level": "warn"
+    },
+    "prefer_english_operator": {
         "level": "warn"
     }
 }

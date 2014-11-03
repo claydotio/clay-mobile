@@ -1,8 +1,8 @@
 should = require('clay-chai').should()
+rewire = require 'rewire'
 
-
-MockGame = require '../_models/game'
-PushToken = require 'models/push_token'
+MockGame = require '../../_models/game'
+PushToken = rewire 'models/push_token'
 
 describe 'PushToken', ->
   describe 'Without Kik', ->

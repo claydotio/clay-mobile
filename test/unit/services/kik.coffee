@@ -1,11 +1,12 @@
 should = require('clay-chai').should()
 Joi = require 'joi'
 Q = require 'q'
+rewire = require 'rewire'
 
-MockGame = require '../_models/game'
-KikService = require 'services/kik'
+MockGame = require '../../_models/game'
+KikService = rewire 'services/kik'
 
-urlRegex = require '../lib/url_regex'
+urlRegex = require '../../lib/url_regex'
 
 describe 'KikService', ->
 

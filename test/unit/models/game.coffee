@@ -3,7 +3,7 @@ should = require('clay-chai').should()
 Game = require 'models/game'
 localstore = require 'lib/localstore'
 
-MockGame = require '../_models/game'
+MockGame = require '../../_models/game'
 
 describe 'Game', ->
 

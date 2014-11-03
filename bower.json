@@ -1,10 +1,9 @@
 {
-  "name": "wink",
+  "name": "clay-mobile",
   "version": "0.0.0",
   "homepage": "https://github.com/claydotio/wink",
   "private": true,
   "dependencies": {
-    "lodash": "2.4.1",
     "zorium.js": "https://github.com/claydotio/zorium.js.git#next",
     "clay-loglevel": "https://github.com/claydotio/loglevel.git#master",
     "q": "1.0.1",
