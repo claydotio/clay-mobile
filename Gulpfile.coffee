@@ -17,16 +17,13 @@ webpackSource = require 'webpack'
 
 karmaConf = require './karma.defaults'
 
-# Modify NODE_PATH for test require's
-process.env.NODE_PATH += ':' + __dirname + '/src'
-
 outFiles =
   scripts: 'bundle.js'
   styles: 'bundle.css'
 
 paths =
   static: './src/*.*'
-  scripts: './src/**/*.coffee'
+  scripts: ['./src/**/*.coffee', './*.coffee']
   styles: './src/stylus/**/*.styl'
 
   tests: './test/*/*.coffee'
