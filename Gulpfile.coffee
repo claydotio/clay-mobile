@@ -18,7 +18,7 @@ webpackSource = require 'webpack'
 karmaConf = require './karma.defaults'
 
 # Modify NODE_PATH for test require's
-process.env.NODE_PATH += ':' + __dirname + '/src/coffee'
+process.env.NODE_PATH += ':' + __dirname + '/src'
 
 outFiles =
   scripts: 'bundle.js'
@@ -26,19 +26,16 @@ outFiles =
 
 paths =
   static: './src/*.*'
-  scripts: './src/coffee/**/*.coffee'
+  scripts: './src/**/*.coffee'
   styles: './src/stylus/**/*.styl'
 
   tests: './test/*/*.coffee'
   serverTests: './test/server.coffee'
-  root: './src/coffee/root.coffee'
-  mock: './src/coffee/mock.coffee'
+  root: './src/root.coffee'
   rootTests: './test/index.coffee'
   baseStyle: './src/stylus/base.styl'
   dist: './dist/'
   build: './build/'
-
-isMockingApi = process.env.MOCK
 
 # start the dev server, and auto-update
 gulp.task 'dev', ['assets:dev', 'watch:dev'], ->
@@ -46,7 +43,6 @@ gulp.task 'dev', ['assets:dev', 'watch:dev'], ->
 
 # compile sources: src/* -> build/*
 gulp.task 'assets:dev', [
-  'scripts:dev'
   'styles:dev'
   'static:dev'
 ]
@@ -65,7 +61,6 @@ gulp.task 'build', (cb) ->
 # tests
 # process.exit is added due to gulp-mocha (test:server) hanging
 gulp.task 'test', [
-    'scripts:dev'
     'scripts:test'
     'test:server'
     'lint:tests'
@@ -95,6 +90,7 @@ gulp.task 'scripts:test', ->
       loaders: [
         { test: /\.coffee$/, loader: 'coffee-loader' }
         { test: /\.json$/, loader: 'json-loader' }
+        { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' }
       ]
     externals:
       kik: '{}'
@@ -104,7 +100,7 @@ gulp.task 'scripts:test', ->
     resolve:
       extensions: ['.coffee', '.js', '.json', '']
       # browser-builtins is for modules requesting native node modules
-      modulesDirectories: ['web_modules', 'node_modules', './src/coffee',
+      modulesDirectories: ['web_modules', 'node_modules', './src',
       './node_modules/browser-builtins/builtin']
   .pipe rename 'bundle.js'
   .pipe gulp.dest paths.build + '/test/'
@@ -122,13 +118,10 @@ gulp.task 'lint:tests', ->
 
 # start the dev server
 gulp.task 'server', ->
-
   # Don't actually watch for changes, just run the server
-  nodemon {script: 'bin/server.coffee', ext: 'null', ignore: ['**/*.*']}
-
+  nodemon {script: 'bin/dev_server.coffee', ext: 'null', ignore: ['**/*.*']}
 
 gulp.task 'watch:dev', ->
-  gulp.watch paths.scripts, ['scripts:dev']
   gulp.watch paths.styles, ['styles:dev']
 
 gulp.task 'watch:test', ->
@@ -143,33 +136,6 @@ gulp.task 'lint:scripts', ->
 #
 # Dev compilation
 #
-
-# init.coffee --> build/js/bundle.js
-gulp.task 'scripts:dev', ->
-  entries = [paths.root]
-
-  # Order matters because mock overrides window.XMLHttpRequest
-  if isMockingApi
-    entries = [paths.mock].concat entries
-
-  gulp.src entries
-  .pipe webpack
-    module:
-      postLoaders: [
-        { test: /\.coffee$/, loader: 'transform/cacheable?envify' }
-      ]
-      loaders: [
-        { test: /\.coffee$/, loader: 'coffee-loader' }
-        { test: /\.json$/, loader: 'json-loader' }
-      ]
-    devtool: '#eval-source-map'
-    externals:
-      kik: 'kik'
-    resolve:
-      extensions: ['.coffee', '.js', '.json', '']
-  .pipe rename 'bundle.js'
-  .pipe gulp.dest paths.build + '/js/'
-
 
 # css/style.css --> build/css/bundle.css
 gulp.task 'styles:dev', ->
@@ -205,6 +171,7 @@ gulp.task 'scripts:prod', ->
       loaders: [
         { test: /\.coffee$/, loader: 'coffee-loader' }
         { test: /\.json$/, loader: 'json-loader' }
+        { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' }
       ]
     plugins: [
       new webpackSource.optimize.UglifyJsPlugin()

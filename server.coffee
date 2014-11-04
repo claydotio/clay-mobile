@@ -10,7 +10,7 @@ compress = require 'compression'
 log = require 'loglevel'
 cookieParser = require 'cookie-parser'
 
-config = require './src/coffee/config'
+config = require './src/config'
 
 API_REQUEST_TIMEOUT = 1000 # 1 second
 
@@ -196,6 +196,7 @@ router.get '*', (req, res) ->
 renderHomePage = do ->
   page =
     inlineSource: config.ENV is config.ENVS.PROD
+    webpackDevHostname: config.WEBPACK_DEV_HOSTNAME
     title: 'Free Games'
     description: 'Play mobile games on your phone for free.
                   We bring you the best mobile web games.'
@@ -233,6 +234,7 @@ renderGamePage = (gameKey, me, experiments) ->
 
     page =
       inlineSource: config.ENV is config.ENVS.PROD
+      webpackDevHostname: config.WEBPACK_DEV_HOSTNAME
       title: "#{game.name}"
       description: "Play #{game.name}; #{game.description}"
       keywords: "#{game.name}, mobile games,  free mobile games"

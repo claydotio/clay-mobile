@@ -91,7 +91,8 @@
         {>distjs/}
       </script>
     {:else}
-      <script src="/js/bundle.js"></script>
+
+    <script src="//{webpackDevHostname}:3004/js/bundle.js"></script>
     {/inlineSource}
   </body>
 
