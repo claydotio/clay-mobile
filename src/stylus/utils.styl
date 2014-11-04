@@ -1,0 +1,9 @@
+/*
+ * For precision spacing. Factors in the amount of spacing between the top or
+ * bottom of a letter, and where the padding actually starts
+ * @param (int) baseSpacing - the exact number of spacing that should exist (px)
+ * @param (int) fontSize - the size of the font (rem) on the side near spacing
+ * @return (int) normalized spacing (px) to be used in top/bottom, margin, padding
+ */
+normalizeSpacing(baseSpacing, fontSize)
+  return baseSpacing - 0.23 * fontSize * 10

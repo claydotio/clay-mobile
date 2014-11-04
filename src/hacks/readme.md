@@ -1,6 +1,8 @@
 Hacks
 ===========
 
+# TODO (Austin): restructure to follow new webpack components pattern
+
 Hacks are a way for us to test whether or not a feature is worthwhile
 to do a full hacks AND learn useful information that may alter
 how we hack the complete version of a feature.
@@ -24,8 +26,8 @@ makes it easier to merge a hack into the main codebase, should it do well
 
 ```
 +-/src/{hack_name}
+| +- components
 | +-coffee
-| | +- components
 | | +- pages
 | | +- models
 | +-stylus
