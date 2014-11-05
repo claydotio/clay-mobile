@@ -36,16 +36,6 @@ resource.extendCollection 'users', (collection) ->
 
   collection.setMe = (_me) -> me = Q _me
 
-  collection.logEngagedActivity = ->
-    me.then (me) ->
-      Q.spread [
-        collection.convertExperiment('engaged_activity').catch log.trace
-        collection.all('me').customPOST null,
-          'lastEngagedActivity',
-          {accessToken: me.accessToken}
-      ], (exp, res) ->
-        res
-
   collection.getExperiments = -> experiments
 
   collection.setExperimentsFrom = (shareOriginUserId) ->
