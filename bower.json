@@ -10,6 +10,7 @@
     "normalize.css": "3.0.1",
     "restangular": "https://github.com/claydotio/restangular.git#noangular",
     "zock": "https://github.com/claydotio/zock.git",
-    "nib": "1.0.3"
+    "nib": "1.0.3",
+    "matchMedia": "0.2.0"
   }
 }

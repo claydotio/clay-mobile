@@ -8,6 +8,7 @@
   "$black": "#000000",
   "$grayDark": "#262626",
   "$grayLight": "#757575",
+  "$transparent": "transparent",
   "$activeBgColor": "rgba(0, 0, 0, 0.05)",
   "$overlayColor": "rgba(0, 0, 0, 0.7)",
 
@@ -17,14 +18,15 @@
   "$fontSizeXLarge": "3.6rem",
   "$fontSizeXXLarge": "4.2rem",
 
+  "$iconTiny": "0.8rem",
   "$iconMedium": "2.2rem",
   "$iconXLarge": "4.2rem",
 
   "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
   "$logoPng110": "//cdn.wtf/d/images/logos/logo_110.png",
 
-  "$marketplaceGameIconWidth": 128,
-  "$marketplaceGameIconHeight": 128,
+  "$marketplaceGamePromoWidth": 440,
+  "$marketplaceGamePromoHeight": 280,
 
   "$zIndexModal": 900,
   "$zIndexDrawer": 200

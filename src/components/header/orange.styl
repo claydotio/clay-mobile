@@ -1,0 +1,25 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+// TODO (Austin): Move to vars.json if this design wins
+$logoSvg = '//cdn.wtf/d/images/logos/logo_standard_bw.svg'
+$logoPng = '//cdn.wtf/d/images/logos/logo_standard_bw.png'
+
+.header
+  background: $orange
+  height: 60px
+  box-sizing: border-box
+  padding: 14px 20px
+
+.header-logo
+  display: inline-block
+  background-image: url($logoSvg)
+  background-repeat: no-repeat
+  width: 125px
+  height: 30px
+
+.no-svg
+  .header-logo
+    background-image: url($logoPng110)
+    background-size: 100% auto

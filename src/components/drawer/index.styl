@@ -1,3 +1,5 @@
+@require 'nib'
+
 json('../../stylus/vars.json')
 @require '../../stylus/utils.styl'
 
@@ -49,7 +51,7 @@ json('../../stylus/vars.json')
     top: 0
     /* doing left negative px doesn't work on android (touch events won't fire) */
     left: 0
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+    -webkit-tap-highlight-color: $transparent
     pointer-events: all // not supported in ie9/10
 
   .drawer-header
@@ -92,7 +94,7 @@ json('../../stylus/vars.json')
     background-size: 100% auto
 
     &:after
-      background: linear-gradient(bottom, $bgColor 0, rgba(0, 0, 0, 0) 50px)
+      background: linear-gradient(bottom, $bgColor 0, $transparent 50px)
       width: 100%
       height: 100%
       position: absolute
@@ -313,5 +315,5 @@ json('../../stylus/vars.json')
   position: fixed
   top: 0
   right: 0
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+  -webkit-tap-highlight-color: $transparent
   pointer-events: all // not supported in ie9/10

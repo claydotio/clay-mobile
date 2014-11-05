@@ -6,10 +6,14 @@ z = require 'zorium'
 log = require 'clay-loglevel'
 Q = require 'q'
 kik = require 'kik'
+require 'matchMedia'
 
 config = require './config'
-GamesPage = require './pages/games'
 PlayGamePage = require './pages/play_game'
+GamesPageControl = require './pages/games'
+GamesPageRecentTabs = require './pages/games/recent_tabs'
+GamesPageRecentList = require './pages/games/recent_list'
+GamesPageRecentBoxes = require './pages/games/recent_boxes'
 PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
@@ -144,63 +148,72 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.route.mode = 'pathname'
 
-z.route document.getElementById('app'), '/', route(
-  '/': GamesPage
-  '/games': GamesPage
-  '/game/:key': PlayGamePage
-  '/games/:filter': GamesPage
-)
+User.getExperiments().then (params) ->
+  switch params.gamesPage
+    when 'recent_tabs' then GamesPageRecentTabs
+    when 'recent_list' then GamesPageRecentList
+    when 'recent_boxes' then GamesPageRecentBoxes
+    else GamesPageControl
 
-# track kik metrics (users sending messages, etc...)
-kik?.metrics?.enableGoogleAnalytics?()
+.then (GamesPage) ->
 
-# Passed via message to denote game (share button in drawer uses this)
-kikGameKey = kik?.message?.gameKey
+  z.route document.getElementById('app'), '/', route(
+    '/': GamesPage
+    '/games': GamesPage
+    '/game/:key': PlayGamePage
+    '/games/:filter': GamesPage
+  )
 
-shouldRouteToGamePage = kikGameKey or
-                        (not UrlService.isRootPath() and not config.MOCK)
-if shouldRouteToGamePage
-  if kikGameKey
-    gameKey = kikGameKey
-  else # subdomain
-    gameKey = UrlService.getSubdomain()
-    PushToken.createByGameKey gameKey
-    # marketplace in picker, causing it to appear in side-bar
-    # This is also used to pass the marketplace anon-user token
-    # which is used for tracking uniq share conversions
-    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-    kik?.picker? marketplaceBaseUrl, {}, (res) ->
-      kikAnonymousToken = res.token
+  # track kik metrics (users sending messages, etc...)
+  kik?.metrics?.enableGoogleAnalytics?()
 
-  z.route "/game/#{gameKey}"
-else
-  PushToken.createForMarketplace()
+  # Passed via message to denote game (share button in drawer uses this)
+  kikGameKey = kik?.message?.gameKey
 
-log.info 'App Ready'
+  shouldRouteToGamePage = kikGameKey or
+                          (not UrlService.isRootPath() and not config.MOCK)
+  if shouldRouteToGamePage
+    if kikGameKey
+      gameKey = kikGameKey
+    else # subdomain
+      gameKey = UrlService.getSubdomain()
+      PushToken.createByGameKey gameKey
+      # marketplace in picker, causing it to appear in side-bar
+      # This is also used to pass the marketplace anon-user token
+      # which is used for tracking uniq share conversions
+      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+      kik?.picker? marketplaceBaseUrl, {}, (res) ->
+        kikAnonymousToken = res.token
+
+    z.route "/game/#{gameKey}"
+  else
+    PushToken.createForMarketplace()
+
+  log.info 'App Ready'
 
 
-##########################
-# CSS / DEVICE DETECTION #
-##########################
+  ##########################
+  # CSS / DEVICE DETECTION #
+  ##########################
 
-# TODO: (Austin) Feature-detection for SVG, slow devices
-# we'll want to move this somewhere cleaner
-bodyClasses = []
-svgSupport = !! document.createElementNS?('http://www.w3.org/2000/svg', 'svg')
-                .createSVGRect
-unless svgSupport
-  bodyClasses.push 'no-svg'
+  # TODO: (Austin) Feature-detection for SVG, slow devices
+  # we'll want to move this somewhere cleaner
+  bodyClasses = []
+  svgSupport = !! document.createElementNS?('http://www.w3.org/2000/svg', 'svg')
+                  .createSVGRect
+  unless svgSupport
+    bodyClasses.push 'no-svg'
 
-isAndroid2 = ->
-  # Android 2.x detection
-  parseInt(navigator.userAgent.match(/Android\s([0-9\.]*)/)?[1], 10) is 2
+  isAndroid2 = ->
+    # Android 2.x detection
+    parseInt(navigator.userAgent.match(/Android\s([0-9\.]*)/)?[1], 10) is 2
 
-isSlowDevice = isAndroid2
+  isSlowDevice = isAndroid2
 
-if isSlowDevice()
-  bodyClasses.push 'is-slow-device'
+  if isSlowDevice()
+    bodyClasses.push 'is-slow-device'
 
-if isAndroid2()
-  bodyClasses.push 'is-android-2-3'
+  if isAndroid2()
+    bodyClasses.push 'is-android-2-3'
 
-document.body.className += ' ' + bodyClasses.join ' '
+  document.body.className += ' ' + bodyClasses.join ' '

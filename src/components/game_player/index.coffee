@@ -20,8 +20,6 @@ require './index.styl'
 module.exports = class GamePlayer
   constructor: ({gameKey}) ->
     @WindowHeightDir = new WindowHeightDir()
-    # FIXME: remove, replace with beforeUnload functionality of components
-    @LogEngagedPlayDir = new LogEngagedPlayDir(gameKey)
     @SDKDir = new SDKDir()
 
     @Spinner = new Spinner()
@@ -33,12 +31,11 @@ module.exports = class GamePlayer
     @game.then =>
       @isLoading = false
 
-    @onFirstRender = _.once =>
-      @showShareModalPromise = Game.incrementPlayCount(gameKey)
-      .then (playCount) =>
-        shouldShowModal = playCount is 3
-        if shouldShowModal
-          @showShareModal()
+    # FIXME: remove, replace with beforeUnload functionality of components
+    @LogEngagedPlayDir = @game.then (game) ->
+      directive = new LogEngagedPlayDir(game)
+      z.redraw()
+      return directive
 
     @Drawer = z.prop Q.spread [
       @game, User.getExperiments()
@@ -46,6 +43,13 @@ module.exports = class GamePlayer
       theme = params.drawer
 
       new Drawer {game, theme}
+
+    @onFirstRender = _.once =>
+      @showShareModalPromise = Game.incrementPlayCount(gameKey)
+      .then (playCount) =>
+        shouldShowModal = playCount is 3
+        if shouldShowModal
+          @showShareModal()
 
   showShareModal: =>
     @game.then (game) ->
@@ -76,7 +80,7 @@ module.exports = class GamePlayer
           'Return to Clay.io'
     else if @game()?.gameUrl
       # FIXME: remove, replace with beforeUnload functionality of components
-      z 'div.game-player', {config: @LogEngagedPlayDir.config},
+      z 'div.game-player', {config: @LogEngagedPlayDir()?.config},
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',
