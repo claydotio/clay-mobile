@@ -42,9 +42,9 @@ new WebpackDevServer webpack({
       { test: /\.coffee$/, loader: 'transform/cacheable?envify' }
     ]
     loaders: [
-      { test: /\.coffee$/, loader: 'coffee-loader' }
-      { test: /\.json$/, loader: 'json-loader' }
-      { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' }
+      { test: /\.coffee$/, loader: 'coffee' }
+      { test: /\.json$/, loader: 'json' }
+      { test: /\.styl$/, loader: 'style/useable!css!stylus' }
     ]
   plugins: [
     new webpack.HotModuleReplacementPlugin()

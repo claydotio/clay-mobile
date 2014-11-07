@@ -6,13 +6,15 @@ log = require 'clay-loglevel'
 Game = require '../../models/game'
 GameBox = require '../game_box'
 
-require './index.styl'
+styles = require './index.styl'
 
 # TODO (Austin): Cleanup and change to CrossPromotion (sans Boxes) when drawer
 # exp is over
 
 module.exports = class CrossPromotionBoxes
   constructor: ({iconSize}) ->
+    styles.use()
+
     randomVariance = Math.floor(Math.random() * 4)
     @gameBoxes = z.prop Game.getTop(limit: 2, skip: randomVariance)
     .then (games) ->

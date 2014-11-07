@@ -1,9 +1,10 @@
 z = require 'zorium'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class Nub
   constructor: ({@onToggle, @theme}) ->
+    styles.use()
     @isOpen = false
 
   toggleOpenState: (e) =>
