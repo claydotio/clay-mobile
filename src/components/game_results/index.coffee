@@ -8,10 +8,12 @@ GameBox = require '../game_box'
 InfiniteScrollDir = require '../../directives/infinite_scroll'
 Spinner = require '../spinner'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class GameResults
   constructor: ->
+    styles.use()
+
     @infiniteScrollDir = new InfiniteScrollDir loadMore: @loadMore
     @gameBoxes = z.prop []
 

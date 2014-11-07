@@ -1,10 +1,11 @@
 z = require 'zorium'
 Modal = require '../../models/modal'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class ModalClose
-  constructor: -> null
+  constructor: ->
+    styles.use()
 
   close: (e) ->
     e?.preventDefault()

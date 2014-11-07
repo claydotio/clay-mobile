@@ -7,10 +7,12 @@ styleConfig = require '../../stylus/vars.json'
 User = require '../../models/user'
 UrlService = require '../../services/url'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class GameBox
   constructor: ({@game, @iconSize}) ->
+    styles.use()
+
     @iconSize ?= styleConfig.$marketplaceGameIconWidth
     @RatingsWidget = new RatingsWidget stars: @game.rating
 

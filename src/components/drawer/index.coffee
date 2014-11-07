@@ -11,7 +11,7 @@ User = require '../../models/user'
 UrlService = require '../../services/url'
 KikService = require '../../services/kik'
 
-require './index.styl'
+styles = require './index.styl'
 
 GAME_BOX_ICON_SIZE = 118
 GAME_PROMO_WIDTH = 92
@@ -19,6 +19,8 @@ GAME_PROMO_HEIGHT = 59
 
 module.exports = class Drawer
   constructor: ({@game, @theme}) ->
+    styles.use()
+
     @CrossPromotion = if @theme is 'orange' then \
       new CrossPromotionBoxes iconSize: GAME_BOX_ICON_SIZE
     else

@@ -6,10 +6,12 @@ log = require 'clay-loglevel'
 Game = require '../../models/game'
 GamePromo = require '../game_promo'
 
-require './promos.styl'
+styles = require './promos.styl'
 
 module.exports = class CrossPromotionPromos
   constructor: ({gamePromoWidth, gamePromoHeight}) ->
+    styles.use()
+
     @gamePromos = z.prop Game.getTop(limit: 6).then (games) ->
       _.map games, (game) ->
         new GamePromo {game, width: gamePromoWidth, height: gamePromoHeight}

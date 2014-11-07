@@ -2,10 +2,11 @@ z = require 'zorium'
 
 UrlService = require '../../services/url'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class GamePromo
-  constructor: ({@game, @width, @height}) -> null
+  constructor: ({@game, @width, @height}) ->
+    styles.use()
 
   loadGame: (e) =>
     e?.preventDefault()

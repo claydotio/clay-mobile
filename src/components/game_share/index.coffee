@@ -9,10 +9,12 @@ User = require '../../models/user'
 Modal = require '../../models/modal'
 KikService = require '../../services/kik'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class GameShare
   constructor: ({@game, @theme}) ->
+    styles.use()
+
     @ModalClose = new ModalClose()
     @onFirstRender = _.once =>
       ga? 'send', 'event', 'game_share_modal', 'open', @game.key

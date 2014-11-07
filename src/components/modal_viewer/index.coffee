@@ -3,9 +3,12 @@ z = require 'zorium'
 config = require '../../config'
 Modal = require '../../models/modal'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class ModalViewer
+  constructor: ->
+    styles.use()
+
   close: (e) ->
     e?.preventDefault()
     Modal.closeComponent()
