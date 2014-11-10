@@ -46,6 +46,7 @@
 
     {! misc !}
     <link rel="shortcut icon" href="http://cdn.wtf/d/images/icons/favicon.ico">
+    <meta name="theme-color" content="#fcaa2f">
     <link rel="terms" href="http://clay.io/tos">
     <link rel="privacy" href="http://clay.io/privacy">
 
