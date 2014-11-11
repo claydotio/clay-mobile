@@ -3,33 +3,6 @@ Zock = require 'zock'
 z = require 'zorium'
 log = require 'clay-loglevel'
 
-# Bind polyfill (phantomjs doesn't support bind)
-# Tossing this in here is terrible practice, don't ever do it
-# This is a short-term fix until we have a more elegant bind polyfill
-# coffeelint: disable=missing_fat_arrows
-unless Function::bind
-  Function::bind = (oThis) ->
-
-    # closest thing possible to the ECMAScript 5
-    # internal IsCallable function
-    throw new TypeError(
-      'Function.prototype.bind - what is trying to be bound is not callable'
-    ) if typeof this isnt 'function'
-    aArgs = Array::slice.call(arguments, 1)
-    fToBind = this
-    fNOP = -> null
-
-    fBound = ->
-      fToBind.apply(
-        (if this instanceof fNOP and oThis then this else oThis),
-        aArgs.concat(Array::slice.call(arguments))
-      )
-
-    fNOP:: = @prototype
-    fBound:: = new fNOP()
-    fBound
-# coffeelint: disable=missing_fat_arrows
-
 game = (i, isNew) ->
   title = "game #{i}"
 
