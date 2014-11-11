@@ -11,13 +11,21 @@ $logoPng = '//cdn.wtf/d/images/logos/logo_standard_bw.png'
   height: 60px
   box-sizing: border-box
   padding: 14px 20px
+  clearfix()
 
 .header-logo
   display: inline-block
+  float: left
+  line-height: 30px
   background-image: url($logoSvg)
   background-repeat: no-repeat
   width: 125px
   height: 30px
+
+.header-marketplace-share
+  display: inline-block
+  float: right
+  line-height: 30px
 
 .no-svg
   .header-logo
