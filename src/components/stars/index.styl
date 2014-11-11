@@ -1,18 +1,9 @@
+@require 'nib'
+
 json('../../stylus/vars.json')
 
 // Squish individual stars together a bit more
 .stars
+  font-size: $iconTiny
   .icon-star-half-fill:before, .icon-star:before
-    margin: 0 0.1em
-
-
-/////////////
-// GAME RATE
-/////////////
-.game-rate-stars
-  > .stars
-    > .icon-star
-      font-size: $fontSizeLarge
-
-    > .icon-star-fill
-      font-size: $fontSizeLarge
+    margin: 0 0.15rem

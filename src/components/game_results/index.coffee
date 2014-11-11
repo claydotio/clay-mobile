@@ -10,23 +10,26 @@ Spinner = require '../spinner'
 
 styles = require './index.styl'
 
+LOAD_MORE_GAMES_LIMIT = 10
+
 module.exports = class GameResults
   constructor: ->
     styles.use()
 
     @infiniteScrollDir = new InfiniteScrollDir loadMore: @loadMore
     @gameBoxes = z.prop []
+    @gameBoxSize = 128
 
     @Spinner = new Spinner()
     @isLoading = true
 
   loadMore: =>
     GameFilter.getGames
-      limit: 10
+      limit: LOAD_MORE_GAMES_LIMIT
       skip: @gameBoxes().length
     .then (games) =>
-      @gameBoxes @gameBoxes().concat _.map games, (game) ->
-        new GameBox {game}
+      @gameBoxes @gameBoxes().concat _.map games, (game) =>
+        new GameBox {game, @gameBoxSize}
 
       @isLoading = false
 
@@ -34,7 +37,7 @@ module.exports = class GameResults
       z.redraw(true)
 
       # Stop loading more
-      if games.length is 0
+      if _.isEmpty games
         return true
 
   render: =>

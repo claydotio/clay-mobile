@@ -1,9 +1,9 @@
 z = require 'zorium'
 
-GameFilter = require '../models/game_filter'
-Header = require '../components/header'
-GameMenu = require '../components/game_menu'
-GameResults = require '../components/game_results'
+GameFilter = require '../../models/game_filter'
+Header = require '../../components/header'
+GameMenu = require '../../components/game_menu'
+GameResults = require '../../components/game_results'
 
 module.exports = class GamesPage
   constructor: (params) ->

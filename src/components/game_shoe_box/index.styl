@@ -1,0 +1,44 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+@require '../../stylus/utils.styl'
+
+.game-shoe-box
+  -webkit-tap-highlight-color: $transparent
+  display: block
+  position: relative
+  border-bottom: 1px solid $dividerColor
+  padding: 10px 0
+
+  &:active
+    background-color: $activeBgColor
+
+  > img
+    width: 40px
+    height: 40px
+    margin-left: 5px
+    margin-right: 10px
+    vertical-align: middle
+
+  > .game-shoe-box-info
+    display: inline-block
+    vertical-align: middle
+
+    > h3
+      font-size: $fontSizeMedium
+      font-weight: normal
+      margin-top: 0
+      margin-bottom: normalizeSpacing(10, unit($fontSizeMedium, '')) px
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+
+  > .game-shoe-box-play
+    position: absolute
+    top: 50%
+    margin-top: -($iconMedium / 2)
+    right: 5px
+
+    > .icon-play-circle
+      font-size: $iconMedium
+      color: $blue

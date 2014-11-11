@@ -87,7 +87,10 @@ gulp.task 'scripts:test', ->
       loaders: [
         { test: /\.coffee$/, loader: 'coffee' }
         { test: /\.json$/, loader: 'json' }
-        { test: /\.styl$/, loader: 'style/useable!css!stylus' }
+        {
+          test: /\.styl$/
+          loader: 'style/useable!css!stylus?paths=components/'
+        }
       ]
     externals:
       kik: '{}'
@@ -168,7 +171,10 @@ gulp.task 'scripts:prod', ->
       loaders: [
         { test: /\.coffee$/, loader: 'coffee' }
         { test: /\.json$/, loader: 'json' }
-        { test: /\.styl$/, loader: 'style/useable!css!stylus' }
+        {
+          test: /\.styl$/
+          loader: 'style/useable!css!stylus?paths=components/'
+        }
       ]
     plugins: [
       new webpackSource.optimize.UglifyJsPlugin()

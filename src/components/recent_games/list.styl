@@ -1,0 +1,12 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+@require '../../stylus/utils.styl'
+
+.recent-games
+  margin-bottom: 35px
+
+.recent-games-header
+  color: $grayLight
+  margin-top: (normalizeSpacing(20, unit($fontSizeSmall, '')))px
+  margin-bottom: (normalizeSpacing(10, unit($fontSizeSmall, '')))px

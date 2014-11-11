@@ -69,6 +69,15 @@ resource.extendCollection 'users', (collection) ->
           uniq: uniq
           userId: user.id
 
+  collection.addRecentGame = (gameId) ->
+    me.then (me) ->
+      collection.all('me').customOperation 'patch', 'links/recentGames',
+        {accessToken: me.accessToken},
+        null,
+        [
+          op: 'add', path: '/-', value: gameId
+        ]
+
   return collection
 
 

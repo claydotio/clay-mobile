@@ -8,13 +8,9 @@ UrlService = require '../../services/url'
 
 styles = require './index.styl'
 
-DEFAULT_GAME_BOX_ICON_SIZE = 128
-
-module.exports = class GameBox
-  constructor: ({@game, @iconSize}) ->
+module.exports = class GameShoeBox
+  constructor: ({@game}) ->
     styles.use()
-
-    @iconSize ?= DEFAULT_GAME_BOX_ICON_SIZE
 
     @RatingsWidget = new RatingsWidget stars: @game.rating
     @gameSubdomainUrl = UrlService.getGameSubdomain {@game}
@@ -22,20 +18,20 @@ module.exports = class GameBox
   loadGame: (e) =>
     e?.preventDefault()
 
-    ga? 'send', 'event', 'game_box', 'click', @game.key
-    User.convertExperiment('game_box_click').catch log.trace
+    ga? 'send', 'event', 'game_shoe_box', 'click', @game.key
+    User.convertExperiment('game_shoe_box_click').catch log.trace
     z.route UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
     kik.picker?(httpSubDomainUrl, {}, -> null)
 
   render: =>
-    z "a.game-box[href=#{@gameSubdomainUrl}]",
-      onclick: @loadGame
-      style: "width: #{@iconSize}px",
+    z "a.game-shoe-box[href=#{@gameSubdomainUrl}]", {onclick: @loadGame}, [
       z 'img',
         src: @game.icon128Url
-        width: @iconSize
-        height: @iconSize
-      z '.game-box-info',
+      z '.game-shoe-box-info', [
         z 'h3', @game.name
         @RatingsWidget.render()
+      ]
+      z '.game-shoe-box-play',
+        z 'i.icon.icon-play-circle'
+    ]
