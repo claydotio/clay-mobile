@@ -1,9 +1,8 @@
 class Modal
   constructor: ->
     @component = null
-    @theme = null
 
-  openComponent: ({@component, @theme}) -> null
+  openComponent: ({@component}) -> null
 
   closeComponent: ->
     @component = null

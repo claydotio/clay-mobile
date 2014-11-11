@@ -20,18 +20,6 @@ describe 'ModalModel', ->
       Modal.openComponent {component}
       Modal.component.should.be component
 
-    it 'openComponent(), with component, theme', ->
-      component = new StubComponent()
-      theme = '.theme-something'
-      Modal.openComponent {component, theme}
-      Modal.theme.should.be theme
-
-    it 'openComponent() resets theme', ->
-      component = new StubComponent()
-      Modal.openComponent {component, theme: '.theme-something'}
-      Modal.openComponent {component}
-      should.not.exist(Modal.theme)
-
     it 'openComponent(), with null component', ->
       Modal.openComponent {component: null}
       should.not.exist(Modal.component)

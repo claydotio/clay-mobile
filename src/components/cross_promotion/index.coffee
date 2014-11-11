@@ -8,10 +8,7 @@ GameBox = require '../game_box'
 
 styles = require './index.styl'
 
-# TODO (Austin): Cleanup and change to CrossPromotion (sans Boxes) when drawer
-# exp is over
-
-module.exports = class CrossPromotionBoxes
+module.exports = class CrossPromotion
   constructor: ({iconSize}) ->
     styles.use()
 
@@ -28,7 +25,7 @@ module.exports = class CrossPromotionBoxes
     .catch log.trace
 
   render: =>
-    z 'div.cross-promotion-boxes',
+    z 'div.cross-promotion',
       _.map @gameBoxes(), (GameBox) ->
-        z 'div.cross-promotion-boxes-game-box',
+        z 'div.cross-promotion-game-box',
           GameBox.render()

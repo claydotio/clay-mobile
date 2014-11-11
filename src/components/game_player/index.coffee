@@ -4,7 +4,6 @@ log = require 'clay-loglevel'
 Q = require 'q'
 
 Game = require '../../models/game'
-User = require '../../models/user'
 WindowHeightDir = require '../../directives/window_height'
 # FIXME: remove, replace with beforeUnload functionality of components
 LogEngagedPlayDir = require '../../directives/log_engaged_play'
@@ -39,12 +38,8 @@ module.exports = class GamePlayer
       z.redraw()
       return directive
 
-    @Drawer = z.prop Q.spread [
-      @game, User.getExperiments()
-    ], (game, params) ->
-      theme = params.drawer
-
-      new Drawer {game, theme}
+    @Drawer = z.prop @game.then (game) ->
+      new Drawer {game}
 
     @onFirstRender = _.once =>
       @showShareModalPromise = Game.incrementPlayCount(gameKey)
@@ -55,14 +50,9 @@ module.exports = class GamePlayer
 
   showShareModal: =>
     @game.then (game) ->
-      User.getExperiments().then (params) ->
-        theme = params.gameShareModal
-
-        if theme isnt 'control'
-          Modal.openComponent(
-            component: new GameShare({game, theme})
-            theme: theme
-          )
+      Modal.openComponent(
+        component: new GameShare({game})
+      )
 
   # if already on marketplace, keep them there with root route, otherwise
   # hard redirect to marketplace

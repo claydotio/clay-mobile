@@ -15,14 +15,7 @@ describe 'Drawer', ->
   it 'toggles properly', ->
     DrawerComponent = new Drawer({game: MockGame})
 
-    # stub nub
-    DrawerComponent.Nub =
-      isOpen: false
-      toggleOpenState: ->
-        DrawerComponent.Nub.isOpen = not DrawerComponent.Nub.isOpen
-      render: -> null
-
-    DrawerComponent.Nub.toggleOpenState()
+    DrawerComponent.toggleState()
 
     $ = DrawerComponent.render()
     $drawer = _.find $, ($nodeSet) ->
@@ -31,7 +24,7 @@ describe 'Drawer', ->
 
     hasClass($drawer, 'is-open').should.be.true
 
-    DrawerComponent.Nub.toggleOpenState()
+    DrawerComponent.toggleState()
 
     $ = DrawerComponent.render()
     $drawer = _.find $, ($nodeSet) ->
@@ -43,15 +36,8 @@ describe 'Drawer', ->
   it 'closes properly', ->
     DrawerComponent = new Drawer(MockGame)
 
-    # stub nub
-    DrawerComponent.Nub =
-      isOpen: false
-      toggleOpenState: ->
-        DrawerComponent.Nub.isOpen = not DrawerComponent.Nub.isOpen
-      render: -> null
-
-    DrawerComponent.Nub.toggleOpenState()
-    DrawerComponent.Nub.isOpen.should.be.true
+    DrawerComponent.toggleState()
+    DrawerComponent.isOpen.should.be.true
 
     DrawerComponent.close()
-    DrawerComponent.Nub.isOpen.should.be.false
+    DrawerComponent.isOpen.should.be.false
