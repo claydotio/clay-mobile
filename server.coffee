@@ -23,13 +23,13 @@ dust.optimizers.format = (ctx, node) -> node
 
 indexTpl = dust.compile fs.readFileSync('index.dust', 'utf-8'), 'index'
 
-if config.ENV is config.ENVS.PROD
-  distJs = dust.compile fs.readFileSync('dist/js/bundle.js', 'utf-8'), 'distjs'
-  distCss = dust.compile fs.readFileSync('dist/css/bundle.css', 'utf-8'),
-    'distcss'
 
-  dust.loadSource distJs
-  dust.loadSource distCss
+distJs = if config.ENV is config.ENVS.PROD \
+          then fs.readFileSync('dist/js/bundle.js', 'utf-8')
+          else null
+distCss = if config.ENV is config.ENVS.PROD \
+          then fs.readFileSync('dist/css/bundle.css', 'utf-8')
+          else null
 
 dust.loadSource indexTpl
 
@@ -212,6 +212,8 @@ renderHomePage = do ->
     canonical: 'http://clay.io'
     me: 'REPLACE_WITH_ME'
     experiments: 'REPLACE_WITH_EXPERIMENTS'
+    distjs: distJs
+    distcss: distCss
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
 
@@ -239,6 +241,8 @@ renderGamePage = (gameKey, me, experiments) ->
       description: "Play #{game.name}; #{game.description}"
       keywords: "#{game.name}, mobile games,  free mobile games"
       name: "#{game.name} - Clay.io"
+      distjs: distJs
+      distcss: distCss
 
       # TODO: (Zoli) This isn't good enough
       icon256: game.icon128Url

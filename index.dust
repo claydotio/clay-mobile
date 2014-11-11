@@ -53,7 +53,7 @@
     {! css !}
     {?inlineSource}
       <style>
-        {>distcss/}
+        {distcss|s}
       </style>
     {:else}
       <link href="/css/bundle.css" rel="stylesheet">
@@ -89,7 +89,7 @@
     <script>window._clay={};window._clay.me={me|s};window._clay.experiments={experiments|s};</script>
     {?inlineSource}
       <script>
-        {>distjs/}
+        {distjs|s}
       </script>
     {:else}
 
