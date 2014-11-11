@@ -3,10 +3,12 @@ _ = require 'lodash'
 
 GameFilter = require '../../models/game_filter'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class GameMenu
   constructor: ->
+    styles.use()
+
     @items = z.prop [
       {title: 'Popular', filter: 'top', link: '/'},
       {title: 'New games', filter: 'new', link: '/games/new'}

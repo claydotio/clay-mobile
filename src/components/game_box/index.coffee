@@ -6,7 +6,7 @@ RatingsWidget = require '../stars'
 User = require '../../models/user'
 UrlService = require '../../services/url'
 
-require './index.styl'
+styles = require './index.styl'
 
 DEFAULT_GAME_BOX_ICON_SIZE = 128
 

@@ -15,10 +15,12 @@ UrlService = require '../../services/url'
 Modal = require '../../models/modal'
 GameShare = require '../game_share'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class GamePlayer
   constructor: ({gameKey}) ->
+    styles.use()
+
     @WindowHeightDir = new WindowHeightDir()
     @SDKDir = new SDKDir()
 

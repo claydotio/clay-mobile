@@ -5,10 +5,12 @@ config = require '../../config'
 RatingsWidget = require '../stars'
 Rating = require '../../models/rating'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class GameRate
   constructor: ({@game, @onRated}) ->
+    styles.use()
+
     # all stars empty, clickable stars
     @RatingsWidget = new RatingsWidget stars: 0, interactive: true
 

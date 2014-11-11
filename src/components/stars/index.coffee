@@ -1,11 +1,13 @@
 z = require 'zorium'
 _ = require 'lodash'
 
-require './index.styl'
+styles = require './index.styl'
 
 module.exports = class RatingsWidget
   # set interactive to true if tapping on a star should fill up to that star
   constructor: ({stars, @interactive}) ->
+    styles.use()
+
     if stars > 5
       stars = 5
     if stars < 0
