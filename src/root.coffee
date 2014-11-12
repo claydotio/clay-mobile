@@ -241,6 +241,6 @@ User.getExperiments().then (params) ->
     bodyClasses.push 'is-slow-device'
 
   if isAndroid2()
-    bodyClasses.push 'is-android-2-3'
+    bodyClasses.push 'is-android-2'
 
   document.body.className += ' ' + bodyClasses.join ' '

@@ -21,10 +21,9 @@ $zIndexDrawerHeader = 100
   &.is-open
     display: block
 
-// ~Android 2.3 detection
 .is-slow-device
   .drawer-overlay
-    display: none // opaque background causes bad performance
+    background: transparent // opaque background causes bad performance
 
 .drawer-nub
   $drawerNubRadius = 42.5
@@ -128,14 +127,6 @@ $zIndexDrawerHeader = 100
         overflow: hidden
         text-overflow: ellipsis
 
-
-.is-android-2-3
-  // bugs out touch events (overlay takes up whole page)
-  .drawer-promo
-    position: static
-    &:after
-      display: none
-
 .drawer-share
   text-align: center
   height: 80px
@@ -175,3 +166,35 @@ $zIndexDrawerHeader = 100
   margin-top: 10px
   background: $white
   color: $blue
+
+
+.is-android-2
+  // links don't work
+  .drawer-header
+    position: static
+
+    > .drawer-close
+      position: static
+      display: block
+      padding: 10px
+
+    > .drawer-home
+      display: none
+
+  .drawer-inner
+    margin-top: 0
+    padding-top: 0
+
+  // bugs out touch events (overlay takes up whole page)
+  .drawer-promo
+    position: static
+
+    &:after
+      display: none
+
+    > .drawer-promo-text
+      position: static
+      display: none
+
+  .drawer-browse-more
+    display: none
