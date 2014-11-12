@@ -13,8 +13,6 @@ KikService = require '../../services/kik'
 styles = require './index.styl'
 
 GAME_BOX_ICON_SIZE = 118
-GAME_PROMO_WIDTH = 92
-GAME_PROMO_HEIGHT = 59
 
 module.exports = class Drawer
   constructor: ({@game}) ->
