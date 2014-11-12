@@ -11,7 +11,9 @@ json('../../stylus/vars.json')
   margin: (normalizeSpacing(20, unit($fontSizeSmall, '')))px 0
 
 .recent-games-game-boxes
+  height: 166px
   margin: 0 -5px
+  overflow: hidden
 
   > .recent-games-game-box-container
     display: inline-block
@@ -20,6 +22,3 @@ json('../../stylus/vars.json')
 @media (min-width: 360px)
   .recent-games-game-boxes
     height: 131px
-
-    > .recent-games-game-box-container
-      width: 166px
