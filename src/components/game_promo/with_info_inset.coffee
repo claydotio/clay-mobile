@@ -1,7 +1,10 @@
 z = require 'zorium'
+kik = require 'kik'
+log = require 'clay-loglevel'
 
 RatingsWidget = require '../stars'
 UrlService = require '../../services/url'
+User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './with_info_inset.styl'
@@ -26,7 +29,9 @@ module.exports = class GamePromo
     kik.picker?(httpSubDomainUrl, {}, -> null)
 
   render: =>
-    z "a.game-promo[href=#{@gameSubdomainUrl}]", {onclick: @loadGame},
+    z "a.game-promo[href=#{@gameSubdomainUrl}]",
+      onclick: @loadGame
+      style: "width: #{@width}px;",
       z 'img',
         src: @game.promo440Url
         width: @width

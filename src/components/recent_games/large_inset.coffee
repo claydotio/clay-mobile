@@ -14,11 +14,11 @@ module.exports = class RecentGames
     styles.use()
 
     if window.matchMedia('(min-width: 360px)').matches
-      @gamePromoWidth = 320
-      @gamePromoHeight = 204
+      gamePromoWidth = 320
+      gamePromoHeight = 204
     else
-      @gamePromoWidth = 280
-      @gamePromoHeight = 178
+      gamePromoWidth = 280
+      gamePromoHeight = 178
 
     @gamePromos = z.prop User.getMe().then (user) ->
       unless user.links.recentGames
@@ -27,9 +27,9 @@ module.exports = class RecentGames
         url: user.links.recentGames.href
         method: 'GET'
         background: true
-    .then (games) =>
-      _.map games, (game) =>
-        new GamePromo {game, width: @gamePromoWidth, height: @gamePromoHeight}
+    .then (games) ->
+      _.map games, (game) ->
+        new GamePromo {game, width: gamePromoWidth, height: gamePromoHeight}
 
     # use Q for finally and catch
     # TODO: (Austin) remove Q dependency when Zorium uses Q

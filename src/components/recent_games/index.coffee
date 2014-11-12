@@ -13,6 +13,11 @@ module.exports = class RecentGames
   constructor: ->
     styles.use()
 
+    if window.matchMedia('(min-width: 360px)').matches
+      gameBoxSize = 100
+    else
+      gameBoxSize = 135
+
     @gameBoxes = z.prop User.getMe().then (user) ->
       unless user.links.recentGames
         return []
@@ -23,7 +28,7 @@ module.exports = class RecentGames
         background: true
     .then (games) ->
       _.map games, (game) ->
-        new GameBox {game},
+        new GameBox {game, iconSize: gameBoxSize},
 
     # use Q for finally and catch
     # TODO: (Austin) remove Q dependency when Zorium uses Q
