@@ -26,7 +26,7 @@ unless Function::bind
     fNOP:: = @prototype
     fBound:: = new fNOP()
     fBound
-# coffeelint: disable=missing_fat_arrows
+# coffeelint: enable=missing_fat_arrows
 
 _ = require 'lodash'
 z = require 'zorium'
