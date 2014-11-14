@@ -4,6 +4,7 @@ nock = require 'nock'
 should = require('clay-chai').should()
 
 app = require '../server'
+config = require '../src/config'
 
 flare = new Flare().express(app)
   .actor 'anon', {}
@@ -74,14 +75,48 @@ describe 'index.dust', ->
       'window._clay.me=' +
       "{\"id\":#{ME_USER_ID},\"accessToken\":\"#{ME_ACCESS_TOKEN}\"};"
 
-    it 'Injects anonymous user object if no auth_token cookie provided', ->
-      flare
-        .get '/'
-        .flare (flare) ->
-          flare.res.body.should.contain injectedAnon
-        .get '/game/slime'
-        .flare (flare) ->
-          flare.res.body.should.contain injectedAnon
+    injectedNulls =
+      '<script>window._clay={};window._clay.me=null;'
+
+    describe 'anonymous user object if no auth_token cookie provided', ->
+      it 'injects when host is root', ->
+        flare
+          .flare (flare) ->
+            flare.request
+              method: 'get'
+              uri: flare.path + '/'
+              headers:
+                host: config.HOST
+          .flare (flare) ->
+            flare.res.body.should.contain injectedAnon
+          .flare (flare) ->
+            flare.request
+              method: 'get'
+              uri: flare.path + '/game/slime'
+              headers:
+                host: config.HOST
+          .flare (flare) ->
+            flare.res.body.should.contain injectedAnon
+
+      it 'doesnt inject when host is subdomain', ->
+        flare
+          .as 'anon'
+          .flare (flare) ->
+            flare.request
+              method: 'get'
+              uri: flare.path + '/'
+              headers:
+                host: 'subdomain.clay.io'
+          .flare (flare) ->
+            flare.res.body.should.contain injectedNulls
+          .flare (flare) ->
+            flare.request
+              method: 'get'
+              uri: flare.path + '/game/slime'
+              headers:
+                host: 'subdomain.clay.io'
+          .flare (flare) ->
+            flare.res.body.should.contain injectedNulls
 
     it 'Injects user provided in cookie', ->
       flare
@@ -113,9 +148,19 @@ describe 'index.dust', ->
 
     it 'Injects a users experiments', ->
       flare
-        .get '/'
+        .flare (flare) ->
+          flare.request
+            method: 'get'
+            uri: flare.path + '/'
+            headers:
+              host: config.HOST
         .flare (flare) ->
           flare.res.body.should.contain injectedExperiments
-        .get '/game/slime'
+        .flare (flare) ->
+          flare.request
+            method: 'get'
+            uri: flare.path + '/game/slime'
+            headers:
+              host: config.HOST
         .flare (flare) ->
           flare.res.body.should.contain injectedExperiments

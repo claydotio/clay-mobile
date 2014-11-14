@@ -86,6 +86,10 @@ clayUserSessionParser = ->
           log.trace err
           next()
     else
+      isSubdomain = req.headers.host isnt config.HOST
+      if isSubdomain
+        return next()
+
       Promise.promisify(request.post, request) loginUrl
       .timeout API_REQUEST_TIMEOUT
       .spread (res, body) ->
@@ -98,6 +102,7 @@ clayUserSessionParser = ->
 clayFlakCannonSessionParser = ->
   (req, res, next) ->
     me = req.clay?.me
+    req.clay.experiments = null
     unless me
       return next()
 
