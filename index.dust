@@ -41,12 +41,15 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{icon152}">
 
     {! kik !}
+    <meta name="kik-unsupported" content="android-2.3">
+    <meta name="kik-unsupported" content="ios-5">
+
     <link rel="kik-icon" href="{iconKik}">
     <link rel="canonical" href="{canonical}">
 
     {! misc !}
-    <link rel="shortcut icon" href="http://cdn.wtf/d/images/icons/favicon.ico">
     <meta name="theme-color" content="#fcaa2f">
+    <link rel="shortcut icon" href="http://cdn.wtf/d/images/icons/favicon.ico">
     <link rel="terms" href="http://clay.io/tos">
     <link rel="privacy" href="http://clay.io/privacy">
 
