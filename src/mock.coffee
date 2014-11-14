@@ -56,6 +56,9 @@ mock = z.prop(new Zock()
   .get '/games/findOne'
   .reply 200, (res) ->
     prism
+  .get '/games/1'
+  .reply 200, (res) ->
+    prism
   .post '/experiments'
   .reply 200, {}
   .post '/pushTokens'

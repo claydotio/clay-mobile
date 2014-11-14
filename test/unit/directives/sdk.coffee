@@ -42,15 +42,6 @@ describe 'SDKDir', ->
     User.setMe
       id: 1
 
-    # Stub kik dependency
-    SDKDir.__set__ 'kik',
-      send: (cb) ->
-        cb 'sent!'
-      browser:
-        setOrientationLock: -> null
-      metrics:
-        enableGoogleAnalytics: -> null
-
     directive = new SDKDir()
     $el = document.createElement 'div'
     ctx = {onunload: _.noop}
@@ -67,17 +58,46 @@ describe 'SDKDir', ->
     .then (res) ->
       res.result.accessToken.should.be '1'
 
+  describe 'share.any()', ->
+    it 'shares via kik', ->
+      SDKDir.__set__ 'kik.send', (params) ->
+        return params
+
+      emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: 1}
+      .then (data) ->
+        data.result.title.should.be 'Prism'
+        data.result.text.should.be 'HELLO'
+
+    it 'shares via twitter if kik unavailable', (done) ->
+      SDKDir.__set__ 'kik.send', null
+
+      SDKDir.__set__ 'window.open', (url) ->
+        url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
+        done()
+
+      emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: 1}
+      .catch done
+
   describe 'kik methods', ->
+    before ->
+      SDKDir.__set__ 'kik',
+        send: (params) ->
+          return params
+        browser:
+          setOrientationLock: -> null
+        metrics:
+          enableGoogleAnalytics: -> null
+
     it 'kik.isEnabled', ->
       emit {method: 'kik.isEnabled', id: 1}
       .then (res) ->
         res.result.should.be true
 
-    it 'kik.send', (done) ->
-      eventListeners[1] = (res) ->
-        res.params[0].should.be 'sent!'
-        done()
-      emit {method: 'kik.send', params: [{_ClayEventListener: 1}], id: 1}
+    it 'kik.send', ->
+      emit {method: 'kik.send', params: [{title: 'abc', text: 'def'}], id: 1}
+      .then (data) ->
+        data.result.title.should.be 'abc'
+        data.result.text.should.be 'def'
 
     it 'kik.browser.setOrientationLock', ->
       emit {method: 'kik.browser.setOrientationLock', id: 1}

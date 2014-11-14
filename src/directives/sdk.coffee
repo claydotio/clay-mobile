@@ -4,6 +4,7 @@ log = require 'clay-loglevel'
 Q = require 'q'
 
 User = require '../models/user'
+Game = require '../models/game'
 
 
 #
@@ -99,7 +100,12 @@ onMessage = (e) ->
 
   fn = methodToFn method
 
-  evalFn e.source, fn, params
+  context =
+    gameId: data.gameId
+    acessToken: data.accessToken
+
+  # TODO: (Zoli) Don't use 'this' context for metadata figure something else out
+  evalFn e.source, fn, params, context
   .then (result) ->
     message = _.defaults {id}, result: result
     e.source.postMessage JSON.stringify(message), '*'
@@ -130,6 +136,9 @@ methodToFn = (method) ->
     when 'auth.getStatus'
       authGetStatus
 
+    when 'share.any'
+      shareAny
+
     # Kik methods
     when 'kik.isEnabled'
       # Kik.send is checked as per documetation
@@ -154,7 +163,7 @@ methodToFn = (method) ->
 @param {Array} params
 @returns {Promise<*>}
 ###
-evalFn = (source, fn, params) ->
+evalFn = (source, fn, params, context) ->
   Q.Promise (resolve, reject) ->
 
     # Bind all callback functions
@@ -164,7 +173,7 @@ evalFn = (source, fn, params) ->
         id = param._ClayEventListener
         emitEvent source, "ClayEventListener.#{id}", args
       else param
-    resolve fn.apply null, boundParams
+    resolve fn.apply context, boundParams
 
 ###
 @param {Window} source
@@ -186,3 +195,28 @@ emitEvent = (source, method, params) ->
 authGetStatus = ->
   User.getMe().then (user) ->
     accessToken: String user.id
+
+# coffeelint: disable=missing_fat_arrows
+shareAny = ({text}) ->
+  gameId = @gameId
+
+  tweet = (text) ->
+    text = encodeURIComponent text.substr 0, 140
+    window.open "https://twitter.com/intent/tweet?text=#{text}"
+
+  Game.customGET(gameId)
+  .then (game) ->
+    unless game
+      throw new Error 'gameId invalid'
+
+    if Boolean kik.send
+      kik.send
+        title: "#{game.name}"
+        text: text
+        data:
+          gameKey: "#{game.key}"
+    else
+      tweet(text)
+  .catch ->
+    tweet(text)
+# coffeelint: enable=missing_fat_arrows
