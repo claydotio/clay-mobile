@@ -56,8 +56,14 @@ if kik?.picker?.reply
   if UrlService.isRootPath() # marketplace
     PushToken.createForMarketplace()
     .finally ->
-      kik.getAnonymousUser (token) ->
-        kik.picker.reply {token}
+      User.getMe()
+      .then (user) ->
+        kik.getAnonymousUser (token) ->
+          kik.picker.reply {token, user}
+      .catch (err) ->
+        log.trace err
+        kik.getAnonymousUser (token) ->
+          kik.picker.reply {token}
     .catch (err) ->
       log.trace err
   else # game subdomain
@@ -208,9 +214,12 @@ User.getExperiments().then (params) ->
       # marketplace in picker, causing it to appear in side-bar
       # This is also used to pass the marketplace anon-user token
       # which is used for tracking uniq share conversions
+      # And also for passing the user object through
       marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
       kik?.picker? marketplaceBaseUrl, {}, (res) ->
         kikAnonymousToken = res.token
+        if res.user
+          User.setMe res.user
 
     z.route "/game/#{gameKey}"
   else

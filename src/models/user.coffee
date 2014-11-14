@@ -34,7 +34,16 @@ resource.extendCollection 'users', (collection) ->
 
   collection.getMe = -> me
 
-  collection.setMe = (_me) -> me = Q _me
+  collection.setMe = (_me) ->
+    me = Q _me
+    experiments = me.then (user) ->
+      Q z.request
+        url: config.FLAK_CANNON_PATH + '/experiments'
+        method: 'POST'
+        data:
+          userId: user.id
+        background: true
+    return me
 
   collection.logEngagedActivity = ->
     me.then (me) ->
