@@ -26,7 +26,7 @@ paths =
   scripts: ['./src/**/*.coffee', './*.coffee']
   styles: './src/stylus/**/*.styl'
 
-  tests: './test/*/*.coffee'
+  tests: './test/*/**/*.coffee'
   serverTests: './test/server.coffee'
   root: './src/root.coffee'
   rootTests: './test/index.coffee'
@@ -125,7 +125,7 @@ gulp.task 'watch:dev', ->
   gulp.watch paths.styles, ['styles:dev']
 
 gulp.task 'watch:test', ->
-  gulp.watch paths.tests, ['test:phantom']
+  gulp.watch paths.scripts.concat([paths.tests]), ['test:phantom']
 
 # run coffee-lint
 gulp.task 'lint:scripts', ->
