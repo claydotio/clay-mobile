@@ -163,15 +163,15 @@ User.getExperiments().then (params) ->
   for experimentParam, experimentTestGroup of params
     ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
 
+###########
+# ROUTING #
+###########
+
 route = (routes) ->
   _.transform routes, (result, Component, route) ->
     result[route] =
       controller: => @component = new Component(z.route.param)
       view: => @component.render()
-
-###########
-# ROUTING #
-###########
 
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
@@ -190,13 +190,6 @@ User.getExperiments().then (params) ->
 
 .then (GamesPage) ->
 
-  z.route document.getElementById('app'), '/', route(
-    '/': GamesPage
-    '/games': GamesPage
-    '/game/:key': PlayGamePage
-    '/games/:filter': GamesPage
-  )
-
   # track kik metrics (users sending messages, etc...)
   kik?.metrics?.enableGoogleAnalytics?()
 
@@ -205,6 +198,7 @@ User.getExperiments().then (params) ->
 
   shouldRouteToGamePage = kikGameKey or
                           (not UrlService.isRootPath() and not config.MOCK)
+  gameKey = null
   if shouldRouteToGamePage
     if kikGameKey
       gameKey = kikGameKey
@@ -220,10 +214,20 @@ User.getExperiments().then (params) ->
         kikAnonymousToken = res.token
         if res.user
           User.setMe res.user
-
-    z.route "/game/#{gameKey}"
   else
     PushToken.createForMarketplace()
+
+  # This is down here because of the User.setMe() call above
+  z.route document.getElementById('app'), '/', route(
+    '/': GamesPage
+    '/games': GamesPage
+    '/game/:key': PlayGamePage
+    '/games/:filter': GamesPage
+  )
+
+  if gameKey
+    z.route "/game/#{gameKey}"
+
 
   log.info 'App Ready'
 
