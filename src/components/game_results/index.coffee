@@ -24,6 +24,9 @@ module.exports = class GameResults
     @isLoading = true
 
   loadMore: =>
+    @isLoading = true
+    z.redraw()
+
     GameFilter.getGames
       limit: LOAD_MORE_GAMES_LIMIT
       skip: @gameBoxes().length
