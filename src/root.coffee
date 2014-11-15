@@ -33,7 +33,6 @@ z = require 'zorium'
 log = require 'clay-loglevel'
 Q = require 'q'
 kik = require 'kik'
-require 'matchMedia'
 
 config = require './config'
 PlayGamePage = require './pages/play_game'
@@ -230,30 +229,3 @@ User.getExperiments().then (params) ->
 
 
   log.info 'App Ready'
-
-
-  ##########################
-  # CSS / DEVICE DETECTION #
-  ##########################
-
-  # TODO: (Austin) Feature-detection for SVG, slow devices
-  # we'll want to move this somewhere cleaner
-  bodyClasses = []
-  svgSupport = !! document.createElementNS?('http://www.w3.org/2000/svg', 'svg')
-                  .createSVGRect
-  unless svgSupport
-    bodyClasses.push 'no-svg'
-
-  isAndroid2 = ->
-    # Android 2.x detection
-    parseInt(navigator.userAgent.match(/Android\s([0-9\.]*)/)?[1], 10) is 2
-
-  isSlowDevice = isAndroid2
-
-  if isSlowDevice()
-    bodyClasses.push 'is-slow-device'
-
-  if isAndroid2()
-    bodyClasses.push 'is-android-2'
-
-  document.body.className += ' ' + bodyClasses.join ' '
