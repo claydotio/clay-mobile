@@ -8,27 +8,27 @@ MockGame = require '../../_models/game'
 
 describe 'GamePlayer', ->
   it 'shows share modal on 3rd visit', ->
-    GamePlayerComponent = new GamePlayer(MockGame)
+    GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
     GamePlayerComponent.onFirstRender()
     GamePlayerComponent.showShareModalPromise
     .then ->
       should.not.exist(Modal.component)
-      GamePlayerComponent = new GamePlayer(MockGame)
+      GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
       GamePlayerComponent.onFirstRender()
       GamePlayerComponent.showShareModalPromise
     .then ->
       should.not.exist(Modal.component)
-      GamePlayerComponent = new GamePlayer(MockGame)
+      GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
       GamePlayerComponent.onFirstRender()
       GamePlayerComponent.showShareModalPromise
     .then ->
       Modal.component.should.exist
       Modal.closeComponent()
-      GamePlayerComponent = new GamePlayer(MockGame)
+      GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
       GamePlayerComponent.onFirstRender()
       GamePlayerComponent.showShareModalPromise
     .then ->
       should.not.exist(Modal.component)
-      GamePlayerComponent = new GamePlayer(MockGame)
+      GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
       GamePlayerComponent.onFirstRender()
       GamePlayerComponent.showShareModalPromise

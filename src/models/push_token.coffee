@@ -1,20 +1,22 @@
 kik = require 'kik'
 log = require 'clay-loglevel'
 
-resource = require '../lib/resource'
 config = require '../config'
 Game = require '../models/game'
+request = require '../lib/request'
 
-resource.extendCollection 'pushTokens', (collection) ->
-  collection.createForMarketplace = ->
-    collection.createByGameId(null)
+PATH = config.API_PATH + '/pushTokens'
 
-  collection.createByGameKey = (gameKey) ->
+class PushToken
+  createForMarketplace: =>
+    @createByGameId(null)
+
+  createByGameKey: (gameKey) =>
     Game.findOne(key: gameKey)
-    .then (game) ->
-      collection.createByGameId(game.id)
+    .then (game) =>
+      @createByGameId(game.id)
 
-  collection.createByGameId = (gameId) ->
+  createByGameId: (gameId) ->
     new Promise (resolve, reject) ->
       # TODO: (Austin) remove localStorage in favor of anonymous user sessions
       if localStorage['pushTokenStored']
@@ -24,9 +26,11 @@ resource.extendCollection 'pushTokens', (collection) ->
           kik.push.getToken (token) ->
             unless token
               return reject new Error 'No push token'
-            collection.post
-              gameId: gameId
-              token: token
+            request PATH,
+              method: 'post'
+              body:
+                gameId: gameId
+                token: token
             .then ->
               localStorage['pushTokenStored'] = 1
               resolve()
@@ -39,6 +43,5 @@ resource.extendCollection 'pushTokens', (collection) ->
       else
         reject new Error 'Kik not loaded - unable to get push token'
 
-  return collection
 
-module.exports = resource.setBaseUrl(config.API_PATH).all('pushTokens')
+module.exports = new PushToken()

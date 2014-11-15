@@ -6,9 +6,7 @@
   "dependencies": {
     "zorium.js": "https://github.com/claydotio/zorium.js.git#next",
     "clay-loglevel": "https://github.com/claydotio/loglevel.git#master",
-    "q": "1.0.1",
     "normalize.css": "3.0.1",
-    "restangular": "https://github.com/claydotio/restangular.git#noangular",
     "zock": "https://github.com/claydotio/zock.git",
     "nib": "1.0.3",
     "fetch": "0.3.0"

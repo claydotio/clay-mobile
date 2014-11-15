@@ -62,7 +62,7 @@ describe 'SDKDir', ->
       SDKDir.__set__ 'kik.send', (params) ->
         return params
 
-      emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: 1}
+      emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: '1'}
       .then (data) ->
         data.result.title.should.be 'Prism'
         data.result.text.should.be 'HELLO'
@@ -74,7 +74,7 @@ describe 'SDKDir', ->
         url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
         done()
 
-      emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: 1}
+      emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: '1'}
       .catch done
 
   describe 'kik methods', ->
