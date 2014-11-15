@@ -1,7 +1,6 @@
 z = require 'zorium'
 _ = require 'lodash'
 log = require 'clay-loglevel'
-Q = require 'q'
 
 Game = require '../../models/game'
 WindowHeightDir = require '../../directives/window_height'

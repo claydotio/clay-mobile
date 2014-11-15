@@ -1,3 +1,5 @@
+# FIXME: Remove this file and remove `Q` dependency
+
 _ = require 'lodash'
 Q = require 'q'
 z = require 'zorium'

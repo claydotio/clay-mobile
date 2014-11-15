@@ -1,6 +1,5 @@
 should = require('clay-chai').should()
 Joi = require 'joi'
-Q = require 'q'
 rewire = require 'rewire'
 
 MockGame = require '../../_models/game'

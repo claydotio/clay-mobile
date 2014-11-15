@@ -1,6 +1,5 @@
 z = require 'zorium'
 _ = require 'lodash'
-Q = require 'q'
 log = require 'clay-loglevel'
 
 Game = require '../../models/game'
@@ -18,10 +17,8 @@ module.exports = class CrossPromotion
       _.map games, (game) ->
         new GameBox {game, iconSize},
 
-    # use Q for finally and catch
-    # TODO: (Austin) remove Q dependency when Zorium uses Q
-    Q.when @gameBoxes
-    .finally z.redraw
+    Promise.resolve @gameBoxes
+    .then z.redraw
     .catch log.trace
 
   render: =>

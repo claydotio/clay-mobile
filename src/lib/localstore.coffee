@@ -1,9 +1,8 @@
-Q = require 'q'
 _ = require 'lodash'
 
 module.exports =
   get: (key) ->
-    Q.Promise (resolve, reject) ->
+    new Promise (resolve, reject) ->
       unless _.isString key
         return reject new Error 'Key must be a String'
 
@@ -15,7 +14,7 @@ module.exports =
       resolve()
 
   set: (key, value) ->
-    Q.Promise (resolve, reject) ->
+    new Promise (resolve, reject) ->
       unless _.isString key
         return reject new Error 'Key must be a String'
 
@@ -26,7 +25,7 @@ module.exports =
       resolve value
 
   del: (key) ->
-    Q.Promise (resolve, reject) ->
+    new Promise (resolve, reject) ->
       unless _.isString key
         return reject new Error 'Key must be a String'
 
