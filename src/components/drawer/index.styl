@@ -21,10 +21,6 @@ $zIndexDrawerHeader = 100
   &.is-open
     display: block
 
-.is-slow-device
-  .drawer-overlay
-    background: transparent // opaque background causes bad performance
-
 .drawer-nub
   $drawerNubRadius = 42.5
   width: $drawerNubRadius px
@@ -167,38 +163,3 @@ $zIndexDrawerHeader = 100
   margin-top: 10px
   background: $white
   color: $blue
-
-
-.is-android-2
-  // links don't work
-  .drawer-header
-    position: static
-
-    > .drawer-close
-      position: static
-      display: block
-      padding: 10px
-
-    > .drawer-home
-      display: none
-
-  .drawer-inner
-    margin-top: 0
-    padding-top: 0
-
-  // bugs out touch events (overlay takes up whole page)
-  .drawer-promo
-    position: static
-
-    &:after
-      display: none
-
-    > .drawer-promo-text
-      position: static
-      display: none
-
-  .drawer-share-button
-    display: none
-
-  .drawer-browse-more
-    display: none
