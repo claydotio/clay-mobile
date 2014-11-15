@@ -28,9 +28,11 @@ unless Function::bind
     fBound
 # coffeelint: enable=missing_fat_arrows
 
-# Promise polyfill
+# Promise polyfill - https://github.com/zolmeister/promiz
 require 'promiz'
 
+# Fetch polyfill - https://github.com/github/fetch
+require 'fetch'
 
 _ = require 'lodash'
 z = require 'zorium'
@@ -84,18 +86,24 @@ if kik?.picker?.reply
 reportError = ->
   # Remove the circular dependency within error objects
   args = _.map arguments, (arg) ->
-    if arg instanceof Error
+
+    if arg instanceof Error and arg.stack
     then arg.stack
-    else if arg instanceof ErrorEvent
+    else if arg instanceof Error
+    then arg.message
+    else if arg instanceof ErrorEvent and arg.error
     then arg.error.stack
+    else if arg instanceof ErrorEvent
+    then arg.message
     else arg
 
-  Promise.resolve z.request
-    method: 'POST'
-    url: config.API_PATH + '/log'
-    data:
-      message: args.join ' '
-    background: true
+  window.fetch config.API_PATH + '/log',
+    method: 'post'
+    headers:
+      'Accept': 'application/json'
+      'Content-Type': 'application/json'
+    body:
+      JSON.stringify message: args.join ' '
   .catch (err) ->
     console?.error err
 

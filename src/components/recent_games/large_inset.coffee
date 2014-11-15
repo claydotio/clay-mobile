@@ -2,6 +2,7 @@ z = require 'zorium'
 log = require 'clay-loglevel'
 _ = require 'lodash'
 
+request = require '../../lib/request'
 Game = require '../../models/game'
 User = require '../../models/user'
 GamePromo = require '../game_promo/with_info_inset'
@@ -22,10 +23,7 @@ module.exports = class RecentGames
     @gamePromos = z.prop User.getMe().then (user) ->
       unless user.links.recentGames
         return []
-      z.request
-        url: user.links.recentGames.href
-        method: 'GET'
-        background: true
+      request user.links.recentGames.href
     .then (games) ->
       _.map games, (game) ->
         new GamePromo {game, width: gamePromoWidth, height: gamePromoHeight}

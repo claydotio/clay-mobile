@@ -2,6 +2,7 @@ log = require 'clay-loglevel'
 z = require 'zorium'
 _ = require 'lodash'
 
+request = require '../lib/request'
 resource = require '../lib/resource'
 config = require '../config'
 
@@ -27,12 +28,10 @@ resource.extendCollection 'users', (collection) ->
   collection.setMe = (_me) ->
     me = Promise.resolve _me
     experiments = me.then (user) ->
-      Promise.resolve z.request
-        url: config.FLAK_CANNON_PATH + '/experiments'
-        method: 'POST'
-        data:
+      request config.FLAK_CANNON_PATH + '/experiments',
+        method: 'post'
+        body:
           userId: user.id
-        background: true
     return me
 
   collection.logEngagedActivity = ->
@@ -51,32 +50,26 @@ resource.extendCollection 'users', (collection) ->
       experiments = if window._clay?.experiments
       then Promise.resolve window._clay.experiments
       else collection.getMe().then (user) ->
-        Promise.resolve z.request
-          url: config.FLAK_CANNON_PATH + '/experiments'
-          method: 'POST'
-          data:
+        request config.FLAK_CANNON_PATH + '/experiments',
+          method: 'post'
+          body:
             userId: user.id
-          background: true
 
     return experiments
 
   collection.setExperimentsFrom = (shareOriginUserId) ->
     experiments = collection.getMe().then (user) ->
-      Promise.resolve z.request
-        url: config.FLAK_CANNON_PATH + '/experiments'
-        method: 'POST'
-        data:
+      request config.FLAK_CANNON_PATH + '/experiments',
+        method: 'post'
+        body:
           fromUserId: shareOriginUserId
           userId: user.id
-        background: true
 
   collection.convertExperiment = (event, {uniq} = {}) ->
     collection.getMe().then (user) ->
-      Promise.resolve z.request
-        url: config.FLAK_CANNON_PATH + '/conversions'
-        method: 'POST'
-        background: true
-        data:
+      request config.FLAK_CANNON_PATH + '/conversions',
+        method: 'post'
+        body:
           event: event
           uniq: uniq
           userId: user.id
