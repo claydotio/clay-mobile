@@ -1,5 +1,4 @@
 _ = require 'lodash'
-Q = require 'q'
 should = require('clay-chai').should()
 rewire = require 'rewire'
 
@@ -11,7 +10,7 @@ eventListeners = {}
 emit = (message) ->
   message = _.defaults message, {_clay: true, jsonrpc: '2.0'}
 
-  Q.Promise (resolve, reject) ->
+  new Promise (resolve, reject) ->
     event = document.createEvent 'Event'
     event.initEvent 'message', false, false
     event.data = JSON.stringify message

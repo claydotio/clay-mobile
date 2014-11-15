@@ -1,5 +1,4 @@
 z = require 'zorium'
-Q = require 'q'
 log = require 'clay-loglevel'
 _ = require 'lodash'
 
@@ -25,10 +24,8 @@ module.exports = class RecentGames
       _.map games, (game) ->
         new GameShoeBox {game},
 
-    # use Q for finally and catch
-    # TODO: (Austin) remove Q dependency when Zorium uses Q
-    Q.when @gameShoeBoxes
-    .finally z.redraw
+    Promise.resolve @gameShoeBoxes
+    .then z.redraw
     .catch log.trace
 
   render: =>

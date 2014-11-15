@@ -28,10 +28,13 @@ unless Function::bind
     fBound
 # coffeelint: enable=missing_fat_arrows
 
+# Promise polyfill
+require 'promiz'
+
+
 _ = require 'lodash'
 z = require 'zorium'
 log = require 'clay-loglevel'
-Q = require 'q'
 kik = require 'kik'
 
 config = require './config'
@@ -87,7 +90,7 @@ reportError = ->
     then arg.error.stack
     else arg
 
-  Q z.request
+  Promise.resolve z.request
     method: 'POST'
     url: config.API_PATH + '/log'
     data:

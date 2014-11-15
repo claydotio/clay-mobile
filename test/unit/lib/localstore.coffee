@@ -1,4 +1,3 @@
-Q = require 'q'
 should = require('clay-chai').should()
 
 localstore = require 'lib/localstore'
@@ -23,7 +22,7 @@ describe 'localstore', ->
 
   it 'doesn\'t allow non strings for keys', ->
 
-    Q.all [
+    Promise.all [
       localstore.get 1
       .then ->
         throw new Error 'Error expected'
@@ -44,7 +43,7 @@ describe 'localstore', ->
     ]
 
   it 'doesn\'t allow non-objects for values', ->
-    Q.all [
+    Promise.all [
       localstore.set 'abc', 1
       .then ->
         throw new Error 'Error expected'

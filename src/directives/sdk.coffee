@@ -1,7 +1,6 @@
 _ = require 'lodash'
 kik = require 'kik'
 log = require 'clay-loglevel'
-Q = require 'q'
 
 User = require '../models/user'
 Game = require '../models/game'
@@ -164,7 +163,7 @@ methodToFn = (method) ->
 @returns {Promise<*>}
 ###
 evalFn = (source, fn, params, context) ->
-  Q.Promise (resolve, reject) ->
+  new Promise (resolve, reject) ->
 
     # Bind all callback functions
     boundParams = _.map params, (param) ->

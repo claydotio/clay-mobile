@@ -1,5 +1,4 @@
 kik = require 'kik'
-Q = require 'q'
 log = require 'clay-loglevel'
 
 resource = require '../lib/resource'
@@ -16,7 +15,7 @@ resource.extendCollection 'pushTokens', (collection) ->
       collection.createByGameId(game.id)
 
   collection.createByGameId = (gameId) ->
-    Q.Promise (resolve, reject) ->
+    new Promise (resolve, reject) ->
       # TODO: (Austin) remove localStorage in favor of anonymous user sessions
       if localStorage['pushTokenStored']
         reject new Error 'Token already created'
