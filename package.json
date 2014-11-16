@@ -65,7 +65,8 @@
     "clay-loglevel": "./components/clay-loglevel/dist/loglevel.js",
     "q": "./components/q/q.js",
     "restangular": "./components/restangular/dist/restangular.js",
-    "zock": "./components/zock/zock.js"
+    "zock": "./components/zock/zock.js",
+    "fetch": "./components/fetch/fetch.js"
   },
   "dependencies": {
     "bluebird": "2.3.2",

@@ -2,6 +2,7 @@ z = require 'zorium'
 log = require 'clay-loglevel'
 _ = require 'lodash'
 
+request = require '../../lib/request'
 Game = require '../../models/game'
 User = require '../../models/user'
 GameShoeBox = require '../game_shoe_box'
@@ -16,10 +17,7 @@ module.exports = class RecentGames
       unless user.links.recentGames
         return []
 
-      z.request
-        url: user.links.recentGames.href
-        method: 'GET'
-        background: true
+      request user.links.recentGames.href
     .then (games) ->
       _.map games, (game) ->
         new GameShoeBox {game},
