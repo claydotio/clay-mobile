@@ -3,20 +3,21 @@ z = require 'zorium'
 _ = require 'lodash'
 
 request = require '../lib/request'
-resource = require '../lib/resource'
 config = require '../config'
 
+PATH = config.API_PATH + '/users'
 
+me = null
+experiments = null
 
-resource.extendCollection 'users', (collection) ->
-  me = null
-  experiments = null
+class User
 
-  collection.getMe = ->
+  getMe: ->
     unless me
       me = if window._clay?.me
       then Promise.resolve window._clay.me
-      else collection.all('login').customPOST null, 'anon'
+      else request PATH + '/login/anon',
+        method: 'post'
 
       # Save accessToken in cookie
       me.then (user) ->
@@ -25,7 +26,7 @@ resource.extendCollection 'users', (collection) ->
 
     return me
 
-  collection.setMe = (_me) ->
+  setMe: (_me) ->
     me = Promise.resolve _me
     experiments = me.then (user) ->
       request config.FLAK_CANNON_PATH + '/experiments',
@@ -34,22 +35,22 @@ resource.extendCollection 'users', (collection) ->
           userId: user.id
     return me
 
-  collection.logEngagedActivity = ->
-    collection.getMe().then (me) ->
+  logEngagedActivity: =>
+    @getMe().then (me) =>
       Promise.all [
-        collection.convertExperiment('engaged_activity').catch log.trace
-        collection.all('me').customPOST null,
-          'lastEngagedActivity',
-          {accessToken: me.accessToken}
+        @convertExperiment('engaged_activity')
+        request PATH + '/me/lastEngagedActivity',
+          method: 'post'
+          qs: {accessToken: me.accessToken}
       ]
       .then ([exp, res]) ->
         res
 
-  collection.getExperiments = ->
+  getExperiments: =>
     unless experiments
       experiments = if window._clay?.experiments
       then Promise.resolve window._clay.experiments
-      else collection.getMe().then (user) ->
+      else @getMe().then (user) ->
         request config.FLAK_CANNON_PATH + '/experiments',
           method: 'post'
           body:
@@ -57,16 +58,16 @@ resource.extendCollection 'users', (collection) ->
 
     return experiments
 
-  collection.setExperimentsFrom = (shareOriginUserId) ->
-    experiments = collection.getMe().then (user) ->
+  setExperimentsFrom: (shareOriginUserId) =>
+    experiments = @getMe().then (user) ->
       request config.FLAK_CANNON_PATH + '/experiments',
         method: 'post'
         body:
           fromUserId: shareOriginUserId
           userId: user.id
 
-  collection.convertExperiment = (event, {uniq} = {}) ->
-    collection.getMe().then (user) ->
+  convertExperiment: (event, {uniq} = {}) =>
+    @getMe().then (user) ->
       request config.FLAK_CANNON_PATH + '/conversions',
         method: 'post'
         body:
@@ -74,16 +75,14 @@ resource.extendCollection 'users', (collection) ->
           uniq: uniq
           userId: user.id
 
-  collection.addRecentGame = (gameId) ->
-    collection.getMe().then (me) ->
-      collection.all('me').customOperation 'patch', 'links/recentGames',
-        {accessToken: me.accessToken},
-        null,
-        [
-          op: 'add', path: '/-', value: gameId
-        ]
-
-  return collection
+  addRecentGame: (gameId) =>
+    @getMe().then (me) ->
+      request PATH + '/me/links/recentGames',
+        method: 'patch'
+        qs:
+          {accessToken: me.accessToken}
+        body:
+          [ op: 'add', path: '/-', value: gameId ]
 
 
-module.exports = resource.setBaseUrl(config.API_PATH).all('users')
+module.exports = new User()

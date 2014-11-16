@@ -1,22 +1,34 @@
 _ = require 'lodash'
 
-status = (response) ->
+serializeQueryString = (obj, prefix) ->
+  str = []
+  for p of obj
+    if obj.hasOwnProperty(p)
+      k = (if prefix then prefix + '[' + p + ']' else p)
+      v = obj[p]
+      str.push (if typeof v is 'object' then serializeQueryString(v, k) \
+                else encodeURIComponent(k) + '=' + encodeURIComponent(v))
+  str.join '&'
+
+statusCheck = (response) ->
   if response.status >= 200 and response.status < 300
     Promise.resolve response
   else
     Promise.reject response
 
-json = (response) ->
+toJson = (response) ->
   response.json()
 
-module.exports = ->
-  options = arguments[1]
-  if _.isObject options?.body
+module.exports = (url, options) ->
+  if _.isObject options?.body or _.isArray options?.body
     options.headers = _.defaults (options.headers or {}),
       'Accept': 'application/json'
       'Content-Type': 'application/json'
     options.body = JSON.stringify options.body
 
-  window.fetch.apply null, arguments
-  .then status
-  .then json
+  if _.isObject options?.qs
+    url += '?' + serializeQueryString options.qs
+
+  window.fetch url, options
+  .then statusCheck
+  .then toJson

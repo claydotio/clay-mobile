@@ -203,7 +203,7 @@ shareAny = ({text}) ->
     text = encodeURIComponent text.substr 0, 140
     window.open "https://twitter.com/intent/tweet?text=#{text}"
 
-  Game.customGET(gameId)
+  Game.get(gameId)
   .then (game) ->
     unless game
       throw new Error 'gameId invalid'

@@ -1,38 +1,7 @@
 # FIXME: clean up this file. all miscellaneous stuff is being placed here
 # for the sake of time
 
-# Bind polyfill (phantomjs doesn't support bind)
-# Tossing this in here is terrible practice, don't ever do it
-# This is a short-term fix until we have a more elegant bind polyfill
-# coffeelint: disable=missing_fat_arrows
-unless Function::bind
-  Function::bind = (oThis) ->
-
-    # closest thing possible to the ECMAScript 5
-    # internal IsCallable function
-    throw new TypeError(
-      'Function.prototype.bind - what is trying to be bound is not callable'
-    ) if typeof this isnt 'function'
-    aArgs = Array::slice.call(arguments, 1)
-    fToBind = this
-    fNOP = -> null
-
-    fBound = ->
-      fToBind.apply(
-        (if this instanceof fNOP and oThis then this else oThis),
-        aArgs.concat(Array::slice.call(arguments))
-      )
-
-    fNOP:: = @prototype
-    fBound:: = new fNOP()
-    fBound
-# coffeelint: enable=missing_fat_arrows
-
-# Promise polyfill - https://github.com/zolmeister/promiz
-require 'promiz'
-
-# Fetch polyfill - https://github.com/github/fetch
-require 'fetch'
+require './polyfill'
 
 _ = require 'lodash'
 z = require 'zorium'
@@ -59,7 +28,7 @@ ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 if kik?.picker?.reply
   if UrlService.isRootPath() # marketplace
     PushToken.createForMarketplace()
-    .finally ->
+    .then ->
       User.getMe()
       .then (user) ->
         kik.getAnonymousUser (token) ->
@@ -70,13 +39,15 @@ if kik?.picker?.reply
           kik.picker.reply {token}
     .catch (err) ->
       log.trace err
+      kik.picker.reply()
   else # game subdomain
     gameKey = UrlService.getSubdomain()
     PushToken.createByGameKey gameKey
-    .finally ->
+    .then ->
       kik.picker.reply()
     .catch (err) ->
       log.trace err
+      kik.picker.reply()
   throw new Error 'Stop code execution'
 
 ###########

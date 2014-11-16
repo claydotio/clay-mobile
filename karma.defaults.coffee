@@ -12,7 +12,7 @@ module.exports =
       useIframe: true
       captureConsole: true
       mocha:
-        timeout: 100
+        timeout: 1000
 
 
     # list of files / patterns to load in the browser
