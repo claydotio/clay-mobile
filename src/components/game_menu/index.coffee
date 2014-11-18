@@ -24,4 +24,4 @@ module.exports = class GameMenu
     z 'nav.game-menu', _.map @items, (item) ->
       isSelected = if item.isSelected then '.is-selected' else ''
 
-      z "a#{isSelected}[href='#{item.link}']", "#{item.title}"
+      z "a#{isSelected}[href=#{item.link}]", "#{item.title}"
