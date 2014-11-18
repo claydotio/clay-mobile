@@ -1,8 +1,9 @@
+z = require 'zorium'
 _ = require 'lodash'
 should = require('clay-chai').should()
 rewire = require 'rewire'
 
-SDKDir = rewire 'directives/sdk'
+SDK = rewire 'services/sdk'
 User = require 'models/user'
 
 eventListeners = {}
@@ -33,18 +34,13 @@ emit = (message) ->
     window.dispatchEvent event
 
 
-describe 'SDKDir', ->
+describe 'SDK', ->
 
   before ->
 
     # Stub user dependency
     User.setMe
       id: 1
-
-    directive = new SDKDir()
-    $el = document.createElement 'div'
-    ctx = {onunload: _.noop}
-    directive.config $el, false, ctx
 
   it 'pong()', ->
     emit {method: 'ping', id: 1}
@@ -59,7 +55,7 @@ describe 'SDKDir', ->
 
   describe 'share.any()', ->
     it 'shares via kik', ->
-      SDKDir.__set__ 'kik.send', (params) ->
+      SDK.__set__ 'kik.send', (params) ->
         return params
 
       emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: '1'}
@@ -68,9 +64,9 @@ describe 'SDKDir', ->
         data.result.text.should.be 'HELLO'
 
     it 'shares via twitter if kik unavailable', (done) ->
-      SDKDir.__set__ 'kik.send', null
+      SDK.__set__ 'kik.send', null
 
-      SDKDir.__set__ 'window.open', (url) ->
+      SDK.__set__ 'window.open', (url) ->
         url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
         done()
 
@@ -79,7 +75,7 @@ describe 'SDKDir', ->
 
   describe 'kik methods', ->
     before ->
-      SDKDir.__set__ 'kik',
+      SDK.__set__ 'kik',
         send: (params) ->
           return params
         browser:

@@ -1,5 +1,4 @@
 log = require 'clay-loglevel'
-z = require 'zorium'
 _ = require 'lodash'
 
 request = require '../lib/request'

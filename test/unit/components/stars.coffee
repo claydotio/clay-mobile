@@ -7,7 +7,7 @@ domWalker = _.walk ($node) ->
   return $node.children
 
 hasClass = ($node, className) ->
-  _.contains $node.attrs.className.split(' '), className
+  _.contains $node.properties.className.split(' '), className
 
 countStars = ($children) ->
   _.reduce $children, (counts, $star) ->
@@ -75,7 +75,7 @@ describe 'RatingsWidgetComponent', ->
       $ = RatingsWidgetComponent.render()
 
       clickableStars = _.reduce $.children, (sum, $star) ->
-        if hasClass($star, 'icon-star') and $star.attrs.onclick
+        if hasClass($star, 'icon-star') and $star.properties.onclick
         then sum + 1
         else sum
       , 0
@@ -87,7 +87,7 @@ describe 'RatingsWidgetComponent', ->
       $ = RatingsWidgetComponent.render()
 
       clickableStars = _.reduce $.children, (sum, $star) ->
-        if hasClass($star, 'icon-star') and $star.attrs.onclick
+        if hasClass($star, 'icon-star') and $star.properties.onclick
         then sum + 1
         else sum
       , 0
@@ -99,8 +99,10 @@ describe 'RatingsWidgetComponent', ->
       $ = RatingsWidgetComponent.render()
 
       $firstStar = domWalker.find $, ($node) ->
+        if _.isArray $node
+          return hasClass $node, 'icon-star'
         return hasClass $node, 'icon-star'
 
-      $firstStar.attrs.onclick()
+      $firstStar.properties.onclick()
 
       RatingsWidgetComponent.getStarCount().should.be 1

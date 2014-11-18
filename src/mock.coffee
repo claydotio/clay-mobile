@@ -1,6 +1,5 @@
 _ = require 'lodash'
 Zock = require 'zock'
-z = require 'zorium'
 log = require 'clay-loglevel'
 
 game = (i, isNew) ->
@@ -31,7 +30,7 @@ prism =
   description: 'The most amazing game ever'
   rating: 5
 
-mock = z.prop(new Zock()
+mock = new Zock()
   .logger log.info
   .post '/users/login/anon'
   .reply 200, id: 1, accessToken: 'thisisanaccesstoken'
@@ -64,9 +63,8 @@ mock = z.prop(new Zock()
   .post '/pushTokens'
   .reply 200, (res) ->
     {gameId: prism.id, token: 'mocked_token'}
-)
 
 window.XMLHttpRequest = ->
-  mock().XMLHttpRequest()
+  mock.XMLHttpRequest()
 
 module.exports = mock

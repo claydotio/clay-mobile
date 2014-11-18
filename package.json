@@ -61,7 +61,7 @@
     "webpack-dev-server": "1.6.5"
   },
   "browser": {
-    "zorium": "./components/zorium.js/mithril.js",
+    "zorium": "./components/zorium.js/src/zorium.coffee",
     "clay-loglevel": "./components/clay-loglevel/dist/loglevel.js",
     "zock": "./components/zock/zock.js",
     "fetch": "./components/fetch/fetch.js"

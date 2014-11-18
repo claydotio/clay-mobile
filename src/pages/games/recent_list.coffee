@@ -5,14 +5,14 @@ RecentGames = require '../../components/recent_games/list'
 GameResults = require '../../components/game_results/popular_small_top'
 
 module.exports = class GamesPage
-  constructor: (params) ->
+  constructor: ->
     @Header = new Header()
     @RecentGames = new RecentGames()
     @PopularGames = new GameResults()
 
   render: =>
     z 'div', [
-      z 'div', @Header.render()
-      z 'div', @RecentGames.render()
-      z 'div', @PopularGames.render()
+      z 'div', @Header
+      z 'div', @RecentGames
+      z 'div', @PopularGames
     ]

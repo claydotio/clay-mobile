@@ -15,7 +15,7 @@ domWalker = _.walk ($node) ->
   return $node.children
 
 hasClass = ($node, className) ->
-  _.contains $node.attrs.className.split(' '), className
+  _.contains $node.properties.className.split(' '), className
 
 describe 'ModalViewer', ->
   it 'renders stub modal', ->

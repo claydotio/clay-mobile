@@ -19,4 +19,4 @@ module.exports = class ModalViewer
     z 'div.modal-viewer-overlay',
       z 'div.modal-viewer-container',
         z 'div.modal-viewer',
-          Modal.component.render()
+          Modal.component

@@ -24,7 +24,7 @@ module.exports = class GameBox
 
     ga? 'send', 'event', 'game_box', 'click', @game.key
     User.convertExperiment('game_box_click').catch log.trace
-    z.route UrlService.getGameRoute {@game}
+    z.router.go UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
     kik.picker?(httpSubDomainUrl, {}, -> null)
 
@@ -38,4 +38,4 @@ module.exports = class GameBox
         height: @iconSize
       z '.game-box-info',
         z 'h3', @game.name
-        @RatingsWidget.render()
+        @RatingsWidget

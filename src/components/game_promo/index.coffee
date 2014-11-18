@@ -19,7 +19,7 @@ module.exports = class GamePromo
     # hard redirect to marketplace / gameRoute
     redirect = =>
       if UrlService.isRootPath()
-        z.route UrlService.getGameRoute {@game}
+        z.router.go UrlService.getGameRoute {@game}
       else
         window.location.href = UrlService.getMarketplaceGame {@game}
 

@@ -3,61 +3,77 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 
 Game = require '../../models/game'
-WindowHeightDir = require '../../directives/window_height'
-# FIXME: remove, replace with beforeUnload functionality of components
-LogEngagedPlayDir = require '../../directives/log_engaged_play'
-SDKDir = require '../../directives/sdk'
 Drawer = require '../drawer'
 Spinner = require '../spinner'
 UrlService = require '../../services/url'
 Modal = require '../../models/modal'
 GameShare = require '../game_share'
+User = require '../../models/user'
 
 styles = require './index.styl'
+
+ENGAGED_PLAY_TIME = 60000 # 1 min
 
 module.exports = class GamePlayer
   constructor: ({gameKey}) ->
     styles.use()
 
-    @WindowHeightDir = new WindowHeightDir()
-    @SDKDir = new SDKDir()
-
     @Spinner = new Spinner()
 
     @isLoading = true
-    @gameKey = z.prop gameKey
+    @gameKey = gameKey
+    @game = null
+    @Drawer = null
 
-    @game = z.prop Game.findOne(key: gameKey)
-    @game.then =>
+    gamePromise = Game.findOne(key: gameKey)
+    .then (game) =>
+      @game = game
       @isLoading = false
+      @Drawer = new Drawer {game}
 
-    # FIXME: remove, replace with beforeUnload functionality of components
-    @LogEngagedPlayDir = @game.then (game) ->
-      directive = new LogEngagedPlayDir(game)
       z.redraw()
-      return directive
-
-    @Drawer = z.prop @game.then (game) ->
-      new Drawer {game}
 
     @onFirstRender = _.once =>
-      @showShareModalPromise = Game.incrementPlayCount(gameKey)
-      .then (playCount) =>
+      @showShareModalPromise = Promise.all [
+        Game.incrementPlayCount(gameKey)
+        gamePromise
+      ]
+      .then ([playCount, game]) =>
         shouldShowModal = playCount is 3
         if shouldShowModal
-          @showShareModal()
+          @showShareModal(game)
 
-  showShareModal: =>
-    @game.then (game) ->
-      Modal.openComponent(
-        component: new GameShare({game})
-      )
+    @engagedPlayTimeout = window.setTimeout @logEngagedPlay, ENGAGED_PLAY_TIME
+
+  onBeforeUnmount: =>
+    window.clearTimeout @engagedPlayTimeout
+    window.removeEventListener 'resize', @resize
+
+  onMount: ($el) =>
+    @$el = $el
+
+    window.addEventListener 'resize', @resize
+
+    @resize()
+
+  resize: ->
+    @$el?.style.height = window.innerHeight + 'px'
+
+  logEngagedPlay: =>
+    User.convertExperiment('engaged_play').catch log.trace
+    ga? 'send', 'event', 'game', 'engaged_play', @game.key
+    User.addRecentGame(@game.id).catch log.trace
+
+  showShareModal: (game) ->
+    Modal.openComponent(
+      component: new GameShare({game})
+    )
 
   # if already on marketplace, keep them there with root route, otherwise
   # hard redirect to marketplace
   redirectToMarketplace: ->
     if UrlService.isRootPath()
-      z.route '/'
+      z.router.go '/'
     else
       window.location.href = UrlService.getMarketplaceBase()
 
@@ -66,25 +82,17 @@ module.exports = class GamePlayer
 
     if @isLoading
       z '.game-player-missing',
-        @Spinner.render()
+        @Spinner
         z 'button.button-ghost', {onclick: @redirectToMarketplace},
           'Return to Clay.io'
-    else if @game()?.gameUrl
-      # FIXME: remove, replace with beforeUnload functionality of components
-      z 'div.game-player', {config: @LogEngagedPlayDir()?.config},
+    else if @game?.gameUrl
+      z 'div.game-player',
+        @SDK
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',
-              src: @game().gameUrl
-
-              config: =>
-                # This is necessary due a resizing issue on some devices
-                @WindowHeightDir.config.apply @WindowHeightDir, arguments
-
-                # Bind listeners for SDK Clay.client() calls
-                @SDKDir.config.apply @SDKDir, arguments
-
-        @Drawer()?.render()
+              src: @game?.gameUrl
+        @Drawer
     else
       z '.game-player-missing',
         z 'div', 'Game Not Found'

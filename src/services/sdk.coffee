@@ -1,3 +1,4 @@
+z = require 'zorium'
 _ = require 'lodash'
 kik = require 'kik'
 log = require 'clay-loglevel'
@@ -5,23 +6,14 @@ log = require 'clay-loglevel'
 User = require '../models/user'
 Game = require '../models/game'
 
-
-#
-# SDK listener for Clay.client() calls
-#
-
-module.exports = class SDKDir
-
-  config: ($el, isInit, ctx) ->
-
-    # run once
-    if isInit
-      return
+class SDK
+  constructor: ->
+    #
+    # SDK listener for Clay.client() calls
+    #
 
     window.addEventListener 'message', onMessage
 
-    ctx.onunload = ->
-      window.removeEventListener 'message', onMessage
 
 ###
 # Messages follow the json-rpc 2.0 spec: http://www.jsonrpc.org/specification
@@ -219,3 +211,6 @@ shareAny = ({text}) ->
   .catch ->
     tweet(text)
 # coffeelint: enable=missing_fat_arrows
+
+
+module.exports = new SDK()

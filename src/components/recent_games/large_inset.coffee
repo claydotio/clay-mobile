@@ -20,15 +20,14 @@ module.exports = class RecentGames
       gamePromoWidth = 280
       gamePromoHeight = 178
 
-    @gamePromos = z.prop User.getMe().then (user) ->
+    @gamePromos = []
+    User.getMe().then (user) ->
       unless user.links.recentGames
         return []
       request user.links.recentGames.href
-    .then (games) ->
-      _.map games, (game) ->
+    .then (games) =>
+      @gamePromos = _.map games, (game) ->
         new GamePromo {game, width: gamePromoWidth, height: gamePromoHeight}
-
-    Promise.resolve @gamePromos
     .then z.redraw
     .catch log.trace
 
@@ -39,6 +38,6 @@ module.exports = class RecentGames
     z 'section.recent-games',
       z 'div.l-content-container',
         z 'div.recent-games-game-boxes',
-          _.map @gamePromos(), (GamePromo) ->
+          _.map @gamePromos, (GamePromo) ->
             z 'div.recent-games-game-box-container',
-              GamePromo.render()
+              GamePromo

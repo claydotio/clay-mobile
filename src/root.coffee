@@ -79,7 +79,6 @@ reportError = ->
     console?.error err
 
 window.addEventListener 'error', reportError
-window.addEventListener 'fb-flo-reload', z.redraw
 
 if config.ENV isnt config.ENVS.PROD
   log.enableAll()
@@ -148,19 +147,13 @@ User.getExperiments().then (params) ->
 # ROUTING #
 ###########
 
-route = (routes) ->
-  _.transform routes, (result, Component, route) ->
-    result[route] =
-      controller: => @component = new Component(z.route.param)
-      view: => @component.render()
-
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
 # Also, if someone recieved a link with a hash, respect it
 if kik?.enabled or not window.history?.pushState or window.location.hash
-  z.route.mode = 'hash'
+  z.router.setMode 'hash'
 else
-  z.route.mode = 'pathname'
+  z.router.setMode 'pathname'
 
 User.getExperiments().then (params) ->
   switch params.gamesPage
@@ -199,15 +192,16 @@ User.getExperiments().then (params) ->
     PushToken.createForMarketplace()
 
   # This is down here because of the User.setMe() call above
-  z.route document.getElementById('app'), '/', route(
-    '/': GamesPage
-    '/games': GamesPage
-    '/game/:key': PlayGamePage
-    '/games/:filter': GamesPage
-  )
+  root = document.getElementById('app')
+  z.router.setRoot root
+  z.router.add '/', GamesPage
+  z.router.add '/games', GamesPage
+  z.router.add '/game/:key', PlayGamePage
+  z.router.add '/games/:filter', GamesPage
 
   if gameKey
-    z.route "/game/#{gameKey}"
-
+    z.router.go "/game/#{gameKey}"
+  else
+    z.router.go()
 
   log.info 'App Ready'
