@@ -4,7 +4,7 @@
   "homepage": "https://github.com/claydotio/wink",
   "private": true,
   "dependencies": {
-    "zorium.js": "https://github.com/claydotio/zorium.js.git#next",
+    "zorium.js": "https://github.com/claydotio/zorium.js.git#0.2",
     "clay-loglevel": "https://github.com/claydotio/loglevel.git#master",
     "normalize.css": "3.0.1",
     "zock": "https://github.com/claydotio/zock.git",
