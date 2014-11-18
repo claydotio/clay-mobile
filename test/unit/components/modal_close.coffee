@@ -20,7 +20,7 @@ domWalker = _.walk ($node) ->
   return $node.children
 
 hasClass = ($node, className) ->
-  _.contains $node.attrs.className.split(' '), className
+  _.contains $node.properties.className.split(' '), className
 
 describe 'ModalClose', ->
 
@@ -33,6 +33,6 @@ describe 'ModalClose', ->
     $closeIcon = domWalker.find $, ($node) ->
       return hasClass $node, 'modal-close'
 
-    $closeIcon.attrs.onclick()
+    $closeIcon.properties.onclick()
 
     should.not.exist(Modal.component)

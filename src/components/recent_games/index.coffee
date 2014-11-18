@@ -18,27 +18,26 @@ module.exports = class RecentGames
     else
       gameBoxSize = 135
 
-    @gameBoxes = z.prop User.getMe().then (user) ->
+    @gameBoxes = []
+    User.getMe().then (user) ->
       unless user.links.recentGames
         return []
 
       request user.links.recentGames.href
-    .then (games) ->
-      _.map games, (game) ->
+    .then (games) =>
+      @gameBoxes = _.map games, (game) ->
         new GameBox {game, iconSize: gameBoxSize},
-
-    Promise.resolve @gameBoxes
     .then z.redraw
     .catch log.trace
 
   render: =>
-    if _.isEmpty @gameBoxes()
+    if _.isEmpty @gameBoxes
       return
 
     z 'section.recent-games',
       z 'div.l-content-container',
         z 'h2.recent-games-header', 'Continue playing'
         z 'div.recent-games-game-boxes',
-          _.map @gameBoxes(), (GameBox) ->
+          _.map @gameBoxes, (GameBox) ->
             z 'div.recent-games-game-box-container',
-              GameBox.render()
+              GameBox

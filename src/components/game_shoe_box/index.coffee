@@ -20,7 +20,7 @@ module.exports = class GameShoeBox
 
     ga? 'send', 'event', 'game_shoe_box', 'click', @game.key
     User.convertExperiment('game_shoe_box_click').catch log.trace
-    z.route UrlService.getGameRoute {@game}
+    z.router.go UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
     kik.picker?(httpSubDomainUrl, {}, -> null)
 
@@ -30,7 +30,7 @@ module.exports = class GameShoeBox
         src: @game.icon128Url
       z '.game-shoe-box-info', [
         z 'h3', @game.name
-        @RatingsWidget.render()
+        @RatingsWidget
       ]
       z '.game-shoe-box-play',
         z 'i.icon.icon-play-circle'

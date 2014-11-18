@@ -69,7 +69,7 @@ module.exports = class Drawer
   # hard redirect to marketplace
   redirectToMarketplace: ->
     if UrlService.isRootPath()
-      z.route '/'
+      z.router.go '/'
     else
       window.location.href = UrlService.getMarketplaceBase()
 
@@ -86,7 +86,7 @@ module.exports = class Drawer
       z "div.drawer-overlay#{drawerOverlayIsOpen}",
         ontouchstart: @close
       z 'div.drawer-nub',
-        @Nub.render()
+        @Nub
       z "div.drawer#{drawerIsOpen}",
         z 'div.drawer-header',
           z 'a[href=#].drawer-close',
@@ -114,7 +114,7 @@ module.exports = class Drawer
               z 'i.icon.icon-heart'
               z 'span.drawer-menu-item', 'Recommended games'
             z 'div.drawer-cross-promotion',
-              @CrossPromotion.render()
+              @CrossPromotion
               z 'button.button-secondary.is-block.drawer-browse-more',
                 onclick: @openMarketplace,
                 'Browse more games'

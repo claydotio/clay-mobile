@@ -12,17 +12,17 @@ module.exports = class CrossPromotion
     styles.use()
 
     randomVariance = Math.floor(Math.random() * 4)
-    @gameBoxes = z.prop Game.getTop(limit: 2, skip: randomVariance)
-    .then (games) ->
-      _.map games, (game) ->
-        new GameBox {game, iconSize},
+    @gameBoxes = []
 
-    Promise.resolve @gameBoxes
+    Game.getTop(limit: 2, skip: randomVariance)
+    .then (games) =>
+      @gameBoxes = _.map games, (game) ->
+        new GameBox {game, iconSize}
     .then z.redraw
     .catch log.trace
 
   render: =>
     z 'div.cross-promotion',
-      _.map @gameBoxes(), (GameBox) ->
+      _.map @gameBoxes, (GameBox) ->
         z 'div.cross-promotion-game-box',
-          GameBox.render()
+          GameBox

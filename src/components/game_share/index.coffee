@@ -36,7 +36,7 @@ module.exports = class GameShare
     @onFirstRender()
 
     z 'div.game-share',
-      @ModalClose.render()
+      @ModalClose
       z 'div.game-share-header',
         z 'h1.game-share-title', "#{@game.name}"
       z 'div.game-share-content',

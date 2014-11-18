@@ -13,27 +13,26 @@ module.exports = class RecentGames
   constructor: ->
     styles.use()
 
-    @gameShoeBoxes = z.prop User.getMe().then (user) ->
+    @gameShoeBoxes = []
+    User.getMe().then (user) ->
       unless user.links.recentGames
         return []
 
       request user.links.recentGames.href
-    .then (games) ->
-      _.map games, (game) ->
+    .then (games) =>
+      @gameShoeBoxes = _.map games, (game) ->
         new GameShoeBox {game},
-
-    Promise.resolve @gameShoeBoxes
     .then z.redraw
     .catch log.trace
 
   render: =>
-    if _.isEmpty @gameShoeBoxes()
+    if _.isEmpty @gameShoeBoxes
       return
 
     z 'section.recent-games',
       z 'div.l-content-container',
         z 'h2.recent-games-header', 'Recently Played'
         z 'div.recent-games-game-boxes',
-          _.map @gameShoeBoxes(), (gameShoeBox) ->
+          _.map @gameShoeBoxes, (gameShoeBox) ->
             z 'div.recent-games-game-box-container',
-              gameShoeBox.render()
+              gameShoeBox

@@ -24,7 +24,7 @@ module.exports = class GamePromo
 
     ga? 'send', 'event', 'game_promo_with_info_inset_click', 'click', @game.key
     User.convertExperiment('game_promo_with_info_inset_click').catch log.trace
-    z.route UrlService.getGameRoute {@game}
+    z.router.go UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
     kik.picker?(httpSubDomainUrl, {}, -> null)
 
@@ -38,4 +38,4 @@ module.exports = class GamePromo
         height: @height
       z '.game-promo-info',
         z 'h3', @game.name
-        @RatingsWidget.render()
+        @RatingsWidget
