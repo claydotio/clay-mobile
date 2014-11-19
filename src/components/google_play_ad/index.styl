@@ -1,0 +1,38 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+@require '../../stylus/utils.styl'
+
+.google-play-ad
+  background: $white
+  padding: 20px 0
+  display: block
+
+.google-play-ad-flexbox
+  display: flex
+
+.google-play-ad-icon
+  flex-basis: 28px
+  flex-shrink: 0
+  margin: auto
+
+.google-play-ad-content
+  padding: 0 10px
+
+  > h2
+    margin: 0
+
+.google-play-ad-message
+  font-size: $fontSizeSmall
+
+.google-play-ad-download
+  margin: auto
+  flex-basis: 30px
+  flex-shrink: 0
+
+  > .google-play-ad-download-button
+    width: 30px
+    height: 30px
+
+    > .icon-arrow-right
+      font-size: $iconSmall

@@ -1,9 +1,17 @@
 z = require 'zorium'
 
+localstore = require '../../lib/localstore'
 GameFilter = require '../../models/game_filter'
+User = require '../../models/user'
+Modal = require '../../models/modal'
 Header = require '../../components/header'
 GameMenu = require '../../components/game_menu'
 GameResults = require '../../components/game_results'
+ModalViewer = require '../../components/modal_viewer'
+GooglePlayAd = require '../../components/google_play_ad'
+GooglePlayAdModalControl = require '../../components/google_play_ad_modal'
+GooglePlayAdModalHeaderBackground =
+  require '../../components/google_play_ad_modal/header_background'
 
 module.exports = class GamesPage
   constructor: ({filter} = {}) ->
@@ -11,11 +19,34 @@ module.exports = class GamesPage
 
     @Header = new Header()
     @GameMenu = new GameMenu()
+    @GooglePlayAd = new GooglePlayAd()
     @GameResults = new GameResults()
+    @ModalViewer = new ModalViewer()
+
+
+  showGooglePlayAdModal: ->
+    User.getMe().then (user) ->
+      User.getExperiments().then (params) ->
+        GooglePlayAdModalComponent = if params.googlePlayModal is 'control' \
+                              then new GooglePlayAdModalHeaderBackground()
+                              else new GooglePlayAdModalControl()
+        Modal.openComponent(
+          component: GooglePlayAdModalComponent
+        )
+
+        localstore.set 'hasSeenGooglePlayAd', seen: true
+
+  onMount: =>
+    localstore.get 'hasSeenGooglePlayAd'
+    .then (hasSeenAd) =>
+      unless hasSeenAd
+        @showGooglePlayAdModal()
 
   render: =>
     z 'div', [
       z 'div', @Header
       z 'div', @GameMenu
+      z 'div', @GooglePlayAd
       z 'div', @GameResults
+      @ModalViewer
     ]

@@ -1,0 +1,25 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.google-play-ad-modal-content
+  text-align: center
+  font-size: $fontSizeMedium
+
+  > .google-play-ad-modal-button
+    border-top: 1px solid $dividerColor
+    padding: 10px 0
+    color: $blue
+
+    > .icon-arrow-down
+      margin-right: 10px
+      font-size: $iconSmall
+      vertical-align: middle
+
+    > .google-play-ad-modal-button-text
+      display: inline-block
+      vertical-align: middle
+
+.google-play-ad-modal-message
+  padding: 20px
+  font-weight: bold

@@ -1,0 +1,20 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.google-play-ad-drawer-flexbox
+  display: flex
+
+.google-play-ad-drawer-icon
+  flex-basis: 24px
+  flex-shrink: 0
+
+.google-play-ad-drawer-content
+  padding-left: 10px
+  margin-bottom: 10px
+
+  > h2
+    margin: 3px 0 5px 0
+
+  > .google-play-ad-drawer-message
+    font-size: $fontSizeSmall
