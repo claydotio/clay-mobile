@@ -160,7 +160,7 @@ User.getExperiments().then (params) ->
     when 'recent_tabs' then GamesPageRecentTabs
     when 'recent_list' then GamesPageRecentList
     when 'recent_boxes' then GamesPageRecentBoxes
-    else GamesPageControl
+    else GamesPageRecentBoxes
 
 .then (GamesPage) ->
 
