@@ -31,7 +31,8 @@ module.exports = class GamePromo
   render: =>
     z "a.game-promo[href=#{@gameSubdomainUrl}]",
       onclick: @loadGame
-      style: "width: #{@width}px;",
+      style:
+        width: "#{@width}px",
       z 'img',
         src: @game.promo440Url
         width: @width

@@ -97,7 +97,8 @@ module.exports = class Drawer
             z 'i.icon.icon-home'
         z 'div.drawer-inner',
           z 'div.drawer-promo',
-            style: "background-image: url(#{@game.promo440Url})",
+            style:
+              backgroundImage: "url(#{@game.promo440Url})",
             z 'div.drawer-promo-text',
               z 'div.drawer-promo-descriptor', "You're playing"
               z 'h1.drawer-promo-title', @game.name

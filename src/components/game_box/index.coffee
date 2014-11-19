@@ -31,7 +31,8 @@ module.exports = class GameBox
   render: =>
     z "a.game-box[href=#{@gameSubdomainUrl}]",
       onclick: @loadGame
-      style: "width: #{@iconSize}px",
+      style:
+        width: "#{@iconSize}px",
       z 'img',
         src: @game.icon128Url
         width: @iconSize
