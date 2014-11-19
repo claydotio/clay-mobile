@@ -30,6 +30,6 @@ module.exports = class GamesPage
   render: =>
     z 'div', [
       z 'div', @Header
-      if @hasRecentGames then z 'div', @GameMenu?
-      z 'div', @Games?
+      if @hasRecentGames then z 'div', @GameMenu
+      z 'div', @Games
     ]
