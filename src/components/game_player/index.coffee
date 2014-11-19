@@ -33,6 +33,8 @@ module.exports = class GamePlayer
 
       z.redraw()
 
+      return game
+
     @onFirstRender = _.once =>
       @showShareModalPromise = Promise.all [
         Game.incrementPlayCount(gameKey)

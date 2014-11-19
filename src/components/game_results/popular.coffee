@@ -3,6 +3,8 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 
 GameFilter = require '../../models/game_filter'
+Modal = require '../../models/modal'
+User = require '../../models/user'
 GameBox = require '../game_box'
 GamePromo = require '../game_promo/with_info'
 Spinner = require '../spinner'

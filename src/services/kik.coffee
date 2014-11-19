@@ -7,13 +7,12 @@ User = require '../models/user'
 class KikService
   shareMarketplace: ->
     User.getMe().then (user) ->
-      User.getExperiments().then (params) ->
-        kik?.send?(
-          title: 'Free Games'
-          text: 'Come play the best games on Kik with me!'
-          pic: styleConfig.$icon256
-          data: {share: {originUserId: user.id}}
-        )
+      kik?.send?(
+        title: 'Free Games'
+        text: 'Come play the best games on Kik with me!'
+        pic: styleConfig.$icon256
+        data: {share: {originUserId: user.id}}
+      )
     .catch (err) ->
       kik?.send?(
         title: 'Free Games'

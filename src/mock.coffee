@@ -24,7 +24,7 @@ game = (i, isNew) ->
 prism =
   id: 4875
   key: 'prism'
-  gameUrl: 'http://192.168.2.98.xip.io:3003'
+  gameUrl: "http://#{config.HOST}:3003"
   icon128Url: 'http://clay.io/games/slime/claymedia/icon128.png'
   name: 'Prism'
   description: 'The most amazing game ever'
@@ -58,8 +58,11 @@ mock = new Zock()
   .get '/games/1'
   .reply 200, (res) ->
     prism
-  .post '/experiments'
-  .reply 200, {}
+  .get '/games/4875'
+  .reply 200, (res) ->
+    prism
+  .post '/log'
+  .reply 204
   .post '/pushTokens'
   .reply 200, (res) ->
     {gameId: prism.id, token: 'mocked_token'}

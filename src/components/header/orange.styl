@@ -10,18 +10,17 @@ $logoSvg = '//cdn.wtf/d/images/logos/logo_standard_bw.svg'
   height: 60px
   box-sizing: border-box
   padding: 14px 20px
-  clearfix()
+  position: relative
+  display: flex
+  justify-content: space-between
 
 .header-logo
-  display: inline-block
-  float: left
-  line-height: 30px
   background-image: url($logoSvg)
   background-repeat: no-repeat
   width: 125px
   height: 30px
 
 .header-marketplace-share
-  display: inline-block
-  float: right
+  flex-basis: 22px
+  flex-shrink: 0
   line-height: 30px

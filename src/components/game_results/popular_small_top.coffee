@@ -6,6 +6,9 @@ GameFilter = require '../../models/game_filter'
 GameBox = require '../game_box'
 GamePromo = require '../game_promo/with_info'
 Spinner = require '../spinner'
+GooglePlayAdModalControl = require '../google_play_ad_modal'
+GooglePlayAdModalHeaderBackground =
+  require '../google_play_ad_modal/header_background'
 
 styles = require './popular_small_top.styl'
 

@@ -5,15 +5,17 @@ json('../../stylus/vars.json')
 .modal-viewer-overlay
   background: $overlayColor
   position: fixed
+  top: 0
+  left: 0
   z-index: $zIndexModal
-  display: table
+  display: flex
+  align-items: center
+  justify-content: center
   width: 100%
   height: 100%
 
 // necessary for flexible-height verically centered
 .modal-viewer-container
-  display: table-cell
-  vertical-align: middle
   width: 100%
   padding: 20px
 

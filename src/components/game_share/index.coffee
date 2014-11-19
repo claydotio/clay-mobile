@@ -4,10 +4,10 @@ log = require 'clay-loglevel'
 _ = require 'lodash'
 
 config = require '../../config'
-ModalClose = require '../modal_close'
 User = require '../../models/user'
 Modal = require '../../models/modal'
 KikService = require '../../services/kik'
+ModalHeader = require '../modal_header'
 
 styles = require './index.styl'
 
@@ -15,7 +15,7 @@ module.exports = class GameShare
   constructor: ({@game}) ->
     styles.use()
 
-    @ModalClose = new ModalClose()
+    @ModalHeader = new ModalHeader {title: "#{@game.name}"}
     @onFirstRender = _.once =>
       ga? 'send', 'event', 'game_share_modal', 'open', @game.key
 
@@ -36,9 +36,7 @@ module.exports = class GameShare
     @onFirstRender()
 
     z 'div.game-share',
-      @ModalClose
-      z 'div.game-share-header',
-        z 'h1.game-share-title', "#{@game.name}"
+      @ModalHeader
       z 'div.game-share-content',
         z 'div.game-share-message', 'Having fun? Spread the word!'
         z 'button.button-primary.is-block', onclick: @shareGame,

@@ -4,8 +4,10 @@ GameFilter = require '../../models/game_filter'
 User = require '../../models/user'
 Header = require '../../components/header/orange'
 GameMenu = require '../../components/game_menu/recent_popular'
+GooglePlayAd = require '../../components/google_play_ad'
 RecentGames = require '../../components/recent_games/large_inset'
 GameResults = require '../../components/game_results/popular'
+ModalViewer = require '../../components/modal_viewer'
 
 module.exports = class GamesPage
   constructor: ({filter} = {}) ->
@@ -25,11 +27,14 @@ module.exports = class GamesPage
       z.redraw()
 
     @Header = new Header()
-
+    @GooglePlayAd = new GooglePlayAd()
+    @ModalViewer = new ModalViewer()
 
   render: =>
     z 'div', [
       z 'div', @Header
-      if @hasRecentGames then z 'div', @GameMenu?
-      z 'div', @Games?
+      z 'div', @GooglePlayAd
+      if @hasRecentGames then z 'div', @GameMenu
+      z 'div', @Games
+      @ModalViewer
     ]

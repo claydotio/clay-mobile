@@ -4,11 +4,16 @@ log = require 'clay-loglevel'
 
 config = require '../../config'
 CrossPromotion = require '../cross_promotion'
+GooglePlayAdDrawerControl = require '../google_play_ad_drawer'
+GooglePlayAdDrawerInstallButton =
+  require '../google_play_ad_drawer/install_button'
 Nub = require '../nub'
 Modal = require '../../models/modal'
 User = require '../../models/user'
 UrlService = require '../../services/url'
 KikService = require '../../services/kik'
+NativeService = require '../../services/native'
+EnvironmentService = require '../../services/environment'
 
 styles = require './index.styl'
 
@@ -21,8 +26,14 @@ module.exports = class Drawer
     @isOpen = false
 
     @CrossPromotion = new CrossPromotion iconSize: GAME_BOX_ICON_SIZE
-
     @Nub = new Nub toggleCallback: @toggleState
+
+    @GooglePlayAdDrawer = null
+    User.getExperiments().then (params) =>
+      @GooglePlayAdDrawer = if params.googlePlayDrawer is 'install-button' \
+                            then new GooglePlayAdDrawerInstallButton()
+                            else new GooglePlayAdDrawerControl()
+    .then z.redraw
 
   toggleState: (e) =>
     e?.preventDefault()
@@ -46,8 +57,15 @@ module.exports = class Drawer
 
   shareGame: (e) =>
     e?.preventDefault()
-    KikService.shareGame @game
-    .catch log.trace
+
+    EnvironmentService.getPlatform().then (platform) =>
+      switch platform
+        when 'kik'
+          KikService.shareGame @game
+          .catch log.trace
+        when 'androidApp'
+          NativeService.shareGame @game
+          .catch log.trace
 
     ga? 'send', 'event', 'drawer', 'share', @game.key
 
@@ -108,6 +126,7 @@ module.exports = class Drawer
                   onclick: @shareGame,
                   z 'i.icon.icon-share'
                   'Share with friends'
+            z 'div.z-drawer-google-play-ad-drawer', @GooglePlayAdDrawer
             z "a[href=#{UrlService.getMarketplaceBase()}]
               .drawer-marketplace-link",
               onclick: @openMarketplace,

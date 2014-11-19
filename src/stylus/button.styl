@@ -1,12 +1,11 @@
 $buttonRadius = 20
 $primaryButtonHeight = 40
 
-.button-primary, .button-secondary
+.button-primary, .button-secondary, .button-circle
   position: relative // for active state
   display: inline-block
   height: $primaryButtonHeight px
   margin-bottom: 0 // for input.button-...
-  padding: 0 20px
   border-radius: $buttonRadius px
   box-shadow: 0.5px 0.866px 3px 0px rgba(0, 0, 0, 0.3)
   font-size: $fontSizeMedium
@@ -18,6 +17,10 @@ $primaryButtonHeight = 40
   &.is-block
     display: block
     width: 100% // because bootstrap does it
+
+  &.is-blue // different from primary or secondary
+    background: $blue
+    color: $white
 
   &:disabled
     opacity: 0.5
@@ -39,9 +42,20 @@ $primaryButtonHeight = 40
       content: ''
       pointer-events: none
 
+.button-primary, .button-secondary
+  padding: 0 20px
+
+.button-circle
+  width: $primaryButtonHeight px
+  height: $primaryButtonHeight px
+
 .button-primary
   background: $orange
   color: $white
+
+.button-secondary
+  background: $white
+  color: $blue
 
 .button-ghost
   background: none

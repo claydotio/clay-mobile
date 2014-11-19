@@ -1,0 +1,40 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-google-play-ad
+  background: $white
+  margin: 20px 0
+  display: block
+  border-radius: 3px
+  overflow: hidden
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2)
+
+  .header
+    height: 20px
+    background: url('//cdn.wtf/d/images/google_play/google_play_banner.png')
+    background-size: 100% auto
+    background-position: center
+
+  .content
+    padding: 20px
+
+    > h2
+      margin: 0
+
+  .message
+    font-size: $fontSizeSmall
+
+  .install-button
+    border-top: 1px solid $dividerColor
+    padding: 10px 0
+    color: $blue
+
+    > .icon-arrow-down
+      margin-right: 10px
+      font-size: $iconSmall
+      vertical-align: middle
+
+    > .install-button-text
+      display: inline-block
+      vertical-align: middle
