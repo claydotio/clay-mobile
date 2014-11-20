@@ -23,9 +23,6 @@ module.exports = class RatingsWidget
 
     @emptyStars = 5 - (@fullStars + @halfStars)
 
-  starClick: (rating) =>
-    @setStarAmounts(rating)
-
   # @return current rating: 0-5 with 0.5 precision (eg 0, 0.5, etc...)
   getStarCount: =>
     return @fullStars + @halfStars * 0.5
@@ -36,20 +33,19 @@ module.exports = class RatingsWidget
     halfStars = @halfStars
     fullStars = @fullStars
 
-    z 'div.stars', _.map _.range(5), (i) =>
+    z 'div.stars', _.map _.range(5), (i) ->
       rating = i + 1
       # what to do when a star is clicked
-      attributes = if @interactive then onclick: (=> @starClick(rating)) else {}
 
       if fullStars
-        star = z 'i.icon.icon-star.is-filled', attributes
+        star = z 'i.icon.icon-star.is-filled'
         fullStars -= 1
       else if halfStars
-        star = z 'i.icon.icon-star-half-fill.is-filled', attributes,
+        star = z 'i.icon.icon-star-half-fill.is-filled',
           z 'i.icon.icon-star.is-empty' # bg star
         halfStars -= 1
       else if emptyStars
-        star = z 'i.icon.icon-star.is-empty', attributes
+        star = z 'i.icon.icon-star.is-empty'
         emptyStars -= 1
 
       return star
