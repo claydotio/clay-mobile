@@ -43,6 +43,7 @@ module.exports = class Drawer
   close: (e) =>
     e?.preventDefault()
     @isOpen = false
+    z.redraw()
 
   shareGame: (e) =>
     e?.preventDefault()

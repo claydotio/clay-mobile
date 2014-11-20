@@ -10,6 +10,7 @@ module.exports = class ModalClose
   close: (e) ->
     e?.preventDefault()
     Modal.closeComponent()
+    z.redraw()
 
   render: =>
     z 'a.modal-close[href=#]', onclick: @close,
