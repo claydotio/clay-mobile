@@ -27,7 +27,7 @@ class PushToken
             unless token
               return reject new Error 'No push token'
             request PATH,
-              method: 'post'
+              method: 'POST'
               body:
                 gameId: gameId
                 token: token

@@ -1,7 +1,6 @@
 @require 'nib'
 
 json('../../stylus/vars.json')
-@require '../../stylus/utils.styl'
 
 .game-box
   -webkit-tap-highlight-color: $transparent
@@ -17,7 +16,7 @@ json('../../stylus/vars.json')
 
   > h3
     font-size: $fontSizeSmall
-    margin: normalizeSpacing(5, unit($fontSizeSmall, '')) px
+    margin: 3px
     white-space: nowrap
     overflow: hidden
     text-overflow: ellipsis

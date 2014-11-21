@@ -21,6 +21,7 @@ module.exports = class GamePlayer
     @Spinner = new Spinner()
 
     @isLoading = true
+    @height = 'auto'
     @gameKey = gameKey
     @game = null
     @Drawer = null
@@ -43,8 +44,6 @@ module.exports = class GamePlayer
         if shouldShowModal
           @showShareModal(game)
 
-    @engagedPlayTimeout = window.setTimeout @logEngagedPlay, ENGAGED_PLAY_TIME
-
   onBeforeUnmount: =>
     window.clearTimeout @engagedPlayTimeout
     window.removeEventListener 'resize', @resize
@@ -53,11 +52,13 @@ module.exports = class GamePlayer
     @$el = $el
 
     window.addEventListener 'resize', @resize
-
     @resize()
 
+    @engagedPlayTimeout = window.setTimeout @logEngagedPlay, ENGAGED_PLAY_TIME
+
   resize: ->
-    @$el?.style.height = window.innerHeight + 'px'
+    @height = window.innerHeight + 'px'
+    z.redraw()
 
   logEngagedPlay: =>
     User.convertExperiment('engaged_play').catch log.trace
@@ -87,6 +88,8 @@ module.exports = class GamePlayer
           'Return to Clay.io'
     else if @game?.gameUrl
       z 'div.game-player',
+        style:
+          height: @height
         @SDK
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +

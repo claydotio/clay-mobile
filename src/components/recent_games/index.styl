@@ -1,24 +1,11 @@
 @require 'nib'
 
 json('../../stylus/vars.json')
-@require '../../stylus/utils.styl'
 
 .recent-games
   margin-bottom: 35px
 
 .recent-games-header
   color: $grayLight
-  margin: (normalizeSpacing(20, unit($fontSizeSmall, '')))px 0
-
-.recent-games-game-boxes
-  height: 168px
-  margin: 0 -5px
-  overflow: hidden
-
-  > .recent-games-game-box-container
-    display: inline-block
-    margin: 0 5px
-
-@media (min-width: 360px)
-  .recent-games-game-boxes
-    height: 133px
+  margin-top: 15px
+  margin-bottom: 8px
