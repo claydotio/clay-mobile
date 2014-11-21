@@ -1,7 +1,6 @@
 @require 'nib'
 
 json('../../stylus/vars.json')
-@require '../../stylus/utils.styl'
 
 .game-shoe-box
   -webkit-tap-highlight-color: $transparent
@@ -28,7 +27,7 @@ json('../../stylus/vars.json')
       font-size: $fontSizeMedium
       font-weight: normal
       margin-top: 0
-      margin-bottom: normalizeSpacing(10, unit($fontSizeMedium, '')) px
+      margin-bottom: 8px
       white-space: nowrap
       overflow: hidden
       text-overflow: ellipsis

@@ -16,7 +16,7 @@ class User
       me = if window._clay?.me
       then Promise.resolve window._clay.me
       else request PATH + '/login/anon',
-        method: 'post'
+        method: 'POST'
 
       # Save accessToken in cookie
       me.then (user) ->
@@ -29,7 +29,7 @@ class User
     me = Promise.resolve _me
     experiments = me.then (user) ->
       request config.FLAK_CANNON_PATH + '/experiments',
-        method: 'post'
+        method: 'POST'
         body:
           userId: user.id
     return me
@@ -39,7 +39,7 @@ class User
       Promise.all [
         @convertExperiment('engaged_activity')
         request PATH + '/me/lastEngagedActivity',
-          method: 'post'
+          method: 'POST'
           qs: {accessToken: me.accessToken}
       ]
       .then ([exp, res]) ->
@@ -51,7 +51,7 @@ class User
       then Promise.resolve window._clay.experiments
       else @getMe().then (user) ->
         request config.FLAK_CANNON_PATH + '/experiments',
-          method: 'post'
+          method: 'POST'
           body:
             userId: user.id
 
@@ -60,7 +60,7 @@ class User
   setExperimentsFrom: (shareOriginUserId) =>
     experiments = @getMe().then (user) ->
       request config.FLAK_CANNON_PATH + '/experiments',
-        method: 'post'
+        method: 'POST'
         body:
           fromUserId: shareOriginUserId
           userId: user.id
@@ -68,7 +68,7 @@ class User
   convertExperiment: (event, {uniq} = {}) =>
     @getMe().then (user) ->
       request config.FLAK_CANNON_PATH + '/conversions',
-        method: 'post'
+        method: 'POST'
         body:
           event: event
           uniq: uniq
@@ -77,7 +77,7 @@ class User
   addRecentGame: (gameId) =>
     @getMe().then (me) ->
       request PATH + '/me/links/recentGames',
-        method: 'patch'
+        method: 'PATCH'
         qs:
           {accessToken: me.accessToken}
         body:
