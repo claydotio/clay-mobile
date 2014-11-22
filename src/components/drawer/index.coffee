@@ -9,6 +9,7 @@ Modal = require '../../models/modal'
 User = require '../../models/user'
 UrlService = require '../../services/url'
 KikService = require '../../services/kik'
+NativeService = require '../../services/native'
 
 styles = require './index.styl'
 
@@ -47,8 +48,28 @@ module.exports = class Drawer
 
   shareGame: (e) =>
     e?.preventDefault()
-    KikService.shareGame @game
-    .catch log.trace
+
+    # TODO: (Austin) replace with impact hammer
+    Promise.all [
+      # FIXME: Don't even load Kik on non-kik - they could very well make
+      # getUser return something in a new version of Kik
+      # (they did with kik.send)
+      Promise.resolve kik?.getUser
+      NativeService.validateParent()
+    ]
+    .then ([isKik, isAndroidApp]) =>
+      if isKik
+        KikService.shareGame @game
+        .catch log.trace
+      else if isAndroidApp
+        NativeService.shareGame @game
+        .catch log.trace
+      else
+        tweet = "Come play #{@game.name} with me!
+                #{UrlService.getMarketplaceGame({@game})}"
+        maxTweetLength = 140
+        tweet = encodeURIComponent tweet.substr 0, maxTweetLength
+        window.open "https://twitter.com/intent/tweet?text=#{tweet}"
 
     ga? 'send', 'event', 'drawer', 'share', @game.key
 
