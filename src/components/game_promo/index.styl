@@ -1,4 +1,23 @@
 @require 'nib'
 
+json('../../stylus/vars.json')
+
 .game-promo
-  display: inline-block
+  -webkit-tap-highlight-color: $transparent
+  font-size: $fontSizeSmall
+  display: block
+  margin: 0 5px
+
+  &:active
+    opacity: 0.6
+
+.game-promo-info
+  text-align: left
+  width: 100%
+
+  > h3
+    font-size: $fontSizeSmall
+    margin: 3px
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis

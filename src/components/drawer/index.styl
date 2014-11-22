@@ -1,7 +1,6 @@
 @require 'nib'
 
 json('../../stylus/vars.json')
-@require '../../stylus/utils.styl'
 
 $drawerWidth = 288
 $drawerContentPadding = 20
@@ -113,12 +112,11 @@ $zIndexDrawerHeader = 100
         text-transform: uppercase
         font-size: $fontSizeSmall
         font-weight: bold
-        margin-bottom: normalizeSpacing(5, unit($fontSizeSmall, '')) px
+        margin-bottom: 3px
 
     > .drawer-promo-title
         margin: 0
-        margin-top: normalizeSpacing(5, unit($fontSizeLarge, '')) px
-        margin-bottom: normalizeSpacing(20, unit($fontSizeLarge, '')) px
+        margin-bottom: 15px
         font-size: $fontSizeLarge
         whitespace: nowrap
         overflow: hidden

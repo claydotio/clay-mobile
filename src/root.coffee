@@ -10,10 +10,7 @@ kik = require 'kik'
 
 config = require './config'
 PlayGamePage = require './pages/play_game'
-GamesPageControl = require './pages/games'
-GamesPageRecentTabs = require './pages/games/recent_tabs'
-GamesPageRecentList = require './pages/games/recent_list'
-GamesPageRecentBoxes = require './pages/games/recent_boxes'
+GamesPage = require './pages/games'
 PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
@@ -69,7 +66,7 @@ reportError = ->
     else arg
 
   window.fetch config.API_PATH + '/log',
-    method: 'post'
+    method: 'POST'
     headers:
       'Accept': 'application/json'
       'Content-Type': 'application/json'
@@ -155,53 +152,44 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.router.setMode 'pathname'
 
-User.getExperiments().then (params) ->
-  switch params.gamesPage
-    when 'recent_tabs' then GamesPageRecentTabs
-    when 'recent_list' then GamesPageRecentList
-    when 'recent_boxes' then GamesPageRecentBoxes
-    else GamesPageRecentBoxes
+# track kik metrics (users sending messages, etc...)
+kik?.metrics?.enableGoogleAnalytics?()
 
-.then (GamesPage) ->
+# Passed via message to denote game (share button in drawer uses this)
+kikGameKey = kik?.message?.gameKey
 
-  # track kik metrics (users sending messages, etc...)
-  kik?.metrics?.enableGoogleAnalytics?()
+shouldRouteToGamePage = kikGameKey or
+                        (not UrlService.isRootPath() and not config.MOCK)
+gameKey = null
+if shouldRouteToGamePage
+  if kikGameKey
+    gameKey = kikGameKey
+  else # subdomain
+    gameKey = UrlService.getSubdomain()
+    PushToken.createByGameKey gameKey
+    # marketplace in picker, causing it to appear in side-bar
+    # This is also used to pass the marketplace anon-user token
+    # which is used for tracking uniq share conversions
+    # And also for passing the user object through
+    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+    kik?.picker? marketplaceBaseUrl, {}, (res) ->
+      kikAnonymousToken = res.token
+      if res.user
+        User.setMe res.user
+else
+  PushToken.createForMarketplace()
 
-  # Passed via message to denote game (share button in drawer uses this)
-  kikGameKey = kik?.message?.gameKey
+# This is down here because of the User.setMe() call above
+root = document.getElementById('app')
+z.router.setRoot root
+z.router.add '/', GamesPage
+z.router.add '/games', GamesPage
+z.router.add '/game/:key', PlayGamePage
+z.router.add '/games/:filter', GamesPage
 
-  shouldRouteToGamePage = kikGameKey or
-                          (not UrlService.isRootPath() and not config.MOCK)
-  gameKey = null
-  if shouldRouteToGamePage
-    if kikGameKey
-      gameKey = kikGameKey
-    else # subdomain
-      gameKey = UrlService.getSubdomain()
-      PushToken.createByGameKey gameKey
-      # marketplace in picker, causing it to appear in side-bar
-      # This is also used to pass the marketplace anon-user token
-      # which is used for tracking uniq share conversions
-      # And also for passing the user object through
-      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-      kik?.picker? marketplaceBaseUrl, {}, (res) ->
-        kikAnonymousToken = res.token
-        if res.user
-          User.setMe res.user
-  else
-    PushToken.createForMarketplace()
+if gameKey
+  z.router.go "/game/#{gameKey}"
+else
+  z.router.go()
 
-  # This is down here because of the User.setMe() call above
-  root = document.getElementById('app')
-  z.router.setRoot root
-  z.router.add '/', GamesPage
-  z.router.add '/games', GamesPage
-  z.router.add '/game/:key', PlayGamePage
-  z.router.add '/games/:filter', GamesPage
-
-  if gameKey
-    z.router.go "/game/#{gameKey}"
-  else
-    z.router.go()
-
-  log.info 'App Ready'
+log.info 'App Ready'

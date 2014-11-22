@@ -1,6 +1,11 @@
 z = require 'zorium'
+kik = require 'kik'
+log = require 'clay-loglevel'
 
+RatingsWidget = require '../stars'
 UrlService = require '../../services/url'
+User = require '../../models/user'
+styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
@@ -8,32 +13,30 @@ module.exports = class GamePromo
   constructor: ({@game, @width, @height}) ->
     styles.use()
 
+    @width ?= styleConfig.$marketplaceGamePromoWidth
+    @height ?= styleConfig.$marketplaceGamePromoHeight
+
+    @RatingsWidget = new RatingsWidget stars: @game.rating
+    @gameSubdomainUrl = UrlService.getGameSubdomain {@game}
+
   loadGame: (e) =>
     e?.preventDefault()
 
-    # technically we could use a URL to track (a la GA URL builder) BUT
-    # Kik things pages with query params are a different app, and it's cleaner
-    # to have all metrics we're tracking in a single format (events)
-
-    # if already on marketplace, keep them there with game route, otherwise
-    # hard redirect to marketplace / gameRoute
-    redirect = =>
-      if UrlService.isRootPath()
-        z.router.go UrlService.getGameRoute {@game}
-      else
-        window.location.href = UrlService.getMarketplaceGame {@game}
-
-    # if ga is loaded in, send the event, then load the marketplace
-    if ga
-      ga 'send', 'event', 'game_promo', 'click', @game.key,
-        {hitCallback: redirect}
-    else
-      redirect()
+    ga? 'send', 'event', 'game_promo', 'click', @game.key
+    User.convertExperiment('game_promo').catch log.trace
+    z.router.go UrlService.getGameRoute {@game}
+    httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
+    kik.picker?(httpSubDomainUrl, {}, -> null)
 
   render: =>
-    gameSubdomainUrl = UrlService.getGameSubdomain {@game}
-    z "a.game-promo[href=#{gameSubdomainUrl}]", {onclick: @loadGame},
+    z "a.game-promo[href=#{@gameSubdomainUrl}]",
+      onclick: @loadGame
+      style:
+        width: "#{@width}px",
       z 'img',
         src: @game.promo440Url
         width: @width
         height: @height
+      z '.game-promo-info',
+        z 'h3', @game.name
+        @RatingsWidget

@@ -2,15 +2,19 @@ z = require 'zorium'
 _ = require 'lodash'
 log = require 'clay-loglevel'
 
-GameFilter = require '../../models/game_filter'
+Game = require '../../models/game'
 GameBox = require '../game_box'
-GamePromo = require '../game_promo/with_info'
+GamePromo = require '../game_promo'
 Spinner = require '../spinner'
 
-styles = require './popular_small_top.styl'
+styles = require './index.styl'
 
+# loading 13 at a time lets the featured images load in the right position for
+# each batch. 12 (least common multiple of 2, 3) normal images + 1 featured
 LOAD_MORE_GAMES_LIMIT = 13
 SCROLL_THRESHOLD = 250
+BOXES_PER_ROW_SMALL_SCREEN = 2
+BOXES_PER_ROW_MEDIUM_SCREEN = 3
 
 elTopPosition = ($el) ->
   if $el
@@ -18,8 +22,10 @@ elTopPosition = ($el) ->
   else 0
 
 module.exports = class GameResults
-  constructor: ->
+  constructor: ({featuredGameRow} = {}) ->
     styles.use()
+
+    featuredGameRow ?= 0
 
     @gameLinks = []
 
@@ -27,10 +33,12 @@ module.exports = class GameResults
       @gameBoxSize = 100
       @gamePromoWidth = 320
       @gamePromoHeight = 204
+      @featuredGamePosition = featuredGameRow * BOXES_PER_ROW_MEDIUM_SCREEN
     else
       @gameBoxSize = 135
       @gamePromoWidth = 280
       @gamePromoHeight = 178
+      @featuredGamePosition = featuredGameRow * BOXES_PER_ROW_SMALL_SCREEN
 
     @Spinner = new Spinner()
     @isLoading = true
@@ -77,18 +85,18 @@ module.exports = class GameResults
     @isLoading = true
     z.redraw()
 
-    GameFilter.getGames
+    Game.getTop
       limit: LOAD_MORE_GAMES_LIMIT
       skip: @gameLinks.length
     .then (games) =>
       @gameLinks = @gameLinks.concat _.map games, (game, index) =>
-        if index is 0
+        if index is @featuredGamePosition
           type: 'featured'
-          module: new GamePromo(
+          component: new GamePromo(
             {game, width: @gamePromoWidth, height: @gamePromoHeight}
           )
         else
-          type: 'default', module: new GameBox {game, iconSize: @gameBoxSize}
+          type: 'default', component: new GameBox {game, iconSize: @gameBoxSize}
 
       @isLoading = false
 
@@ -107,10 +115,10 @@ module.exports = class GameResults
           (_.map @gameLinks, (gameLink) ->
             if gameLink.type is 'featured'
               z '.game-results-featured-game-box-container',
-                gameLink.module
+                gameLink.component
             else
               z '.game-results-game-box-container',
-                gameLink.module
+                gameLink.component
           ).concat [
             if @isLoading then z '.game-results-spinner', @Spinner
           ]

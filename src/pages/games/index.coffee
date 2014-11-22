@@ -1,21 +1,28 @@
 z = require 'zorium'
 
-GameFilter = require '../../models/game_filter'
 Header = require '../../components/header'
-GameMenu = require '../../components/game_menu'
-GameResults = require '../../components/game_results'
+RecentGames = require '../../components/recent_games'
+PopularGames = require '../../components/popular_games'
+User = require '../../models/user'
 
 module.exports = class GamesPage
-  constructor: ({filter} = {}) ->
-    GameFilter.setFilter filter or 'top'
-
+  constructor: ->
     @Header = new Header()
-    @GameMenu = new GameMenu()
-    @GameResults = new GameResults()
+    @RecentGames = new RecentGames()
+
+    @PopularGames = null
+    User.getMe().then (user) =>
+      hasRecentGames = user.links.recentGames
+      if hasRecentGames
+        @PopularGames = new PopularGames({featuredGameRow: 1})
+      else
+        @PopularGames = new PopularGames({featuredGameRow: 0})
+
+      z.redraw()
 
   render: =>
     z 'div', [
       z 'div', @Header
-      z 'div', @GameMenu
-      z 'div', @GameResults
+      z 'div', @RecentGames
+      z 'div', @PopularGames
     ]
