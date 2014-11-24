@@ -14,8 +14,11 @@ GamesPage = require './pages/games'
 PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
+PortalService = require './services/portal'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
+
+PortalService.registerMethods()
 
 ##############
 # KIK PICKER #
