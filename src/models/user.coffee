@@ -20,7 +20,8 @@ class User
 
       # Save accessToken in cookie
       me.then (user) ->
-        document.cookie = "accessToken=#{user.accessToken}"
+        document.cookie = "accessToken=#{user.accessToken};" +
+                          'path=/;domain=.clay.io'
       .catch log.trace
 
     return me
