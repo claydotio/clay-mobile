@@ -155,6 +155,13 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.router.setMode 'pathname'
 
+root = document.getElementById('app')
+z.router.setRoot root
+z.router.add '/', GamesPage
+z.router.add '/games', GamesPage
+z.router.add '/game/:key', PlayGamePage
+z.router.add '/games/:filter', GamesPage
+
 # track kik metrics (users sending messages, etc...)
 kik?.metrics?.enableGoogleAnalytics?()
 
@@ -166,7 +173,7 @@ shouldRouteToGamePage = kikGameKey or
 gameKey = null
 if shouldRouteToGamePage
   if kikGameKey
-    gameKey = kikGameKey
+    z.router.go "/game/#{kikGameKey}"
   else # subdomain
     gameKey = UrlService.getSubdomain()
     PushToken.createByGameKey gameKey
@@ -179,20 +186,10 @@ if shouldRouteToGamePage
       kikAnonymousToken = res.token
       if res.user
         User.setMe res.user
+
+      z.router.go "/game/#{gameKey}"
 else
   PushToken.createForMarketplace()
-
-# This is down here because of the User.setMe() call above
-root = document.getElementById('app')
-z.router.setRoot root
-z.router.add '/', GamesPage
-z.router.add '/games', GamesPage
-z.router.add '/game/:key', PlayGamePage
-z.router.add '/games/:filter', GamesPage
-
-if gameKey
-  z.router.go "/game/#{gameKey}"
-else
   z.router.go()
 
 log.info 'App Ready'
