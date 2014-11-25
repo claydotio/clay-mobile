@@ -24,11 +24,11 @@ app.listen config.PORT, ->
 entries = [
   "webpack-dev-server/client?http://#{webpackDevHostname}:#{webpackDevPort}"
   'webpack/hot/dev-server'
-  './src/root'
 ]
 # Order matters because mock overrides window.XMLHttpRequest
 if isMockingApi
-  entries = ['./src/mock'].concat entries
+  entries = entries.concat ['./src/mock']
+entries = entries.concat ['./src/root']
 
 new WebpackDevServer webpack({
   entry: entries
