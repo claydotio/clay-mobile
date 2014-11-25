@@ -10,6 +10,8 @@ class PortalService
   constructor: ->
     portal.up()
 
+  get: portal.get
+
   registerMethods: =>
     portal.register 'auth.getStatus', @authGetStatus
     portal.register 'share.any', @shareAny

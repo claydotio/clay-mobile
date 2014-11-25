@@ -74,7 +74,7 @@
     "lodash": "2.4.1",
     "loglevel": "1.1.0",
     "pm2": "0.10.3",
-    "portal-gun": "0.0.2",
+    "portal-gun": "0.0.4",
     "promiz": "1.0.0",
     "request": "2.40.0",
     "zorium": "0.2.12"
