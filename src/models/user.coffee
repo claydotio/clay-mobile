@@ -4,7 +4,7 @@ _ = require 'lodash'
 request = require '../lib/request'
 config = require '../config'
 
-PATH = config.API_PATH + '/users'
+PATH = config.API_URL + '/users'
 
 me = null
 experiments = null
@@ -29,7 +29,7 @@ class User
   setMe: (_me) ->
     me = Promise.resolve _me
     experiments = me.then (user) ->
-      request config.FLAK_CANNON_PATH + '/experiments',
+      request config.FC_API_URL + '/experiments',
         method: 'POST'
         body:
           userId: user.id
@@ -51,7 +51,7 @@ class User
       experiments = if window._clay?.experiments
       then Promise.resolve window._clay.experiments
       else @getMe().then (user) ->
-        request config.FLAK_CANNON_PATH + '/experiments',
+        request config.FC_API_URL + '/experiments',
           method: 'POST'
           body:
             userId: user.id
@@ -60,7 +60,7 @@ class User
 
   setExperimentsFrom: (shareOriginUserId) =>
     experiments = @getMe().then (user) ->
-      request config.FLAK_CANNON_PATH + '/experiments',
+      request config.FC_API_URL + '/experiments',
         method: 'POST'
         body:
           fromUserId: shareOriginUserId
@@ -68,7 +68,7 @@ class User
 
   convertExperiment: (event, {uniq} = {}) =>
     @getMe().then (user) ->
-      request config.FLAK_CANNON_PATH + '/conversions',
+      request config.FC_API_URL + '/conversions',
         method: 'POST'
         body:
           event: event

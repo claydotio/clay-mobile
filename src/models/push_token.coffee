@@ -5,7 +5,7 @@ config = require '../config'
 Game = require '../models/game'
 request = require '../lib/request'
 
-PATH = config.API_PATH + '/pushTokens'
+PATH = config.API_URL + '/pushTokens'
 
 class PushToken
   createForMarketplace: =>
