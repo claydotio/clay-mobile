@@ -64,9 +64,12 @@ mock = new Zock()
   .get '/games/1'
   .reply 200, (res) ->
     prism
+  .post '/log'
+  .reply 204
   .post '/pushTokens'
   .reply 200, (res) ->
     {gameId: prism.id, token: 'mocked_token'}
+
 
 window.XMLHttpRequest = ->
   mock.XMLHttpRequest()
