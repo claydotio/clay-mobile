@@ -1,0 +1,35 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+.z-dev-dashboard-header
+  height: 80px
+  padding: 20px
+  background: $white
+
+  .logo
+    > img
+      height: 80px
+      vertical-align: middle
+
+
+    > .title
+      font-size: 60px
+      font-weight: lighter
+      color: $grayLight
+      vertical-align: middle
+      padding-left: 10px
+
+  .user
+    margin-left: auto
+    align-self: center
+
+    > .name
+      font-weight: bold
+      font-size: $fontSizeMedium
+      display: inline-block
+      vertical-align: middle
+      margin-right: 20px
+
+    > img
+      width: 50px
+      vertical-align: middle

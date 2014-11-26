@@ -11,6 +11,7 @@ kik = require 'kik'
 config = require './config'
 PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
+DevDashboardPage = require './pages/dev_dashboard'
 PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
@@ -162,14 +163,15 @@ z.router.add '/games', GamesPage
 z.router.add '/game/:key', PlayGamePage
 z.router.add '/games/:filter', GamesPage
 
+z.router.add '/developers/dashboard', DevDashboardPage
+
 # track kik metrics (users sending messages, etc...)
 kik?.metrics?.enableGoogleAnalytics?()
 
 # Passed via message to denote game (share button in drawer uses this)
 kikGameKey = kik?.message?.gameKey
 
-shouldRouteToGamePage = kikGameKey or
-                        (not UrlService.isRootPath() and not config.MOCK)
+shouldRouteToGamePage = kikGameKey or not UrlService.isRootPath()
 gameKey = null
 if shouldRouteToGamePage
   if kikGameKey
