@@ -108,17 +108,17 @@ module.exports = class GameResults
         return true
 
   render: =>
-    z 'section.game-results',
+    z 'section.z-game-results',
       z 'div.l-content-container',
-        z 'h2.game-results-header', 'Most popular games'
-          z 'div.game-results-game-boxes',
+        z 'h2.z-game-results-header', 'Most popular games'
+          z 'div.z-game-results-game-boxes',
           (_.map @gameLinks, (gameLink) ->
             if gameLink.type is 'featured'
-              z '.game-results-featured-game-box-container',
+              z '.z-game-results-featured-game-box-container',
                 gameLink.component
             else
-              z '.game-results-game-box-container',
+              z '.z-game-results-game-box-container',
                 gameLink.component
           ).concat [
-            if @isLoading then z '.game-results-spinner', @Spinner
+            if @isLoading then z '.z-game-results-spinner', @Spinner
           ]

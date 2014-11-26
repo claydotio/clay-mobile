@@ -89,40 +89,40 @@ module.exports = class Drawer
 
     # TODO: (Austin) some sort of fast-click equivalent on top of mithril
     [
-      z "div.drawer-overlay#{drawerOverlayIsOpen}",
+      z "div.z-drawer-overlay#{drawerOverlayIsOpen}",
         ontouchstart: @close
-      z 'div.drawer-nub',
+      z 'div.z-drawer-nub',
         @Nub
-      z "div.drawer#{drawerIsOpen}",
-        z 'div.drawer-header',
-          z 'a[href=#].drawer-close',
+      z "div.z-drawer#{drawerIsOpen}",
+        z 'div.z-drawer-header',
+          z 'a[href=#].z-drawer-close',
             onclick: @close,
             z 'i.icon.icon-close'
-          z 'a[href=#{UrlService.getMarketplaceBase()].drawer-home',
+          z 'a[href=#{UrlService.getMarketplaceBase()].z-drawer-home',
             onclick: @openMarketplace,
             z 'i.icon.icon-home'
-        z 'div.drawer-inner',
-          z 'div.drawer-promo',
+        z 'div.z-drawer-inner',
+          z 'div.z-drawer-promo',
             style:
               backgroundImage: "url(#{@game.promo440Url})",
-            z 'div.drawer-promo-text',
-              z 'div.drawer-promo-descriptor', "You're playing"
-              z 'h1.drawer-promo-title', @game.name
-          z 'div.drawer-content',
-            z '.drawer-share',
-              z 'div.drawer-share-inner',
-                z 'button.button-primary.is-block.drawer-share-button',
+            z 'div.z-drawer-promo-text',
+              z 'div.z-drawer-promo-descriptor', "You're playing"
+              z 'h1.z-drawer-promo-title', @game.name
+          z 'div.z-drawer-content',
+            z '.z-drawer-share',
+              z 'div.z-drawer-share-inner',
+                z 'button.button-primary.is-block.z-drawer-share-button',
                   onclick: @shareGame,
                   z 'i.icon.icon-share'
                   'Share with friends'
             z "a[href=#{UrlService.getMarketplaceBase()}]
-              .drawer-marketplace-link",
+              .z-drawer-marketplace-link",
               onclick: @openMarketplace,
               z 'i.icon.icon-heart'
-              z 'span.drawer-menu-item', 'Recommended games'
-            z 'div.drawer-cross-promotion',
+              z 'span.z-drawer-menu-item', 'Recommended games'
+            z 'div.z-drawer-cross-promotion',
               @CrossPromotion
-              z 'button.button-secondary.is-block.drawer-browse-more',
+              z 'button.button-secondary.is-block.z-drawer-browse-more',
                 onclick: @openMarketplace,
                 'Browse more games'
     ]

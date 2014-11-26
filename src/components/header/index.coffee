@@ -11,6 +11,6 @@ module.exports = class Header
     @MarketplaceShare = new MarketplaceShare()
 
   render: ->
-    z 'header.header',
-      z 'a.header-logo[href=/]'
-      z 'div.header-marketplace-share', @MarketplaceShare
+    z 'header.z-header',
+      z 'a.z-header-logo[href=/]'
+      z 'div.z-header-marketplace-share', @MarketplaceShare

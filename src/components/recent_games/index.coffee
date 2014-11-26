@@ -29,10 +29,10 @@ module.exports = class RecentGames
     if _.isEmpty @gameShoeBoxes
       return
 
-    z 'section.recent-games',
+    z 'section.z-recent-games',
       z 'div.l-content-container',
-        z 'h2.recent-games-header', 'Recently Played'
-        z 'div.recent-games-game-boxes',
+        z 'h2.z-recent-games-header', 'Recently Played'
+        z 'div.z-recent-games-game-boxes',
           _.map @gameShoeBoxes, (gameShoeBox) ->
-            z 'div.recent-games-game-box-container',
+            z 'div.z-recent-games-game-box-container',
               gameShoeBox
