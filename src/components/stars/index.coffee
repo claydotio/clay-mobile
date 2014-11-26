@@ -33,7 +33,7 @@ module.exports = class RatingsWidget
     halfStars = @halfStars
     fullStars = @fullStars
 
-    z 'div.stars', _.map _.range(5), (i) ->
+    z 'div.z-stars', _.map _.range(5), (i) ->
       rating = i + 1
       # what to do when a star is clicked
 

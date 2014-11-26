@@ -31,7 +31,7 @@ describe 'ModalClose', ->
     $ = Stub.render()
 
     $closeIcon = domWalker.find $, ($node) ->
-      return hasClass $node, 'modal-close'
+      return hasClass $node, 'z-modal-close'
 
     $closeIcon.properties.onclick()
 

@@ -82,12 +82,12 @@ module.exports = class GamePlayer
     @onFirstRender()
 
     if @isLoading
-      z '.game-player-missing',
+      z '.z-game-player-missing',
         @Spinner
         z 'button.button-ghost', {onclick: @redirectToMarketplace},
           'Return to Clay.io'
     else if @game?.gameUrl
-      z 'div.game-player',
+      z 'div.z-game-player',
         style:
           height: @height
         @SDK
@@ -97,7 +97,7 @@ module.exports = class GamePlayer
               src: @game?.gameUrl
         @Drawer
     else
-      z '.game-player-missing',
+      z '.z-game-player-missing',
         z 'div', 'Game Not Found'
         z 'button.button-ghost', {onclick: @redirectToMarketplace},
           'Return to Clay.io'

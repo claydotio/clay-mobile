@@ -35,11 +35,11 @@ module.exports = class GameShare
   render: =>
     @onFirstRender()
 
-    z 'div.game-share',
+    z 'div.z-game-share',
       @ModalClose
-      z 'div.game-share-header',
-        z 'h1.game-share-title', "#{@game.name}"
-      z 'div.game-share-content',
-        z 'div.game-share-message', 'Having fun? Spread the word!'
+      z 'div.z-game-share-header',
+        z 'h1.z-game-share-title', "#{@game.name}"
+      z 'div.z-game-share-content',
+        z 'div.z-game-share-message', 'Having fun? Spread the word!'
         z 'button.button-primary.is-block', onclick: @shareGame,
           'Share with friends'

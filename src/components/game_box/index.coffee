@@ -29,7 +29,7 @@ module.exports = class GameBox
     kik.picker?(httpSubDomainUrl, {}, -> null)
 
   render: =>
-    z "a.game-box[href=#{@gameSubdomainUrl}]",
+    z "a.z-game-box[href=#{@gameSubdomainUrl}]",
       onclick: @loadGame
       style:
         width: "#{@iconSize}px",
@@ -37,6 +37,6 @@ module.exports = class GameBox
         src: @game.icon128Url
         width: @iconSize
         height: @iconSize
-      z '.game-box-info',
+      z '.z-game-box-info',
         z 'h3', @game.name
         @RatingsWidget

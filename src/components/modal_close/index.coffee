@@ -13,5 +13,5 @@ module.exports = class ModalClose
     z.redraw()
 
   render: =>
-    z 'a.modal-close[href=#]', onclick: @close,
+    z 'a.z-modal-close[href=#]', onclick: @close,
       z 'i.icon.icon-close'
