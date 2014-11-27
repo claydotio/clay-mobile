@@ -59,7 +59,7 @@ describe 'PortalService', ->
 
   describe 'share.any()', ->
     before ->
-      PortalService.__set__ 'kik.getUser', -> null
+      PortalService.__set__ 'kik.enabled', -> false
 
     it 'shares via kik', ->
       kikSent = false
@@ -88,7 +88,7 @@ describe 'PortalService', ->
       PortalService.__set__ 'kik',
         send: (params) ->
           return params
-        getUser: true
+        enabled: true
         browser:
           setOrientationLock: -> null
         metrics:
