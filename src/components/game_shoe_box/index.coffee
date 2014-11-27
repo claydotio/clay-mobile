@@ -22,7 +22,7 @@ module.exports = class GameShoeBox
     User.convertExperiment('game_shoe_box_click').catch log.trace
     z.router.go UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
-    kik.picker?(httpSubDomainUrl, {}, -> null)
+    kik?.picker?(httpSubDomainUrl, {}, -> null)
 
   render: =>
     z "a.z-game-shoe-box[href=#{@gameSubdomainUrl}]", {onclick: @loadGame}, [

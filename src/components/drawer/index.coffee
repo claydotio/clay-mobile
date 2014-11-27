@@ -32,12 +32,6 @@ module.exports = class Drawer
     if @isOpen
       ga? 'send', 'event', 'drawer', 'open', @game.key
 
-    # This is a workaround for this Mithril issue:
-    # https://github.com/lhorie/mithril.js/issues/273
-    # Without this, if the game iframe is clicked before the drawer nub
-    # then the iframe is re-loaded because it is the activeElement
-    # during the Mithril DOM-diff
-    window.document.activeElement?.blur()
     z.redraw()
 
   close: (e) =>
@@ -87,7 +81,7 @@ module.exports = class Drawer
       drawerIsOpen = ''
       drawerOverlayIsOpen = ''
 
-    # TODO: (Austin) some sort of fast-click equivalent on top of mithril
+    # TODO: (Austin) some sort of fast-click equivalent on top of zorium
     [
       z "div.z-drawer-overlay#{drawerOverlayIsOpen}",
         ontouchstart: @close

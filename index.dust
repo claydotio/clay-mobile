@@ -89,7 +89,6 @@
       // restore console.log, window.open (since kik messes with them)
       console.log = logClone
       window.open = windowOpenClone
-      console.log(window.open);
     </script>
     {! Inject current user to prevent round-trip !}
     <script>window._clay={};window._clay.me={me|s};window._clay.experiments={experiments|s};</script>
