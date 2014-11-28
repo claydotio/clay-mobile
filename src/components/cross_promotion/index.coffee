@@ -22,7 +22,7 @@ module.exports = class CrossPromotion
     .catch log.trace
 
   render: =>
-    z 'div.cross-promotion',
+    z 'div.z-cross-promotion',
       _.map @gameBoxes, (GameBox) ->
-        z 'div.cross-promotion-game-box',
+        z 'div.z-cross-promotion-game-box',
           GameBox

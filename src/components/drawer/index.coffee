@@ -11,9 +11,7 @@ Nub = require '../nub'
 Modal = require '../../models/modal'
 User = require '../../models/user'
 UrlService = require '../../services/url'
-KikService = require '../../services/kik'
-NativeService = require '../../services/native'
-EnvironmentService = require '../../services/environment'
+PortalService = require '../../services/portal'
 
 styles = require './index.styl'
 
@@ -44,29 +42,22 @@ module.exports = class Drawer
     if @isOpen
       ga? 'send', 'event', 'drawer', 'open', @game.key
 
-    # This is a workaround for this Mithril issue:
-    # https://github.com/lhorie/mithril.js/issues/273
-    # Without this, if the game iframe is clicked before the drawer nub
-    # then the iframe is re-loaded because it is the activeElement
-    # during the Mithril DOM-diff
-    window.document.activeElement?.blur()
     z.redraw()
 
   close: (e) =>
     e?.preventDefault()
     @isOpen = false
+    z.redraw()
 
   shareGame: (e) =>
     e?.preventDefault()
 
-    EnvironmentService.getPlatform().then (platform) =>
-      switch platform
-        when 'kik'
-          KikService.shareGame @game
-          .catch log.trace
-        when 'androidApp'
-          NativeService.shareGame @game
-          .catch log.trace
+    text = "Come play #{@game.name} with me!
+           #{UrlService.getMarketplaceGame({@game})}"
+
+    PortalService.get 'share.any',
+      gameId: @game.id
+      text: text
 
     ga? 'send', 'event', 'drawer', 'share', @game.key
 
@@ -100,42 +91,43 @@ module.exports = class Drawer
       drawerIsOpen = ''
       drawerOverlayIsOpen = ''
 
-    # TODO: (Austin) some sort of fast-click equivalent on top of mithril
+    # TODO: (Austin) some sort of fast-click equivalent on top of zorium
     [
-      z "div.drawer-overlay#{drawerOverlayIsOpen}",
+      z "div.z-drawer-overlay#{drawerOverlayIsOpen}",
         ontouchstart: @close
-      z 'div.drawer-nub',
+      z 'div.z-drawer-nub',
         @Nub
-      z "div.drawer#{drawerIsOpen}",
-        z 'div.drawer-header',
-          z 'a[href=#].drawer-close',
+      z "div.z-drawer#{drawerIsOpen}",
+        z 'div.z-drawer-header',
+          z 'a[href=#].z-drawer-close',
             onclick: @close,
             z 'i.icon.icon-close'
-          z 'a[href=#{UrlService.getMarketplaceBase()].drawer-home',
+          z 'a[href=#{UrlService.getMarketplaceBase()].z-drawer-home',
             onclick: @openMarketplace,
             z 'i.icon.icon-home'
-        z 'div.drawer-inner',
-          z 'div.drawer-promo',
-            style: "background-image: url(#{@game.promo440Url})",
-            z 'div.drawer-promo-text',
-              z 'div.drawer-promo-descriptor', "You're playing"
-              z 'h1.drawer-promo-title', @game.name
-          z 'div.drawer-content',
-            z '.drawer-share',
-              z 'div.drawer-share-inner',
-                z 'button.button-primary.is-block.drawer-share-button',
+        z 'div.z-drawer-inner',
+          z 'div.z-drawer-promo',
+            style:
+              backgroundImage: "url(#{@game.promo440Url})",
+            z 'div.z-drawer-promo-text',
+              z 'div.z-drawer-promo-descriptor', "You're playing"
+              z 'h1.z-drawer-promo-title', @game.name
+          z 'div.z-drawer-content',
+            z '.z-drawer-share',
+              z 'div.z-drawer-share-inner',
+                z 'button.button-primary.is-block.z-drawer-share-button',
                   onclick: @shareGame,
                   z 'i.icon.icon-share'
                   'Share with friends'
             z 'div.drawer-google-play-ad-drawer', @GooglePlayAdDrawer
             z "a[href=#{UrlService.getMarketplaceBase()}]
-              .drawer-marketplace-link",
+              .z-drawer-marketplace-link",
               onclick: @openMarketplace,
               z 'i.icon.icon-heart'
-              z 'span.drawer-menu-item', 'Recommended games'
-            z 'div.drawer-cross-promotion',
+              z 'span.z-drawer-menu-item', 'Recommended games'
+            z 'div.z-drawer-cross-promotion',
               @CrossPromotion
-              z 'button.button-secondary.is-block.drawer-browse-more',
+              z 'button.button-secondary.is-block.z-drawer-browse-more',
                 onclick: @openMarketplace,
                 'Browse more games'
     ]

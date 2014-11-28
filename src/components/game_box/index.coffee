@@ -26,16 +26,17 @@ module.exports = class GameBox
     User.convertExperiment('game_box_click').catch log.trace
     z.router.go UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
-    kik.picker?(httpSubDomainUrl, {}, -> null)
+    kik?.picker?(httpSubDomainUrl, {}, -> null)
 
   render: =>
-    z "a.game-box[href=#{@gameSubdomainUrl}]",
+    z "a.z-game-box[href=#{@gameSubdomainUrl}]",
       onclick: @loadGame
-      style: "width: #{@iconSize}px",
+      style:
+        width: "#{@iconSize}px",
       z 'img',
         src: @game.icon128Url
         width: @iconSize
         height: @iconSize
-      z '.game-box-info',
+      z '.z-game-box-info',
         z 'h3', @game.name
         @RatingsWidget

@@ -10,15 +10,15 @@ kik = require 'kik'
 
 config = require './config'
 PlayGamePage = require './pages/play_game'
-GamesPageControl = require './pages/games'
-GamesPageRecentTabs = require './pages/games/recent_tabs'
-GamesPageRecentList = require './pages/games/recent_list'
-GamesPageRecentBoxes = require './pages/games/recent_boxes'
+GamesPage = require './pages/games'
 PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
+PortalService = require './services/portal'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
+
+PortalService.registerMethods()
 
 ##############
 # KIK PICKER #
@@ -68,8 +68,8 @@ reportError = ->
     then arg.message
     else arg
 
-  window.fetch config.API_PATH + '/log',
-    method: 'post'
+  window.fetch config.API_URL + '/log',
+    method: 'POST'
     headers:
       'Accept': 'application/json'
       'Content-Type': 'application/json'
@@ -116,7 +116,7 @@ window.setTimeout ->
 if shareOriginUserId and not hasVisitedBefore
   # Kik clears tokens often. Use their anon-token to identify users
   # The anon-token is unique for each 'app', so always use the marketplace one
-  if kik.enabled
+  if kik?.enabled
     if not kikAnonymousToken
       kik.getAnonymousUser (token) ->
         User.convertExperiment 'new_unique_from_share', {uniq: token}
@@ -155,53 +155,41 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.router.setMode 'pathname'
 
-User.getExperiments().then (params) ->
-  switch params.gamesPage
-    when 'recent_tabs' then GamesPageRecentTabs
-    when 'recent_list' then GamesPageRecentList
-    when 'recent_boxes' then GamesPageRecentBoxes
-    else GamesPageControl
+root = document.getElementById('app')
+z.router.setRoot root
+z.router.add '/', GamesPage
+z.router.add '/games', GamesPage
+z.router.add '/game/:key', PlayGamePage
+z.router.add '/games/:filter', GamesPage
 
-.then (GamesPage) ->
+# track kik metrics (users sending messages, etc...)
+kik?.metrics?.enableGoogleAnalytics?()
 
-  # track kik metrics (users sending messages, etc...)
-  kik?.metrics?.enableGoogleAnalytics?()
+# Passed via message to denote game (share button in drawer uses this)
+kikGameKey = kik?.message?.gameKey
 
-  # Passed via message to denote game (share button in drawer uses this)
-  kikGameKey = kik?.message?.gameKey
+shouldRouteToGamePage = kikGameKey or
+                        (not UrlService.isRootPath() and not config.MOCK)
+gameKey = null
+if shouldRouteToGamePage
+  if kikGameKey
+    z.router.go "/game/#{kikGameKey}"
+  else # subdomain
+    gameKey = UrlService.getSubdomain()
+    PushToken.createByGameKey gameKey
+    # marketplace in picker, causing it to appear in side-bar
+    # This is also used to pass the marketplace anon-user token
+    # which is used for tracking uniq share conversions
+    # And also for passing the user object through
+    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+    kik?.picker? marketplaceBaseUrl, {}, (res) ->
+      kikAnonymousToken = res.token
+      if res.user
+        User.setMe res.user
 
-  shouldRouteToGamePage = kikGameKey or
-                          (not UrlService.isRootPath() and not config.MOCK)
-  gameKey = null
-  if shouldRouteToGamePage
-    if kikGameKey
-      gameKey = kikGameKey
-    else # subdomain
-      gameKey = UrlService.getSubdomain()
-      PushToken.createByGameKey gameKey
-      # marketplace in picker, causing it to appear in side-bar
-      # This is also used to pass the marketplace anon-user token
-      # which is used for tracking uniq share conversions
-      # And also for passing the user object through
-      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-      kik?.picker? marketplaceBaseUrl, {}, (res) ->
-        kikAnonymousToken = res.token
-        if res.user
-          User.setMe res.user
-  else
-    PushToken.createForMarketplace()
+      z.router.go "/game/#{gameKey}"
+else
+  PushToken.createForMarketplace()
+  z.router.go()
 
-  # This is down here because of the User.setMe() call above
-  root = document.getElementById('app')
-  z.router.setRoot root
-  z.router.add '/', GamesPage
-  z.router.add '/games', GamesPage
-  z.router.add '/game/:key', PlayGamePage
-  z.router.add '/games/:filter', GamesPage
-
-  if gameKey
-    z.router.go "/game/#{gameKey}"
-  else
-    z.router.go()
-
-  log.info 'App Ready'
+log.info 'App Ready'

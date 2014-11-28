@@ -20,7 +20,7 @@ describe 'Drawer', ->
     $ = DrawerComponent.render()
     $drawer = _.find $, ($nodeSet) ->
       domWalker.find $nodeSet, ($node) ->
-        return hasClass $node, 'drawer'
+        return hasClass $node, 'z-drawer'
 
     hasClass($drawer, 'is-open').should.be.true
 
@@ -29,7 +29,7 @@ describe 'Drawer', ->
     $ = DrawerComponent.render()
     $drawer = _.find $, ($nodeSet) ->
       domWalker.find $nodeSet, ($node) ->
-        return hasClass $node, 'drawer'
+        return hasClass $node, 'z-drawer'
 
     hasClass($drawer, 'is-open').should.be.false
 

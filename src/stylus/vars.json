@@ -23,7 +23,7 @@
   "$iconLarge": "2.2rem",
   "$iconXXLarge": "4.2rem",
 
-  "$logoSvg": "//cdn.wtf/d/images/logos/logo.svg",
+  "$logoSvg": "//cdn.wtf/d/images/logos/logo_standard_bw.svg",
   "$icon256": "//cdn.wtf/d/images/icons/icon_256.png",
 
   "$marketplaceGamePromoWidth": 440,

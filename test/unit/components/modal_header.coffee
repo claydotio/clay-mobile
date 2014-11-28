@@ -31,7 +31,7 @@ describe 'ModalHeader', ->
     $ = Stub.render()
 
     $closeIcon = domWalker.find $, ($node) ->
-      return hasClass $node, 'modal-header-close'
+      return hasClass $node, 'z-modal-header-close'
 
     $closeIcon.properties.onclick()
 

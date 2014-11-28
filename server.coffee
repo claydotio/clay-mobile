@@ -33,38 +33,14 @@ distCss = if config.ENV is config.ENVS.PROD \
 
 dust.loadSource indexTpl
 
-
-# TODO: (Zoli) make pretty
-apiRequestUrl = (path) ->
-  apiPath = url.parse config.API_PATH + '/'
-
-  unless apiPath.host
-    apiPath.host = config.HOST
-
-  unless apiPath.protocol
-    apiPath.protocol = 'http'
-
-  url.format url.resolve url.format(apiPath), path
-
-fcApiRequestUrl = (path) ->
-  apiPath = url.parse config.FLAK_CANNON_PATH + '/'
-
-  unless apiPath.host
-    apiPath.host = config.HOST
-
-  unless apiPath.protocol
-    apiPath.protocol = 'http'
-
-  url.format url.resolve url.format(apiPath), path
-
 # Middlewares
 clayUserSessionParser = ->
   (req, res, next) ->
     req.clay = {}
     req.clay.me = null
 
-    loginUrl = apiRequestUrl 'users/login/anon'
-    meUrl = apiRequestUrl 'users/me'
+    loginUrl = config.API_URL + '/users/login/anon'
+    meUrl = config.API_URL + '/users/me'
     accessToken = req.cookies.accessToken
 
     if accessToken
@@ -106,7 +82,7 @@ clayFlakCannonSessionParser = ->
     unless me
       return next()
 
-    experimentsUrl = fcApiRequestUrl 'experiments'
+    experimentsUrl = config.FC_API_URL + '/experiments'
     Promise.promisify(request.post, request) experimentsUrl,
       {json: userId: me.id}
     .timeout API_REQUEST_TIMEOUT
@@ -229,7 +205,7 @@ renderHomePage = do ->
 
 renderGamePage = (gameKey, me, experiments) ->
 
-  gameUrl = apiRequestUrl "games/findOne?key=#{gameKey}"
+  gameUrl = config.API_URL + "/games/findOne?key=#{gameKey}"
 
   log.info 'GET', gameUrl
   Promise.promisify(request.get, request) gameUrl

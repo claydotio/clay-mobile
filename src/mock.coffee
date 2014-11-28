@@ -2,6 +2,8 @@ _ = require 'lodash'
 Zock = require 'zock'
 log = require 'clay-loglevel'
 
+config = require './config'
+
 game = (i, isNew) ->
   title = "game #{i}"
 
@@ -31,6 +33,10 @@ prism =
   rating: 5
 
 mock = new Zock()
+  .base(config.FC_API_URL)
+  .post '/experiments'
+  .reply 200, {}
+  .base(config.API_URL)
   .logger log.info
   .post '/users/login/anon'
   .reply 200, id: 1, accessToken: 'thisisanaccesstoken'
@@ -58,11 +64,12 @@ mock = new Zock()
   .get '/games/1'
   .reply 200, (res) ->
     prism
-  .post '/experiments'
-  .reply 200, {}
+  .post '/log'
+  .reply 204
   .post '/pushTokens'
   .reply 200, (res) ->
     {gameId: prism.id, token: 'mocked_token'}
+
 
 window.XMLHttpRequest = ->
   mock.XMLHttpRequest()

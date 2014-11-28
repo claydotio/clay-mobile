@@ -7,5 +7,5 @@ module.exports = class Spinner
     styles.use()
 
   render: ->
-    z '.spinner-container',
-      z '.spinner'
+    z '.z-spinner-container',
+      z '.z-spinner'

@@ -1,9 +1,8 @@
 @require 'nib'
 
 json('../../stylus/vars.json')
-@require '../../stylus/utils.styl'
 
-.game-box
+.z-game-box
   -webkit-tap-highlight-color: $transparent
   font-size: $fontSizeSmall
   display: block
@@ -11,13 +10,13 @@ json('../../stylus/vars.json')
   &:active
     opacity: 0.6
 
-.game-box-info
+.z-game-box-info
   text-align: left
   width: 100%
 
   > h3
     font-size: $fontSizeSmall
-    margin: normalizeSpacing(5, unit($fontSizeSmall, '')) px
+    margin: 3px
     white-space: nowrap
     overflow: hidden
     text-overflow: ellipsis
