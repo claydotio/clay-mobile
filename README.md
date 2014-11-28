@@ -34,14 +34,3 @@ API_URL is only if you're running [clay-mobile-api](https://github.com/claydotio
 > Plugins
   - [Kik Developer Tools](https://chrome.google.com/webstore/detail/kik-developer-tools/occbnccdhakfaomkhhdkmmknjbghmllm)
   - [fb-flo](https://chrome.google.com/webstore/detail/fb-flo/ahkfhobdidabddlalamkkiafpipdfchp?hl=en)
-
-
-### Cordova
-  # TODO: (Austin) automate this
-  - Install [Android SDK](https://developer.android.com/sdk/installing/index.html) standalone tools
-    - [This guide](https://help.ubuntu.com/community/AndroidSDK) is helpful for Linux
-  - [http://cordova.apache.org/docs/en/4.0.0//guide_cli_index.md.html#The%20Command-Line%20Interface](Install Cordova via NPM)
-  - `sudo apt-get install ant`
-
-#### Plugins to-be-installed
-  - https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin

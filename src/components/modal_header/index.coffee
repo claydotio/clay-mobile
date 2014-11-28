@@ -19,7 +19,7 @@ module.exports = class ModalHeader
     z.redraw()
 
   render: =>
-    z "div.modal-header#{if @theme then ".theme-#{@theme}" else ''}",
-      z 'a.modal-header-close[href=#]', onclick: @close,
+    z "div.z-modal-header#{if @theme then ".theme-#{@theme}" else ''}",
+      z 'a.z-modal-header-close[href=#]', onclick: @close,
         z 'i.icon.icon-close'
-      z 'h1.modal-header-title', "#{@title}"
+      z 'h1.z-modal-header-title', "#{@title}"

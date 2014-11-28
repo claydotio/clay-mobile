@@ -200,26 +200,3 @@ gulp.task 'styles:prod', ->
 gulp.task 'static:prod', ->
   gulp.src paths.static
     .pipe gulp.dest paths.dist
-
-
-
-
-
-
-
-
-# FIXME: cleanup
-gulp.task 'cordova:script', ->
-  gulp.src './cordova_src/root.coffee'
-    .pipe webpack
-      module:
-        loaders: [
-          { test: /\.coffee$/, loader: 'coffee' }
-        ]
-      plugins: [
-        new webpackSource.optimize.UglifyJsPlugin()
-      ]
-      resolve:
-        extensions: ['.coffee']
-    .pipe rename 'cordova.js'
-    .pipe gulp.dest './cordova/www/'

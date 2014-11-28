@@ -119,7 +119,7 @@ module.exports = class Drawer
                   onclick: @shareGame,
                   z 'i.icon.icon-share'
                   'Share with friends'
-            z 'div.drawer-google-play-ad-drawer', @GooglePlayAdDrawer
+            z 'div.z-drawer-google-play-ad-drawer', @GooglePlayAdDrawer
             z "a[href=#{UrlService.getMarketplaceBase()}]
               .z-drawer-marketplace-link",
               onclick: @openMarketplace,
