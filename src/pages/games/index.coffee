@@ -3,6 +3,7 @@ z = require 'zorium'
 localstore = require '../../lib/localstore'
 User = require '../../models/user'
 Modal = require '../../models/modal'
+FeaturesService = require '../../services/features'
 Header = require '../../components/header'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
@@ -16,7 +17,6 @@ User = require '../../models/user'
 module.exports = class GamesPage
   constructor: ->
     @Header = new Header()
-    @GooglePlayAd = new GooglePlayAd()
     @ModalViewer = new ModalViewer()
     @RecentGames = new RecentGames()
 
@@ -29,6 +29,9 @@ module.exports = class GamesPage
         @PopularGames = new PopularGames({featuredGameRow: 0})
 
       z.redraw()
+
+    FeaturesService.shouldShowGooglePlayAds().then (shouldShow) =>
+      @GooglePlayAd = if shouldShow then new GooglePlayAd() else null
 
   showGooglePlayAdModal: ->
     User.getMe().then (user) ->
@@ -43,10 +46,11 @@ module.exports = class GamesPage
         localstore.set 'hasSeenGooglePlayAd', seen: true
 
   onMount: =>
-    localstore.get 'hasSeenGooglePlayAd'
-    .then (hasSeenAd) =>
-      unless hasSeenAd
-        @showGooglePlayAdModal()
+    FeaturesService.shouldShowGooglePlayAds().then (shouldShow) =>
+      if shouldShow
+        localstore.get('hasSeenGooglePlayAd').then (hasSeenAd) =>
+          unless hasSeenAd
+            @showGooglePlayAdModal()
 
   render: =>
     z 'div', [

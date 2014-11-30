@@ -18,6 +18,9 @@ describe 'GamesPage', ->
         localstoreCache[key] = value
         Promise.resolve null
 
+    GamesPage.__set__ 'FeaturesService.shouldShowGooglePlayAds', ->
+      Promise.resolve true
+
     GamesPageComponent = new GamesPage()
     GamesPageComponent.onMount()
     .then ->
