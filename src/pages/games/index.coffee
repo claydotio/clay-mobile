@@ -3,7 +3,7 @@ z = require 'zorium'
 localstore = require '../../lib/localstore'
 User = require '../../models/user'
 Modal = require '../../models/modal'
-FeaturesService = require '../../services/features'
+GooglePlayAdService = require '../../services/google_play_ad'
 Header = require '../../components/header'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
@@ -30,27 +30,27 @@ module.exports = class GamesPage
 
       z.redraw()
 
-    FeaturesService.shouldShowGooglePlayAds().then (shouldShow) =>
-      @GooglePlayAd = if shouldShow then new GooglePlayAd() else null
+      @GooglePlayAd = if GooglePlayAdService.shouldShowAds() \
+                      then new GooglePlayAd()
+                      else null
 
   showGooglePlayAdModal: ->
-    User.getMe().then (user) ->
-      User.getExperiments().then (params) ->
-        GooglePlayAdModalComponent = if params.googlePlayModal is 'control' \
-                              then new GooglePlayAdModalHeaderBackground()
-                              else new GooglePlayAdModalControl()
-        Modal.openComponent(
-          component: GooglePlayAdModalComponent
-        )
+    User.getExperiments().then (params) ->
+      GooglePlayAdModalComponent =
+                            if params.googlePlayModal is 'header-background' \
+                            then new GooglePlayAdModalHeaderBackground()
+                            else new GooglePlayAdModalControl()
+      Modal.openComponent(
+        component: GooglePlayAdModalComponent
+      )
 
-        localstore.set 'hasSeenGooglePlayAd', seen: true
+      localstore.set 'hasSeenGooglePlayAd', seen: true
 
   onMount: =>
-    FeaturesService.shouldShowGooglePlayAds().then (shouldShow) =>
-      if shouldShow
-        localstore.get('hasSeenGooglePlayAd').then (hasSeenAd) =>
-          unless hasSeenAd
-            @showGooglePlayAdModal()
+    if GooglePlayAdService.shouldShowAds()
+      localstore.get('hasSeenGooglePlayAd').then (hasSeenAd) =>
+        unless hasSeenAd
+          @showGooglePlayAdModal()
 
   render: =>
     z 'div', [

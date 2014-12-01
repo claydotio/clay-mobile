@@ -11,6 +11,8 @@ $zIndexModalClose = 1
   padding: 0 20px
   background: $white
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.3)
+  background-size: 100% auto
+  background-position: center
 
 .z-modal-header-title
   margin: 0
@@ -27,3 +29,12 @@ $zIndexModalClose = 1
   > .icon-close
     color: $disabledColor
     font-size: $fontSizeLarge
+
+
+.is-dark.z-modal-header
+  > .z-modal-header-title
+    color: white
+
+  > .z-modal-header-close
+    > .icon-close
+      color: #fff

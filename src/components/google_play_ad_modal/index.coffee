@@ -21,15 +21,15 @@ module.exports = class GooglePlayAdModal
     window.open 'https://play.google.com/store/apps/details?id=com.clay.clay'
 
   render: ->
-    z 'div.google-play-ad-modal',
+    z 'div.z-google-play-ad-modal',
       @ModalHeader
-      z 'div.google-play-ad-modal-content',
-        z 'div.google-play-ad-modal-icon',
+      z 'div.content',
+        z 'div',
           z 'img',
             src: '//cdn.wtf/d/images/google_play/google_play_icon.svg'
             width: 60
             height: 66
-        z 'div.google-play-ad-modal-message',
+        z 'div.message',
           'Play your favorite games even faster. '
           'Official app now on Google Play!'
         z 'button.button-primary.is-block',

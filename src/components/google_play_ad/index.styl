@@ -2,36 +2,33 @@
 
 json('../../stylus/vars.json')
 
-.google-play-ad
+.z-google-play-ad
   background: $white
   padding: 20px 0
   display: block
 
-.google-play-ad-flexbox
-  display: flex
+  .google-play-icon
+    flex-basis: 28px
+    flex-shrink: 0
+    margin: auto
 
-.google-play-ad-icon
-  flex-basis: 28px
-  flex-shrink: 0
-  margin: auto
+  .content
+    padding: 0 10px
 
-.google-play-ad-content
-  padding: 0 10px
+    > h2
+      margin: 0
 
-  > h2
-    margin: 0
+  .message
+    font-size: $fontSizeSmall
 
-.google-play-ad-message
-  font-size: $fontSizeSmall
+  .download
+    margin: auto
+    flex-basis: 30px
+    flex-shrink: 0
 
-.google-play-ad-download
-  margin: auto
-  flex-basis: 30px
-  flex-shrink: 0
+    > .install-button
+      width: 30px
+      height: 30px
 
-  > .google-play-ad-download-button
-    width: 30px
-    height: 30px
-
-    > .icon-arrow-right
-      font-size: $iconSmall
+      > .icon-arrow-right
+        font-size: $iconSmall

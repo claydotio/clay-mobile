@@ -15,13 +15,13 @@ module.exports = class GooglePlayAdDrawer
     window.open 'https://play.google.com/store/apps/details?id=com.clay.clay'
 
   render: ->
-    z 'div.google-play-ad-drawer',
-      z 'div.google-play-ad-drawer-content',
-        z 'div.google-play-ad-drawer-content-text',
+    z 'div.z-google-play-ad-drawer',
+      z 'div.content',
+        z 'div.content-text',
           z 'h2', 'Get the app!'
           z 'div', 'Play your favorite games even faster. '
           z 'div', 'Official app now on Google Play!'
-      z 'button.button-ghost.is-block.google-play-ad-drawer-button',
+      z 'button.button-ghost.is-block.install-button',
         onclick: @openGooglePlay,
         z 'i.icon.icon-arrow-down'
-        z 'span.google-play-ad-drawer-button-text', 'Install now'
+        z 'span.button-text', 'Install now'

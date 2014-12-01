@@ -10,7 +10,11 @@ module.exports = class GooglePlayAdModal
   constructor: ->
     styles.use()
 
-    @ModalHeader = new ModalHeader {title: 'Get the app', theme: 'google-play'}
+    @ModalHeader = new ModalHeader(
+      title: 'Get the app'
+      isDark: true
+      backgroundImage: '//cdn.wtf/d/images/google_play/google_play_banner.png'
+    )
 
   onMount: ->
     ga? 'send', 'event', 'google_play_ad_modal', 'open'
@@ -21,13 +25,13 @@ module.exports = class GooglePlayAdModal
     window.open 'https://play.google.com/store/apps/details?id=com.clay.clay'
 
   render: ->
-    z 'div.google-play-ad-modal',
+    z 'div.z-google-play-ad-modal',
       @ModalHeader
-      z 'div.google-play-ad-modal-content',
-        z 'div.google-play-ad-modal-message',
+      z 'div.content',
+        z 'div.message',
           'Play your favorite games even faster. '
           'Official app now on Google Play!'
-        z 'button.button-ghost.is-block.google-play-ad-modal-button',
+        z 'button.button-ghost.is-block.install-button',
           onclick: @openGooglePlay,
           z 'i.icon.icon-arrow-down'
-          z 'span.google-play-ad-modal-button-text', 'Install now'
+          z 'span.button-text', 'Install now'

@@ -2,58 +2,58 @@
 
 json('../../stylus/vars.json')
 
-$zIndexGooglePlayAdDrawerContentAfter = 0
-$zIndexGooglePlayAdDrawerContentText = 1
-$googlePlayAdDrawerBorderRadius = 3
+$zIndexContentAfter = 0
+$zIndexContentText = 1
+$adBorderRadius = 3
 
-.google-play-ad-drawer
+.z-google-play-ad-drawer
   background: $white
-  border-radius: $googlePlayAdDrawerBorderRadius px
+  border-radius: $adBorderRadius px
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2)
 
-.google-play-ad-drawer-content
-  // position: relative and overflow: hidden has a weird side-effect.
-  // it puts ~1px of unwanted white space to the left of the element.
-  // since we were just using it for hiding border radiuses, we can get the
-  // same effect by applying the border radius to the children elements
-  border-radius: top ($googlePlayAdDrawerBorderRadius)px
-  background: url('//cdn.wtf/d/images/google_play/google_play_banner.png')
-  background-size: auto 100%
-  background-position: center
-  padding: 10px
-  color: #fff
-  position: relative
-
-  &:after
-    border-radius: top ($googlePlayAdDrawerBorderRadius)px
-    position: absolute
-    z-index: $zIndexGooglePlayAdDrawerContentAfter
-    width: 100%
-    height: 100%
-    top: 0
-    left: 0
-    background: rgba(0, 0, 0, 0.2)
-    content: ''
-
-  > .google-play-ad-drawer-content-text
+  > .content
+    // position: relative and overflow: hidden has a weird side-effect.
+    // it puts ~1px of unwanted white space to the left of the element.
+    // since we were just using it for hiding border radiuses, we can get the
+    // same effect by applying the border radius to the children elements
+    border-radius: top ($adBorderRadius)px
+    background: url('//cdn.wtf/d/images/google_play/google_play_banner.png')
+    background-size: auto 100%
+    background-position: center
+    padding: 10px
+    color: #fff
     position: relative
-    z-index: $zIndexGooglePlayAdDrawerContentText
-    font-weight: bold
 
-    > h2
-      margin: 0 0 5px 0
+    &:after
+      border-radius: top ($adBorderRadius)px
+      position: absolute
+      z-index: $zIndexContentAfter
+      width: 100%
+      height: 100%
+      top: 0
+      left: 0
+      background: rgba(0, 0, 0, 0.2)
+      content: ''
+
+    > .content-text
+      position: relative
+      z-index: $zIndexContentText
+      font-weight: bold
+
+      > h2
+        margin: 0 0 5px 0
 
 
-.google-play-ad-drawer-button
-  border-top: 1px solid $dividerColor
-  padding: 10px 0
-  color: $blue
+  > .install-button
+    border-top: 1px solid $dividerColor
+    padding: 10px 0
+    color: $blue
 
-  > .icon-arrow-down
-    margin-right: 10px
-    font-size: $iconSmall
-    vertical-align: middle
+    > .icon-arrow-down
+      margin-right: 10px
+      font-size: $iconSmall
+      vertical-align: middle
 
-  > .google-play-ad-drawer-button-text
-    display: inline-block
-    vertical-align: middle
+    > .button-text
+      display: inline-block
+      vertical-align: middle

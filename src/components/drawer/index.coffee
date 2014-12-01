@@ -27,12 +27,11 @@ module.exports = class Drawer
     @Nub = new Nub toggleCallback: @toggleState
 
     @GooglePlayAdDrawer = null
-    User.getMe().then (user) =>
-      User.getExperiments().then (params) =>
-        @GooglePlayAdDrawer = if params.googlePlayDrawer is 'control' \
-                              then new GooglePlayAdDrawerInstallButton()
-                              else new GooglePlayAdDrawerControl()
-      .then z.redraw
+    User.getExperiments().then (params) =>
+      @GooglePlayAdDrawer = if params.googlePlayDrawer is 'install-button' \
+                            then new GooglePlayAdDrawerInstallButton()
+                            else new GooglePlayAdDrawerControl()
+    .then z.redraw
 
   toggleState: (e) =>
     e?.preventDefault()

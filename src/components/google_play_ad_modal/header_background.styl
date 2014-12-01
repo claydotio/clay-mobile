@@ -2,24 +2,26 @@
 
 json('../../stylus/vars.json')
 
-.google-play-ad-modal-content
-  text-align: center
-  font-size: $fontSizeMedium
+.z-google-play-ad-modal
 
-  > .google-play-ad-modal-button
-    border-top: 1px solid $dividerColor
-    padding: 10px 0
-    color: $blue
+  > .content
+    text-align: center
+    font-size: $fontSizeMedium
 
-    > .icon-arrow-down
-      margin-right: 10px
-      font-size: $iconSmall
-      vertical-align: middle
+    > .message
+      padding: 20px
+      font-weight: bold
 
-    > .google-play-ad-modal-button-text
-      display: inline-block
-      vertical-align: middle
+    > .install-button
+      border-top: 1px solid $dividerColor
+      padding: 10px 0
+      color: $blue
 
-.google-play-ad-modal-message
-  padding: 20px
-  font-weight: bold
+      > .icon-arrow-down
+        margin-right: 10px
+        font-size: $iconSmall
+        vertical-align: middle
+
+      > .button-text
+        display: inline-block
+        vertical-align: middle
