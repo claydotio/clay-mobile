@@ -56,6 +56,9 @@ module.exports = class GamePlayer
 
     @engagedPlayTimeout = window.setTimeout @logEngagedPlay, ENGAGED_PLAY_TIME
 
+    User.convertExperiment('game_play').catch log.trace
+    ga? 'send', 'event', 'game', 'game_play', @game.key
+
   resize: ->
     @height = window.innerHeight + 'px'
     z.redraw()
