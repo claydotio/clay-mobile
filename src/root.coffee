@@ -183,11 +183,14 @@ if shouldRouteToGamePage
     # And also for passing the user object through
     marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
     if kik?.enabled
-      kik?.picker? marketplaceBaseUrl, {}, (res) ->
-        kikAnonymousToken = res.token
-        if res.user
-          User.setMe res.user
+      if kik?.picker
+        kik?.picker? marketplaceBaseUrl, {}, (res) ->
+          kikAnonymousToken = res.token
+          if res.user
+            User.setMe res.user
 
+          z.router.go "/game/#{gameKey}"
+      else
         z.router.go "/game/#{gameKey}"
     else
       z.router.go "/game/#{gameKey}"
