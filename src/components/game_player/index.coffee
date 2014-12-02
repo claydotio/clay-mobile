@@ -33,6 +33,7 @@ module.exports = class GamePlayer
       @Drawer = new Drawer {game}
 
       z.redraw()
+      return game
 
     @onFirstRender = _.once =>
       @showShareModalPromise = Promise.all [
