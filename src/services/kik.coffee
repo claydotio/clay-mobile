@@ -4,7 +4,21 @@ log = require 'clay-loglevel'
 styleConfig = require '../stylus/vars.json'
 User = require '../models/user'
 
+KIK_PUSH_HANDLER_TIMEOUT = 250
+
 class KikService
+  constructor: ->
+    @isFromPushPromise = null
+
+  isFromPush: =>
+    unless @isFromPushPromise
+      @isFromPushPromise = new Promise (resolve, reject) ->
+        kik.push.handler ->
+          resolve true
+        setTimeout (-> resolve false), KIK_PUSH_HANDLER_TIMEOUT
+
+    return @isFromPushPromise
+
   shareMarketplace: ->
     User.getMe().then (user) ->
       User.getExperiments().then (params) ->
