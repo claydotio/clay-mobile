@@ -21,7 +21,8 @@ module.exports = class GamePlayer
     @Spinner = new Spinner()
 
     @isLoading = true
-    @height = 'auto'
+    @height = window.innerHeight + 'px'
+    @width = window.innerWidth + 'px'
     @gameKey = gameKey
     @game = null
     @Drawer = null
@@ -60,8 +61,9 @@ module.exports = class GamePlayer
 
     User.convertExperiment('game_play').catch log.trace
 
-  resize: ->
+  resize: =>
     @height = window.innerHeight + 'px'
+    @width = window.innerWidth + 'px'
     z.redraw()
 
   logEngagedPlay: =>
@@ -98,6 +100,9 @@ module.exports = class GamePlayer
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',
+              style:
+                width: @width
+                height: @height
               src: @game?.gameUrl
         @Drawer
     else
