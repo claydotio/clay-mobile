@@ -6,6 +6,7 @@ Game = require '../../models/game'
 Drawer = require '../drawer'
 Spinner = require '../spinner'
 UrlService = require '../../services/url'
+KikService  = require '../../services/kik'
 Modal = require '../../models/modal'
 GameShare = require '../game_share'
 User = require '../../models/user'
@@ -42,6 +43,9 @@ module.exports = class GamePlayer
         gamePromise
       ]
       .then ([playCount, game]) =>
+        KikService.isFromPush().then (isFromPush) ->
+          unless isFromPush
+            ga? 'send', 'event', 'game_wo_push', 'game_play', game.key
         ga? 'send', 'event', 'game', 'game_play', game.key
         shouldShowModal = playCount is 3
         if shouldShowModal
@@ -68,6 +72,9 @@ module.exports = class GamePlayer
 
   logEngagedPlay: =>
     User.convertExperiment('engaged_play').catch log.trace
+    KikService.isFromPush().then (isFromPush) =>
+      unless isFromPush
+        ga? 'send', 'event', 'game_wo_push', 'engaged_play', @game.key
     ga? 'send', 'event', 'game', 'engaged_play', @game.key
     User.addRecentGame(@game.id).catch log.trace
 
