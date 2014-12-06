@@ -34,33 +34,23 @@ distCss = if config.ENV is config.ENVS.PROD \
 dust.loadSource indexTpl
 
 # Middlewares
-clayUserSessionParser = ->
+clayUserSessionMiddleware = ->
   (req, res, next) ->
     req.clay = {}
     req.clay.me = null
+
+    # Don't inject anything for kik, it will use kikAnonToken
+    # They delete cookies all the time, inflating signup metrics
+    if req.useragent.isKik
+      return next()
 
     loginUrl = config.API_URL + '/users/login/anon'
     meUrl = config.API_URL + '/users/me'
     accessToken = req.cookies.accessToken
 
+    # Don't inject user for security reasons
     if accessToken
-      Promise.promisify(request.get, request) meUrl, {qs: {accessToken}}
-      .timeout API_REQUEST_TIMEOUT
-      .spread (res, body) ->
-        req.clay.me = JSON.parse body
-        next()
-      .catch (err) ->
-        log.trace err
-
-        # Getting user failed, create a new one
-        Promise.promisify(request.post, request) loginUrl
-        .timeout API_REQUEST_TIMEOUT
-        .spread (res, body) ->
-          req.clay.me = JSON.parse body
-          next()
-        .catch (err) ->
-          log.trace err
-          next()
+      return next()
     else
       isSubdomain = req.headers.host isnt config.HOST
       if isSubdomain
@@ -75,7 +65,7 @@ clayUserSessionParser = ->
         log.trace err
         next()
 
-clayFlakCannonSessionParser = ->
+clayFlakCannonSessionMiddleware = ->
   (req, res, next) ->
     me = req.clay?.me
     req.clay.experiments = null
@@ -93,6 +83,18 @@ clayFlakCannonSessionParser = ->
       log.trace err
       next()
 
+isKikUseragentMiddleware = ->
+  (req, res, next) ->
+    {source, isMac, isSafari, isMobile} = req.useragent
+
+    isKik = /^Kik/.test source
+    isKikBot = /KikBot/.test source
+    isiOSWebView = isMac and not isSafari and isMobile
+
+    req.useragent.isKik = isKik or isKikBot or isiOSWebView
+
+    next()
+
 app = express()
 
 app.use compress()
@@ -102,9 +104,10 @@ else app.use express['static'](__dirname + '/build')
 
 # After checking static files
 app.use cookieParser()
-app.use clayUserSessionParser()
-app.use clayFlakCannonSessionParser()
 app.use useragent.express()
+app.use isKikUseragentMiddleware()
+app.use clayUserSessionMiddleware()
+app.use clayFlakCannonSessionMiddleware()
 app.use router
 
 
