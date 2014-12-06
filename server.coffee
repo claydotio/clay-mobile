@@ -41,14 +41,14 @@ clayUserSessionMiddleware = ->
 
     # Don't inject anything for kik, it will use kikAnonToken
     # They delete cookies all the time, inflating signup metrics
-    if req.useragent.isKik
+    if req.useragent.isProbablyKik
       return next()
 
     loginUrl = config.API_URL + '/users/login/anon'
     meUrl = config.API_URL + '/users/me'
     accessToken = req.cookies.accessToken
 
-    # Don't inject user for security reasons
+    # Don't inject user because the page is sent over http
     if accessToken
       return next()
     else
@@ -91,7 +91,7 @@ isKikUseragentMiddleware = ->
     isKikBot = /KikBot/.test source
     isiOSWebView = isMac and not isSafari and isMobile
 
-    req.useragent.isKik = isKik or isKikBot or isiOSWebView
+    req.useragent.isProbablyKik = isKik or isKikBot or isiOSWebView
 
     next()
 

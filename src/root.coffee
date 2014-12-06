@@ -29,14 +29,8 @@ if kik?.picker?.reply
   if UrlService.isRootPath() # marketplace
     PushToken.createForMarketplace()
     .then ->
-      User.getMe()
-      .then (user) ->
-        kik.getAnonymousUser (token) ->
-          kik.picker.reply {token, user}
-      .catch (err) ->
-        log.trace err
-        kik.getAnonymousUser (token) ->
-          kik.picker.reply {token}
+      kik.getAnonymousUser (anonToken) ->
+        kik.picker.reply {anonToken}
     .catch (err) ->
       log.trace err
       kik.picker.reply()
@@ -87,65 +81,10 @@ else
   log.on 'error', reportError
   log.on 'trace', reportError
 
-############
-# Z-FACTOR #
-############
-shareOriginUserId = kik?.message?.share?.originUserId
 
-if shareOriginUserId
-  User.setExperimentsFrom shareOriginUserId
-  .catch log.trace
-  User.convertExperiment 'hit_from_share'
-  .catch log.trace
-
-hasVisitedBefore = _.contains document.cookie, 'accessToken'
-
-#####################
-# ENGAGED GAMEPLAYS #
-#####################
-
-# This is set if on kik and on a subdomain
-# using the picker trigger for push tokens
-kikAnonymousToken = null
-
-window.setTimeout ->
-  User.logEngagedActivity()
-  .catch log.trace
-, ENGAGED_ACTIVITY_TIME
-
-if shareOriginUserId and not hasVisitedBefore
-  # Kik clears tokens often. Use their anon-token to identify users
-  # The anon-token is unique for each 'app', so always use the marketplace one
-  if kik?.enabled
-    if not kikAnonymousToken
-      kik.getAnonymousUser (token) ->
-        User.convertExperiment 'new_unique_from_share', {uniq: token}
-        .catch log.trace
-    else
-      User.convertExperiment 'new_unique_from_share', {uniq: kikAnonymousToken}
-      .catch log.trace
-  else
-    User.convertExperiment 'new_unique_from_share'
-    .catch log.trace
-
-####################
-# GOOGLE ANALYTICS #
-####################
-
-# track A/B tests in Google Analytics
-# Google's intended solution for this is custom dimensions
-# https://developers.google.com/analytics/devguides/platform/customdimsmets
-# however, that requires adding each dimension inside of FA's admin panel.
-# using events we can get the same results with a filter for users with
-# specific events
-User.getExperiments().then (params) ->
-  return unless ga
-  for experimentParam, experimentTestGroup of params
-    ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
-
-###########
-# ROUTING #
-###########
+#################
+# ROUTING SETUP #
+#################
 
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
@@ -162,40 +101,91 @@ z.router.add '/games', GamesPage
 z.router.add '/game/:key', PlayGamePage
 z.router.add '/games/:filter', GamesPage
 
-# track kik metrics (users sending messages, etc...)
-kik?.metrics?.enableGoogleAnalytics?()
+new Promise (resolve) ->
+  #############
+  # USER INIT #
+  #############
 
-# Passed via message to denote game (share button in drawer uses this)
-kikGameKey = kik?.message?.gameKey
-
-shouldRouteToGamePage = kikGameKey or
-                        (not UrlService.isRootPath() and not config.MOCK)
-gameKey = null
-if shouldRouteToGamePage
-  if kikGameKey
-    z.router.go "/game/#{kikGameKey}"
-  else # subdomain
-    gameKey = UrlService.getSubdomain()
-    PushToken.createByGameKey gameKey
-    # marketplace in picker, causing it to appear in side-bar
-    # This is also used to pass the marketplace anon-user token
-    # which is used for tracking uniq share conversions
-    # And also for passing the user object through
-    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-    if kik?.enabled
-      if kik?.picker
-        kik?.picker? marketplaceBaseUrl, {}, (res) ->
-          kikAnonymousToken = res.token
-          if res.user
-            User.setMe res.user
-
-          z.router.go "/game/#{gameKey}"
-      else
-        z.router.go "/game/#{gameKey}"
+  # If on kik, login with anonymous user token (from marketplace)
+  if kik?.enabled and kik?.picker
+    if UrlService.isRootPath()
+      kik.getAnonymousUser (token) ->
+        resolve token
     else
-      z.router.go "/game/#{gameKey}"
-else
-  PushToken.createForMarketplace()
-  z.router.go()
+      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+      kik?.picker? marketplaceBaseUrl, {}, (res) ->
+        resolve(res.anonToken)
+  else resolve()
+.then (maybeKikAnonToken) ->
+  if maybeKikAnonToken
+    User.setMe User.loginKikAnon(maybeKikAnonToken)
+    .catch log.trace
 
-log.info 'App Ready'
+  ############
+  # Z-FACTOR #
+  ############
+
+  shareOriginUserId = kik?.message?.share?.originUserId
+  isFromShare = Boolean shareOriginUserId
+
+  if isFromShare
+    User.setExperimentsFrom shareOriginUserId
+    .then ->
+      User.convertExperiment 'hit_from_share'
+    .catch log.trace
+
+
+  #####################
+  # ENGAGED GAMEPLAYS #
+  #####################
+
+  hasVisitedBefore = _.contains document.cookie, 'accessToken'
+
+  if isFromShare and not hasVisitedBefore
+    # The anon-token is unique for each 'app', so always use the marketplace one
+    uniqBody = if maybeKikAnonToken then {uniq: maybeKikAnonToken} else {}
+    User.convertExperiment 'new_unique_from_share', uniqBody
+    .catch log.trace
+
+  ####################
+  #    ANALYTICS     #
+  ####################
+
+  # track A/B tests in Google Analytics
+  # Google's intended solution for this is custom dimensions
+  # https://developers.google.com/analytics/devguides/platform/customdimsmets
+  # however, that requires adding each dimension inside of FA's admin panel.
+  # using events we can get the same results with a filter for users with
+  # specific events
+  User.getExperiments().then (params) ->
+    unless ga
+      return
+    for experimentParam, experimentTestGroup of params
+      ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
+  .catch log.trace
+
+  # track kik metrics (users sending messages, etc...)
+  kik?.metrics?.enableGoogleAnalytics?()
+
+  window.setTimeout ->
+    User.logEngagedActivity()
+    .catch log.trace
+  , ENGAGED_ACTIVITY_TIME
+
+
+  ###########
+  # ROUTING #
+  ###########
+
+  # Passed via message to denote game (share button in drawer uses this)
+  gameKey = kik?.message?.gameKey or UrlService.getSubdomain()
+
+  if gameKey
+    PushToken.createByGameKey gameKey
+    z.router.go "/game/#{gameKey}"
+  else
+    PushToken.createForMarketplace()
+    z.router.go()
+
+  log.info 'App Ready'
+.catch log.trace
