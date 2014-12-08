@@ -25,5 +25,5 @@ module.exports = class ModalClose
     .catch log.trace
 
   render: =>
-    z 'a.z-marketplace-share', onclick: @share,
+    z 'a.z-marketplace-share[href=#]', onclick: @share,
       z 'i.icon.icon-share'

@@ -4,10 +4,14 @@ _ = require 'lodash'
 request = require '../lib/request'
 config = require '../config'
 
-PATH = config.API_URL + '/users'
+PATH = config.CLAY_API_URL + '/users'
 
 me = null
 experiments = null
+
+getCookieValue = (key) ->
+  match = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)')
+  return if match then match.pop() else null
 
 class User
 
@@ -17,6 +21,8 @@ class User
       then Promise.resolve window._clay.me
       else request PATH + '/login/anon',
         method: 'POST'
+        qs:
+          accessToken: getCookieValue 'accessToken'
 
       # Save accessToken in cookie
       me.then (user) ->
@@ -28,6 +34,13 @@ class User
 
   setMe: (_me) ->
     me = Promise.resolve _me
+
+    # Save accessToken in cookie
+    me.then (user) ->
+      document.cookie = "accessToken=#{user.accessToken};" +
+                        'path=/;domain=.clay.io'
+    .catch log.trace
+
     experiments = me.then (user) ->
       request config.FC_API_URL + '/experiments',
         method: 'POST'
@@ -83,6 +96,12 @@ class User
           {accessToken: me.accessToken}
         body:
           [ op: 'add', path: '/-', value: gameId ]
+
+  loginKikAnon: (kikAnonToken) ->
+    request PATH + '/login/kikAnon',
+      method: 'POST'
+      body:
+        kikAnonToken: kikAnonToken
 
 
 module.exports = new User()
