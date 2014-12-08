@@ -1,10 +1,10 @@
 express = require 'express'
 dust = require 'dustjs-linkedin'
 fs = require 'fs'
-request = require 'request'
 url = require 'url'
 _ = require 'lodash'
 Promise = require 'bluebird'
+request = Promise.promisifyAll require 'request'
 useragent = require 'express-useragent'
 compress = require 'compression'
 log = require 'loglevel'
@@ -44,7 +44,7 @@ clayUserSessionParser = ->
     accessToken = req.cookies.accessToken
 
     if accessToken
-      Promise.promisify(request.get, request) meUrl, {qs: {accessToken}}
+      request.getAsync meUrl, {qs: {accessToken}}
       .timeout API_REQUEST_TIMEOUT
       .spread (res, body) ->
         req.clay.me = JSON.parse body
@@ -53,7 +53,7 @@ clayUserSessionParser = ->
         log.trace err
 
         # Getting user failed, create a new one
-        Promise.promisify(request.post, request) loginUrl
+        request.postAsync loginUrl
         .timeout API_REQUEST_TIMEOUT
         .spread (res, body) ->
           req.clay.me = JSON.parse body
@@ -66,7 +66,7 @@ clayUserSessionParser = ->
       if isSubdomain
         return next()
 
-      Promise.promisify(request.post, request) loginUrl
+      request.postAsync loginUrl
       .timeout API_REQUEST_TIMEOUT
       .spread (res, body) ->
         req.clay.me = JSON.parse body
@@ -83,7 +83,7 @@ clayFlakCannonSessionParser = ->
       return next()
 
     experimentsUrl = config.FC_API_URL + '/experiments'
-    Promise.promisify(request.post, request) experimentsUrl,
+    request.postAsync experimentsUrl,
       {json: userId: me.id}
     .timeout API_REQUEST_TIMEOUT
     .spread (res, body) ->
@@ -208,7 +208,7 @@ renderGamePage = (gameKey, me, experiments) ->
   gameUrl = config.API_URL + "/games/findOne?key=#{gameKey}"
 
   log.info 'GET', gameUrl
-  Promise.promisify(request.get, request) gameUrl
+  request.getAsync gameUrl
   .timeout API_REQUEST_TIMEOUT
   .spread (res, body) ->
     game = JSON.parse body
