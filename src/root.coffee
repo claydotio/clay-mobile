@@ -13,10 +13,12 @@ PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
 PushToken = require './models/push_token'
 User = require './models/user'
+EnvironmentService = require './services/environment'
 UrlService = require './services/url'
 PortalService = require './services/portal'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
+GOOGLE_ANALYTICS_PLATFORM_DIMENSION = 'dimension1'
 
 PortalService.registerMethods()
 
@@ -147,6 +149,8 @@ new Promise (resolve) ->
     User.convertExperiment 'new_unique_from_share', uniqBody
     .catch log.trace
 
+.then -> # lowering cyclomatic complexity. this file needs to be cleaned up
+
   ####################
   #    ANALYTICS     #
   ####################
@@ -163,6 +167,11 @@ new Promise (resolve) ->
     for experimentParam, experimentTestGroup of params
       ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
   .catch log.trace
+
+  ga 'set', GOOGLE_ANALYTICS_PLATFORM_DIMENSION,
+    if EnvironmentService.isClayApp() then 'clay_app'
+    else if EnvironmentService.isKik() then 'kik'
+    else 'browser'
 
   # track kik metrics (users sending messages, etc...)
   kik?.metrics?.enableGoogleAnalytics?()

@@ -7,4 +7,7 @@ class EnvironmentService
   isClayApp: ->
     _.contains navigator.userAgent, 'Clay'
 
+  isKik: ->
+    Boolean kik?.enabled
+
 module.exports = new EnvironmentService()
