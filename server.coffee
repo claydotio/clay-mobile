@@ -44,8 +44,8 @@ clayUserSessionMiddleware = ->
     if req.useragent.isProbablyKik
       return next()
 
-    loginUrl = config.API_URL + '/users/login/anon'
-    meUrl = config.API_URL + '/users/me'
+    loginUrl = config.CLAY_API_URL + '/users/login/anon'
+    meUrl = config.CLAY_API_URL + '/users/me'
     accessToken = req.cookies.accessToken
 
     # Don't inject user because the page is sent over http
@@ -208,7 +208,7 @@ renderHomePage = do ->
 
 renderGamePage = (gameKey, me, experiments) ->
 
-  gameUrl = config.API_URL + "/games/findOne?key=#{gameKey}"
+  gameUrl = config.CLAY_API_URL + "/games/findOne?key=#{gameKey}"
 
   log.info 'GET', gameUrl
   Promise.promisify(request.get, request) gameUrl

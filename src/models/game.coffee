@@ -2,7 +2,7 @@ localstore = require '../lib/localstore'
 config = require '../config'
 request = require '../lib/request'
 
-PATH = config.API_URL + '/games'
+PATH = config.CLAY_API_URL + '/games'
 
 class Game
   getTop: ({limit, skip}) ->
