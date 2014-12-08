@@ -9,7 +9,9 @@ Header = require '../../components/header'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
 ModalViewer = require '../../components/modal_viewer'
-GooglePlayAd = require '../../components/google_play_ad'
+GooglePlayAdControl = require '../../components/google_play_ad'
+GooglePlayAdInstallButton =
+  require '../../components/google_play_ad/install_button'
 GooglePlayAdModalControl = require '../../components/google_play_ad_modal'
 GooglePlayAdModalHeaderBackground =
   require '../../components/google_play_ad_modal/header_background'
@@ -32,8 +34,13 @@ module.exports = class GamesPage
       z.redraw()
     .catch log.trace
 
+    User.getExperiments().then (params) =>
+      GooglePlayAdComponent = if params.googlePlayAd is 'install-button' \
+                              then new GooglePlayAdInstallButton()
+                              else new GooglePlayAdControl()
+
       @GooglePlayAd = if GooglePlayAdService.shouldShowAds() \
-                      then new GooglePlayAd()
+                      then GooglePlayAdComponent
                       else null
 
   showGooglePlayAdModal: ->
