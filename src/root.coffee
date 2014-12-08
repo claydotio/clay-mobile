@@ -62,7 +62,7 @@ reportError = ->
     then arg.message
     else arg
 
-  window.fetch config.API_URL + '/log',
+  window.fetch config.CLAY_API_URL + '/log',
     method: 'POST'
     headers:
       'Accept': 'application/json'

@@ -4,7 +4,7 @@ _ = require 'lodash'
 request = require '../lib/request'
 config = require '../config'
 
-PATH = config.API_URL + '/users'
+PATH = config.CLAY_API_URL + '/users'
 
 me = null
 experiments = null
