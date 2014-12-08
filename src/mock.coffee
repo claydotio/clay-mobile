@@ -36,7 +36,7 @@ mock = new Zock()
   .base(config.FC_API_URL)
   .post '/experiments'
   .reply 200, {}
-  .base(config.API_URL)
+  .base(config.CLAY_API_URL)
   .logger log.info
   .post '/users/login/anon'
   .reply 200, id: 1, accessToken: 'thisisanaccesstoken'

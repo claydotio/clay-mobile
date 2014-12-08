@@ -1,4 +1,5 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 
 localstore = require '../../lib/localstore'
 User = require '../../models/user'
@@ -29,6 +30,7 @@ module.exports = class GamesPage
         @PopularGames = new PopularGames({featuredGameRow: 0})
 
       z.redraw()
+    .catch log.trace
 
       @GooglePlayAd = if GooglePlayAdService.shouldShowAds() \
                       then new GooglePlayAd()

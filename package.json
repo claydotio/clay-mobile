@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "postinstall": "node_modules/bower/bin/bower install",
-    "test": "NODE_ENV=test node_modules/gulp/bin/gulp.js test",
+    "test": "FC_API_URL=https://clay.io/api/fc/v2 CLAY_API_URL=https://clay.io/api/m/v1 CLAY_MOBILE_HOST=clay.io NODE_ENV=test node_modules/gulp/bin/gulp.js test",
     "start": "npm run build && ./node_modules/pm2/bin/pm2 start ./bin/server.coffee -i max --name clay_mobile --no-daemon -o /var/log/clay/clay_mobile.log -e /var/log/clay/clay_mobile.error.log",
     "dev": "NODE_ENV=development node_modules/gulp/bin/gulp.js dev",
     "mock": "NODE_ENV=development MOCK=true node_modules/gulp/bin/gulp.js dev",
@@ -76,6 +76,6 @@
     "portal-gun": "0.0.4",
     "promiz": "1.0.0",
     "request": "2.40.0",
-    "zorium": "0.2.12"
+    "zorium": "0.4.8"
   }
 }

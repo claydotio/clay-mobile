@@ -7,7 +7,6 @@ PushToken = rewire 'models/push_token'
 describe 'PushToken', ->
   describe 'Without Kik', ->
     before ->
-      # Stub kik dependency
       PushToken.__set__ 'kik', null
 
     it 'Attempts to create push token and promise rejects (no Kik)', ->
@@ -20,7 +19,6 @@ describe 'PushToken', ->
   describe 'With Kik', ->
 
     before ->
-      # Stub kik dependency
       PushToken.__set__ 'kik',
         ready: (fn) -> fn()
         push:
