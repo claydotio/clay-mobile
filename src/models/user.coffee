@@ -97,15 +97,18 @@ class User
       request PATH + '/me/links/recentGames',
         method: 'PATCH'
         qs:
-          {accessToken: me.accessToken}
+          accessToken: me.accessToken
         body:
           [ op: 'add', path: '/-', value: gameId ]
 
-  loginKikAnon: (kikAnonToken) ->
-    request PATH + '/login/kikAnon',
-      method: 'POST'
-      body:
-        kikAnonToken: kikAnonToken
+  loginKikAnon: (kikAnonToken) =>
+    @getMe().then (me) ->
+      request PATH + '/login/kikAnon',
+        method: 'POST'
+        qs:
+          accessToken: me.accessToken
+        body:
+          kikAnonToken: kikAnonToken
 
 
 module.exports = new User()
