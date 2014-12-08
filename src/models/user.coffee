@@ -13,6 +13,12 @@ getCookieValue = (key) ->
   match = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)')
   return if match then match.pop() else null
 
+setHostCookie = (key, value) ->
+  secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
+  # The '.' prefix allows subdomains access
+  domain = '.' + secondLevelDomain
+  document.cookie = "#{key}=#{value};path=/;domain=#{domain}"
+
 class User
 
   getMe: ->
@@ -26,8 +32,7 @@ class User
 
       # Save accessToken in cookie
       me.then (user) ->
-        document.cookie = "accessToken=#{user.accessToken};" +
-                          'path=/;domain=.clay.io'
+        setHostCookie 'accessToken', user.accessToken
       .catch log.trace
 
     return me
@@ -37,8 +42,7 @@ class User
 
     # Save accessToken in cookie
     me.then (user) ->
-      document.cookie = "accessToken=#{user.accessToken};" +
-                        'path=/;domain=.clay.io'
+      setHostCookie 'accessToken', user.accessToken
     .catch log.trace
 
     experiments = me.then (user) ->
