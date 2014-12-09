@@ -15,6 +15,7 @@ PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
 PortalService = require './services/portal'
+ErrorReportService = require './services/error_report'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 
@@ -48,38 +49,14 @@ if kik?.picker?.reply
 # LOGGING #
 ###########
 
-reportError = ->
-  # Remove the circular dependency within error objects
-  args = _.map arguments, (arg) ->
-
-    if arg instanceof Error and arg.stack
-    then arg.stack
-    else if arg instanceof Error
-    then arg.message
-    else if arg instanceof ErrorEvent and arg.error
-    then arg.error.stack
-    else if arg instanceof ErrorEvent
-    then arg.message
-    else arg
-
-  window.fetch config.CLAY_API_URL + '/log',
-    method: 'POST'
-    headers:
-      'Accept': 'application/json'
-      'Content-Type': 'application/json'
-    body:
-      JSON.stringify message: args.join ' '
-  .catch (err) ->
-    console?.error err
-
-window.addEventListener 'error', reportError
+window.addEventListener 'error', ErrorReportService.report
 
 if config.ENV isnt config.ENVS.PROD
   log.enableAll()
 else
   log.setLevel 'error'
-  log.on 'error', reportError
-  log.on 'trace', reportError
+  log.on 'error', ErrorReportService.report
+  log.on 'trace', ErrorReportService.report
 
 
 #################
