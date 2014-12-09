@@ -17,6 +17,7 @@ setHostCookie = (key, value) ->
   secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
   # The '.' prefix allows subdomains access
   domain = '.' + secondLevelDomain
+  document.cookie = "#{key}=#{value}"
   document.cookie = "#{key}=#{value};path=/;domain=#{domain}"
 
 class User
