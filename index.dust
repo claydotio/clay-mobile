@@ -79,16 +79,16 @@
       // the original versions since Kik overrides them
       // Kik doing that means we don't see the correct line numbers for logs
       // without this fix + window.open is busted in native
-      var logClone = console.log
-      var windowOpenClone = window.open
+      var originalConsoleLogFn = console.log
+      var originalWindowOpenFn = window.open
     </script>
 
     <div id="app"></div>
     <script src="//cdn.kik.com/kik/1.0.18/kik.js"></script>
     <script>
       // restore console.log, window.open (since kik messes with them)
-      console.log = logClone
-      window.open = windowOpenClone
+      console.log = originalConsoleLogFn
+      window.open = originalWindowOpenFn
     </script>
     {! Inject current user to prevent round-trip !}
     <script>window._clay={};window._clay.me={me|s};window._clay.experiments={experiments|s};</script>

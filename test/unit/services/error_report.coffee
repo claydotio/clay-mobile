@@ -8,7 +8,7 @@ ErrorReportService = rewire 'services/error_report'
 describe 'ErrorReportService', ->
 
   it 'report()', (done) ->
-    fetchClone = window.fetch
+    originalFetchFn = window.fetch
     window.fetch = (url, options) ->
       schema = Joi.object().required().keys
         method: Joi.string().valid 'POST'
@@ -21,7 +21,7 @@ describe 'ErrorReportService', ->
           Joi.string()
 
       Joi.validate options, schema, (err) ->
-        window.fetch = fetchClone
+        window.fetch = originalFetchFn
         done err
 
     err = new Error()
