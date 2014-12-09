@@ -27,22 +27,26 @@ PortalService.registerMethods()
 
 # Marketplace or game was loaded in picker
 if kik?.picker?.reply
-  if UrlService.isRootPath() # marketplace
+  if UrlService.isRootPath() # marketplace in picker
+    # will throw an error if token exists. better than waiting for roundtrip
+    # to check for existence
     PushToken.createForMarketplace()
     .then ->
+      throw new Error 'always'
+    .catch ->
       kik.getAnonymousUser (anonToken) ->
         kik.picker.reply {anonToken}
     .catch (err) ->
       log.trace err
-      kik.picker.reply()
-  else # game subdomain
+      kik.picker.reply {}
+  else # game subdomain in picker
     gameKey = UrlService.getSubdomain()
     PushToken.createByGameKey gameKey
     .then ->
-      kik.picker.reply()
+      kik.picker.reply {}
     .catch (err) ->
       log.trace err
-      kik.picker.reply()
+      kik.picker.reply {}
   throw new Error 'Stop code execution'
 
 ###########
@@ -94,9 +98,11 @@ new Promise (resolve) ->
         resolve(res.anonToken)
   else resolve()
 .then (maybeKikAnonToken) ->
+  ###
   if maybeKikAnonToken
     User.setMe User.loginKikAnon(maybeKikAnonToken)
     .catch log.trace
+  ###
 
   ############
   # Z-FACTOR #
@@ -110,7 +116,6 @@ new Promise (resolve) ->
     .then ->
       User.convertExperiment 'hit_from_share'
     .catch log.trace
-
 
   #####################
   # ENGAGED GAMEPLAYS #
@@ -148,7 +153,6 @@ new Promise (resolve) ->
     User.logEngagedActivity()
     .catch log.trace
   , ENGAGED_ACTIVITY_TIME
-
 
   ###########
   # ROUTING #
