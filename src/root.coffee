@@ -98,9 +98,11 @@ new Promise (resolve) ->
         resolve(res.anonToken)
   else resolve()
 .then (maybeKikAnonToken) ->
+  ###
   if maybeKikAnonToken
     User.setMe User.loginKikAnon(maybeKikAnonToken)
     .catch log.trace
+  ###
 
   ############
   # Z-FACTOR #
