@@ -107,14 +107,15 @@ new Promise (resolve) ->
   #############
 
   # If on kik, login with anonymous user token (from marketplace)
-  if kik?.enabled and kik?.picker
+  if kik?.enabled
     if UrlService.isRootPath()
       kik.getAnonymousUser (token) ->
         resolve token
-    else
+    else if kik?.picker
       marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
       kik?.picker? marketplaceBaseUrl, {}, (res) ->
         resolve(res.anonToken)
+    else resolve()
   else resolve()
 .then (maybeKikAnonToken) ->
   if maybeKikAnonToken
