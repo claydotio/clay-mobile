@@ -95,15 +95,14 @@ new Promise (resolve) ->
     else if kik?.picker
       marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
       kik?.picker? marketplaceBaseUrl, {}, (res) ->
-        resolve(res.anonToken)
+        resolve(res?.anonToken)
     else resolve()
   else resolve()
 .then (maybeKikAnonToken) ->
-  ###
+
   if maybeKikAnonToken
     User.setMe User.loginKikAnon(maybeKikAnonToken)
     .catch log.trace
-  ###
 
   ############
   # Z-FACTOR #
