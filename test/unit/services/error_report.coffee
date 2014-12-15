@@ -1,28 +1,28 @@
-should = require('clay-chai').should()
 Joi = require 'joi'
-rewire = require 'rewire'
-Promise = require 'bluebird'
+log = require 'clay-loglevel'
+Zock = require 'zock'
 
-ErrorReportService = rewire 'services/error_report'
+config = require 'config'
+ErrorReportService = require 'services/error_report'
 
 describe 'ErrorReportService', ->
 
   it 'report()', (done) ->
-    originalFetchFn = window.fetch
-    window.fetch = (url, options) ->
-      schema = Joi.object().required().keys
-        method: Joi.string().valid 'POST'
-        headers: Joi.object().required().keys
-          'Accept':
-            Joi.string().required().valid 'application/json'
-          'Content-Type':
-            Joi.string().valid 'application/json'
-        body:
-          Joi.string()
+    mock = new Zock()
+      .base(config.CLAY_API_URL)
+      .logger log.info
+      .post '/log'
+      .reply 200, (res) ->
+        schema = Joi.object().keys
+          message: Joi.string().regex /terrible/
 
-      Joi.validate options, schema, (err) ->
-        window.fetch = originalFetchFn
-        done err
+        Joi.validate res.body, schema, (err) ->
+          window.XMLHttpRequest = originalXMLHttpRequestFn
+          done err
 
-    err = new Error()
+    originalXMLHttpRequestFn = window.XMLHttpRequest
+    window.XMLHttpRequest = ->
+      mock.XMLHttpRequest()
+
+    err = new Error 'terrible'
     ErrorReportService.report err
