@@ -58,7 +58,7 @@
     "transform-loader": "0.2.1",
     "webpack": "1.4.11",
     "webpack-dev-server": "1.6.5",
-    "zock": "0.0.6"
+    "zock": "0.0.7"
   },
   "browser": {
     "fetch": "./components/fetch/fetch.js"
