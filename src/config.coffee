@@ -1,8 +1,8 @@
 module.exports =
-  API_URL: process.env.API_URL or 'https://clay.io/api/m/v1'
+  CLAY_API_URL: process.env.CLAY_API_URL or 'https://clay.io/api/m/v1'
   FC_API_URL: process.env.FC_API_URL or 'https://clay.io/api/fc/v2'
-  HOST: process.env.HOST or 'clay.io'
-  PORT: process.env.PORT or 3000
+  HOST: process.env.CLAY_MOBILE_HOST or 'clay.io'
+  PORT: process.env.CLAY_MOBILE_PORT or process.env.PORT or 50040
   WEBPACK_DEV_HOSTNAME: process.env.WEBPACK_DEV_HOSTNAME or 'localhost'
   MOCK: process.env.MOCK or false
   ENV: process.env.NODE_ENV or 'production'

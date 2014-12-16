@@ -4,10 +4,21 @@ _ = require 'lodash'
 request = require '../lib/request'
 config = require '../config'
 
-PATH = config.API_URL + '/users'
+PATH = config.CLAY_API_URL + '/users'
 
 me = null
 experiments = null
+
+getCookieValue = (key) ->
+  match = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)')
+  return if match then match.pop() else null
+
+setHostCookie = (key, value) ->
+  secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
+  # The '.' prefix allows subdomains access
+  domain = '.' + secondLevelDomain
+  document.cookie = "#{key}=#{value}"
+  document.cookie = "#{key}=#{value};path=/;domain=#{domain}"
 
 class User
 
@@ -17,17 +28,24 @@ class User
       then Promise.resolve window._clay.me
       else request PATH + '/login/anon',
         method: 'POST'
+        qs:
+          accessToken: getCookieValue 'accessToken'
 
       # Save accessToken in cookie
       me.then (user) ->
-        document.cookie = "accessToken=#{user.accessToken};" +
-                          'path=/;domain=.clay.io'
+        setHostCookie 'accessToken', user.accessToken
       .catch log.trace
 
     return me
 
   setMe: (_me) ->
     me = Promise.resolve _me
+
+    # Save accessToken in cookie
+    me.then (user) ->
+      setHostCookie 'accessToken', user.accessToken
+    .catch log.trace
+
     experiments = me.then (user) ->
       request config.FC_API_URL + '/experiments',
         method: 'POST'
@@ -80,9 +98,18 @@ class User
       request PATH + '/me/links/recentGames',
         method: 'PATCH'
         qs:
-          {accessToken: me.accessToken}
+          accessToken: me.accessToken
         body:
           [ op: 'add', path: '/-', value: gameId ]
+
+  loginKikAnon: (kikAnonToken) =>
+    @getMe().then (me) ->
+      request PATH + '/login/kikAnon',
+        method: 'POST'
+        qs:
+          accessToken: me.accessToken
+        body:
+          kikAnonToken: kikAnonToken
 
 
 module.exports = new User()

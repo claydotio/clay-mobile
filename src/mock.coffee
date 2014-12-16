@@ -41,7 +41,9 @@ mock = new Zock()
   .base(config.API_URL)
   .logger log.info
   .post '/users/login/anon'
-  .reply 200, id: 1, accessToken: 'thisisanaccesstoken'
+  .reply 200, id: 1, accessToken: 'thisisanaccesstoken', links: {}
+  .post '/users/login/kikAnon'
+  .reply 200, id: 1, accessToken: 'thisisanaccesstoken', links: {}
   .post '/users/me/lastEngagedActivity'
   .reply 200
   .post '/users'

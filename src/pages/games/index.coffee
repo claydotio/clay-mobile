@@ -1,4 +1,5 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 
 Header = require '../../components/header'
 RecentGames = require '../../components/recent_games'
@@ -19,6 +20,7 @@ module.exports = class GamesPage
         @PopularGames = new PopularGames({featuredGameRow: 0})
 
       z.redraw()
+    .catch log.trace
 
   render: =>
     z 'div', [

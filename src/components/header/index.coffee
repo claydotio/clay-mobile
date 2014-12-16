@@ -12,5 +12,6 @@ module.exports = class Header
 
   render: ->
     z 'header.z-header',
-      z 'a.z-header-logo[href=/]'
-      z 'div.z-header-marketplace-share', @MarketplaceShare
+      z '.orange-bar',
+        z.router.a '.logo[href=/]'
+        z 'div.marketplace-share', @MarketplaceShare
