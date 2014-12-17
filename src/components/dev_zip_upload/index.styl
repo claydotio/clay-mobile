@@ -1,0 +1,48 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-dev-zip-upload
+  width: 320px
+  height: 320px
+  position: relative
+  margin: 0 auto 60px auto
+  text-align: center
+
+  > canvas
+    position: absolute
+    top: 0
+    left: 0
+    pointer-events: none // not supported in ie9/10
+
+  .upload-dropzone
+    width: 100%
+    height: 100%
+    border-radius: 160px
+    background: $white
+
+    .upload-content
+      width: 100%
+
+      > .drop-here
+        font-size: $fontSizeLarge
+        font-family: 'RobotoLighter'
+        margin: 10px
+
+      > .browse
+        color: $blue
+        display: block
+        font-size: $fontSizeMedium
+        margin-bottom: 20px
+
+      > .icon-cloud-upload
+        color: $greyMedium
+        font-size: 120px // FIXME does this need an icon size?
+        line-height: 80px
+        height: 80px
+        margin-bottom: 10px
+
+      .icon-help
+        font-size: $iconMedium
+        margin-left: 10px
+        color: $greyDarker

@@ -1,0 +1,33 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-input-subdomain
+  display: inline-block
+
+  input
+    border-radius: 3px
+    height: 40px
+    width: 175px
+    line-height: 38px
+    padding: 0 10px
+    border: 1px solid $greyLighter
+    color: $greyDarkest
+    box-sizing: border-box
+    background: $white
+    display: inline-block
+    vertical-align: middle
+    border-top-right-radius: 0
+    border-bottom-right-radius: 0
+
+    &:active
+      border: 1px solid $greyMedium
+
+    &:-webkit-input-placeholder
+      color: $greyMedium
+
+  .subdomain
+    width: 60px
+    border-left: 0
+    border-top-left-radius: 0
+    border-bottom-left-radius: 0

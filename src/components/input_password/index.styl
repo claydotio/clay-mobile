@@ -1,0 +1,30 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-input-password
+  display: inline-block
+
+  input
+    border-radius: 3px
+    height: 40px
+    line-height: 38px
+    padding: 0 10px
+    border: 1px solid $greyLighter
+    color: $greyDarkest
+    box-sizing: border-box
+    background: $white
+    display: inline-block
+    vertical-align: middle
+
+    &:active
+      border: 1px solid $greyMedium
+
+    &:-webkit-input-placeholder
+      color: $greyMedium
+
+  &.theme-full-width
+    width: 100%
+
+    input
+      width: 100%

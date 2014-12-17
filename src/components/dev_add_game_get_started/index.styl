@@ -1,0 +1,37 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+$borderRadius = 3px
+
+.z-dev-add-game-get-started
+  padding: 20px
+
+  .next-step
+    margin-top: 10px
+
+  hr
+    border: none
+    height: 1px
+    background: $greyLighter
+    margin: 20px 0
+
+  > .sdk-info
+    > h1
+      font-family: 'RobotoLighter'
+      font-weight: lighter
+      color: $greyDarker
+
+    > ul
+      list-style-type: none
+      margin: 0
+      padding: 0
+
+      > li
+        font-size: $fontSizeMedium
+        margin: 20px 0
+        > .icon
+          color: $orange
+          font-size: $iconLarge
+          margin-right: 10px
+          vertical-align: middle

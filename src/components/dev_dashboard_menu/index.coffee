@@ -9,17 +9,11 @@ module.exports = class DevDashboardMenu
   render: ->
     z '.z-dev-dashboard-menu',
       z '.menu',
-        z 'div',
+        z.router.a '[href=/developers/add-game]',
           z '.text.add-game', 'Add game'
 
       z '.menu',
-        z 'div.is-selected',
+        z.router.a '.is-selected[href=#]',
           z '.text', 'My games'
-        z 'div',
+        z 'a[href=https://github.com/claydotio/clay-sdk][target=_blank]',
           z '.text', 'Documentation'
-        z 'div',
-          z '.text', 'Account'
-
-      z '.menu',
-        z 'div',
-          z '.text', 'Exit developer site'

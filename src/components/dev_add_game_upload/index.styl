@@ -1,0 +1,40 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-dev-add-game-upload
+  padding: 20px
+  text-align: center
+
+  .external-host
+    font-family: 'RobotoLighter'
+    font-weight: lighter
+    font-size: $fontSizeMedium
+    color: $greyDarker
+
+    > input[type=text]
+      margin-top: 5px
+      width: 320px
+
+  .help
+    text-align: center
+    width: 200px
+
+    > h1
+      font-family: 'RobotoLighter'
+      font-weight: lighter
+      color: $greyDarker
+
+    > .what-to-upload
+      margin: 10px 0
+
+    .icon
+      color: $orange
+      font-size: $iconXLarge
+      margin: 0 10px
+
+    .icon-arrow-down
+      margin: 20px 0
+      display: block
+      color: $greyMedium
+      font-size: $iconMedium

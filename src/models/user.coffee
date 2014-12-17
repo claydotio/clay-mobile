@@ -4,6 +4,8 @@ _ = require 'lodash'
 request = require '../lib/request'
 config = require '../config'
 
+Developer = require './developer'
+
 PATH = config.CLAY_API_URL + '/users'
 
 me = null
@@ -109,7 +111,26 @@ class User
         qs:
           accessToken: me.accessToken
         body:
-          kikAnonToken: kikAnonToken
+          kikAnonToken
 
+  loginBasic: ({email, password}) =>
+    @getMe().then (me) ->
+      request PATH + '/login/basic',
+        method: 'POST'
+        qs:
+          accessToken: me.accessToken
+        body: {
+          email
+          password
+        }
+
+
+  logout: ->
+    setHostCookie 'accessToken', ''
+
+  getDevelopers: ->
+    @getMe().then (me) ->
+      console.log me
+      Developer.find ownerId: me.id
 
 module.exports = new User()

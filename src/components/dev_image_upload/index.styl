@@ -1,0 +1,80 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+
+// TODO
+textarea
+  width: 360px
+  height: 120px
+
+$borderRadius = 3px
+$zIndexThumbnail = 1
+$zIndexUnsafeOverlay = 2
+$zIndexSafe = 3
+
+.z-dev-image-upload
+  background: $white // FIXME
+  border: 1px solid $grayBorder // FIXME
+  text-align: center
+  display: inline-block
+  vertical-align: top
+  margin: 0 10px 10px 0
+  position: relative
+  box-sizing: border-box
+  overflow: hidden
+
+  .clickable
+    height: 100%
+    cursor: pointer
+
+  .content
+    width: 100%
+    text-align: center
+
+  .percentage, canvas
+    display: none
+
+  .thumbnail
+    position: absolute
+    top: 0
+    left: 0
+    z-index: $zIndexThumbnail
+
+  .unsafe-overlay
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: $zIndexUnsafeOverlay
+    background: rgba(0, 0, 0, 0.3)
+
+  .safe
+    position: absolute
+    z-index: $zIndexSafe
+    overflow: hidden
+    border: 3px solid rgba(255, 255, 255, 0.5)
+    box-sizing: border-box
+
+    > .safe-text
+      position: absolute
+      margin: 10px
+      text-shadow: 0 1px 0 $white
+
+  &.is-loading
+
+    .drop-here
+      display: none
+
+    .percentage
+      display: block
+
+    canvas
+      display: block
+      position: absolute
+      left: 0
+      top: 0
+
+    .thumbnail
+      opacity: 0.3

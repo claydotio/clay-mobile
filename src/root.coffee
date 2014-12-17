@@ -11,8 +11,10 @@ kik = require 'kik'
 config = require './config'
 PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
+DevLoginPage = require './pages/dev_login'
+DevLogoutPage = require './pages/dev_logout'
 DevDashboardPage = require './pages/dev_dashboard'
-DevDashboardAddGamePage = require './pages/dev_dashboard_add_game'
+DevAddGamePage = require './pages/dev_add_game'
 PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
@@ -84,8 +86,14 @@ z.router.add '/games', GamesPage
 z.router.add '/game/:key', PlayGamePage
 z.router.add '/games/:filter', GamesPage
 
-z.router.add '/developers/dashboard', DevDashboardPage
-z.router.add '/developers/dashboard/add-game', DevDashboardAddGamePage
+z.router.add '/developers/login', DevLoginPage
+z.router.add '/developers/logout', DevLogoutPage
+
+z.router.add '/developers', DevDashboardPage
+z.router.add '/developers/add-game', DevAddGamePage
+z.router.add '/developers/add-game/:step', DevAddGamePage
+z.router.add '/developers/edit-game/:gameId', DevAddGamePage
+z.router.add '/developers/edit-game/:step/:gameId', DevAddGamePage
 
 new Promise (resolve) ->
   #############

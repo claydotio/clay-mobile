@@ -1,3 +1,5 @@
+z = require 'zorium'
+
 localstore = require '../lib/localstore'
 config = require '../config'
 request = require '../lib/request'
@@ -19,6 +21,10 @@ class Game
     request PATH + '/new',
       qs: {limit, skip}
 
+  find: (query) ->
+    request PATH,
+      qs: query
+
   findOne: (query) ->
     request PATH + '/findOne',
       qs: query
@@ -38,5 +44,29 @@ class Game
       localstore.set gamePlayCountKey, {count: gamePlayCount + 1}
     .then (gamePlayObject) ->
       gamePlayObject.count
+
+  ###############
+  # DEV METHODS #
+  ###############
+
+  create: ->
+    request PATH,
+      method: 'POST'
+
+  editingGame: null
+
+  setEditingGame: (gameId) =>
+    @editingGame = @get gameId
+
+  getEditingGame: ->
+    return @editingGame
+
+  uploadZip: -> null
+
+  uploadMeta: -> null
+
+  update: (gameId, {game}) -> null
+
+  delete: (gameId) -> null
 
 module.exports = new Game()

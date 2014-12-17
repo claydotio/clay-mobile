@@ -1,0 +1,37 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+// TODO
+textarea
+  width: 360px
+  height: 120px
+
+$borderRadius = 3px
+
+.z-dev-add-game-details
+  width: 100%
+  padding: 20px
+
+  .title
+    color: $greyDarker
+    font-weight: bold
+    font-size: $fontSizeMedium
+
+  hr
+    margin: 40px 0 20px 0
+
+  .image-holder
+    height: 100px
+    background: $white // FIXME
+    border: 1px solid $grayBorder // FIXME
+    text-align: center
+    display: inline-block
+    margin: 0 10px 10px 0
+
+    .image-holder-content
+      width: 100%
+      text-align: center
+
+  .next-step
+    margin-top: 10px

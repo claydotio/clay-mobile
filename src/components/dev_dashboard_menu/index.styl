@@ -7,18 +7,22 @@ json('../../stylus/vars.json')
     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2)
     margin: 20px 0
     font-size: $fontSizeMedium
+    border-radius: 3px
 
-    > div
+    > a
+      display: block
       background: $white
       font-weight: bold
-      color: $grayLight
+      color: $greyDarker
+      border-radius: 3px
+      overflow: hidden
 
       &.is-selected
         color: $black
-        background: $activeBgColor
+        background: $greyLightest
         position: relative
 
-        &::before
+        &:before
           content: ''
           background: $orange
           height: 100%
@@ -28,6 +32,20 @@ json('../../stylus/vars.json')
 
       .add-game
         color: $blue
+        position: relative
+
+        &:before
+          content: '+'
+          font-size: $fontSizeLarge
+          font-weight: normal
+          color: $blue
+          position: absolute
+          top: 0
+          right: 20px
+          height: 100%
+          display: flex
+          align-items: center
+
 
       .text
-        padding: 15px
+        padding: 15px 20px
