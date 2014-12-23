@@ -19,8 +19,9 @@
   "$fontSizeXXLarge": "4.2rem",
 
   "$iconTiny": "0.8rem",
-  "$iconMedium": "2.2rem",
-  "$iconXLarge": "4.2rem",
+  "$iconSmall": "1.2rem",
+  "$iconLarge": "2.2rem",
+  "$iconXXLarge": "4.2rem",
 
   "$logoSvg": "//cdn.wtf/d/images/logos/logo_standard_bw.svg",
   "$icon256": "//cdn.wtf/d/images/icons/icon_256.png",

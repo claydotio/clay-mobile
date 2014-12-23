@@ -1,0 +1,40 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+$zIndexModalClose = 1
+
+.z-modal-header
+  position: relative
+  overflow: hidden
+  height: 50px
+  padding: 0 20px
+  background: $white
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.3)
+  background-size: 100% auto
+  background-position: center
+
+  > .title
+    margin: 0
+    line-height: 50px
+    font-size: $fontSizeLarge
+
+  > .close
+    position: absolute
+    top: 10px
+    right: 10px
+    opacity: 0.75
+    z-index: $zIndexModalClose
+
+    > .icon-close
+      color: $disabledColor
+      font-size: $fontSizeLarge
+
+
+  &.is-dark
+    > .title
+      color: white
+
+    > .close
+      > .icon-close
+        color: #fff

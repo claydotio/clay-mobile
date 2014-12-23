@@ -61,7 +61,7 @@ $zIndexDrawerHeader = 100
     top: 13px
 
     > .icon-close
-      font-size: $iconMedium
+      font-size: $iconLarge
       color: $white
 
 
@@ -71,7 +71,7 @@ $zIndexDrawerHeader = 100
     top: 13px
 
     > .icon-home
-      font-size: $iconMedium
+      font-size: $iconLarge
       color: $white
 
 .z-drawer-inner
@@ -83,8 +83,8 @@ $zIndexDrawerHeader = 100
   padding-top: ($drawerHeaderHeight) px
   box-shadow: -10px 0 10px 0px rgba(0, 0, 0, 0.04)
   pointer-events: all // not supported in ie9/10
-  overflow: auto
   box-sizing: border-box
+  overflow: auto
 
 .z-drawer-promo
   height: 92px
@@ -126,18 +126,25 @@ $zIndexDrawerHeader = 100
   text-align: center
   height: 80px
   width: 100%
-  display: table
+  display: flex
+  align-items: center
+  justify-content: center
   background: $white
 
   > .z-drawer-share-inner
     display: table-cell
     vertical-align: middle
     padding: 0 20px
+    width: 100%
 
     .z-drawer-share-button
 
       > .icon-share
         margin-right: 10px
+
+.z-drawer-google-play-ad-drawer
+  margin: 20px 0 0 0
+  padding: 0 20px
 
 .z-drawer-marketplace-link
   display: block
@@ -149,7 +156,7 @@ $zIndexDrawerHeader = 100
     background: $activeBgColor
 
   > .icon-heart
-    font-size: $iconMedium
+    font-size: $iconLarge
     color: $orange
     margin-right: 10px
 
@@ -159,5 +166,3 @@ $zIndexDrawerHeader = 100
 
 .z-drawer-browse-more
   margin-top: 10px
-  background: $white
-  color: $blue
