@@ -19,6 +19,6 @@ module.exports = class ModalHeader
         backgroundImage: if @backgroundImage then "url(#{@backgroundImage})" \
                          else 'none'
 
-      z 'a.z-modal-header-close[href=#]', onclick: @close,
+      z 'a.close[href=#]', onclick: @close,
         z 'i.icon.icon-close'
-      z 'h1.z-modal-header-title', "#{@title}"
+      z 'h1.title', "#{@title}"

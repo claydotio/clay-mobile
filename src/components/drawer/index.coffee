@@ -28,9 +28,10 @@ module.exports = class Drawer
 
     @GooglePlayAdDrawer = null
     User.getExperiments().then (params) =>
-      @GooglePlayAdDrawer = if params.googlePlayDrawer is 'install-button' \
-                            then new GooglePlayAdDrawerInstallButton()
-                            else new GooglePlayAdDrawerControl()
+      unless params.googlePlayDrawer is 'none'
+        @GooglePlayAdDrawer = if params.googlePlayDrawer is 'install-button' \
+                              then new GooglePlayAdDrawerInstallButton()
+                              else new GooglePlayAdDrawerControl()
     .then z.redraw
 
   toggleState: (e) =>
