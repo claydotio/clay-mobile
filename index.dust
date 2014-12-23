@@ -41,8 +41,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{icon152}">
 
     {! kik !}
-    <meta name="kik-unsupported" content="android-2.3">
-    <meta name="kik-unsupported" content="ios-5">
+    <meta name="kik-unsupported" content="android-2.3,ios-5">
 
     <link rel="kik-icon" href="{iconKik}">
     <link rel="canonical" href="{canonical}">
@@ -75,18 +74,20 @@
       ga('send', 'pageview');
     </script>
     <script>
-      // We save console.log to a temp variable and re-set console.log to
-      // the original version (logClone) since Kik overrides console.log
+      // We save some native methods to temp variables and re-set to
+      // the original versions since Kik overrides them
       // Kik doing that means we don't see the correct line numbers for logs
-      // without this fix.
-      var logClone = console.log
+      // without this fix + window.open is busted in native
+      var originalConsoleLogFn = console.log
+      var originalWindowOpenFn = window.open
     </script>
 
     <div id="app"></div>
-    <script src="//cdn.kik.com/kik/1.0.9/kik.js"></script>
+    <script src="//cdn.kik.com/kik/1.0.18/kik.js"></script>
     <script>
-      // restore console.log (since kik messes with it)
-      console.log = logClone
+      // restore console.log, window.open (since kik messes with them)
+      console.log = originalConsoleLogFn
+      window.open = originalWindowOpenFn
     </script>
     {! Inject current user to prevent round-trip !}
     <script>window._clay={};window._clay.me={me|s};window._clay.experiments={experiments|s};</script>

@@ -13,11 +13,11 @@ $zIndexSpinnerBeforeAfterAnimation = 1
   100%
     z-index: $zIndexSpinnerBeforeAfterAnimation
 
-.spinner-container
+.z-spinner-container
   position: relative
   height: 40px
 
-.spinner
+.z-spinner
   position: absolute
   left: 50%
   top: 50%
@@ -28,7 +28,7 @@ $zIndexSpinnerBeforeAfterAnimation = 1
   width: 40px
   height: 40px
 
-.spinner:before, .spinner:after
+.z-spinner:before, .spinner:after
   content: ''
   position: absolute
   left: 50%
@@ -40,10 +40,10 @@ $zIndexSpinnerBeforeAfterAnimation = 1
   width: 42px
   height: 42px
 
-.spinner:before
+.z-spinner:before
   background: $orange
   animation: expand 1.6s linear infinite both
 
-.spinner:after
+.z-spinner:after
   background: $white
   animation: expand 1.6s linear 0.8s infinite both

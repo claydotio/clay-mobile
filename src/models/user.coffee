@@ -4,10 +4,21 @@ _ = require 'lodash'
 request = require '../lib/request'
 config = require '../config'
 
-PATH = config.API_PATH + '/users'
+PATH = config.CLAY_API_URL + '/users'
 
 me = null
 experiments = null
+
+getCookieValue = (key) ->
+  match = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)')
+  return if match then match.pop() else null
+
+setHostCookie = (key, value) ->
+  secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
+  # The '.' prefix allows subdomains access
+  domain = '.' + secondLevelDomain
+  document.cookie = "#{key}=#{value}"
+  document.cookie = "#{key}=#{value};path=/;domain=#{domain}"
 
 class User
 
@@ -16,20 +27,28 @@ class User
       me = if window._clay?.me
       then Promise.resolve window._clay.me
       else request PATH + '/login/anon',
-        method: 'post'
+        method: 'POST'
+        qs:
+          accessToken: getCookieValue 'accessToken'
 
       # Save accessToken in cookie
       me.then (user) ->
-        document.cookie = "accessToken=#{user.accessToken}"
+        setHostCookie 'accessToken', user.accessToken
       .catch log.trace
 
     return me
 
   setMe: (_me) ->
     me = Promise.resolve _me
+
+    # Save accessToken in cookie
+    me.then (user) ->
+      setHostCookie 'accessToken', user.accessToken
+    .catch log.trace
+
     experiments = me.then (user) ->
-      request config.FLAK_CANNON_PATH + '/experiments',
-        method: 'post'
+      request config.FC_API_URL + '/experiments',
+        method: 'POST'
         body:
           userId: user.id
     return me
@@ -39,7 +58,7 @@ class User
       Promise.all [
         @convertExperiment('engaged_activity')
         request PATH + '/me/lastEngagedActivity',
-          method: 'post'
+          method: 'POST'
           qs: {accessToken: me.accessToken}
       ]
       .then ([exp, res]) ->
@@ -50,8 +69,8 @@ class User
       experiments = if window._clay?.experiments
       then Promise.resolve window._clay.experiments
       else @getMe().then (user) ->
-        request config.FLAK_CANNON_PATH + '/experiments',
-          method: 'post'
+        request config.FC_API_URL + '/experiments',
+          method: 'POST'
           body:
             userId: user.id
 
@@ -59,16 +78,16 @@ class User
 
   setExperimentsFrom: (shareOriginUserId) =>
     experiments = @getMe().then (user) ->
-      request config.FLAK_CANNON_PATH + '/experiments',
-        method: 'post'
+      request config.FC_API_URL + '/experiments',
+        method: 'POST'
         body:
           fromUserId: shareOriginUserId
           userId: user.id
 
   convertExperiment: (event, {uniq} = {}) =>
     @getMe().then (user) ->
-      request config.FLAK_CANNON_PATH + '/conversions',
-        method: 'post'
+      request config.FC_API_URL + '/conversions',
+        method: 'POST'
         body:
           event: event
           uniq: uniq
@@ -77,11 +96,20 @@ class User
   addRecentGame: (gameId) =>
     @getMe().then (me) ->
       request PATH + '/me/links/recentGames',
-        method: 'patch'
+        method: 'PATCH'
         qs:
-          {accessToken: me.accessToken}
+          accessToken: me.accessToken
         body:
           [ op: 'add', path: '/-', value: gameId ]
+
+  loginKikAnon: (kikAnonToken) =>
+    @getMe().then (me) ->
+      request PATH + '/login/kikAnon',
+        method: 'POST'
+        qs:
+          accessToken: me.accessToken
+        body:
+          kikAnonToken: kikAnonToken
 
 
 module.exports = new User()

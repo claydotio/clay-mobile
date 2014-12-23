@@ -16,7 +16,7 @@ module.exports = class ModalViewer
   render: ->
     return unless Modal.component
 
-    z 'div.modal-viewer-overlay',
-      z 'div.modal-viewer-container',
-        z 'div.modal-viewer',
+    z 'div.z-modal-viewer-overlay',
+      z 'div.z-modal-viewer-container',
+        z 'div.z-modal-viewer',
           Modal.component

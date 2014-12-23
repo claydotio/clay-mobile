@@ -27,9 +27,10 @@ class UrlService
     protocol ?= if kik?.enabled and @isRootPath() then 'card' else 'http'
     return "#{protocol}://#{game.key}.#{config.HOST}"
 
-  # url is optional, if undefined, uses current url (window.location.host)
+  # url is optional, if undefined use config.HOST as base domain
   getSubdomain: ({url} = {}) ->
-    url ?= host
+    # ignore subdomains which are part of config.HOST, e.g. [192].168.0.0
+    url ?= host.replace config.HOST, 'X.XX'
     subdomainRegex = /(?:(?:http|card)[s]*\:\/\/)*(.*?)\.(?=[^\/]*\..{2,5})/i
     matches = subdomainRegex.exec(url)
 

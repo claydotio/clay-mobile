@@ -1,14 +1,14 @@
 @require 'nib'
 
-.game-player
+.z-game-player
   > iframe
-    width: 100%
-    height: 100%
+    // some games (eg flytrap) on iOS bug out if we set width and height 100%
+    // therefore, we set it via coffeescript
     border: none
     position: absolute
     -webkit-overflow-scrolling: touch
 
-.game-player-missing
+.z-game-player-missing
   position: absolute
   font-size: 2em
   text-align: center

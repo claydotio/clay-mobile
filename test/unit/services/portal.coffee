@@ -1,15 +1,16 @@
-z = require 'zorium'
 _ = require 'lodash'
 should = require('clay-chai').should()
 rewire = require 'rewire'
 
-SDK = rewire 'services/sdk'
+PortalService = rewire 'services/portal'
 User = require 'models/user'
+
+PortalService.registerMethods()
 
 eventListeners = {}
 
 emit = (message) ->
-  message = _.defaults message, {_clay: true, jsonrpc: '2.0'}
+  message = _.defaults message, {_portal: true, jsonrpc: '2.0'}
 
   new Promise (resolve, reject) ->
     event = document.createEvent 'Event'
@@ -34,9 +35,12 @@ emit = (message) ->
     window.dispatchEvent event
 
 
-describe 'SDK', ->
+describe 'PortalService', ->
 
   before ->
+    portal = PortalService.__get__ 'portal'
+    portal.down()
+    portal.up timeout: 1
 
     # Stub user dependency
     User.setMe
@@ -54,19 +58,25 @@ describe 'SDK', ->
       res.result.accessToken.should.be '1'
 
   describe 'share.any()', ->
+    before ->
+      PortalService.__set__ 'kik.enabled', -> false
+
     it 'shares via kik', ->
-      SDK.__set__ 'kik.send', (params) ->
+      kikSent = false
+      PortalService.__set__ 'kik.send', (params) ->
+        params.title.should.be 'Prism'
+        params.text.should.be 'HELLO'
+        kikSent = true
         return params
 
-      emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: '1'}
-      .then (data) ->
-        data.result.title.should.be 'Prism'
-        data.result.text.should.be 'HELLO'
+      emit {method: 'share.any', id: 1, params: [{text: 'HELLO', gameId: '1'}]}
+      .then ->
+        kikSent.should.be true
 
     it 'shares via twitter if kik unavailable', (done) ->
-      SDK.__set__ 'kik.send', null
+      PortalService.__set__ 'kik.send', null
 
-      SDK.__set__ 'window.open', (url) ->
+      PortalService.__set__ 'window.open', (url) ->
         url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
         done()
 
@@ -75,9 +85,10 @@ describe 'SDK', ->
 
   describe 'kik methods', ->
     before ->
-      SDK.__set__ 'kik',
+      PortalService.__set__ 'kik',
         send: (params) ->
           return params
+        enabled: true
         browser:
           setOrientationLock: -> null
         metrics:
@@ -110,4 +121,4 @@ describe 'SDK', ->
       .then (res) ->
         throw new Error 'expected error'
       , (res) ->
-        res.error.code.should.be -32601
+        res.error.message.should.exist

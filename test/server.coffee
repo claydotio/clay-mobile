@@ -16,9 +16,9 @@ ANON_ACCESS_TOKEN = 'ANON_ACCESS_TOKEN'
 ME_USER_ID = 321
 ME_ACCESS_TOKEN = 'USER_ACCESS_TOKEN'
 
-nock 'http://clay.io'
+nock 'https://clay.io'
   .persist()
-  .get '/games/findOne?key=slime'
+  .get '/api/m/v1/games/findOne?key=slime'
   .reply 200,
     id: 8
     key: 'slime'
@@ -28,15 +28,15 @@ nock 'http://clay.io'
     name: 'Slime'
     description: 'a game about slime'
     rating: 3
-  .post '/users/login/anon'
+  .post '/api/m/v1/users/login/anon'
   .reply 200,
     id: ANON_USER_ID
     accessToken: ANON_ACCESS_TOKEN
-  .get '/users/me?accessToken=USER_ACCESS_TOKEN'
+  .get '/api/m/v1/users/me?accessToken=USER_ACCESS_TOKEN'
   .reply 200,
     id: ME_USER_ID
     accessToken: ME_ACCESS_TOKEN
-  .post '/experiments'
+  .post '/api/fc/v2/experiments'
   .reply 200,
     login_button: 'red'
 
@@ -118,7 +118,7 @@ describe 'index.dust', ->
           .flare (flare) ->
             flare.res.body.should.contain injectedNulls
 
-    it 'Injects user provided in cookie', ->
+    it 'Does NOT Inject user provided in cookie', ->
       flare
         .actor 'joe',
           headers:
@@ -126,11 +126,11 @@ describe 'index.dust', ->
         .as 'joe'
         .get '/'
         .flare (flare) ->
-          flare.res.body.should.contain injectedUser
+          flare.res.body.should.not.contain injectedUser
         .get '/game/slime'
         .flare (flare) ->
-          flare.res.body.should.contain injectedUser
-    it 'Injects anonymous user object if invalid token', ->
+          flare.res.body.should.not.contain injectedUser
+    it 'Does NOT Inject anonymous user object if invalid token', ->
       flare
         .actor 'notjoe',
           headers:
@@ -138,10 +138,24 @@ describe 'index.dust', ->
         .as 'notjoe'
         .get '/'
         .flare (flare) ->
-          flare.res.body.should.contain injectedAnon
+          flare.res.body.should.not.contain injectedAnon
         .get '/game/slime'
         .flare (flare) ->
-          flare.res.body.should.contain injectedAnon
+          flare.res.body.should.not.contain injectedAnon
+
+    it 'Does NOT Inject anonymous user if kik useragent', ->
+      flare
+        .actor 'kikUser',
+          headers:
+            host: config.HOST
+            'User-Agent': 'Kik'
+        .as 'kikUser'
+        .get '/'
+        .flare (flare) ->
+          flare.res.body.should.not.contain injectedAnon
+        .get '/game/slime'
+        .flare (flare) ->
+          flare.res.body.should.not.contain injectedAnon
 
   describe 'Experiments object injection', ->
     injectedExperiments = 'window._clay.experiments={"login_button":"red"}'

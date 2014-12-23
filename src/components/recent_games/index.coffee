@@ -5,7 +5,7 @@ _ = require 'lodash'
 request = require '../../lib/request'
 Game = require '../../models/game'
 User = require '../../models/user'
-GameBox = require '../game_box'
+GameShoeBox = require '../game_shoe_box'
 
 styles = require './index.styl'
 
@@ -13,31 +13,26 @@ module.exports = class RecentGames
   constructor: ->
     styles.use()
 
-    if window.matchMedia('(min-width: 360px)').matches
-      gameBoxSize = 100
-    else
-      gameBoxSize = 135
-
-    @gameBoxes = []
+    @gameShoeBoxes = []
     User.getMe().then (user) ->
       unless user.links.recentGames
         return []
 
       request user.links.recentGames.href
     .then (games) =>
-      @gameBoxes = _.map games, (game) ->
-        new GameBox {game, iconSize: gameBoxSize},
+      @gameShoeBoxes = _.map games.slice(0, 3), (game) ->
+        new GameShoeBox {game},
     .then z.redraw
     .catch log.trace
 
   render: =>
-    if _.isEmpty @gameBoxes
+    if _.isEmpty @gameShoeBoxes
       return
 
-    z 'section.recent-games',
+    z 'section.z-recent-games',
       z 'div.l-content-container',
-        z 'h2.recent-games-header', 'Continue playing'
-        z 'div.recent-games-game-boxes',
-          _.map @gameBoxes, (GameBox) ->
-            z 'div.recent-games-game-box-container',
-              GameBox
+        z 'h2.z-recent-games-header', 'Recently Played'
+        z 'div.z-recent-games-game-boxes',
+          _.map @gameShoeBoxes, (gameShoeBox) ->
+            z 'div.z-recent-games-game-box-container',
+              gameShoeBox

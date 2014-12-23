@@ -1,13 +1,11 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 
 localstore = require '../../lib/localstore'
-GameFilter = require '../../models/game_filter'
 User = require '../../models/user'
 Modal = require '../../models/modal'
 GooglePlayAdService = require '../../services/google_play_ad'
 Header = require '../../components/header'
-GameMenu = require '../../components/game_menu'
-GameResults = require '../../components/game_results'
 ModalViewer = require '../../components/modal_viewer'
 GooglePlayAdControl = require '../../components/google_play_ad'
 GooglePlayAdInstallButton =
@@ -15,17 +13,27 @@ GooglePlayAdInstallButton =
 GooglePlayAdModalControl = require '../../components/google_play_ad_modal'
 GooglePlayAdModalHeaderBackground =
   require '../../components/google_play_ad_modal/header_background'
+RecentGames = require '../../components/recent_games'
+PopularGames = require '../../components/popular_games'
 
 module.exports = class GamesPage
-  constructor: ({filter} = {}) ->
-    GameFilter.setFilter filter or 'top'
-
+  constructor: ->
     @Header = new Header()
-    @GameMenu = new GameMenu()
     @GooglePlayAd = new GooglePlayAd()
-    @GameResults = new GameResults()
     @ModalViewer = new ModalViewer()
+    @PopularGames = null
+    @RecentGames = new RecentGames()
 
+    @PopularGames = null
+    User.getMe().then (user) =>
+      hasRecentGames = user.links.recentGames
+      if hasRecentGames
+        @PopularGames = new PopularGames({featuredGameRow: 1})
+      else
+        @PopularGames = new PopularGames({featuredGameRow: 0})
+
+      z.redraw()
+    .catch log.trace
 
     User.getExperiments().then (params) =>
       GooglePlayAdComponent = if params.googlePlayAd is 'install-button' \
@@ -57,8 +65,7 @@ module.exports = class GamesPage
   render: =>
     z 'div', [
       z 'div', @Header
-      z 'div', @GameMenu
-      z 'div', @GooglePlayAd
-      z 'div', @GameResults
+      z 'div', @RecentGames
+      z 'div', @PopularGames
       @ModalViewer
     ]

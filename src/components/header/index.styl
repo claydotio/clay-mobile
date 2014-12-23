@@ -2,16 +2,31 @@
 
 json('../../stylus/vars.json')
 
-.header
-  background: $white
-  height: 50px
-  border-bottom: 1px solid $bgColor
-  box-sizing: border-box
-  padding: 12px 20px
+$headerHeight = 60px
 
-.header-logo
-  display: inline-block
-  background-image: url($logoSvg)
-  background-repeat: no-repeat
-  width: 110px
-  height: 26px
+.z-header
+  height: $headerHeight
+
+  > .orange-bar
+    background: $orange
+    position: fixed
+    width: 100%
+    top: 0
+    height: $headerHeight
+    box-sizing: border-box
+    padding: 14px 20px
+    box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.13), 0px 3px 6px -2px rgba(0, 0, 0, 0.2)
+
+    > .logo
+      display: inline-block
+      float: left
+      line-height: 30px
+      background-image: url($logoSvg)
+      background-repeat: no-repeat
+      width: 125px
+      height: 30px
+
+    > .marketplace-share
+      display: inline-block
+      float: right
+      line-height: 30px

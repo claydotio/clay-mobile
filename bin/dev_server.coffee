@@ -6,10 +6,9 @@ webpack = require 'webpack'
 WebpackDevServer = require 'webpack-dev-server'
 config = require '../src/config'
 
-webpackDevPort = process.env.WEBPACK_DEV_PORT or 3004
+webpackDevPort = 3004
 webpackDevHostname = config.WEBPACK_DEV_HOSTNAME
-
-isMockingApi = process.env.MOCK
+isMockingApi = config.MOCK
 
 app.all '/*', (req, res, next) ->
   res.header(
@@ -18,18 +17,18 @@ app.all '/*', (req, res, next) ->
   res.header 'Access-Control-Allow-Headers', 'X-Requested-With'
   next()
 
-app.listen process.env.PORT or 3000, ->
-  log.info 'Listening on port %d', process.env.PORT or 3000
+app.listen config.PORT, ->
+  log.info 'Listening on port %d', config.PORT
 
 
 entries = [
   "webpack-dev-server/client?http://#{webpackDevHostname}:#{webpackDevPort}"
   'webpack/hot/dev-server'
-  './src/root'
 ]
 # Order matters because mock overrides window.XMLHttpRequest
 if isMockingApi
-  entries = ['./src/mock'].concat entries
+  entries = entries.concat ['./src/mock']
+entries = entries.concat ['./src/root']
 
 new WebpackDevServer webpack({
   entry: entries

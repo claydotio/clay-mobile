@@ -1,12 +1,13 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
+portal = require 'portal-gun'
 
 User = require '../../models/user'
-KikService = require '../../services/kik'
-NativeService = require '../../services/native'
-EnvironmentService = require '../../services/environment'
+PortalService = require '../../services/portal'
 
 styles = require './index.styl'
+
+MARKETPLACE_GAME_ID = '1'
 
 module.exports = class ModalClose
   constructor: ->
@@ -15,19 +16,14 @@ module.exports = class ModalClose
   share: (e) ->
     e?.preventDefault()
 
-    EnvironmentService.getPlatform().then (platform) ->
-      switch platform
-        when 'kik'
-          KikService.shareMarketplace()
-          .catch log.trace
-        when 'androidApp'
-          NativeService.shareMarketplace()
-          .catch log.trace
+    PortalService.get 'share.any',
+      gameId: MARKETPLACE_GAME_ID
+      text: 'Play with me! http://clay.io'
 
     ga? 'send', 'event', 'marketplace_share', 'share', 'marketplace'
     User.convertExperiment 'marketplace_share'
     .catch log.trace
 
   render: =>
-    z 'a.marketplace-share', onclick: @share,
+    z 'a.z-marketplace-share[href=#]', onclick: @share,
       z 'i.icon.icon-share'

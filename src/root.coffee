@@ -10,15 +10,16 @@ kik = require 'kik'
 
 config = require './config'
 PlayGamePage = require './pages/play_game'
-GamesPageControl = require './pages/games'
-GamesPageRecentTabs = require './pages/games/recent_tabs'
-GamesPageRecentList = require './pages/games/recent_list'
-GamesPageRecentBoxes = require './pages/games/recent_boxes'
+GamesPage = require './pages/games'
 PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
+PortalService = require './services/portal'
+ErrorReportService = require './services/error_report'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
+
+PortalService.registerMethods()
 
 ##############
 # KIK PICKER #
@@ -26,126 +27,45 @@ ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 
 # Marketplace or game was loaded in picker
 if kik?.picker?.reply
-  if UrlService.isRootPath() # marketplace
+  if UrlService.isRootPath() # marketplace in picker
+    # will throw an error if token exists. better than waiting for roundtrip
+    # to check for existence
     PushToken.createForMarketplace()
     .then ->
-      User.getMe()
-      .then (user) ->
-        kik.getAnonymousUser (token) ->
-          kik.picker.reply {token, user}
-      .catch (err) ->
-        log.trace err
-        kik.getAnonymousUser (token) ->
-          kik.picker.reply {token}
+      throw new Error 'always'
+    .catch ->
+      kik.getAnonymousUser (anonToken) ->
+        kik.picker.reply {anonToken}
     .catch (err) ->
       log.trace err
-      kik.picker.reply()
-  else # game subdomain
+      kik.picker.reply {}
+  else # game subdomain in picker
     gameKey = UrlService.getSubdomain()
     PushToken.createByGameKey gameKey
     .then ->
-      kik.picker.reply()
+      kik.picker.reply {}
     .catch (err) ->
       log.trace err
-      kik.picker.reply()
+      kik.picker.reply {}
   throw new Error 'Stop code execution'
 
 ###########
 # LOGGING #
 ###########
 
-reportError = ->
-  # Remove the circular dependency within error objects
-  args = _.map arguments, (arg) ->
-
-    if arg instanceof Error and arg.stack
-    then arg.stack
-    else if arg instanceof Error
-    then arg.message
-    else if arg instanceof ErrorEvent and arg.error
-    then arg.error.stack
-    else if arg instanceof ErrorEvent
-    then arg.message
-    else arg
-
-  window.fetch config.API_PATH + '/log',
-    method: 'post'
-    headers:
-      'Accept': 'application/json'
-      'Content-Type': 'application/json'
-    body:
-      JSON.stringify message: args.join ' '
-  .catch (err) ->
-    console?.error err
-
-window.addEventListener 'error', reportError
+window.addEventListener 'error', ErrorReportService.report
 
 if config.ENV isnt config.ENVS.PROD
   log.enableAll()
 else
   log.setLevel 'error'
-  log.on 'error', reportError
-  log.on 'trace', reportError
+  log.on 'error', ErrorReportService.report
+  log.on 'trace', ErrorReportService.report
 
-############
-# Z-FACTOR #
-############
-shareOriginUserId = kik?.message?.share?.originUserId
 
-if shareOriginUserId
-  User.setExperimentsFrom shareOriginUserId
-  .catch log.trace
-  User.convertExperiment 'hit_from_share'
-  .catch log.trace
-
-hasVisitedBefore = _.contains document.cookie, 'accessToken'
-
-#####################
-# ENGAGED GAMEPLAYS #
-#####################
-
-# This is set if on kik and on a subdomain
-# using the picker trigger for push tokens
-kikAnonymousToken = null
-
-window.setTimeout ->
-  User.logEngagedActivity()
-  .catch log.trace
-, ENGAGED_ACTIVITY_TIME
-
-if shareOriginUserId and not hasVisitedBefore
-  # Kik clears tokens often. Use their anon-token to identify users
-  # The anon-token is unique for each 'app', so always use the marketplace one
-  if kik.enabled
-    if not kikAnonymousToken
-      kik.getAnonymousUser (token) ->
-        User.convertExperiment 'new_unique_from_share', {uniq: token}
-        .catch log.trace
-    else
-      User.convertExperiment 'new_unique_from_share', {uniq: kikAnonymousToken}
-      .catch log.trace
-  else
-    User.convertExperiment 'new_unique_from_share'
-    .catch log.trace
-
-####################
-# GOOGLE ANALYTICS #
-####################
-
-# track A/B tests in Google Analytics
-# Google's intended solution for this is custom dimensions
-# https://developers.google.com/analytics/devguides/platform/customdimsmets
-# however, that requires adding each dimension inside of FA's admin panel.
-# using events we can get the same results with a filter for users with
-# specific events
-User.getExperiments().then (params) ->
-  return unless ga
-  for experimentParam, experimentTestGroup of params
-    ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
-
-###########
-# ROUTING #
-###########
+#################
+# ROUTING SETUP #
+#################
 
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
@@ -155,53 +75,98 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.router.setMode 'pathname'
 
-User.getExperiments().then (params) ->
-  switch params.gamesPage
-    when 'recent_tabs' then GamesPageRecentTabs
-    when 'recent_list' then GamesPageRecentList
-    when 'recent_boxes' then GamesPageRecentBoxes
-    else GamesPageControl
+root = document.getElementById('app')
+z.router.setRoot root
+z.router.add '/', GamesPage
+z.router.add '/games', GamesPage
+z.router.add '/game/:key', PlayGamePage
+z.router.add '/games/:filter', GamesPage
 
-.then (GamesPage) ->
+new Promise (resolve) ->
+  #############
+  # USER INIT #
+  #############
+
+  # If on kik, login with anonymous user token (from marketplace)
+  if kik?.enabled
+    if UrlService.isRootPath()
+      kik.getAnonymousUser (token) ->
+        resolve token
+    else if kik?.picker
+      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+      kik?.picker? marketplaceBaseUrl, {}, (res) ->
+        resolve(res?.anonToken)
+    else resolve()
+  else resolve()
+.then (maybeKikAnonToken) ->
+
+  if maybeKikAnonToken
+    User.setMe User.loginKikAnon(maybeKikAnonToken)
+    .catch log.trace
+
+  ############
+  # Z-FACTOR #
+  ############
+
+  shareOriginUserId = kik?.message?.share?.originUserId
+  isFromShare = Boolean shareOriginUserId
+
+  if isFromShare
+    User.setExperimentsFrom shareOriginUserId
+    .then ->
+      User.convertExperiment 'hit_from_share'
+    .catch log.trace
+
+  #####################
+  # ENGAGED GAMEPLAYS #
+  #####################
+
+  hasVisitedBefore = _.contains document.cookie, 'accessToken'
+
+  if isFromShare and not hasVisitedBefore
+    # The anon-token is unique for each 'app', so always use the marketplace one
+    uniqBody = if maybeKikAnonToken then {uniq: maybeKikAnonToken} else {}
+    User.convertExperiment 'new_unique_from_share', uniqBody
+    .catch log.trace
+
+  ####################
+  #    ANALYTICS     #
+  ####################
+
+  # track A/B tests in Google Analytics
+  # Google's intended solution for this is custom dimensions
+  # https://developers.google.com/analytics/devguides/platform/customdimsmets
+  # however, that requires adding each dimension inside of FA's admin panel.
+  # using events we can get the same results with a filter for users with
+  # specific events
+  User.getExperiments().then (params) ->
+    unless ga
+      return
+    for experimentParam, experimentTestGroup of params
+      ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
+  .catch log.trace
 
   # track kik metrics (users sending messages, etc...)
   kik?.metrics?.enableGoogleAnalytics?()
 
+  window.setTimeout ->
+    User.logEngagedActivity()
+    .catch log.trace
+  , ENGAGED_ACTIVITY_TIME
+
+  ###########
+  # ROUTING #
+  ###########
+
   # Passed via message to denote game (share button in drawer uses this)
-  kikGameKey = kik?.message?.gameKey
-
-  shouldRouteToGamePage = kikGameKey or
-                          (not UrlService.isRootPath() and not config.MOCK)
-  gameKey = null
-  if shouldRouteToGamePage
-    if kikGameKey
-      gameKey = kikGameKey
-    else # subdomain
-      gameKey = UrlService.getSubdomain()
-      PushToken.createByGameKey gameKey
-      # marketplace in picker, causing it to appear in side-bar
-      # This is also used to pass the marketplace anon-user token
-      # which is used for tracking uniq share conversions
-      # And also for passing the user object through
-      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-      kik?.picker? marketplaceBaseUrl, {}, (res) ->
-        kikAnonymousToken = res.token
-        if res.user
-          User.setMe res.user
-  else
-    PushToken.createForMarketplace()
-
-  # This is down here because of the User.setMe() call above
-  root = document.getElementById('app')
-  z.router.setRoot root
-  z.router.add '/', GamesPage
-  z.router.add '/games', GamesPage
-  z.router.add '/game/:key', PlayGamePage
-  z.router.add '/games/:filter', GamesPage
+  gameKey = kik?.message?.gameKey or UrlService.getSubdomain()
 
   if gameKey
+    PushToken.createByGameKey gameKey
     z.router.go "/game/#{gameKey}"
   else
+    PushToken.createForMarketplace()
     z.router.go()
 
   log.info 'App Ready'
+.catch log.trace

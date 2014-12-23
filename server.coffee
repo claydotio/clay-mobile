@@ -1,10 +1,10 @@
 express = require 'express'
 dust = require 'dustjs-linkedin'
 fs = require 'fs'
-request = require 'request'
 url = require 'url'
 _ = require 'lodash'
 Promise = require 'bluebird'
+request = Promise.promisifyAll require 'request'
 useragent = require 'express-useragent'
 compress = require 'compression'
 log = require 'loglevel'
@@ -33,64 +33,30 @@ distCss = if config.ENV is config.ENVS.PROD \
 
 dust.loadSource indexTpl
 
-
-# TODO: (Zoli) make pretty
-apiRequestUrl = (path) ->
-  apiPath = url.parse config.API_PATH + '/'
-
-  unless apiPath.host
-    apiPath.host = config.HOST
-
-  unless apiPath.protocol
-    apiPath.protocol = 'http'
-
-  url.format url.resolve url.format(apiPath), path
-
-fcApiRequestUrl = (path) ->
-  apiPath = url.parse config.FLAK_CANNON_PATH + '/'
-
-  unless apiPath.host
-    apiPath.host = config.HOST
-
-  unless apiPath.protocol
-    apiPath.protocol = 'http'
-
-  url.format url.resolve url.format(apiPath), path
-
 # Middlewares
-clayUserSessionParser = ->
+clayUserSessionMiddleware = ->
   (req, res, next) ->
     req.clay = {}
     req.clay.me = null
 
-    loginUrl = apiRequestUrl 'users/login/anon'
-    meUrl = apiRequestUrl 'users/me'
+    # Don't inject anything for kik, it will use kikAnonToken
+    # They delete cookies all the time, inflating signup metrics
+    if req.useragent.isProbablyKik
+      return next()
+
+    loginUrl = config.CLAY_API_URL + '/users/login/anon'
+    meUrl = config.CLAY_API_URL + '/users/me'
     accessToken = req.cookies.accessToken
 
+    # Don't inject user because the page is sent over http
     if accessToken
-      Promise.promisify(request.get, request) meUrl, {qs: {accessToken}}
-      .timeout API_REQUEST_TIMEOUT
-      .spread (res, body) ->
-        req.clay.me = JSON.parse body
-        next()
-      .catch (err) ->
-        log.trace err
-
-        # Getting user failed, create a new one
-        Promise.promisify(request.post, request) loginUrl
-        .timeout API_REQUEST_TIMEOUT
-        .spread (res, body) ->
-          req.clay.me = JSON.parse body
-          next()
-        .catch (err) ->
-          log.trace err
-          next()
+      return next()
     else
       isSubdomain = req.headers.host isnt config.HOST
       if isSubdomain
         return next()
 
-      Promise.promisify(request.post, request) loginUrl
+      request.postAsync loginUrl
       .timeout API_REQUEST_TIMEOUT
       .spread (res, body) ->
         req.clay.me = JSON.parse body
@@ -99,15 +65,15 @@ clayUserSessionParser = ->
         log.trace err
         next()
 
-clayFlakCannonSessionParser = ->
+clayFlakCannonSessionMiddleware = ->
   (req, res, next) ->
     me = req.clay?.me
     req.clay.experiments = null
     unless me
       return next()
 
-    experimentsUrl = fcApiRequestUrl 'experiments'
-    Promise.promisify(request.post, request) experimentsUrl,
+    experimentsUrl = config.FC_API_URL + '/experiments'
+    request.postAsync experimentsUrl,
       {json: userId: me.id}
     .timeout API_REQUEST_TIMEOUT
     .spread (res, body) ->
@@ -116,6 +82,18 @@ clayFlakCannonSessionParser = ->
     .catch (err) ->
       log.trace err
       next()
+
+isKikUseragentMiddleware = ->
+  (req, res, next) ->
+    {source, isMac, isSafari, isMobile} = req.useragent
+
+    isKik = /^Kik/.test source
+    isKikBot = /KikBot/.test source
+    isiOSWebView = isMac and not isSafari and isMobile
+
+    req.useragent.isProbablyKik = isKik or isKikBot or isiOSWebView
+
+    next()
 
 app = express()
 
@@ -126,9 +104,10 @@ else app.use express['static'](__dirname + '/build')
 
 # After checking static files
 app.use cookieParser()
-app.use clayUserSessionParser()
-app.use clayFlakCannonSessionParser()
 app.use useragent.express()
+app.use isKikUseragentMiddleware()
+app.use clayUserSessionMiddleware()
+app.use clayFlakCannonSessionMiddleware()
 app.use router
 
 
@@ -229,10 +208,10 @@ renderHomePage = do ->
 
 renderGamePage = (gameKey, me, experiments) ->
 
-  gameUrl = apiRequestUrl "games/findOne?key=#{gameKey}"
+  gameUrl = config.CLAY_API_URL + "/games/findOne?key=#{gameKey}"
 
   log.info 'GET', gameUrl
-  Promise.promisify(request.get, request) gameUrl
+  request.getAsync gameUrl
   .timeout API_REQUEST_TIMEOUT
   .spread (res, body) ->
     game = JSON.parse body

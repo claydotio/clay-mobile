@@ -29,6 +29,7 @@ describe 'ModalHeader', ->
     Modal.openComponent {component: Stub}
 
     $ = Stub.render()
+    console.log $
 
     $closeIcon = domWalker.find $, ($node) ->
       return hasClass $node, 'modal-header-close'

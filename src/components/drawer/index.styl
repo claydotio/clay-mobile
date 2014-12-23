@@ -1,7 +1,6 @@
 @require 'nib'
 
 json('../../stylus/vars.json')
-@require '../../stylus/utils.styl'
 
 $drawerWidth = 288
 $drawerContentPadding = 20
@@ -11,7 +10,7 @@ $zIndexDrawerPromoAfter = 0
 $zIndexDrawerPromoText = 1
 $zIndexDrawerHeader = 100
 
-.drawer-overlay
+.z-drawer-overlay
   background: $overlayColor
   position: fixed
   width: 100%
@@ -21,7 +20,7 @@ $zIndexDrawerHeader = 100
   &.is-open
     display: block
 
-.drawer-nub
+.z-drawer-nub
   $drawerNubRadius = 42.5
   width: $drawerNubRadius px
   height: $drawerNubRadius px
@@ -31,7 +30,7 @@ $zIndexDrawerHeader = 100
   -webkit-tap-highlight-color: $transparent
   pointer-events: all // not supported in ie9/10
 
-.drawer
+.z-drawer
   width: ($drawerWidth + $drawerNubRadius) px
   right: -($drawerWidth)px
   height: 100%
@@ -48,7 +47,7 @@ $zIndexDrawerHeader = 100
   &.is-open
     right: 0
 
-.drawer-header
+.z-drawer-header
   width: 100%
   height: ($drawerHeaderHeight) px
   position: relative
@@ -56,7 +55,7 @@ $zIndexDrawerHeader = 100
   background: $orange
   pointer-events: all // not supported in ie9/10
 
-  .drawer-close
+  .z-drawer-close
     position: absolute
     left: 10px
     top: 13px
@@ -66,7 +65,7 @@ $zIndexDrawerHeader = 100
       color: $white
 
 
-  .drawer-home
+  .z-drawer-home
     position: absolute
     right: 10px
     top: 13px
@@ -75,7 +74,7 @@ $zIndexDrawerHeader = 100
       font-size: $iconLarge
       color: $white
 
-.drawer-inner
+.z-drawer-inner
   background: $bgColor
   height: 100%
   width: 100%
@@ -87,7 +86,7 @@ $zIndexDrawerHeader = 100
   box-sizing: border-box
   overflow: auto
 
-.drawer-promo
+.z-drawer-promo
   height: 92px
   position: relative
   background-size: 100% auto
@@ -101,7 +100,7 @@ $zIndexDrawerHeader = 100
     background: rgba(0, 0, 0, 0.5)
     content: ''
 
-  > .drawer-promo-text
+  > .z-drawer-promo-text
     position: absolute
     bottom: 0
     left: 20px
@@ -109,22 +108,21 @@ $zIndexDrawerHeader = 100
     z-index: $zIndexDrawerPromoText
     color: $white
 
-    > .drawer-promo-descriptor
+    > .z-drawer-promo-descriptor
         text-transform: uppercase
         font-size: $fontSizeSmall
         font-weight: bold
-        margin-bottom: normalizeSpacing(5, unit($fontSizeSmall, '')) px
+        margin-bottom: 3px
 
-    > .drawer-promo-title
+    > .z-drawer-promo-title
         margin: 0
-        margin-top: normalizeSpacing(5, unit($fontSizeLarge, '')) px
-        margin-bottom: normalizeSpacing(20, unit($fontSizeLarge, '')) px
+        margin-bottom: 15px
         font-size: $fontSizeLarge
         whitespace: nowrap
         overflow: hidden
         text-overflow: ellipsis
 
-.drawer-share
+.z-drawer-share
   text-align: center
   height: 80px
   width: 100%
@@ -133,20 +131,22 @@ $zIndexDrawerHeader = 100
   justify-content: center
   background: $white
 
-  > .drawer-share-inner
-    width: 100%
+  > .z-drawer-share-inner
+    display: table-cell
+    vertical-align: middle
     padding: 0 20px
+    width: 100%
 
-    .drawer-share-button
+    .z-drawer-share-button
 
       > .icon-share
         margin-right: 10px
 
-.drawer-google-play-ad-drawer
+.z-drawer-google-play-ad-drawer
   margin: 20px 0 0 0
   padding: 0 20px
 
-.drawer-marketplace-link
+.z-drawer-marketplace-link
   display: block
   font-size: $fontSizeMedium
   font-weight: bold
@@ -161,8 +161,8 @@ $zIndexDrawerHeader = 100
     margin-right: 10px
 
 
-.drawer-cross-promotion
+.z-drawer-cross-promotion
   padding: 0 ($drawerContentPadding)px 10px
 
-.drawer-browse-more
+.z-drawer-browse-more
   margin-top: 10px

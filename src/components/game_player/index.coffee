@@ -6,6 +6,7 @@ Game = require '../../models/game'
 Drawer = require '../drawer'
 Spinner = require '../spinner'
 UrlService = require '../../services/url'
+KikService  = require '../../services/kik'
 Modal = require '../../models/modal'
 GameShare = require '../game_share'
 User = require '../../models/user'
@@ -21,6 +22,8 @@ module.exports = class GamePlayer
     @Spinner = new Spinner()
 
     @isLoading = true
+    @height = window.innerHeight + 'px'
+    @width = window.innerWidth + 'px'
     @gameKey = gameKey
     @game = null
     @Drawer = null
@@ -32,6 +35,7 @@ module.exports = class GamePlayer
       @Drawer = new Drawer {game}
 
       z.redraw()
+      return game
 
       return game
 
@@ -41,11 +45,13 @@ module.exports = class GamePlayer
         gamePromise
       ]
       .then ([playCount, game]) =>
+        KikService.isFromPush().then (isFromPush) ->
+          unless isFromPush
+            ga? 'send', 'event', 'game_wo_push', 'game_play', game.key
+        ga? 'send', 'event', 'game', 'game_play', game.key
         shouldShowModal = playCount is 3
         if shouldShowModal
           @showShareModal(game)
-
-    @engagedPlayTimeout = window.setTimeout @logEngagedPlay, ENGAGED_PLAY_TIME
 
   onBeforeUnmount: =>
     window.clearTimeout @engagedPlayTimeout
@@ -55,14 +61,22 @@ module.exports = class GamePlayer
     @$el = $el
 
     window.addEventListener 'resize', @resize
-
     @resize()
 
-  resize: ->
-    @$el?.style.height = window.innerHeight + 'px'
+    @engagedPlayTimeout = window.setTimeout @logEngagedPlay, ENGAGED_PLAY_TIME
+
+    User.convertExperiment('game_play').catch log.trace
+
+  resize: =>
+    @height = window.innerHeight + 'px'
+    @width = window.innerWidth + 'px'
+    z.redraw()
 
   logEngagedPlay: =>
     User.convertExperiment('engaged_play').catch log.trace
+    KikService.isFromPush().then (isFromPush) =>
+      unless isFromPush
+        ga? 'send', 'event', 'game_wo_push', 'engaged_play', @game.key
     ga? 'send', 'event', 'game', 'engaged_play', @game.key
     User.addRecentGame(@game.id).catch log.trace
 
@@ -83,20 +97,25 @@ module.exports = class GamePlayer
     @onFirstRender()
 
     if @isLoading
-      z '.game-player-missing',
+      z '.z-game-player-missing',
         @Spinner
         z 'button.button-ghost', {onclick: @redirectToMarketplace},
           'Return to Clay.io'
     else if @game?.gameUrl
-      z 'div.game-player',
+      z 'div.z-game-player',
+        style:
+          height: @height
         @SDK
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',
+              style:
+                width: @width
+                height: @height
               src: @game?.gameUrl
         @Drawer
     else
-      z '.game-player-missing',
+      z '.z-game-player-missing',
         z 'div', 'Game Not Found'
         z 'button.button-ghost', {onclick: @redirectToMarketplace},
           'Return to Clay.io'
