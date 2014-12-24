@@ -40,6 +40,13 @@ nock 'https://clay.io'
   .reply 200,
     login_button: 'red'
 
+describe 'healthcheck', ->
+  it 'is healthy', ->
+    flare
+      .get '/healthcheck'
+      .expect 200,
+        healthy: true
+
 describe 'index.dust', ->
   describe 'Basic page responses', ->
     before ->

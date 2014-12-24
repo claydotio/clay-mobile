@@ -132,6 +132,10 @@ unless config.ENV is config.ENVS.PROD
 
 
 # Routes
+router.get '/healthcheck', (req, res) ->
+  res.json
+    healthy: true
+
 router.get '/game/:key', (req, res) ->
   log.info 'AGENT ', req.useragent.source
   gameKey = req.params.key
