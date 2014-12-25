@@ -9,10 +9,12 @@ useragent = require 'express-useragent'
 compress = require 'compression'
 log = require 'loglevel'
 cookieParser = require 'cookie-parser'
+rp = require 'request-promise'
 
 config = require './src/config'
 
 API_REQUEST_TIMEOUT = 1000 # 1 second
+HEALTHCHECK_TIMEOUT = 200
 
 router = express.Router()
 log.enableAll()
@@ -132,6 +134,19 @@ unless config.ENV is config.ENVS.PROD
 
 
 # Routes
+router.get '/healthcheck', (req, res) ->
+  Promise.settle [
+      Promise.cast(rp(config.CLAY_API_URL + '/healthcheck'))
+        .timeout HEALTHCHECK_TIMEOUT
+      Promise.cast(rp(config.FC_API_URL + '/healthcheck'))
+        .timeout HEALTHCHECK_TIMEOUT
+    ]
+    .spread (clayApi, flakCannon) ->
+      res.json
+        clayApi: clayApi.isFulfilled()
+        flakCannon: flakCannon.isFulfilled()
+        healthy: clayApi.isFulfilled() and flakCannon.isFulfilled()
+
 router.get '/game/:key', (req, res) ->
   log.info 'AGENT ', req.useragent.source
   gameKey = req.params.key

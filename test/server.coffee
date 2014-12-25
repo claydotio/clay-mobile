@@ -16,9 +16,9 @@ ANON_ACCESS_TOKEN = 'ANON_ACCESS_TOKEN'
 ME_USER_ID = 321
 ME_ACCESS_TOKEN = 'USER_ACCESS_TOKEN'
 
-nock 'https://clay.io'
+nock config.CLAY_API_URL
   .persist()
-  .get '/api/m/v1/games/findOne?key=slime'
+  .get '/games/findOne?key=slime'
   .reply 200,
     id: 8
     key: 'slime'
@@ -28,17 +28,35 @@ nock 'https://clay.io'
     name: 'Slime'
     description: 'a game about slime'
     rating: 3
-  .post '/api/m/v1/users/login/anon'
+  .post '/users/login/anon'
   .reply 200,
     id: ANON_USER_ID
     accessToken: ANON_ACCESS_TOKEN
-  .get '/api/m/v1/users/me?accessToken=USER_ACCESS_TOKEN'
+  .get '/users/me?accessToken=USER_ACCESS_TOKEN'
   .reply 200,
     id: ME_USER_ID
     accessToken: ME_ACCESS_TOKEN
-  .post '/api/fc/v2/experiments'
+  .get '/healthcheck'
+  .reply 200,
+    healthy: true
+
+nock config.FC_API_URL
+  .persist()
+  .post '/experiments'
   .reply 200,
     login_button: 'red'
+  .get '/healthcheck'
+  .reply 200,
+    healthy: true
+
+describe 'healthcheck', ->
+  it 'is healthy', ->
+    flare
+      .get '/healthcheck'
+      .expect 200,
+        clayApi: true
+        flakCannon: true
+        healthy: true
 
 describe 'index.dust', ->
   describe 'Basic page responses', ->
