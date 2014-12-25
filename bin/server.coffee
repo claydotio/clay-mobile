@@ -2,6 +2,7 @@
 log = require 'loglevel'
 
 app = require '../server'
+config = require '../src/config'
 
-app.listen process.env.PORT or 3000, ->
-  log.info 'Listening on port %d', process.env.PORT or 3000
+app.listen config.PORT, ->
+  log.info 'Listening on port %d', config.PORT
