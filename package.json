@@ -50,7 +50,7 @@
     "lodash": "2.4.1",
     "lodash-contrib": "241.4.14",
     "mocha": "1.20.1",
-    "nock": "0.48.1",
+    "nock": "0.52.4",
     "rewire": "2.1.2",
     "rewire-webpack": "0.2.0",
     "style-loader": "0.8.1",
@@ -76,6 +76,7 @@
     "portal-gun": "0.0.4",
     "promiz": "1.0.0",
     "request": "2.40.0",
+    "request-promise": "0.3.2",
     "zorium": "0.4.8"
   }
 }
