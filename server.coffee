@@ -14,7 +14,7 @@ rp = require 'request-promise'
 config = require './src/config'
 
 API_REQUEST_TIMEOUT = 1000 # 1 second
-HEALTHCHECK_TIMEOUT = 200
+HEALTHCHECK_TIMEOUT = 600
 
 router = express.Router()
 log.enableAll()
@@ -138,7 +138,7 @@ router.get '/healthcheck', (req, res) ->
   Promise.settle [
       Promise.cast(rp(config.CLAY_API_URL + '/healthcheck'))
         .timeout HEALTHCHECK_TIMEOUT
-      Promise.cast(rp(config.FC_API_URL + '/healthcheck'))
+      Promise.cast(rp(config.FC_API_URL + '/experiments'))
         .timeout HEALTHCHECK_TIMEOUT
     ]
     .spread (clayApi, flakCannon) ->

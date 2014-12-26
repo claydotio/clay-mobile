@@ -45,9 +45,10 @@ nock config.FC_API_URL
   .post '/experiments'
   .reply 200,
     login_button: 'red'
-  .get '/healthcheck'
-  .reply 200,
-    healthy: true
+  .get '/experiments'
+  .reply 200, [
+    {}
+  ]
 
 describe 'healthcheck', ->
   it 'is healthy', ->
