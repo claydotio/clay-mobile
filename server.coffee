@@ -14,7 +14,7 @@ rp = require 'request-promise'
 config = require './src/config'
 
 API_REQUEST_TIMEOUT = 1000 # 1 second
-HEALTHCHECK_TIMEOUT = 200
+HEALTHCHECK_TIMEOUT = 600
 
 router = express.Router()
 log.enableAll()
