@@ -39,16 +39,18 @@ nock config.CLAY_API_URL
   .get '/healthcheck'
   .reply 200,
     healthy: true
+  .get '/ping'
+  .reply 200,
+    'pong'
 
 nock config.FC_API_URL
   .persist()
   .post '/experiments'
   .reply 200,
     login_button: 'red'
-  .get '/experiments'
-  .reply 200, [
-    {}
-  ]
+  .get '/ping'
+  .reply 200,
+    'pong'
 
 describe 'healthcheck', ->
   it 'is healthy', ->
