@@ -28,7 +28,8 @@ module.exports = class Drawer
 
     @GooglePlayAdDrawer = null
     User.getExperiments().then (params) =>
-      unless params.googlePlayDrawer is 'none'
+      if params.googlePlayDrawer isnt 'none' and
+      GooglePlayAdService.shouldShowAds()
         @GooglePlayAdDrawer = if params.googlePlayDrawer is 'install-button' \
                               then new GooglePlayAdDrawerInstallButton()
                               else new GooglePlayAdDrawerControl()
