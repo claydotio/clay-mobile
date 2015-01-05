@@ -1,15 +1,13 @@
 express = require 'express'
 dust = require 'dustjs-linkedin'
 fs = require 'fs'
-url = require 'url'
 _ = require 'lodash'
 Promise = require 'bluebird'
-request = Promise.promisifyAll require 'request'
 useragent = require 'express-useragent'
 compress = require 'compression'
 log = require 'loglevel'
 cookieParser = require 'cookie-parser'
-rp = require 'request-promise'
+request = require 'request-promise'
 
 config = require './src/config'
 
@@ -58,9 +56,9 @@ clayUserSessionMiddleware = ->
       if isSubdomain
         return next()
 
-      request.postAsync loginUrl
+      Promise.cast request.post loginUrl
       .timeout API_REQUEST_TIMEOUT
-      .spread (res, body) ->
+      .then (body) ->
         req.clay.me = JSON.parse body
         next()
       .catch (err) ->
@@ -75,10 +73,10 @@ clayFlakCannonSessionMiddleware = ->
       return next()
 
     experimentsUrl = config.FC_API_URL + '/experiments'
-    request.postAsync experimentsUrl,
+    Promise.cast request.post experimentsUrl,
       {json: userId: me.id}
     .timeout API_REQUEST_TIMEOUT
-    .spread (res, body) ->
+    .then (body) ->
       req.clay.experiments = body
       next()
     .catch (err) ->
@@ -112,33 +110,12 @@ app.use clayUserSessionMiddleware()
 app.use clayFlakCannonSessionMiddleware()
 app.use router
 
-
-# Development
-unless config.ENV is config.ENVS.PROD
-  # fb-flo - for live reload
-  flo = require('fb-flo')
-  fs = require('fs')
-
-  flo 'build',
-    port: 8888
-    host: 'localhost'
-    verbose: false
-    glob: [
-      'js/bundle.js'
-      'css/bundle.css'
-    ]
-  , (filepath, callback) ->
-    callback
-      resourceURL: filepath
-      contents: fs.readFileSync('build/' + filepath, 'utf-8').toString()
-
-
 # Routes
 router.get '/healthcheck', (req, res) ->
   Promise.settle [
-      Promise.cast(rp(config.CLAY_API_URL + '/ping'))
+      Promise.cast(request.get(config.CLAY_API_URL + '/ping'))
         .timeout HEALTHCHECK_TIMEOUT
-      Promise.cast(rp(config.FC_API_URL + '/ping'))
+      Promise.cast(request.get(config.FC_API_URL + '/ping'))
         .timeout HEALTHCHECK_TIMEOUT
     ]
     .spread (clayApi, flakCannon) ->
@@ -226,9 +203,9 @@ renderGamePage = (gameKey, me, experiments) ->
   gameUrl = config.CLAY_API_URL + "/games/findOne?key=#{gameKey}"
 
   log.info 'GET', gameUrl
-  request.getAsync gameUrl
+  Promise.cast request.get gameUrl
   .timeout API_REQUEST_TIMEOUT
-  .spread (res, body) ->
+  .then (body) ->
     game = JSON.parse body
     if _.isEmpty game
       throw new Error 'Game not found: ' + gameKey
