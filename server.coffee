@@ -1,7 +1,6 @@
 express = require 'express'
 dust = require 'dustjs-linkedin'
 fs = require 'fs'
-url = require 'url'
 _ = require 'lodash'
 Promise = require 'bluebird'
 useragent = require 'express-useragent'
