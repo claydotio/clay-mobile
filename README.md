@@ -33,4 +33,3 @@ CLAY_API_URL is only if you're running [clay-mobile-api](https://github.com/clay
 ##### Google Chrome
 > Plugins
   - [Kik Developer Tools](https://chrome.google.com/webstore/detail/kik-developer-tools/occbnccdhakfaomkhhdkmmknjbghmllm)
-  - [fb-flo](https://chrome.google.com/webstore/detail/fb-flo/ahkfhobdidabddlalamkkiafpipdfchp?hl=en)

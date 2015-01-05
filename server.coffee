@@ -112,27 +112,6 @@ app.use clayUserSessionMiddleware()
 app.use clayFlakCannonSessionMiddleware()
 app.use router
 
-
-# Development
-unless config.ENV is config.ENVS.PROD
-  # fb-flo - for live reload
-  flo = require('fb-flo')
-  fs = require('fs')
-
-  flo 'build',
-    port: 8888
-    host: 'localhost'
-    verbose: false
-    glob: [
-      'js/bundle.js'
-      'css/bundle.css'
-    ]
-  , (filepath, callback) ->
-    callback
-      resourceURL: filepath
-      contents: fs.readFileSync('build/' + filepath, 'utf-8').toString()
-
-
 # Routes
 router.get '/healthcheck', (req, res) ->
   Promise.settle [
