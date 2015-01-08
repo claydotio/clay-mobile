@@ -6,15 +6,15 @@ Modal = require 'models/modal'
 Modal.constructor() # reset
 
 MockGame = require '../../_models/game'
-ModalClose = require 'components/modal_close'
+ModalHeader = require 'components/modal_header'
 
 class StubComponent
   constructor: ->
-    @ModalClose = new ModalClose()
+    @ModalHeader = new ModalHeader(title: 'something')
 
   render: =>
     z 'div.parent-component',
-      @ModalClose.render()
+      @ModalHeader.render()
 
 domWalker = _.walk ($node) ->
   return $node.children
@@ -22,7 +22,7 @@ domWalker = _.walk ($node) ->
 hasClass = ($node, className) ->
   _.contains $node.properties.className.split(' '), className
 
-describe 'ModalClose', ->
+describe 'ModalHeader', ->
 
   it 'closes modal', ->
     Stub = new StubComponent()
@@ -31,7 +31,7 @@ describe 'ModalClose', ->
     $ = Stub.render()
 
     $closeIcon = domWalker.find $, ($node) ->
-      return hasClass $node, 'z-modal-close'
+      return hasClass $node, 'close'
 
     $closeIcon.properties.onclick()
 

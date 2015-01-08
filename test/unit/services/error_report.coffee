@@ -14,9 +14,9 @@ describe 'ErrorReportService', ->
       .post '/log'
       .reply 200, (res) ->
         schema = Joi.object().keys
-          message: Joi.string().regex /terrible/
+          message: Joi.string()
 
-        Joi.validate res.body, schema, (err) ->
+        Joi.validate res.body, schema, {presence: 'required'}, (err) ->
           window.XMLHttpRequest = originalXMLHttpRequestFn
           done err
 
@@ -24,5 +24,4 @@ describe 'ErrorReportService', ->
     window.XMLHttpRequest = ->
       mock.XMLHttpRequest()
 
-    err = new Error 'terrible'
-    ErrorReportService.report err
+    ErrorReportService.report new Error()
