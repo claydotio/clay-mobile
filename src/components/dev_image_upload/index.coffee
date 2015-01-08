@@ -3,6 +3,7 @@ _ = require 'lodash'
 Dropzone = require 'dropzone'
 
 styleConfig = require '../../stylus/vars.json'
+User = require '../../models/user'
 
 styles = require './index.styl'
 
@@ -44,11 +45,24 @@ renderLoadingCanvas = (ctx, percentUploaded) ->
   drawCircle styleConfig.$green, lineWidth, percentUploaded / 100
 
 
-module.exports = class DevDashboardGames
-  constructor: ({type, renderHeight, width, height, safeWidth, safeHeight}) ->
+module.exports = class DevImageUpload
+  constructor: (
+    {
+      inputName
+      label
+      url
+      method
+      renderHeight
+      width
+      height
+      safeWidth
+      safeHeight
+    }
+  ) ->
     styles.use()
 
-    type ?= ''
+    label ?= ''
+    method ?= 'put'
     safeWidth ?= width
     safeHeight ?= height
     # scaled per design specs, not full-size images
@@ -61,7 +75,10 @@ module.exports = class DevDashboardGames
       percentUploaded: 0
       loading: false
       thumbnail: null
-      type
+      inputName
+      label
+      url
+      method
       width
       height
       renderHeight
@@ -73,27 +90,35 @@ module.exports = class DevDashboardGames
     }
 
   onMount: ($el) =>
+
     loadingCanvas = createLoadingCanvas $el
 
     # override the default listeners that do styling
     # so we can use our own rendering system
     # http://stackoverflow.com/questions/18645945/override-default-event-listeners-in-dropzone-js
-    dropzone = new Dropzone $el, {
-      url: 'http://clay.io'
-      acceptedFiles: 'image/*'
-      thumbnailWidth: @state().renderWidth
-      thumbnailHeight: @state().renderHeight
-      addedfile: (file) =>
-        # file = accepted, width, height, size, name, processing
-        @state.set loading: true
+    User.getMe().then ({accessToken}) =>
+      dropzone = new Dropzone $el, {
+        url: "#{@state().url}?accessToken=#{accessToken}"
+        method: @state().method
+        paramName: @state().inputName
+        acceptedFiles: 'image/*'
+        thumbnailWidth: @state().renderWidth
+        thumbnailHeight: @state().renderHeight
+        addedfile: =>
+          @state.set loading: true
+        complete: =>
+          @state.set loading: false
 
-      uploadprogress: (file, percentUploaded) =>
-        @state.set {percentUploaded}
-        renderLoadingCanvas loadingCanvas.getContext('2d'), percentUploaded
+        uploadprogress: (file, percentUploaded) =>
+          @state.set {percentUploaded}
+          renderLoadingCanvas loadingCanvas.getContext('2d'), percentUploaded
 
-      thumbnail: (file, dataUrl) =>
-        @state.set thumbnail: dataUrl
-    }
+        thumbnail: (file, dataUrl) =>
+          @setThumbnail dataUrl
+      }
+
+  setThumbnail: (url) =>
+    @state.set thumbnail: url
 
   render: =>
     z "div.z-dev-image-upload#{if @state().loading then '.is-loading' else ''}",
@@ -104,16 +129,21 @@ module.exports = class DevDashboardGames
       },
       # .dz-message necessary to be clickable (no workaround)
       z 'div.dz-message.clickable',
-        z 'div.l-flex.is-vertical-center',
+        z 'div.l-flex.l-vertical-center',
           z 'div.content.percentage',
             "#{@state().percentUploaded}%"
           z 'div.content.drop-here',
             z 'div', '+'
-            z 'div', @state().type
+            z 'div', @state().label
             z 'div', 'Drop here'
 
       if @state().thumbnail
         z 'div.thumbnail',
+          z 'a.close[href=#]',
+            onclick: (e) =>
+              e.preventDefault()
+              @setThumbnail(null)
+            z 'i.icon.icon-close'
           z "img[src=#{@state().thumbnail}]"
           if @state().safeWidth isnt @state().width or
              @state().safeHeight isnt @state().height

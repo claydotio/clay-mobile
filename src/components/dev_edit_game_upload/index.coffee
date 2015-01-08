@@ -6,7 +6,7 @@ DevZipUpload = require '../dev_zip_upload'
 
 styles = require './index.styl'
 
-module.exports = class DevAddGameUpload
+module.exports = class DevEditGameUpload
   constructor: ->
     styles.use()
 
@@ -14,7 +14,7 @@ module.exports = class DevAddGameUpload
       zipUpload: new DevZipUpload()
 
   render: ->
-    z 'div.z-dev-add-game-upload',
+    z 'div.z-dev-edit-game-upload',
       z 'div.l-flex',
         z 'form',
           # .dz-message necessary to be clickable (no workaround)

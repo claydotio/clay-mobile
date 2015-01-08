@@ -19,11 +19,14 @@ module.exports = class InputRadio
   onChecked: (onCheckedFn) =>
     @state.set onChecked: onCheckedFn
 
+  getValue: =>
+    return @state().value
+
   render: =>
     z 'div.z-input-radio',
       z 'label',
         z "input[type=radio][name=orientation]
-        #{if @state().isChecked then 'checked' else ''}",
+        #{if @state().isChecked then '[checked]' else ''}",
         value: @state().value
         onchange: (e) =>
           if e.target.checked

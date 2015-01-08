@@ -9,8 +9,8 @@ module.exports = class DevDashboardMenu
   render: ->
     z '.z-dev-dashboard-menu',
       z '.menu',
-        z.router.a '[href=/developers/add-game]',
-          z '.text.add-game', 'Add game'
+        z.router.a '[href=/developers/edit-game/start]',
+          z '.text.edit-game', 'Add game'
 
       z '.menu',
         z.router.a '.is-selected[href=#]',

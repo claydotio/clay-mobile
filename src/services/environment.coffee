@@ -1,5 +1,3 @@
-kik = require 'kik'
-
 class EnvironmentService
   isAndroid: ->
     _.contains navigator.appVersion, 'Android'

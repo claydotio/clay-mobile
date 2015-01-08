@@ -8,7 +8,7 @@ module.exports = class DevLoginBanner
 
   render: ->
     z 'div.z-dev-login-banner',
-      z 'div.l-flex.is-vertical-center',
+      z 'div.l-flex.l-vertical-center',
         z 'div.content',
           z 'div', 'Welcome, developers.'
           z 'div', 'Sign in to start publishing'

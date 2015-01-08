@@ -7,7 +7,8 @@ DevFooter = require '../../components/dev_footer'
 module.exports = class Logout
   constructor: ->
     User.logout()
-    window.location.href = '/'
+    # hard refresh
+    window.location.href = '/developers/login'
 
     @state = z.state
       DevHeader: new DevHeader()

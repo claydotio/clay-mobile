@@ -3,12 +3,12 @@ _ = require 'lodash'
 
 styles = require './index.styl'
 
-module.exports = class DevAddGamePublished
+module.exports = class DevEditGamePublished
   constructor: ->
     styles.use()
 
   render: ->
-    z 'div.z-dev-add-game-published',
+    z 'div.z-dev-edit-game-published',
       z 'i.icon.icon-happy'
       z 'h1', 'Awesome!'
       z 'div.game-published', 'Your game has been published.'

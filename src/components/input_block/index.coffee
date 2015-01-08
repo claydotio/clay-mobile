@@ -18,7 +18,7 @@ module.exports = class InputBlock
   render: =>
     z 'div.z-input-block',
       z 'label',
-        z 'div.l-flex.is-vertical-center',
+        z 'div.l-flex.l-vertical-center',
           z 'div.label-text', style: width: "#{@state().labelWidth}px",
             @state().label
           z 'div.l-flex-1',

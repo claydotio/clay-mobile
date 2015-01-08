@@ -2,7 +2,6 @@ z = require 'zorium'
 _ = require 'lodash'
 
 Game = require '../../models/game'
-DevImageUpload = require '../dev_image_upload'
 InputBlock = require '../input_block'
 InputText = require '../input_text'
 InputSubdomain = require '../input_subdomain'
@@ -10,17 +9,18 @@ InputSubdomain = require '../input_subdomain'
 styles = require './index.styl'
 
 
-module.exports = class DevDashboardGames
+module.exports = class DevEditGameGetStarted
   constructor: ->
     styles.use()
 
     @state = z.state
-      gameTitle: new InputBlock {
+      gameId: null
+      titleBlock: new InputBlock {
         label: 'Game Title'
         labelWidth: 125
         input: new InputText value: '', theme: '.theme-medium-width'
       }
-      gameKey: new InputBlock {
+      subdomainBlock: new InputBlock {
         label: 'Subdomain'
         labelWidth: 125
         input: new InputSubdomain value: '', theme: '.theme-small-width'
@@ -28,7 +28,7 @@ module.exports = class DevDashboardGames
         #helpText: "Your game will be accessible at
         #           http://#{@state().gameKey}.clay.io"
       }
-      gameId: new InputBlock {
+      gameIdBlock: new InputBlock {
         label: 'SDK Game ID'
         labelWidth: 125
         input: new InputText {
@@ -38,32 +38,33 @@ module.exports = class DevDashboardGames
         }
       }
 
-    if Game.getEditingGame()
-      Game.getEditingGame().then (game) =>
-        @state().gameTitle.input.setValue game.name
-        @state().gameKey.input.setValue game.key
-        @state().gameId.input.setValue game.id
-    else
-      console.log Game.create()
+  onMount: =>
+    Game.getEditingGame().then (game) =>
+      @state.set gameId: game.id
+      @state().titleBlock.input.setValue game.name
+      @state().subdomainBlock.input.setValue game.key
+      @state().gameIdBlock.input.setValue game.id
 
-  saveAndContinue: (e) ->
-    console.log e
+  saveAndContinue: (e) =>
     e?.preventDefault()
 
-    # FIXME: do correct route for edit-game
-    z.router.go '/developers/add-game/details'
+    Game.update(@state().gameId, {
+      name: @state().titleBlock.input.getValue()
+      key: @state().subdomainBlock.input.getValue()
+    }).then =>
+      z.router.go "/developers/edit-game/details/#{@state().gameId}"
 
   render: =>
-    isCompleted = @state().gameTitle.input.getValue() and
-                  @state().gameKey.input.getValue()
+    isCompleted = @state().titleBlock.input.getValue() and
+                  @state().subdomainBlock.input.getValue()
 
-    z 'div.z-dev-add-game-get-started',
+    z 'div.z-dev-edit-game-get-started',
       z 'form',
-        {onsubmit: @saveAndContinue}
+        {onsubmit: @saveAndContinue},
 
-        @state().gameTitle
-        @state().gameKey
-        @state().gameId
+        @state().titleBlock
+        @state().subdomainBlock
+        @state().gameIdBlock
 
         z 'div.l-flex',
           z 'div.l-flex-right',

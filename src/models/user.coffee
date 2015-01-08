@@ -4,8 +4,6 @@ _ = require 'lodash'
 request = require '../lib/request'
 config = require '../config'
 
-Developer = require './developer'
-
 PATH = config.CLAY_API_URL + '/users'
 
 me = null
@@ -19,7 +17,7 @@ setHostCookie = (key, value) ->
   secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
   # The '.' prefix allows subdomains access
   domain = '.' + secondLevelDomain
-  document.cookie = "#{key}=#{value}"
+  document.cookie = "#{key}=#{value};path=/"
   document.cookie = "#{key}=#{value};path=/;domain=#{domain}"
 
 class User
@@ -124,13 +122,7 @@ class User
           password
         }
 
-
   logout: ->
     setHostCookie 'accessToken', ''
-
-  getDevelopers: ->
-    @getMe().then (me) ->
-      console.log me
-      Developer.find ownerId: me.id
 
 module.exports = new User()

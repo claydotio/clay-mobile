@@ -74,7 +74,7 @@ module.exports = class DevZipUpload
     z 'div.z-dev-zip-upload',
       # .dz-message necessary to be clickable (no workaround)
       z 'div.upload-dropzone.dz-message',
-        z 'div.l-flex.is-vertical-center',
+        z 'div.l-flex.l-vertical-center',
           z 'div.upload-content',
             z 'i.icon.icon-cloud-upload'
             z 'div.drop-here', 'Drop your game .zip here'

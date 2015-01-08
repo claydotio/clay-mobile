@@ -14,7 +14,7 @@ GamesPage = require './pages/games'
 DevLoginPage = require './pages/dev_login'
 DevLogoutPage = require './pages/dev_logout'
 DevDashboardPage = require './pages/dev_dashboard'
-DevAddGamePage = require './pages/dev_add_game'
+DevEditGamePage = require './pages/dev_edit_game'
 PushToken = require './models/push_token'
 User = require './models/user'
 UrlService = require './services/url'
@@ -90,10 +90,9 @@ z.router.add '/developers/login', DevLoginPage
 z.router.add '/developers/logout', DevLogoutPage
 
 z.router.add '/developers', DevDashboardPage
-z.router.add '/developers/add-game', DevAddGamePage
-z.router.add '/developers/add-game/:step', DevAddGamePage
-z.router.add '/developers/edit-game/:gameId', DevAddGamePage
-z.router.add '/developers/edit-game/:step/:gameId', DevAddGamePage
+z.router.add '/developers/edit-game', DevEditGamePage
+z.router.add '/developers/edit-game/:step', DevEditGamePage
+z.router.add '/developers/edit-game/:step/:gameId', DevEditGamePage
 
 new Promise (resolve) ->
   #############

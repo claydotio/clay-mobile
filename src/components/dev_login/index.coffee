@@ -1,4 +1,5 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 
 InputBlock = require '../input_block'
 InputText = require '../input_text'
@@ -25,7 +26,10 @@ module.exports = class DevLogin
     e?.preventDefault()
     email = @state().email.input.getValue()
     password = @state().password.input.getValue()
-    User.loginBasic {email, password}
+    User.setMe User.loginBasic {email, password}
+    .then ->
+      z.router.go '/developers'
+    .catch log.trace
 
   render: =>
     z 'div.z-dev-login',

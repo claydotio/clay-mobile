@@ -2,20 +2,15 @@
 
 json('../../stylus/vars.json')
 
-
-// TODO
-textarea
-  width: 360px
-  height: 120px
-
 $borderRadius = 3px
 $zIndexThumbnail = 1
 $zIndexUnsafeOverlay = 2
 $zIndexSafe = 3
+$zIndexClose = 4
 
 .z-dev-image-upload
-  background: $white // FIXME
-  border: 1px solid $grayBorder // FIXME
+  background: $greyLightest
+  border: 1px solid $greyLighter
   text-align: center
   display: inline-block
   vertical-align: top
@@ -37,9 +32,26 @@ $zIndexSafe = 3
 
   .thumbnail
     position: absolute
+    z-index: $zIndexThumbnail
     top: 0
     left: 0
-    z-index: $zIndexThumbnail
+    width: 100%
+    height: 100%
+
+    > .close
+      position: absolute
+      top: 10px
+      right: 10px
+      z-index: $zIndexClose
+
+      > .icon-close
+        color: $white
+        font-size: $iconMedium
+        text-shadow: 0 1px 6px rgba(0, 0, 0, .44)
+
+    > img
+      width: 100%
+      height: 100%
 
   .unsafe-overlay
     position: absolute
@@ -60,7 +72,7 @@ $zIndexSafe = 3
     > .safe-text
       position: absolute
       margin: 10px
-      text-shadow: 0 1px 0 $white
+      text-shadow: 0 0 4px $white
 
   &.is-loading
 

@@ -18,8 +18,10 @@ json('../../stylus/vars.json')
     display: inline-block
     vertical-align: middle
 
-    &:active
+    &:focus
       border: 1px solid $greyMedium
+      outline: 0px
+      appearance: none
 
     &:-webkit-input-placeholder
       color: $greyMedium

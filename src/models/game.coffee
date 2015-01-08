@@ -3,6 +3,7 @@ z = require 'zorium'
 localstore = require '../lib/localstore'
 config = require '../config'
 request = require '../lib/request'
+User = require '../models/user'
 
 PATH = config.CLAY_API_URL + '/games'
 
@@ -49,11 +50,15 @@ class Game
   # DEV METHODS #
   ###############
 
-  create: ->
-    request PATH,
-      method: 'POST'
+  create: (developerId) ->
+    User.getMe().then (me) ->
+      request PATH,
+        method: 'POST'
+        qs:
+          accessToken: me.accessToken
+        body: {developerId}
 
-  editingGame: null
+  editingGame: Promise.resolve null
 
   setEditingGame: (gameId) =>
     @editingGame = @get gameId
@@ -65,7 +70,14 @@ class Game
 
   uploadMeta: -> null
 
-  update: (gameId, {game}) -> null
+  update: (gameId, gameUpdate) ->
+    User.getMe().then (me) ->
+      request "#{PATH}/#{gameId}",
+        method: 'PUT'
+        qs:
+          accessToken: me.accessToken
+        body: gameUpdate
+
 
   delete: (gameId) -> null
 
