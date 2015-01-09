@@ -9,6 +9,7 @@ log = require 'clay-loglevel'
 kik = require 'kik'
 
 config = require './config'
+HomePage = require './pages/home'
 PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
 DevLoginPage = require './pages/dev_login'
@@ -20,6 +21,7 @@ User = require './models/user'
 UrlService = require './services/url'
 PortalService = require './services/portal'
 ErrorReportService = require './services/error_report'
+EnvironmentService = require './services/environment'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 
@@ -81,7 +83,7 @@ else
 
 root = document.getElementById('app')
 z.router.setRoot root
-z.router.add '/', GamesPage
+z.router.add '/', if EnvironmentService.isMobile() then GamesPage else HomePage
 z.router.add '/games', GamesPage
 z.router.add '/game/:key', PlayGamePage
 z.router.add '/games/:filter', GamesPage
