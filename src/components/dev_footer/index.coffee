@@ -20,9 +20,9 @@ module.exports = class DevDashboardFooter
               z 'li', z 'a[href=mailto:jobs@clay.io' +
                         '?Subject=Let\'s change the world]', 'Jobs'
             z 'ul.links',
-              z 'li', z '[href=/contact]', 'Contact'
-              z 'li', z '[href=/tos]', 'Terms'
-              z 'li', z '[href=/privacy]', 'Privacy'
+              z 'li', z 'a[href=/contact]', 'Contact'
+              z 'li', z 'a[href=/tos]', 'Terms'
+              z 'li', z 'a[href=/privacy]', 'Privacy'
         z '.section',
           z 'h3.title', 'Connect'
           z 'ul.social',
