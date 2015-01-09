@@ -17,7 +17,6 @@ setHostCookie = (key, value) ->
   secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
   # The '.' prefix allows subdomains access
   domain = '.' + secondLevelDomain
-  document.cookie = "#{key}=#{value};path=/"
   document.cookie = "#{key}=#{value};path=/;domain=#{domain}"
 
 class User
@@ -29,11 +28,11 @@ class User
       else request PATH + '/login/anon',
         method: 'POST'
         qs:
-          accessToken: getCookieValue 'accessToken'
+          accessToken: getCookieValue config.ACCESS_TOKEN_COOKIE_KEY
 
       # Save accessToken in cookie
       me.then (user) ->
-        setHostCookie 'accessToken', user.accessToken
+        setHostCookie config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
       .catch log.trace
 
     return me
@@ -43,7 +42,7 @@ class User
 
     # Save accessToken in cookie
     me.then (user) ->
-      setHostCookie 'accessToken', user.accessToken
+      setHostCookie config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
     .catch log.trace
 
     experiments = me.then (user) ->

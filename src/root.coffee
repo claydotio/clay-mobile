@@ -135,7 +135,7 @@ new Promise (resolve) ->
   # ENGAGED GAMEPLAYS #
   #####################
 
-  hasVisitedBefore = _.contains document.cookie, 'accessToken'
+  hasVisitedBefore = _.contains document.cookie, config.ACCESS_TOKEN_COOKIE_KEY
 
   if isFromShare and not hasVisitedBefore
     # The anon-token is unique for each 'app', so always use the marketplace one

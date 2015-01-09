@@ -7,6 +7,7 @@ module.exports =
   WEBPACK_DEV_HOSTNAME: process.env.WEBPACK_DEV_HOSTNAME or 'localhost'
   MOCK: process.env.MOCK or false
   ENV: process.env.NODE_ENV or 'production'
+  ACCESS_TOKEN_COOKIE_KEY: 'accessToken2'
   ENVS:
     DEV: 'development'
     PROD: 'production'

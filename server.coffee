@@ -46,7 +46,7 @@ clayUserSessionMiddleware = ->
 
     loginUrl = config.CLAY_API_URL + '/users/login/anon'
     meUrl = config.CLAY_API_URL + '/users/me'
-    accessToken = req.cookies.accessToken
+    accessToken = req.cookies[config.ACCESS_TOKEN_COOKIE_KEY]
 
     # Don't inject user because the page is sent over http
     if accessToken
