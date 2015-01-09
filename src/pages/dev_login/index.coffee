@@ -3,7 +3,7 @@ z = require 'zorium'
 DevHeader = require '../../components/dev_header'
 DevLoginBanner = require '../../components/dev_login_banner'
 DevLogin = require '../../components/dev_login'
-DevSignup = require '../../components/dev_signup'
+DevApply = require '../../components/dev_apply'
 DevLoginPlayerMessage = require '../../components/dev_login_player_message'
 DevFooter = require '../../components/dev_footer'
 VerticalDivider = require '../../components/vertical_divider'
@@ -15,7 +15,7 @@ module.exports = class Login
       DevLogin: new DevLogin()
       DevLoginBanner: new DevLoginBanner()
       VerticalDivider: new VerticalDivider()
-      DevSignup: new DevSignup()
+      DevApply: new DevApply()
       DevLoginPlayerMessage: new DevLoginPlayerMessage()
       DevFooter: new DevFooter()
 
@@ -27,6 +27,6 @@ module.exports = class Login
         z 'div', {style: {width: '50%', marginLeft: '-20px'}}, @state().DevLogin
         @state().VerticalDivider
         z 'div.l-flex-right.l-flex-1', {style: marginRight: '-20px'},
-          @state().DevSignup
+          @state().DevApply
       z 'div', @state().DevLoginPlayerMessage
       z 'div', @state().DevFooter

@@ -2,15 +2,31 @@
 
 json('../../stylus/vars.json')
 
+$zIndexContent = 1
+
 .z-dev-login-banner
   width: 100%
-  height: 120px
-  background: $orange
+  height: 150px
+  background: url('http://cdn.wtf/d/images/desktop_site/vector_technology.svg')
+  background-size: 100% auto
   text-align: center
+  position: relative
+
+  &:after
+    content: ''
+    position: absolute
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    background: $orange
+    opacity: 0.9
 
   .content
     width: 100%
     color: $white
-    font-size: $fontSizeLarge
+    font-size: $fontSizeXLarge
     font-family: 'RobotoLighter'
     font-weight: lighter
+    position: relative
+    z-index: $zIndexContent

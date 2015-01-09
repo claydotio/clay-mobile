@@ -25,7 +25,6 @@ module.exports = class DevDashboardGames
         z 'h2.title', 'My games'
           z 'div.games',
             _.map @state().games, (game) ->
-              console.log game.accentImage
               z 'div.game-container',
                 z 'div.game',
                   z '.image-content',
