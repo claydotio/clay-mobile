@@ -8,6 +8,7 @@ User = require '../models/user'
 PATH = config.CLAY_API_URL + '/games'
 
 class Game
+  # TODO: (Zoli) Deprecate
   getTop: ({limit, skip}) ->
     skip ?= 0
     limit ?= 10
@@ -15,6 +16,7 @@ class Game
     request PATH + '/top',
       qs: {limit, skip}
 
+  # TODO: (Zoli) Deprecate
   getNew: ({limit, skip}) ->
     skip ?= 0
     limit ?= 10
@@ -30,7 +32,11 @@ class Game
     request PATH + '/findOne',
       qs: query
 
+  # TODO: (Zoli) rename
   get: (id) ->
+    if _.isArray id
+      id = id.join ','
+
     request PATH + "/#{id}"
 
   incrementPlayCount: (gameKey) ->

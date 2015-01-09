@@ -3,26 +3,35 @@
 json('../../stylus/vars.json')
 
 .z-dev-dashboard-footer
-  margin-top: 60px
-  height: 110px
-  padding: 18px
+  padding: 40px 0
   box-sizing: border-box
   background: $greyDarkest
 
   .title
-    color: $greyDarker
-    margin: 0 0 7px 0
+    color: $orange
+    font-size: $fontSizeLarge
+    font-weight: lighter
+    margin: 0 0 20px 0
+
+  .section:first-child
+    margin-right: 40px
 
   .links
     margin: 0 40px 0 0
     padding: 0
     list-style-type: none
+    color: $white
 
     > li
-      margin: 2px 0
+      font-size: $fontSizeMedium
+      font-weight: bold
+      margin: 15px 0
 
       > a
-        color: #fff
+        color: inherit
+
+    > li:first-child
+      margin: 0 0 15px 0
 
   .social
     // offset for li gap margin
@@ -31,23 +40,26 @@ json('../../stylus/vars.json')
     list-style-type: none
 
     > li
-      margin: 4px
+      margin: 0 5px
       display: inline-block
 
-      > a.social-icon
+      > .social-icon
         display: block
-        width: 25px
-        height: 25px
+        width: 30px
+        height: 30px
         background-size: 100% 100%
 
-      > a.facebook
+      > .facebook
         background: url('//cdn.wtf/d/images/social/facebook.svg') #3B5998
 
-      > a.twitter
+      > .twitter
         background: url('//cdn.wtf/d/images/social/twitter.svg') #00aced
 
-      > a.google-plus
+      > .google-plus
         background: url('//cdn.wtf/d/images/social/google_plus.svg') #dd4b39
+
+      > .github
+        background: url('//cdn.wtf/d/images/social/github.svg') #4183c4
 
 
   .clay-info
@@ -55,6 +67,7 @@ json('../../stylus/vars.json')
     text-align: center
 
     > .cloud
+      height: 28px
       width: 40px
       margin-bottom: 2px
 
