@@ -10,6 +10,7 @@ KikService  = require '../../services/kik'
 Modal = require '../../models/modal'
 GameShare = require '../game_share'
 User = require '../../models/user'
+EnvironmentService = require '../../services/environment'
 
 styles = require './index.styl'
 
@@ -32,7 +33,9 @@ module.exports = class GamePlayer
     .then (game) =>
       @game = game
       @isLoading = false
-      @Drawer = new Drawer {game}
+      @Drawer = if EnvironmentService.isMobile() \
+                then new Drawer {game}
+                else null
 
       z.redraw()
       return game
