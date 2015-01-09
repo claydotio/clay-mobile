@@ -4,13 +4,25 @@ json('../../stylus/vars.json')
 
 .z-dev-login-player-message
   width: 100%
-  height: 120px
   background: $white
   text-align: center
 
-  .content
-    width: 100%
-    color: $white
-    font-size: $fontSizeLarge
-    font-family: 'RobotoLighter'
-    font-weight: lighter
+  > .content
+    padding: 40px 0
+    font-size: $fontSizeSmall
+
+    > h1
+      font-size: $fontSizeXXLarge
+      font-family: 'RobotoLighter'
+      font-weight: lighter
+      margin: 0 0 20px 0
+
+    > .links
+      margin-top: 20px
+
+      > .google-play, .kik
+        height: 40px
+        margin-bottom: 40px
+
+      > .google-play
+        margin-right: 20px
