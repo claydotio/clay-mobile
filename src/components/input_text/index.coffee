@@ -3,12 +3,13 @@ z = require 'zorium'
 styles = require './index.styl'
 
 module.exports = class InputText
-  constructor: ({value, theme, disabled}) ->
+  constructor: ({value, theme, disabled, placeholder}) ->
     styles.use()
 
     @state = z.state {
       value
       disabled
+      placeholder
       theme
     }
 
@@ -18,9 +19,11 @@ module.exports = class InputText
   setValue: (val) =>
     @state.set value: val
 
-  render: =>
-    z "div.z-input-text#{if @state().theme then @state().theme else ''}",
-      z "input[type=text]#{if @state().disabled then '[disabled]' else ''}",
+  render: ({value, disabled, placeholder, theme}) ->
+    z "div.z-input-text#{if theme then theme else ''}",
+      z "input[type=text]
+        #{if disabled then '[disabled]' else ''}
+        #{if placeholder then "[placeholder=#{placeholder}]" else ''}",
         onchange: (e) =>
           @state.set value: e.target.value
-        value: @state().value
+        value: value

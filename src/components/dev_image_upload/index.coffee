@@ -52,6 +52,7 @@ module.exports = class DevImageUpload
       label
       url
       method
+      thumbnail
       renderHeight
       width
       height
@@ -74,7 +75,7 @@ module.exports = class DevImageUpload
     @state = z.state {
       percentUploaded: 0
       loading: false
-      thumbnail: null
+      thumbnail
       inputName
       label
       url
@@ -120,55 +121,67 @@ module.exports = class DevImageUpload
   setThumbnail: (url) =>
     @state.set thumbnail: url
 
-  render: =>
-    z "div.z-dev-image-upload#{if @state().loading then '.is-loading' else ''}",
+  render: (
+    {
+      loading
+      renderWidth
+      renderHeight
+      percentUploaded
+      label
+      thumbnail
+      safeHeight
+      safeWidth
+      width
+      height
+      renderSafeWidth
+      renderSafeHeight
+    }
+  ) ->
+    z "div.z-dev-image-upload#{if loading then '.is-loading' else ''}",
       {
         style:
-          width: "#{@state().renderWidth}px"
-          height: "#{@state().renderHeight}px"
+          width: "#{renderWidth}px"
+          height: "#{renderHeight}px"
       },
       # .dz-message necessary to be clickable (no workaround)
       z 'div.dz-message.clickable',
         z 'div.l-flex.l-vertical-center',
           z 'div.content.percentage',
-            "#{@state().percentUploaded}%"
+            "#{percentUploaded}%"
           z 'div.content.drop-here',
             z 'div', '+'
-            z 'div', @state().label
+            z 'div', label
             z 'div', 'Drop here'
 
-      if @state().thumbnail
+      if thumbnail
         z 'div.thumbnail',
           z 'a.close[href=#]',
             onclick: (e) =>
               e.preventDefault()
+              # FIXME
               @setThumbnail(null)
             z 'i.icon.icon-close'
-          z "img[src=#{@state().thumbnail}]"
-          if @state().safeWidth isnt @state().width or
-             @state().safeHeight isnt @state().height
+          z "img[src=#{thumbnail}]"
+          if safeWidth isnt width or
+             safeHeight isnt height
             z 'div',
               z 'div.unsafe-overlay'
               z 'div.safe',
                 {
                   style:
-                    width: "#{@state().renderSafeWidth}px"
-                    height: "#{@state().renderSafeHeight}px"
+                    width: "#{renderSafeWidth}px"
+                    height: "#{renderSafeHeight}px"
                     left: '50%'
-                    marginLeft:
-                      -1 * @state().renderSafeWidth / 2 + 'px'
+                    marginLeft: -1 * renderSafeWidth / 2 + 'px'
                     top: '50%'
-                    marginTop:
-                      -1 * @state().renderSafeHeight / 2 + 'px'
+                    marginTop: -1 * renderSafeHeight / 2 + 'px'
                 },
                 z 'div.safe-text', 'Safe zone'
-                z "img[src=#{@state().thumbnail}]",
+                z "img[src=#{thumbnail}]",
                   {
                     style:
-                      marginLeft: -1 *
-                        (@state().renderWidth - @state().renderSafeWidth) /
+                      marginLeft: -1 * (renderWidth - renderSafeWidth) /
                         2 + 'px'
-                      marginTop: -1 *
-                        (@state().renderHeight - @state().renderSafeHeight) /
+                      marginTop: -1 * (renderHeight - renderSafeHeight) /
                         2 + 'px'
                   }

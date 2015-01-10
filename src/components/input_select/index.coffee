@@ -16,12 +16,12 @@ module.exports = class InputSelect
   setValue: (val) =>
     @state.set value: val
 
-  render: =>
+  render: ({options, value}) =>
     z 'div.z-input-select',
       z 'select', {
         onchange: (e) =>
           @state.set value: e.target.value
         },
-        _.map @state().options, (option) ->
+        _.map options, (option) ->
           z 'option', {value: option.value},
             option.label

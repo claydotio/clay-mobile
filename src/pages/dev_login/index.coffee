@@ -1,32 +1,42 @@
 z = require 'zorium'
 
-DevHeader = require '../../components/dev_header'
+GuestHeader = require '../../components/guest_header'
 DevLoginBanner = require '../../components/dev_login_banner'
 DevLogin = require '../../components/dev_login'
 DevApply = require '../../components/dev_apply'
 DevLoginPlayerMessage = require '../../components/dev_login_player_message'
-DevFooter = require '../../components/dev_footer'
+GuestFooter = require '../../components/guest_footer'
 VerticalDivider = require '../../components/vertical_divider'
 
 module.exports = class Login
   constructor: ->
     @state = z.state
-      DevHeader: new DevHeader()
-      DevLogin: new DevLogin()
-      DevLoginBanner: new DevLoginBanner()
-      VerticalDivider: new VerticalDivider()
-      DevApply: new DevApply()
-      DevLoginPlayerMessage: new DevLoginPlayerMessage()
-      DevFooter: new DevFooter()
+      guestHeader: new GuestHeader()
+      devLogin: new DevLogin()
+      devLoginBanner: new DevLoginBanner()
+      verticalDivider: new VerticalDivider()
+      devApply: new DevApply()
+      devLoginPlayerMessage: new DevLoginPlayerMessage()
+      guestFooter: new GuestFooter()
 
-  render: =>
+  render: (
+    {
+      guestHeader
+      devLoginBanner
+      devLogin
+      verticalDivider
+      devApply
+      devLoginPlayerMessage
+      guestFooter
+    }
+  ) ->
     z 'div',
-      z 'div', @state().DevHeader
-      z 'div', @state().DevLoginBanner
-      z 'div.l-content-container.l-flex',
-        z 'div', {style: {width: '50%', marginLeft: '-20px'}}, @state().DevLogin
-        @state().VerticalDivider
+      z 'div', guestHeader
+      z 'div', devLoginBanner
+      z 'div.l-content-container.l-flex', {style: marginBottom: '40px'},
+        z 'div', {style: {width: '50%', marginLeft: '-20px'}}, devLogin
+        verticalDivider
         z 'div.l-flex-right.l-flex-1', {style: marginRight: '-20px'},
-          @state().DevApply
-      z 'div', @state().DevLoginPlayerMessage
-      z 'div', @state().DevFooter
+          devApply
+      z 'div', devLoginPlayerMessage
+      z 'div', guestFooter

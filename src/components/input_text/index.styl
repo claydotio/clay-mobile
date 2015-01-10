@@ -18,8 +18,9 @@ json('../../stylus/vars.json')
     display: inline-block
     vertical-align: middle
 
-    &:active
+    &:focus
       border: 1px solid $greyMedium
+      outline: 0px
 
     &:disabled
       font-family: monospace
@@ -40,3 +41,6 @@ json('../../stylus/vars.json')
 
   &.theme-small-width input
     width: 150px
+
+  &.theme-medium-width input
+    width: 320px

@@ -1,8 +1,10 @@
 z = require 'zorium'
 _ = require 'lodash'
+log = require 'clay-loglevel'
 Dropzone = require 'dropzone'
 
 DevZipUpload = require '../dev_zip_upload'
+InputText = require '../input_text'
 
 styles = require './index.styl'
 
@@ -12,17 +14,42 @@ module.exports = class DevEditGameUpload
 
     @state = z.state
       zipUpload: new DevZipUpload()
+      externalHostInput: new InputText {
+        placeholder: 'http://yourcoolgame.com'
+        theme: '.theme-medium-width'
+      }
 
-  render: ->
-    z 'div.z-dev-edit-game-upload',
+  onBeforeUnmount: =>
+    @save()
+    .catch log.trace
+
+  save: =>
+    externalHostPath = @state().externalHostInput.getValue()
+    if externalHostPath
+      Game.update(@state().gameId, {
+        path: externalHostPath
+      })
+      .catch (err) ->
+        log.trace err
+        error = JSON.parse err._body
+        # TODO: (Austin) better error handling UX
+        alert error.detail
+        throw err
+    else
+      Promise.resolve(null)
+
+  render: ({zipUpload, externalHostInput}) ->
+    # TODO (Austin): remove when v-dom diff/zorium unmount work properly
+    # https://github.com/claydotio/zorium/issues/13
+    z 'div.z-dev-edit-game-upload', {key: 3},
       z 'div.l-flex',
-        z 'form',
+        z 'form.form',
           # .dz-message necessary to be clickable (no workaround)
-          @state().zipUpload
+          zipUpload
 
           z 'label.external-host',
             'Game hosted elsewhere? Enter the URL:'
-            z 'input[type=text][placeholder=http://yourcoolgame.com]'
+            externalHostInput
 
         z 'div.l-flex-right',
           z 'div.help',

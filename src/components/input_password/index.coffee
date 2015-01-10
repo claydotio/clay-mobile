@@ -17,9 +17,9 @@ module.exports = class InputPassword
   setValue: (val) =>
     @state.set value: val
 
-  render: =>
-    z "div.z-input-password#{if @state().theme then @state().theme else ''}",
+  render: ({value, theme}) =>
+    z "div.z-input-password#{if theme then theme else ''}",
       z 'input[type=password]',
         onchange: (e) =>
           @state.set value: e.target.value
-        value: @state().value
+        value: value

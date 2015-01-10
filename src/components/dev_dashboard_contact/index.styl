@@ -1,0 +1,24 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-dev-dashboard-contact
+  font-size: $fontSizeMedium
+  color: $greyDarker
+
+  > h1
+    font-family: 'RobotoLighter'
+    font-weight: lighter
+
+  > .buttons
+    margin: 20px 0
+
+    > .contact-us, > .submit-feedback
+      width: 140px
+      text-align: center
+
+    > .contact-us
+      margin-right: 20px
+
+  > .social
+    margin-top: 20px

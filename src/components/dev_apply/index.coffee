@@ -16,11 +16,11 @@ module.exports = class DevApply
     styles.use()
 
     @state = z.state
-      email: new InputBlock {
+      emailBlock: new InputBlock {
         label: 'Email'
         input: new InputText {value: '', theme: '.theme-full-width'}
       }
-      gameUrl: new InputBlock {
+      gameUrlBlock: new InputBlock {
         label: 'Game URL'
         input: new InputText {value: '', theme: '.theme-full-width'}
       }
@@ -30,7 +30,7 @@ module.exports = class DevApply
 
     # FIXME
 
-  render: =>
+  render: ({emailBlock, gameUrlBlock}) ->
     z 'div.z-dev-apply',
       z 'h1', 'Request an invite'
       z 'div.friendly-message',
@@ -43,6 +43,6 @@ module.exports = class DevApply
 
       z 'form',
         {onsubmit: @apply},
-        @state().email
-        @state().gameUrl
+        emailBlock
+        gameUrlBlock
         z 'button.button-primary.apply', 'Apply!'

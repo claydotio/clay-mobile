@@ -10,6 +10,7 @@ DevEditGameGetStarted = require '../../components/dev_edit_game_get_started'
 DevEditGameDetails = require '../../components/dev_edit_game_details'
 DevEditGameUpload = require '../../components/dev_edit_game_upload'
 DevEditGamePublished = require '../../components/dev_edit_game_published'
+DevFooter = require '../../components/dev_footer'
 Spinner = require '../../components/spinner'
 
 module.exports = class DevDashboardAddGamePage
@@ -22,6 +23,7 @@ module.exports = class DevDashboardAddGamePage
       DevEditGameDetails: new DevEditGameDetails()
       DevEditGameUpload: new DevEditGameUpload()
       DevEditGamePublished: new DevEditGamePublished()
+      DevFooter: new DevFooter()
       Spinner: new Spinner()
       isLoading: true
 
@@ -44,10 +46,11 @@ module.exports = class DevDashboardAddGamePage
         else
           z 'div.l-flex',
             if @state().step isnt 'published'
-              z 'div', {style: width: '240px'}, @state().DevGameMenu
+              z 'div', @state().DevGameMenu
             z 'div.l-flex-1',
               if @state().step is 'details' then @state().DevEditGameDetails
               else if @state().step is 'upload' then @state().DevEditGameUpload
               else if @state().step is 'published'
               then @state().DevEditGamePublished
               else @state().DevEditGameGetStarted
+      @state().DevFooter

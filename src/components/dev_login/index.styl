@@ -5,14 +5,25 @@ json('../../stylus/vars.json')
 .z-dev-login
   padding: 20px
 
-  h1
+  > h1
     margin: 0 0 10px 0
 
-  .friendly-message
+  > .friendly-message
     color: $greyDarker
 
-  .sign-in
-    width: 200px
-    margin-top: 10px
-    float: right
+  > form
     clearfix()
+
+    > .sign-in
+      width: 200px
+      margin-top: 10px
+      float: right
+      clearfix()
+
+  > .tos
+    text-align: right
+    margin-top: 20px
+    color: $greyDark
+
+    > a
+      color: inherit

@@ -15,14 +15,14 @@ module.exports = class InputBlock
       labelWidth
     }
 
-  render: =>
+  render: ({label, input, helpText, labelWidth}) ->
     z 'div.z-input-block',
       z 'label',
         z 'div.l-flex.l-vertical-center',
-          z 'div.label-text', style: width: "#{@state().labelWidth}px",
-            @state().label
+          z 'div.label-text', style: width: "#{labelWidth}px",
+            label
           z 'div.l-flex-1',
-            @state().input
-            if @state().helpText
+            input
+            if helpText
               z 'i.icon.icon-help',
-                title: @state().helpText
+                title: helpText

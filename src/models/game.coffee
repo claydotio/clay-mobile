@@ -76,6 +76,24 @@ class Game
 
   uploadMeta: -> null
 
+  isStartComplete: (game) ->
+    return game.key and game.name
+
+  isDetailsComplete: (game) ->
+    return game.description and
+           (game.isDesktop or game.isMobile) and
+           game.headerImage and
+           game.iconImage and
+           game.screenshotImages?.length >= config.SCREENSHOT_MIN_COUNT
+
+  isUploadComplete: (game) ->
+    return !!game.gameUrl
+
+  isApprovable: (game) =>
+    return @isStartComplete(game) and
+           @isDetailsComplete(game) and
+           @isUploadComplete(game)
+
   update: (gameId, gameUpdate) ->
     User.getMe().then (me) ->
       request "#{PATH}/#{gameId}",

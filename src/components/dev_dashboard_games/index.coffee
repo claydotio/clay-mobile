@@ -18,19 +18,19 @@ module.exports = class DevDashboardGames
             Game.find({developerId: developers[0].id})
       )
 
-  render: ->
+  render: ({games}) ->
     z 'div.z-dev-dashboard-games',
-    if @state().games?.length > 0
+    if games?.length > 0
       z 'div.container',
         z 'h2.title', 'My games'
           z 'div.games',
-            _.map @state().games, (game) ->
+            _.map games, (game) ->
               z 'div.game-container',
                 z 'div.game',
                   z '.image-content',
                     z '.image-background',
                       # FIXME use 440/accent if available
-                      style: backgroundImage: "url(#{game.accentImage})"
+                      style: backgroundImage: "url(#{game.headerImage})"
                     z '.image-overlay',
                       z "img[src=#{game.iconImage}]",
                         width: 70
@@ -48,7 +48,7 @@ module.exports = class DevDashboardGames
                       #z.router.a '.delete[href=#]',
                       #  z 'i.icon.icon-delete'
                       #  z 'span', 'Delete'
-    else if _.isArray @state().games
+    else if _.isArray games
       z 'div.container.no-games',
         z 'h1', 'Thanks for joining!'
         z 'h1', "We can't wait to play your awesome game!"

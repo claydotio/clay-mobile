@@ -1,4 +1,5 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 _ = require 'lodash'
 
 config = require '../../config'
@@ -45,9 +46,34 @@ module.exports = class DevEditGameDetails
       }
       orientationBlock: new InputBlockRadio {
         radios: [
-          new InputRadio label: 'Portrait', value: 'portrait'
-          new InputRadio label: 'Landscape', value: 'landscape'
-          new InputRadio label: 'Both', value: 'both', isChecked: true
+          new InputRadio {
+            label: 'Portrait'
+            name: 'orientation'
+            value: 'portrait'
+          }
+          new InputRadio {
+            label: 'Landscape'
+            name: 'orientation'
+            value: 'landscape'
+          }
+          new InputRadio {
+            label: 'Both'
+            name: 'orientation'
+            value: 'both'
+            isChecked: true
+          }
+        ]
+      }
+      devicesBlock: new InputBlockRadio {
+        radios: [
+          new InputRadio label: 'Desktop', name: 'devices', value: 'desktop'
+          new InputRadio label: 'Mobile', name: 'devices', value: 'mobile'
+          new InputRadio {
+            label: 'Both'
+            name: 'devices'
+            value: 'both'
+            isChecked: true
+          }
         ]
       }
 
@@ -59,6 +85,7 @@ module.exports = class DevEditGameDetails
         iconUpload: new DevImageUpload(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/iconImage"
           inputName: 'iconImage'
+          thumbnail: game.iconImage
           label: 'Icon'
           renderHeight: 110
           width: 512
@@ -67,6 +94,7 @@ module.exports = class DevEditGameDetails
         accentUpload: new DevImageUpload(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/accentImage"
           inputName: 'accentImage'
+          thumbnail: game.accentImage
           label: 'Accent'
           renderHeight: 110
           width: 900
@@ -75,6 +103,7 @@ module.exports = class DevEditGameDetails
         headerUpload: new DevImageUpload(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/headerImage"
           inputName: 'headerImage'
+          thumbnail: game.headerImage
           label: 'Header'
           renderHeight: 110
           width: 2550
@@ -86,6 +115,7 @@ module.exports = class DevEditGameDetails
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
+          thumbnail: game.screenshotImages?[0]
           renderHeight: 110
           width: 320
           height: 320
@@ -94,6 +124,7 @@ module.exports = class DevEditGameDetails
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
+          thumbnail: game.screenshotImages?[1]
           renderHeight: 110
           width: 320
           height: 320
@@ -102,6 +133,7 @@ module.exports = class DevEditGameDetails
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
+          thumbnail: game.screenshotImages?[2]
           renderHeight: 110
           width: 320
           height: 320
@@ -110,6 +142,7 @@ module.exports = class DevEditGameDetails
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
+          thumbnail: game.screenshotImages?[3]
           renderHeight: 110
           width: 320
           height: 320
@@ -118,30 +151,52 @@ module.exports = class DevEditGameDetails
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
+          thumbnail: game.screenshotImages?[4]
           renderHeight: 110
           width: 320
           height: 320
         )
 
-  saveAndContinue: (e) =>
-    e?.preventDefault()
+  onBeforeUnmount: =>
+    @save()
+    .catch log.trace
 
+  save: =>
     orientation = @state().orientationBlock.getChecked().getValue()
     isPortrait = orientation is 'both' or orientation is 'portrait'
     isLandscape = orientation is 'both' or orientation is 'landscape'
     # FIXME: update these when backend for them is done
 
-    # images saved immediately (not need to hit 'next step')
+    devices = @state().devicesBlock.getChecked().getValue()
+    isDesktop = devices is 'both' or devices is 'desktop'
+    isMobile = devices is 'both' or devices is 'mobile'
+
+    # images saved immediately (no need to hit 'next step')
     Game.update(@state().gameId, {
       description: @state().descriptionBlock.input.getValue()
-    }).then =>
+      isDesktop
+      isMobile
+    })
+    .catch (err) ->
+      log.trace err
+      error = JSON.parse err._body
+      # TODO: (Austin) better error handling UX
+      alert error.detail
+      throw err
+
+  saveAndContinue: (e) =>
+    e?.preventDefault()
+
+    @save().then =>
       z.router.go "/developers/edit-game/upload/#{@state().gameId}"
+      .catch log.trace
 
   render: (
     {
       categoryBlock
       descriptionBlock
       orientationBlock
+      devicesBlock
       iconUpload
       accentUpload
       headerUpload
@@ -152,17 +207,25 @@ module.exports = class DevEditGameDetails
       screenshotUpload5
     }
   ) ->
-    z 'div.z-dev-edit-game-details',
+    # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
+    # https://github.com/claydotio/zorium/issues/13
+    z 'div.z-dev-edit-game-details', {key: 1},
       z 'form',
         {onsubmit: @saveAndContinue},
 
         categoryBlock
         descriptionBlock
+
+        z 'h2.title', 'Supported Game Orientations'
         orientationBlock
+
+        z 'h2.title', 'Supported Device Types'
+        devicesBlock
 
         z 'hr'
 
-        z 'h2.title', 'Graphics ',
+        z 'h2.title',
+          'Graphics '
           z 'i.icon.icon-help',
             title: 'We require a few images for your game to make sure it
             looks great and get more people playing.'
@@ -173,7 +236,8 @@ module.exports = class DevEditGameDetails
 
         z 'h2.title',
           'Screenshots'
-          z 'div.label-info', '2 required, minimum 320px dimension'
+          z 'div.label-info',
+            "#{config.SCREENSHOT_MIN_COUNT} required, minimum 320px dimension"
 
         # FIXME: ability to remove screenshots
         screenshotUpload1

@@ -1,8 +1,7 @@
 z = require 'zorium'
 
 User = require '../../models/user'
-DevHeader = require '../../components/dev_header'
-DevFooter = require '../../components/dev_footer'
+GuestHeader = require '../../components/guest_header'
 
 module.exports = class Logout
   constructor: ->
@@ -11,11 +10,9 @@ module.exports = class Logout
     window.location.href = '/developers/login'
 
     @state = z.state
-      DevHeader: new DevHeader()
-      DevFooter: new DevFooter()
+      guestHeader: new GuestHeader()
 
-  render: ->
+  render: ({guestHeader}) ->
     z 'div',
-      z 'div', @state().DevHeader
+      z 'div', guestHeader
       z 'div', {style: textAlign: 'center', margin: '20px'}, 'Logging out...'
-      z 'div', @state().DevFooter

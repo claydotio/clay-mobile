@@ -14,10 +14,10 @@ module.exports = class InputTextarea
   setValue: (val) =>
     @state.set value: val
 
-  render: =>
+  render: ({value}) ->
     z 'div.z-input-textarea',
       z 'textarea', {
       onchange: (e) =>
         @state.set value: e.target.value
       },
-        @state().value
+        value

@@ -122,6 +122,6 @@ class User
         }
 
   logout: ->
-    setHostCookie 'accessToken', ''
+    setHostCookie config.ACCESS_TOKEN_COOKIE_KEY, ''
 
 module.exports = new User()

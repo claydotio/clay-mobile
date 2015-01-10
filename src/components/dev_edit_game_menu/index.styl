@@ -5,11 +5,12 @@ json('../../stylus/vars.json')
 .z-dev-edit-game-menu
   > .menu
     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2)
-    margin: 20px 0
+    width: 240px
+    margin: 20px 40px 20px 0
     font-size: $fontSizeMedium
     border-radius: 3px
 
-    > a
+    > .menu-item
       display: block
       background: $white
       font-weight: bold
@@ -36,9 +37,6 @@ json('../../stylus/vars.json')
         background: $greyLightest
         position: relative
 
-        .icon-check
-          background: $blue
-
         &:before
           content: ''
           background: $orange
@@ -46,9 +44,24 @@ json('../../stylus/vars.json')
           width: 5px
           position: absolute
 
+      &.is-completed
+        .icon-check
+          background: $blue
+
       .text
         padding: 15px 20px
 
     > .publish
       background: $blue
       color: $white
+      width: 100%
+      text-align: left
+
+      &:disabled
+        opacity: 0.2
+        cursor: not-allowed
+        pointer-events: none
+
+      .icon-arrow-right
+        margin-left: auto
+        margin-right: 10px

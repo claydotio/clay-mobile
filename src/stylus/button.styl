@@ -8,12 +8,13 @@ $buttonHeight = 40
   line-height: $buttonHeight px
   margin-bottom: 0 // for input.button-...
   border-radius: $buttonRadius px
-  box-shadow: 0.5px 0.866px 3px 0px rgba(0, 0, 0, 0.3)
+  box-shadow: $z1Shadow
   font-size: $fontSizeMedium
   font-weight: bold
   touch-action: manipulation
   cursor: pointer
   white-space: nowrap
+  transition: box-shadow 0.5s
 
   &.is-block
     display: block
@@ -22,6 +23,10 @@ $buttonHeight = 40
   &.is-blue // different from primary or secondary
     background: $blue
     color: $white
+
+  &:hover
+    box-shadow: $z2Shadow
+    transition: box-shadow 0.5s
 
   &:disabled
     opacity: 0.5

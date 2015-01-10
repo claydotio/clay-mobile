@@ -1,4 +1,5 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 _ = require 'lodash'
 
 Game = require '../../models/game'
@@ -45,26 +46,43 @@ module.exports = class DevEditGameGetStarted
       @state().subdomainBlock.input.setValue game.key
       @state().gameIdBlock.input.setValue game.id
 
-  saveAndContinue: (e) =>
-    e?.preventDefault()
+  onBeforeUnmount: =>
+    @save()
 
+  save: =>
+    console.log 'save'
+    # images saved immediately (no need to hit 'next step')
     Game.update(@state().gameId, {
       name: @state().titleBlock.input.getValue()
       key: @state().subdomainBlock.input.getValue()
-    }).then =>
+    })
+    .catch (err) ->
+      log.trace err
+      error = JSON.parse err._body
+      # TODO: (Austin) better error handling UX
+      alert error.detail
+      throw err
+
+  saveAndContinue: (e) =>
+    e?.preventDefault()
+
+    @save().then =>
       z.router.go "/developers/edit-game/details/#{@state().gameId}"
+      .catch log.trace
 
-  render: =>
-    isCompleted = @state().titleBlock.input.getValue() and
-                  @state().subdomainBlock.input.getValue()
+  render: ({titleBlock, subdomainBlock, gameIdBlock}) ->
+    isCompleted = titleBlock.input.getValue() and
+                  subdomainBlock.input.getValue()
 
-    z 'div.z-dev-edit-game-get-started',
+    # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
+    # https://github.com/claydotio/zorium/issues/13
+    z 'div.z-dev-edit-game-get-started', {key: 2},
       z 'form',
         {onsubmit: @saveAndContinue},
 
-        @state().titleBlock
-        @state().subdomainBlock
-        @state().gameIdBlock
+        titleBlock
+        subdomainBlock
+        gameIdBlock
 
         z 'div.l-flex',
           z 'div.l-flex-right',
@@ -88,3 +106,7 @@ module.exports = class DevEditGameGetStarted
           z 'li',
             z 'i.icon.icon-share'
             'Get more players with sharing'
+
+        z 'a.button-primary[href=https://github.com/claydotio/clay-sdk]
+          [target=blank]',
+          'Add it to your game'

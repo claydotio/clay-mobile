@@ -8,6 +8,7 @@ module.exports =
   MOCK: process.env.MOCK or false
   ENV: process.env.NODE_ENV or 'production'
   ACCESS_TOKEN_COOKIE_KEY: 'accessToken2'
+  SCREENSHOT_MIN_COUNT: 2
   ENVS:
     DEV: 'development'
     PROD: 'production'

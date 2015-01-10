@@ -17,11 +17,11 @@ module.exports = class InputSubdomain
   setValue: (val) =>
     @state.set value: val
 
-  render: =>
-    z "div.z-input-subdomain#{if @state().theme then @state().theme else ''}",
+  render: ({value, theme}) =>
+    z "div.z-input-subdomain#{if theme then theme else ''}",
       z 'input[type=text]',
         onchange: (e) =>
           @state.set value: e.target.value
-        value: @state().value
+        value: value
 
       z 'input[type=text][disabled].subdomain', value: 'clay.io'

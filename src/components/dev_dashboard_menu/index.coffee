@@ -3,17 +3,21 @@ z = require 'zorium'
 styles = require './index.styl'
 
 module.exports = class DevDashboardMenu
-  constructor: ->
+  constructor: ({tab}) ->
     styles.use()
 
-  render: ->
+    @state = z.state {tab}
+
+  render: ({tab}) ->
     z '.z-dev-dashboard-menu',
       z '.menu',
         z.router.a '[href=/developers/edit-game/start]',
           z '.text.edit-game', 'Add game'
 
       z '.menu',
-        z.router.a '.is-selected[href=#]',
+        z.router.a "[href=/developers]
+                   #{if not tab or tab is 'games' then '.is-selected' else ''}",
           z '.text', 'My games'
-        z 'a[href=https://github.com/claydotio/clay-sdk][target=_blank]',
-          z '.text', 'Documentation'
+        z.router.a "[href=/developers/dashboard/contact]
+                   #{if tab is 'contact' then '.is-selected' else ''}",
+          z '.text', 'Contact Us'
