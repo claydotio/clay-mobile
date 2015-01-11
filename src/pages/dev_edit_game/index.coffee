@@ -12,7 +12,7 @@ DevEditGameUpload = require '../../components/dev_edit_game_upload'
 DevEditGamePublished = require '../../components/dev_edit_game_published'
 Spinner = require '../../components/spinner'
 
-module.exports = class DevDashboardAddGamePage
+module.exports = class DevEditGame
   constructor: (params) ->
     @state = z.state
       step: params.step
