@@ -1,6 +1,6 @@
 z = require 'zorium'
 
-DevSocialIcons = require '../dev_social_icons'
+SocialIcons = require '../social_icons'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -10,9 +10,9 @@ module.exports = class DevDashboardContact
     styles.use()
 
     @state = z.state
-      DevSocialIcons: new DevSocialIcons()
+      SocialIcons: new SocialIcons()
 
-  render: ({DevSocialIcons}) ->
+  render: ({SocialIcons}) ->
     z 'div.z-dev-dashboard-contact',
       z 'h1', 'Get in touch with us.'
       z 'div',
@@ -26,4 +26,4 @@ module.exports = class DevDashboardContact
       z 'h1', 'Just looking to say hi?'
       z 'div', 'Get social and follow us.'
       z 'div.social',
-        DevSocialIcons
+        SocialIcons

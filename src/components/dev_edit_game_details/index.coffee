@@ -4,7 +4,7 @@ _ = require 'lodash'
 
 config = require '../../config'
 Game = require '../../models/game'
-DevImageUpload = require '../dev_image_upload'
+ImageUploader = require '../image_uploader'
 InputBlock = require '../input_block'
 InputBlockRadio = require '../input_block_radio'
 InputSelect = require '../input_select'
@@ -82,7 +82,7 @@ module.exports = class DevEditGameDetails
       @state().descriptionBlock.input.setValue game.description
       @state.set
         gameId: game.id
-        iconUpload: new DevImageUpload(
+        iconUpload: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/iconImage"
           inputName: 'iconImage'
           thumbnail: game.iconImage
@@ -91,7 +91,7 @@ module.exports = class DevEditGameDetails
           width: 512
           height: 512
         )
-        accentUpload: new DevImageUpload(
+        accentUpload: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/accentImage"
           inputName: 'accentImage'
           thumbnail: game.accentImage
@@ -100,7 +100,7 @@ module.exports = class DevEditGameDetails
           width: 900
           height: 300
         )
-        headerUpload: new DevImageUpload(
+        headerUpload: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/headerImage"
           inputName: 'headerImage'
           thumbnail: game.headerImage
@@ -111,7 +111,7 @@ module.exports = class DevEditGameDetails
           safeWidth: 1700
           safeHeight: 850
         )
-        screenshotUpload1: new DevImageUpload(
+        screenshotUpload1: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
@@ -120,7 +120,7 @@ module.exports = class DevEditGameDetails
           width: 320
           height: 320
         )
-        screenshotUpload2: new DevImageUpload(
+        screenshotUpload2: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
@@ -129,7 +129,7 @@ module.exports = class DevEditGameDetails
           width: 320
           height: 320
         )
-        screenshotUpload3: new DevImageUpload(
+        screenshotUpload3: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
@@ -138,7 +138,7 @@ module.exports = class DevEditGameDetails
           width: 320
           height: 320
         )
-        screenshotUpload4: new DevImageUpload(
+        screenshotUpload4: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'
@@ -147,7 +147,7 @@ module.exports = class DevEditGameDetails
           width: 320
           height: 320
         )
-        screenshotUpload5: new DevImageUpload(
+        screenshotUpload5: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
           method: 'post'
           inputName: 'screenshotImage'

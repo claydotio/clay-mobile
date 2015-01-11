@@ -1,21 +1,21 @@
 z = require 'zorium'
 
-DevBanner = require '../../components/dev_banner'
+LegacyBanner = require '../../components/legacy_banner'
 GuestHeader = require '../../components/guest_header'
-DevFooter = require '../../components/dev_footer'
+GuestFooter = require '../../components/guest_footer'
 Home = require '../../components/home'
 
 module.exports = class HomePage
   constructor: ->
     @state = z.state
-      devBanner: new DevBanner()
+      legacyBanner: new LegacyBanner()
       guestHeader: new GuestHeader()
       home: new Home()
-      devFooter: new DevFooter()
+      guestFooter: new GuestFooter()
 
-  render: ({devBanner, devHeader, home, devFooter, guestHeader}) ->
+  render: ({legacyBanner, devHeader, home, guestFooter, guestHeader}) ->
     z 'div',
-      z 'div', devBanner
+      z 'div', legacyBanner
       z 'div', guestHeader
       z 'div', home
-      z 'div', devFooter
+      z 'div', guestFooter

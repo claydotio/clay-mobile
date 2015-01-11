@@ -40,7 +40,7 @@ renderLoadingCanvas = (ctx, percentUploaded) ->
   drawCircle styleConfig.$green, lineWidth, percentUploaded / 100
 
 
-module.exports = class DevZipUpload
+module.exports = class ZipUploader
   constructor: ->
     styles.use()
 
@@ -71,7 +71,7 @@ module.exports = class DevZipUpload
     }
 
   render: ->
-    z 'div.z-dev-zip-upload',
+    z 'div.z-zip-uploader',
       # .dz-message necessary to be clickable (no workaround)
       z 'div.upload-dropzone.dz-message',
         z 'div.l-flex.l-vertical-center',

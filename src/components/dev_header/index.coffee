@@ -1,26 +1,35 @@
 z = require 'zorium'
 
+HeaderBase = require '../header_base'
+
 styles = require './index.styl'
 
 module.exports = class DevHeader
-  constructor: ->
+  constructor: ({currentPage} = {}) ->
     styles.use()
 
-  render: ->
+    @state = z.state
+      header: new HeaderBase {
+        logoUrl: '//cdn.wtf/d/images/logos/logo_dev.svg'
+        homeUrl: '/developers'
+        links: [
+          {
+            text: 'Dashboard'
+            url: '/developers'
+            isSelected: currentPage is 'dashboard'
+          }
+          {
+            text: 'Dev Docs'
+            url: 'https://github.com/claydotio/clay-sdk'
+            isExternal: true
+          }
+          {
+            text: 'Logout'
+            url: '/developers/logout'
+          }
+        ]
+      }
+
+  render: ({header}) ->
     z '.z-dev-header',
-      z '.l-content-container.l-flex.l-vertical-center',
-        z.router.a '.logo[href=/developers]',
-          z 'img[src=//cdn.wtf/d/images/logos/logo_dev.svg]'
-        z 'nav.navigation',
-          z 'ul',
-            z 'li.is-selected',
-              z 'div.l-flex.l-vertical-center',
-                z.router.a '[href=/developers]', 'Dashboard'
-            z 'li',
-              z 'div.l-flex.l-vertical-center',
-                z.router.a '[href=https://github.com/claydotio/clay-sdk]
-                            [target=_blank]',
-                'Dev Docs'
-            z 'li',
-              z 'div.l-flex.l-vertical-center',
-                z.router.a '[href=/developers/logout]', 'Sign out'
+      header

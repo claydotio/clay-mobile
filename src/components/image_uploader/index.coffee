@@ -45,7 +45,7 @@ renderLoadingCanvas = (ctx, percentUploaded) ->
   drawCircle styleConfig.$green, lineWidth, percentUploaded / 100
 
 
-module.exports = class DevImageUpload
+module.exports = class ImageUploader
   constructor: (
     {
       inputName
@@ -137,7 +137,7 @@ module.exports = class DevImageUpload
       renderSafeHeight
     }
   ) ->
-    z "div.z-dev-image-upload#{if loading then '.is-loading' else ''}",
+    z "div.z-image-uploader#{if loading then '.is-loading' else ''}",
       {
         style:
           width: "#{renderWidth}px"

@@ -3,7 +3,7 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 Dropzone = require 'dropzone'
 
-DevZipUpload = require '../dev_zip_upload'
+ZipUploader = require '../zip_uploader'
 InputText = require '../input_text'
 
 styles = require './index.styl'
@@ -13,7 +13,7 @@ module.exports = class DevEditGameUpload
     styles.use()
 
     @state = z.state
-      zipUpload: new DevZipUpload()
+      zipUpload: new ZipUploader()
       externalHostInput: new InputText {
         placeholder: 'http://yourcoolgame.com'
         theme: '.theme-medium-width'

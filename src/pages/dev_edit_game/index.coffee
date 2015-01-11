@@ -10,20 +10,18 @@ DevEditGameGetStarted = require '../../components/dev_edit_game_get_started'
 DevEditGameDetails = require '../../components/dev_edit_game_details'
 DevEditGameUpload = require '../../components/dev_edit_game_upload'
 DevEditGamePublished = require '../../components/dev_edit_game_published'
-DevFooter = require '../../components/dev_footer'
 Spinner = require '../../components/spinner'
 
 module.exports = class DevDashboardAddGamePage
   constructor: (params) ->
     @state = z.state
       step: params.step
-      DevHeader: new DevHeader()
+      DevHeader: new DevHeader(currentPage: 'dashboard')
       DevGameMenu: new DevEditGameMenu {step: params.step}
       DevEditGameGetStarted: new DevEditGameGetStarted()
       DevEditGameDetails: new DevEditGameDetails()
       DevEditGameUpload: new DevEditGameUpload()
       DevEditGamePublished: new DevEditGamePublished()
-      DevFooter: new DevFooter()
       Spinner: new Spinner()
       isLoading: true
 
@@ -38,7 +36,7 @@ module.exports = class DevDashboardAddGamePage
               @state.set isLoading: false
 
   render: =>
-    z 'div',
+    z 'div.l-dev-page-container',
       z 'div', @state().DevHeader
       z '.l-content-container',
         if @state().isLoading
@@ -53,4 +51,3 @@ module.exports = class DevDashboardAddGamePage
               else if @state().step is 'published'
               then @state().DevEditGamePublished
               else @state().DevEditGameGetStarted
-      @state().DevFooter

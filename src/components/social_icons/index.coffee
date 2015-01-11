@@ -4,7 +4,7 @@ styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
-module.exports = class DevSocialIcons
+module.exports = class SocialIcons
   constructor: ->
     styles.use()
 

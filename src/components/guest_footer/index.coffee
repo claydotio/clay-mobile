@@ -1,6 +1,6 @@
 z = require 'zorium'
 
-DevSocialIcons = require '../dev_social_icons'
+SocialIcons = require '../social_icons'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -10,9 +10,9 @@ module.exports = class GuestFooter
     styles.use()
 
     @state = z.state
-      DevSocialIcons: new DevSocialIcons()
+      SocialIcons: new SocialIcons()
 
-  render: ({DevSocialIcons}) ->
+  render: ({SocialIcons}) ->
     z '.z-guest-footer',
       z '.l-content-container.l-flex',
         z '.section',
@@ -29,7 +29,7 @@ module.exports = class GuestFooter
               z 'li', z 'a[href=/privacy]', 'Privacy'
         z '.section',
           z 'h3.title', 'Connect'
-          DevSocialIcons
+          SocialIcons
         z 'div.clay-info',
           z "img.cloud[src=#{styleConfig.$logoCloudSvg}]"
           z 'div.copyright', '© 2015 Clay'
