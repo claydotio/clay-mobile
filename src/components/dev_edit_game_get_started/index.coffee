@@ -9,7 +9,6 @@ InputSubdomain = require '../input_subdomain'
 
 styles = require './index.styl'
 
-
 module.exports = class DevEditGameGetStarted
   constructor: ->
     styles.use()
@@ -25,9 +24,7 @@ module.exports = class DevEditGameGetStarted
         label: 'Subdomain'
         labelWidth: 125
         input: new InputSubdomain value: '', theme: '.theme-small-width'
-        # FIXME!
-        #helpText: "Your game will be accessible at
-        #           http://#{@state().gameKey}.clay.io"
+        helpText: 'Your game will be accessible at http://SUBDOMAIN.clay.io'
       }
       gameIdBlock: new InputBlock {
         label: 'SDK Game ID'
@@ -39,7 +36,6 @@ module.exports = class DevEditGameGetStarted
         }
       }
 
-  onMount: =>
     Game.getEditingGame().then (game) =>
       @state.set gameId: game.id
       @state().titleBlock.input.setValue game.name
@@ -50,9 +46,8 @@ module.exports = class DevEditGameGetStarted
     @save()
 
   save: =>
-    console.log 'save'
     # images saved immediately (no need to hit 'next step')
-    Game.update(@state().gameId, {
+    Game.updateById(@state().gameId, {
       name: @state().titleBlock.input.getValue()
       key: @state().subdomainBlock.input.getValue()
     })
@@ -63,34 +58,32 @@ module.exports = class DevEditGameGetStarted
       alert error.detail
       throw err
 
-  saveAndContinue: (e) =>
-    e?.preventDefault()
-
-    @save().then =>
-      z.router.go "/developers/edit-game/details/#{@state().gameId}"
-      .catch log.trace
-
-  render: ({titleBlock, subdomainBlock, gameIdBlock}) ->
+  render: ({gameId, titleBlock, subdomainBlock, gameIdBlock}) ->
     isCompleted = titleBlock.input.getValue() and
                   subdomainBlock.input.getValue()
 
     # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
     z 'div.z-dev-edit-game-get-started', {key: 2},
-      z 'form',
-        {onsubmit: @saveAndContinue},
+      z 'form.form', {
+        onsubmit: (e) =>
+          e?.preventDefault()
+
+          @save().then ->
+            z.router.go "/developers/edit-game/details/#{gameId}"
+            .catch log.trace
+        },
 
         titleBlock
         subdomainBlock
         gameIdBlock
 
-        z 'div.l-flex',
-          z 'div.l-flex-right',
-            z 'button.button-secondary.next-step',
-              unless isCompleted
-                disabled: true
-              ,
-              'Next step'
+        z 'div.next-step-container',
+          z 'button.button-secondary.next-step',
+            unless isCompleted
+              disabled: true
+            ,
+            'Next step'
 
       z 'hr'
 

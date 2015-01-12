@@ -1,7 +1,5 @@
 z = require 'zorium'
 
-styleConfig = require '../../stylus/vars.json'
-
 styles = require './index.styl'
 
 module.exports = class SocialIcons

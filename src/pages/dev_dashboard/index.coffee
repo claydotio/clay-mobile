@@ -1,18 +1,18 @@
 z = require 'zorium'
 
 DevHeader = require '../../components/dev_header'
+DevDashboardMenu = require '../../components/dev_dashboard_menu'
 DevDashboardContact = require '../../components/dev_dashboard_contact'
 DevDashboardGames = require '../../components/dev_dashboard_games'
-DevDashboardMenu = require '../../components/dev_dashboard_menu'
 
 module.exports = class DevDashboard
   constructor: (params) ->
     @state = z.state
       DevHeader: new DevHeader(currentPage: 'dashboard')
-      DevDashboardMenu: new DevDashboardMenu({tab: params.tab})
+      DevDashboardMenu: new DevDashboardMenu({selected: params.tab})
       DevDashboardContact: new DevDashboardContact()
       DevDashboardGames: new DevDashboardGames()
-      tab: params.tab
+      selectedTab: params.tab
 
   render: (
     {
@@ -20,7 +20,7 @@ module.exports = class DevDashboard
       DevDashboardMenu
       DevDashboardContact
       DevDashboardGames
-      tab
+      selectedTab
     }
   ) ->
     z 'div.l-dev-page-container',
@@ -28,5 +28,5 @@ module.exports = class DevDashboard
       z '.l-content-container.l-flex',
         z 'div', DevDashboardMenu
         z 'div.l-flex-1',
-          if tab is 'contact' then DevDashboardContact
+          if selectedTab is 'contact' then DevDashboardContact
           else DevDashboardGames

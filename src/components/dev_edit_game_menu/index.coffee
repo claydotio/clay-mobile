@@ -23,10 +23,10 @@ module.exports = class DevEditGameMenu
   publish: (e) =>
     e?.preventDefault()
 
-    Game.update(@state().gameId, {
+    Game.updateById(@state().gameId, {
       status: 'Approved'
-    }).then ->
-      z.router.go '/developers/published'
+    }).then =>
+      z.router.go "/developers/published/#{@state().gameId}"
     .catch (err) ->
       log.trace err
       error = JSON.parse err._body
@@ -47,28 +47,29 @@ module.exports = class DevEditGameMenu
     z '.z-dev-edit-game-menu',
       z '.menu',
         z.router.link z 'a.menu-item[href=/developers]',
-          z 'div.text', 'Back to dashboard'
+          z 'div.menu-item-content',
+            z 'div.text', 'Back to dashboard'
 
       z '.menu',
         z.router.link z "a.menu-item
           [href=/developers/edit-game/start/#{gameId}]
           #{if step is 'start' then '.is-selected' else ''}
           #{if isStartComplete then '.is-completed' else ''}",
-          z 'div.l-flex.l-vertical-center',
+          z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Get started'
             z 'i.icon.icon-check'
         z.router.link z "a.menu-item
           [href=/developers/edit-game/details/#{gameId}]
           #{if step is 'details' then '.is-selected' else ''}
           #{if isDetailsComplete then '.is-completed' else ''}",
-          z 'div.l-flex.l-vertical-center',
+          z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Add details'
             z 'i.icon.icon-check'
         z.router.link z "a.menu-item
           [href=/developers/edit-game/upload/#{gameId}]
           #{if step is 'upload' then '.is-selected' else ''}
           #{if isUploadComplete then '.is-completed' else ''}",
-          z 'div.l-flex.l-vertical-center',
+          z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Upload game'
             z 'i.icon.icon-check'
 
@@ -77,6 +78,6 @@ module.exports = class DevEditGameMenu
         z "button.menu-item.publish
           #{if not isApprovable then '[disabled]' else ''}",
           {onclick: @publish},
-          z 'div.l-flex.l-vertical-center',
+          z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Publish'
             z 'i.icon.icon-arrow-right'

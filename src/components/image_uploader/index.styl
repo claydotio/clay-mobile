@@ -19,18 +19,21 @@ $zIndexClose = 4
   box-sizing: border-box
   overflow: hidden
 
-  .clickable
+  > .clickable
     height: 100%
     cursor: pointer
 
-  .content
-    width: 100%
-    text-align: center
+    > .content
+      width: 100%
+      text-align: center
 
-  .percentage, canvas
+    > .percentage
+      display: none
+
+  > canvas
     display: none
 
-  .thumbnail
+  > .thumbnail
     position: absolute
     z-index: $zIndexThumbnail
     top: 0
@@ -53,40 +56,46 @@ $zIndexClose = 4
       width: 100%
       height: 100%
 
-  .unsafe-overlay
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    z-index: $zIndexUnsafeOverlay
-    background: rgba(0, 0, 0, 0.3)
+    > .safe-unsafe
+      > .unsafe-overlay
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        z-index: $zIndexUnsafeOverlay
+        background: rgba(0, 0, 0, 0.3)
 
-  .safe
-    position: absolute
-    z-index: $zIndexSafe
-    overflow: hidden
-    border: 3px solid rgba(255, 255, 255, 0.5)
-    box-sizing: border-box
+      > .safe
+        position: absolute
+        z-index: $zIndexSafe
+        overflow: hidden
+        border: 3px solid rgba(255, 255, 255, 0.5)
+        box-sizing: border-box
 
-    > .safe-text
-      position: absolute
-      margin: 10px
-      text-shadow: 0 0 4px $white
+        > .safe-text
+          position: absolute
+          margin: 10px
+          text-shadow: 0 0 4px $white
+
+        > img
+          width: 100%
+          height: 100%
 
   &.is-loading
 
-    .drop-here
-      display: none
+    > .clickable
+      > .drop-here
+        display: none
 
-    .percentage
-      display: block
+      > .percentage
+        display: block
 
-    canvas
+    > canvas
       display: block
       position: absolute
       left: 0
       top: 0
 
-    .thumbnail
+    > .thumbnail
       opacity: 0.3

@@ -144,14 +144,13 @@ module.exports = class ImageUploader
           height: "#{renderHeight}px"
       },
       # .dz-message necessary to be clickable (no workaround)
-      z 'div.dz-message.clickable',
-        z 'div.l-flex.l-vertical-center',
-          z 'div.content.percentage',
-            "#{percentUploaded}%"
-          z 'div.content.drop-here',
-            z 'div', '+'
-            z 'div', label
-            z 'div', 'Drop here'
+      z 'div.dz-message.clickable.l-flex.l-vertical-center',
+        z 'div.content.percentage',
+          "#{percentUploaded}%"
+        z 'div.content.drop-here',
+          z 'div', '+'
+          z 'div', label
+          z 'div', 'Drop here'
 
       if thumbnail
         z 'div.thumbnail',
@@ -164,7 +163,7 @@ module.exports = class ImageUploader
           z "img[src=#{thumbnail}]"
           if safeWidth isnt width or
              safeHeight isnt height
-            z 'div',
+            z 'div.safe-unsafe',
               z 'div.unsafe-overlay'
               z 'div.safe',
                 {
@@ -180,6 +179,7 @@ module.exports = class ImageUploader
                 z "img[src=#{thumbnail}]",
                   {
                     style:
+                      width: "#{renderWidth}px"
                       marginLeft: -1 * (renderWidth - renderSafeWidth) /
                         2 + 'px'
                       marginTop: -1 * (renderHeight - renderSafeHeight) /

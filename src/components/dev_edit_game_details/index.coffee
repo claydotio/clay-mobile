@@ -11,15 +11,6 @@ InputSelect = require '../input_select'
 InputTextarea = require '../input_textarea'
 InputRadio = require '../input_radio'
 
-categories = {
-  arcade: 'Arcade',
-  action: 'Action',
-  puzzle: 'Puzzle'
-}
-
-categoryOptions = _.map categories, (label, value) ->
-  return {label, value}
-
 styles = require './index.styl'
 
 module.exports = class DevEditGameDetails
@@ -38,7 +29,16 @@ module.exports = class DevEditGameDetails
       screenshotUpload5: null
       categoryBlock: new InputBlock {
         label: 'Category'
-        input: new InputSelect({options: categoryOptions})
+        input: new InputSelect {
+          options: [
+            {label: 'Action', value: 'action'}
+            {label: 'Adventure', value: 'adventure'}
+            {label: 'Arcade', value: 'arcade'}
+            {label: 'Puzzle', value: 'puzzle'}
+            {label: 'Racing', value: 'racing'}
+            {label: 'Stategy', value: 'strategy'}
+          ]
+        }
       }
       descriptionBlock: new InputBlock {
         label: 'Description'
@@ -77,7 +77,6 @@ module.exports = class DevEditGameDetails
         ]
       }
 
-  onMount: =>
     Game.getEditingGame().then (game) =>
       @state().descriptionBlock.input.setValue game.description
       @state.set
@@ -162,18 +161,14 @@ module.exports = class DevEditGameDetails
     .catch log.trace
 
   save: =>
-    orientation = @state().orientationBlock.getChecked().getValue()
-    isPortrait = orientation is 'both' or orientation is 'portrait'
-    isLandscape = orientation is 'both' or orientation is 'landscape'
-    # FIXME: update these when backend for them is done
-
     devices = @state().devicesBlock.getChecked().getValue()
     isDesktop = devices is 'both' or devices is 'desktop'
     isMobile = devices is 'both' or devices is 'mobile'
 
     # images saved immediately (no need to hit 'next step')
-    Game.update(@state().gameId, {
+    Game.updateById(@state().gameId, {
       description: @state().descriptionBlock.input.getValue()
+      orientation: @state().orientationBlock.getChecked().getValue()
       isDesktop
       isMobile
     })
@@ -184,15 +179,9 @@ module.exports = class DevEditGameDetails
       alert error.detail
       throw err
 
-  saveAndContinue: (e) =>
-    e?.preventDefault()
-
-    @save().then =>
-      z.router.go "/developers/edit-game/upload/#{@state().gameId}"
-      .catch log.trace
-
   render: (
     {
+      gameId
       categoryBlock
       descriptionBlock
       orientationBlock
@@ -210,8 +199,14 @@ module.exports = class DevEditGameDetails
     # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
     z 'div.z-dev-edit-game-details', {key: 1},
-      z 'form',
-        {onsubmit: @saveAndContinue},
+      z 'form.form', {
+        onsubmit: (e) =>
+          e?.preventDefault()
+
+          @save().then ->
+            z.router.go "/developers/edit-game/upload/#{gameId}"
+            .catch log.trace
+        },
 
         categoryBlock
         descriptionBlock
@@ -246,11 +241,10 @@ module.exports = class DevEditGameDetails
         screenshotUpload4
         screenshotUpload5
 
-        z 'div.l-flex',
-          z 'div.l-flex-right',
-            z 'button.button-secondary.next-step',
-              # FIXME: check that all images, etc... are uploaded
-              unless true
-                disabled: true
-              ,
-              'Next step'
+        z 'div.next-step-container',
+          z 'button.button-secondary.next-step',
+            # FIXME: check that all images, etc... are uploaded
+            unless true
+              disabled: true
+            ,
+            'Next step'

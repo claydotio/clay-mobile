@@ -17,23 +17,29 @@ module.exports = class DevEditGame
     @state = z.state
       step: params.step
       DevHeader: new DevHeader(currentPage: 'dashboard')
+      Spinner: new Spinner()
+      isLoading: true
+
+    if params.gameId
+      gamePromise = Game.get(params.gameId).then (game) =>
+        @state.set isLoading: false
+        return game
+      Game.setEditingGame gamePromise
+    else
+      gamePromise = User.getMe().then ({id}) =>
+        Developer.find({ownerId: id}).then (developers) =>
+          Game.create(developers?[0].id).then (game) =>
+            @state.set isLoading: false
+            return game
+      Game.setEditingGame gamePromise
+
+    @state.set
       DevGameMenu: new DevEditGameMenu {step: params.step}
       DevEditGameGetStarted: new DevEditGameGetStarted()
       DevEditGameDetails: new DevEditGameDetails()
       DevEditGameUpload: new DevEditGameUpload()
       DevEditGamePublished: new DevEditGamePublished()
-      Spinner: new Spinner()
-      isLoading: true
 
-    if params.gameId
-      Game.setEditingGame(params.gameId)
-      @state.set isLoading: false
-    else
-      User.getMe().then ({id}) =>
-        Developer.find({ownerId: id}).then (developers) =>
-          Game.create(developers[0].id).then (game) =>
-            Game.setEditingGame(game.id).then =>
-              @state.set isLoading: false
 
   render: =>
     z 'div.l-dev-page-container',

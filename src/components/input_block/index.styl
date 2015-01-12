@@ -6,12 +6,17 @@ json('../../stylus/vars.json')
   display: block
   margin: 10px 0
 
-  .label-text
-    vertical-align: middle
-    width: 100px
-    font-weight: bold
-    color: $greyDarker
-    font-size: $fontSizeMedium
+  > .label
+    > .content
+      > .label-text
+        vertical-align: middle
+        width: 100px
+        font-weight: bold
+        color: $greyDarker
+        font-size: $fontSizeMedium
 
-    &.is-aligned-top
-      vertical-align: top
+      > .input-container
+        > .icon-help
+          font-size: $iconMedium
+          margin-left: 10px
+          color: $greyDarker

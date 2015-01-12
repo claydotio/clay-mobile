@@ -15,12 +15,12 @@ module.exports = class DevDashboardGames
       games: z.observe(
         User.getMe().then ({id}) ->
           Developer.find({ownerId: id}).then (developers) ->
-            Game.find({developerId: developers[0].id})
+            Game.find({developerId: developers?[0].id})
       )
 
   render: ({games}) ->
     z 'div.z-dev-dashboard-games',
-    if games?.length > 0
+    if not _.isEmpty games
       z 'div.container',
         z 'h2.title', 'My games'
           z 'div.games',
@@ -29,7 +29,6 @@ module.exports = class DevDashboardGames
                 z 'div.game',
                   z '.image-content',
                     z '.image-background',
-                      # FIXME use 440/accent if available
                       style: backgroundImage: "url(#{game.headerImage})"
                     z '.image-overlay',
                       z "img[src=#{game.iconImage}]",
@@ -44,11 +43,8 @@ module.exports = class DevDashboardGames
                                   ]",
                         z 'i.icon.icon-edit'
                         z 'span', 'Edit'
-                      # TODO (Austin). Implement when someone asks for it
-                      #z.router.link z 'a.delete[href=#]',
-                      #  z 'i.icon.icon-delete'
-                      #  z 'span', 'Delete'
-    else if _.isArray games
+
+    else if games isnt null # null = still loading
       z 'div.container.no-games',
         z 'h1', 'Thanks for joining!'
         z 'h1', "We can't wait to play your awesome game!"

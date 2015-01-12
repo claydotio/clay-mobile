@@ -2,12 +2,10 @@ z = require 'zorium'
 
 HeaderBase = require '../header_base'
 
-styles = require './index.styl'
+# only styles used are from HeaderBase
 
 module.exports = class GuestHeader
   constructor: ({currentPage} = {}) ->
-    styles.use()
-
     @state = z.state
       header: new HeaderBase {
         logoUrl: '//cdn.wtf/d/images/logos/logo.svg'

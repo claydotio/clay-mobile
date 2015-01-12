@@ -26,7 +26,7 @@ module.exports = class DevEditGameUpload
   save: =>
     externalHostPath = @state().externalHostInput.getValue()
     if externalHostPath
-      Game.update(@state().gameId, {
+      Game.updateById(@state().gameId, {
         path: externalHostPath
       })
       .catch (err) ->
@@ -41,27 +41,25 @@ module.exports = class DevEditGameUpload
   render: ({zipUpload, externalHostInput}) ->
     # TODO (Austin): remove when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
-    z 'div.z-dev-edit-game-upload', {key: 3},
-      z 'div.l-flex',
+    z 'div.z-dev-edit-game-upload.l-flex', {key: 3},
         z 'form.form',
           # .dz-message necessary to be clickable (no workaround)
           zipUpload
 
           z 'label.external-host',
-            'Game hosted elsewhere? Enter the URL:'
+            z 'div.label-text', 'Game hosted elsewhere? Enter the URL:'
             externalHostInput
 
-        z 'div.l-flex-right',
-          z 'div.help',
-            z 'h1',
-              'What do I upload?'
-            z 'div.what-to-upload', 'index.html and all assets'
-            z 'div',
-              z 'i.icon.icon-dev-console'
-              z 'i.icon.icon-photos'
-              z 'i.icon.icon-music'
-            z 'div',
-              z 'i.icon.icon-arrow-down'
-            z 'div',
-              z 'i.icon.icon-zipped'
-            z 'div.what-to-upload', 'zipped all together'
+        z 'div.help.l-flex-right',
+          z 'h1',
+            'What do I upload?'
+          z 'div.what-to-upload', 'index.html and all assets'
+          z 'div.icon-block',
+            z 'i.icon.icon-dev-console'
+            z 'i.icon.icon-photos'
+            z 'i.icon.icon-music'
+          z 'div.icon-block',
+            z 'i.icon.icon-arrow-down'
+          z 'div.icon-block',
+            z 'i.icon.icon-zipped'
+          z 'div.what-to-upload', 'zipped all together'

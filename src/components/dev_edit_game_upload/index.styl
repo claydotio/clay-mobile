@@ -6,38 +6,41 @@ json('../../stylus/vars.json')
   padding: 20px 0
   text-align: center
 
-  .form
+  > .form
     width: 320px
     height: 320px
     margin: 0 auto
 
-    .external-host
+    > .external-host
       display: block
       margin: 60px 0
-      font-family: 'RobotoLighter'
       font-weight: lighter
       font-size: $fontSizeMedium
       color: $greyDarker
 
-  .help
+      > .label-text
+        margin-bottom: 5px
+
+  > .help
     text-align: center
     width: 200px
 
     > h1
-      font-family: 'RobotoLighter'
       font-weight: lighter
       color: $greyDarker
 
     > .what-to-upload
       margin: 10px 0
 
-    .icon
-      color: $orange
-      font-size: $iconXLarge
-      margin: 0 10px
+    > .icon-block
 
-    .icon-arrow-down
-      margin: 20px 0
-      display: block
-      color: $greyMedium
-      font-size: $iconMedium
+      > .icon
+        color: $orange
+        font-size: $iconXLarge
+        margin: 0 10px
+
+      > .icon-arrow-down
+        margin: 20px 0
+        display: block
+        color: $greyMedium
+        font-size: $iconMedium

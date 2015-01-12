@@ -6,30 +6,24 @@ json('../../stylus/vars.json')
   width: 100%
   padding: 20px 0
 
-  .title
-    color: $greyDarker
-    font-weight: bold
-    font-size: $fontSizeMedium
-    margin-top: 20px
+  > .form
 
-    .label-info
-      font-size: $fontSizeSmall
-      margin-top: 2px
+    > .title
+      color: $greyDarker
+      font-weight: bold
+      font-size: $fontSizeMedium
+      margin-top: 20px
 
-  hr
-    margin: 40px 0 20px 0
+      > .label-info
+        font-size: $fontSizeSmall
+        margin-top: 2px
 
-  .image-holder
-    height: 100px
-    background: $white // FIXME
-    border: 1px solid $grayBorder // FIXME
-    text-align: center
-    display: inline-block
-    margin: 0 10px 10px 0
+    > hr
+      margin: 40px 0 20px 0
 
-    .image-holder-content
-      width: 100%
-      text-align: center
+    > .next-step-container
+      clearfix()
 
-  .next-step
-    margin-top: 10px
+      > .next-step
+        float: right
+        margin-top: 20px

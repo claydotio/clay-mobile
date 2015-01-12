@@ -7,40 +7,43 @@ json('../../stylus/vars.json')
   box-sizing: border-box
   background: $greyDarkest
 
-  .title
-    color: $orange
-    font-size: $fontSizeLarge
-    font-weight: lighter
-    margin: 0 0 20px 0
+  > .content
+    > .section
+      > .title
+        color: $orange
+        font-size: $fontSizeLarge
+        font-weight: lighter
+        margin: 0 0 20px 0
 
-  .section:first-child
-    margin-right: 40px
+      &:first-child
+        margin-right: 40px
 
-  .links
-    margin: 0 40px 0 0
-    padding: 0
-    list-style-type: none
-    color: $white
+      > .links-container
+        > .links
+          margin: 0 40px 0 0
+          padding: 0
+          list-style-type: none
+          color: $white
 
-    > li
-      font-size: $fontSizeMedium
-      font-weight: bold
-      margin: 15px 0
+          > li
+            font-size: $fontSizeMedium
+            font-weight: bold
+            margin: 15px 0
 
-      > a
-        color: inherit
+            > a
+              color: inherit
 
-    > li:first-child
-      margin: 0 0 15px 0
+          > li:first-child
+            margin: 0 0 15px 0
 
-  .clay-info
-    margin-left: auto
-    text-align: center
+    > .clay-info
+      margin-left: auto
+      text-align: center
 
-    > .cloud
-      height: 28px
-      width: 40px
-      margin-bottom: 2px
+      > .cloud
+        height: 28px
+        width: 40px
+        margin-bottom: 2px
 
-    > .copyright
-      color: $greyDarker
+      > .copyright
+        color: $greyDarker

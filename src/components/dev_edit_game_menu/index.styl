@@ -18,19 +18,23 @@ json('../../stylus/vars.json')
       border-radius: 3px
       overflow: hidden
 
-      .icon-check
-        border-radius: 12px
-        width: 24px
-        height: 24px
-        line-height: 24px
-        margin-left: auto
-        margin-right: 10px
-        background: $greyLighter
-        color: $white
-        font-size: $iconTiny
-        text-align: center
-        box-sizing: border-box
-        padding: 1px 2px 0 0
+      > .menu-item-content
+        > .icon-check
+          border-radius: 12px
+          width: 24px
+          height: 24px
+          line-height: 24px
+          margin-left: auto
+          margin-right: 10px
+          background: $greyLighter
+          color: $white
+          font-size: $iconTiny
+          text-align: center
+          box-sizing: border-box
+          padding: 1px 2px 0 0
+
+        > .text
+          padding: 15px 20px
 
       &.is-selected
         color: $black
@@ -45,11 +49,9 @@ json('../../stylus/vars.json')
           position: absolute
 
       &.is-completed
-        .icon-check
-          background: $blue
-
-      .text
-        padding: 15px 20px
+        > .menu-item-content
+          > .icon-check
+            background: $blue
 
     > .publish
       background: $blue
@@ -62,6 +64,7 @@ json('../../stylus/vars.json')
         cursor: not-allowed
         pointer-events: none
 
-      .icon-arrow-right
-        margin-left: auto
-        margin-right: 10px
+      > .menu-item-content
+        > .icon-arrow-right
+          margin-left: auto
+          margin-right: 10px

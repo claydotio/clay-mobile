@@ -4,7 +4,6 @@ log = require 'clay-loglevel'
 VerticalDivider = require '../../components/vertical_divider'
 InputBlock = require '../input_block'
 InputText = require '../input_text'
-InputPassword = require '../input_password'
 User = require '../../models/user'
 Developer = require '../../models/developer'
 
@@ -21,7 +20,11 @@ module.exports = class DevLogin
       }
       passwordBlock: new InputBlock {
         label: 'Password'
-        input: new InputPassword {value: '', theme: '.theme-full-width'}
+        input: new InputText {
+          value: ''
+          theme: '.theme-full-width'
+          type: 'password'
+        }
       }
       applyEmailBlock: new InputBlock {
         label: 'Email'
@@ -65,11 +68,10 @@ module.exports = class DevLogin
     }
   ) ->
     z 'div.z-dev-login',
-      z 'div.banner',
-        z 'div.l-flex.l-vertical-center',
-          z 'div.content',
-            z 'div', 'Welcome, developers.'
-            z 'div', 'Sign in to start publishing'
+      z 'div.banner.l-flex.l-vertical-center',
+        z 'div.content',
+          z 'div', 'Welcome, developers.'
+          z 'div', 'Sign in to start publishing'
 
       z 'div.login-apply.l-content-container.l-flex',
         z 'div.login',

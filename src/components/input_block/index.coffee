@@ -17,11 +17,11 @@ module.exports = class InputBlock
 
   render: ({label, input, helpText, labelWidth}) ->
     z 'div.z-input-block',
-      z 'label',
-        z 'div.l-flex.l-vertical-center',
+      z 'label.label',
+        z 'div.l-flex.l-vertical-center.content',
           z 'div.label-text', style: width: "#{labelWidth}px",
             label
-          z 'div.l-flex-1',
+          z 'div.l-flex-1.input-container',
             input
             if helpText
               z 'i.icon.icon-help',

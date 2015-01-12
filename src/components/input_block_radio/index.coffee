@@ -23,6 +23,6 @@ module.exports = class InputBlockRadio
     @state().radios[@state().checked]
 
   render: ({radios}) ->
-    z 'div.z-input-radio-block',
+    z 'div.z-input-block-radio',
       _.map radios, (radio) ->
         z 'div.radio-container', radio

@@ -7,10 +7,15 @@ $borderRadius = 3px
 .z-dev-edit-game-get-started
   padding: 20px 0
 
-  .next-step
-    margin-top: 10px
+  > .form
+    > .next-step-container
+      clearfix()
 
-  hr
+      > .next-step
+        float: right
+        margin-top: 10px
+
+  > hr
     border: none
     height: 1px
     background: $greyLighter
@@ -18,7 +23,6 @@ $borderRadius = 3px
 
   > .sdk-info
     > h1
-      font-family: 'RobotoLighter'
       font-weight: lighter
       color: $greyDarker
 

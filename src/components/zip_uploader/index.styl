@@ -14,18 +14,17 @@ json('../../stylus/vars.json')
     left: 0
     pointer-events: none // not supported in ie9/10
 
-  .upload-dropzone
+  > .upload-dropzone
     width: 100%
     height: 100%
     border-radius: 160px
     background: $white
 
-    .upload-content
+    > .upload-content
       width: 100%
 
       > .drop-here
         font-size: $fontSizeLarge
-        font-family: 'RobotoLighter'
         margin: 10px
 
       > .browse
@@ -36,12 +35,7 @@ json('../../stylus/vars.json')
 
       > .icon-cloud-upload
         color: $greyMedium
-        font-size: 120px // FIXME does this need an icon size?
+        font-size: 120px
         line-height: 80px
         height: 80px
         margin-bottom: 10px
-
-      .icon-help
-        font-size: $iconMedium
-        margin-left: 10px
-        color: $greyDarker

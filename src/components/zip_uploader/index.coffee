@@ -73,10 +73,8 @@ module.exports = class ZipUploader
   render: ->
     z 'div.z-zip-uploader',
       # .dz-message necessary to be clickable (no workaround)
-      z 'div.upload-dropzone.dz-message',
-        z 'div.l-flex.l-vertical-center',
-          z 'div.upload-content',
-            z 'i.icon.icon-cloud-upload'
-            z 'div.drop-here', 'Drop your game .zip here'
-            z.router.link z 'a[href=#].browse', 'or browse'
-            #z 'div', z '.i.icon.icon-help'
+      z 'div.upload-dropzone.dz-message.l-flex.l-vertical-center',
+        z 'div.upload-content',
+          z 'i.icon.icon-cloud-upload'
+          z 'div.drop-here', 'Drop your game .zip here'
+          z.router.link z 'a[href=#].browse', 'or browse'

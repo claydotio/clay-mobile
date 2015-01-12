@@ -8,6 +8,9 @@ User = require '../models/user'
 PATH = config.CLAY_API_URL + '/games'
 
 class Game
+  constructor: ->
+    @editingGame = z.observe Promise.resolve null
+
   # TODO: (Zoli) Deprecate
   getTop: ({limit, skip}) ->
     skip ?= 0
@@ -64,17 +67,11 @@ class Game
           accessToken: me.accessToken
         body: {developerId}
 
-  editingGame: Promise.resolve null
-
-  setEditingGame: (gameId) =>
-    @editingGame = @get gameId
+  setEditingGame: (gamePromise) ->
+    @editingGame = gamePromise
 
   getEditingGame: ->
     return @editingGame
-
-  uploadZip: -> null
-
-  uploadMeta: -> null
 
   isStartComplete: (game) ->
     return game.key and game.name
@@ -94,15 +91,12 @@ class Game
            @isDetailsComplete(game) and
            @isUploadComplete(game)
 
-  update: (gameId, gameUpdate) ->
+  updateById: (gameId, gameUpdate) ->
     User.getMe().then (me) ->
       request "#{PATH}/#{gameId}",
         method: 'PUT'
         qs:
           accessToken: me.accessToken
         body: gameUpdate
-
-
-  delete: (gameId) -> null
 
 module.exports = new Game()

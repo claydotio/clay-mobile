@@ -3,12 +3,10 @@ z = require 'zorium'
 HeaderBase = require '../header_base'
 User = require '../../models/user'
 
-styles = require './index.styl'
+# only styles used are from HeaderBase
 
 module.exports = class DevHeader
   constructor: ({currentPage} = {}) ->
-    styles.use()
-
     @state = z.state
       header: new HeaderBase {
         logoUrl: '//cdn.wtf/d/images/logos/logo_dev.svg'
@@ -27,6 +25,7 @@ module.exports = class DevHeader
           {
             text: 'Logout'
             url: '/developers/login'
+            isExternal: true
             onclick: (e) ->
               e.preventDefault()
               User.logout()

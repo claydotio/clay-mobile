@@ -14,10 +14,10 @@ module.exports = class GuestFooter
 
   render: ({SocialIcons}) ->
     z '.z-guest-footer',
-      z '.l-content-container.l-flex',
-        z '.section',
+      z '.l-content-container.l-flex.content',
+        z 'section.section',
           z 'h3.title', 'About'
-          z 'div.l-flex',
+          z 'div.l-flex.links-container',
             z 'ul.links',
               z 'li', z 'a[href=/blog]', 'Blog'
               z 'li', z 'a[href=/about]', 'Team'
@@ -30,6 +30,6 @@ module.exports = class GuestFooter
         z '.section',
           z 'h3.title', 'Connect'
           SocialIcons
-        z 'div.clay-info',
+        z 'section.clay-info',
           z "img.cloud[src=#{styleConfig.$logoCloudSvg}]"
           z 'div.copyright', '© 2015 Clay'
