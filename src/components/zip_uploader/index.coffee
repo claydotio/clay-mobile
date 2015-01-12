@@ -78,5 +78,5 @@ module.exports = class ZipUploader
           z 'div.upload-content',
             z 'i.icon.icon-cloud-upload'
             z 'div.drop-here', 'Drop your game .zip here'
-            z.router.a '[href=#].browse', 'or browse'
+            z.router.link z 'a[href=#].browse', 'or browse'
             #z 'div', z '.i.icon.icon-help'

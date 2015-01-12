@@ -33,7 +33,7 @@ module.exports = class Home
       z '.featured',
         z '.l-content-container',
             _.map featuredGames, (game) ->
-              z.router.a ".link[href=/game/#{game.key}]",
+              z.router.link z "a.link[href=/game/#{game.key}]",
                 z "img.image[src=#{game.promo440Url}]"
       z '.dev-info.l-content-container',
         z 'h1', 'Publish your mobile games to over 5 million players'

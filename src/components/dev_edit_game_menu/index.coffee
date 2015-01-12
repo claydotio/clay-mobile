@@ -46,25 +46,25 @@ module.exports = class DevEditGameMenu
   ) ->
     z '.z-dev-edit-game-menu',
       z '.menu',
-        z.router.a '.menu-item[href=/developers]',
+        z.router.link z 'a.menu-item[href=/developers]',
           z 'div.text', 'Back to dashboard'
 
       z '.menu',
-        z.router.a ".menu-item
+        z.router.link z "a.menu-item
           [href=/developers/edit-game/start/#{gameId}]
           #{if step is 'start' then '.is-selected' else ''}
           #{if isStartComplete then '.is-completed' else ''}",
           z 'div.l-flex.l-vertical-center',
             z 'div.text', 'Get started'
             z 'i.icon.icon-check'
-        z.router.a ".menu-item
+        z.router.link z "a.menu-item
           [href=/developers/edit-game/details/#{gameId}]
           #{if step is 'details' then '.is-selected' else ''}
           #{if isDetailsComplete then '.is-completed' else ''}",
           z 'div.l-flex.l-vertical-center',
             z 'div.text', 'Add details'
             z 'i.icon.icon-check'
-        z.router.a ".menu-item
+        z.router.link z "a.menu-item
           [href=/developers/edit-game/upload/#{gameId}]
           #{if step is 'upload' then '.is-selected' else ''}
           #{if isUploadComplete then '.is-completed' else ''}",

@@ -39,13 +39,13 @@ module.exports = class DevDashboardGames
                   z '.actions',
                     z 'span.status', 'Published'
                     z 'div.action-links',
-                      z.router.a ".edit[href=
+                      z.router.link z "a.edit[href=
                                     /developers/edit-game/start/#{game.id}
                                   ]",
                         z 'i.icon.icon-edit'
                         z 'span', 'Edit'
                       # TODO (Austin). Implement when someone asks for it
-                      #z.router.a '.delete[href=#]',
+                      #z.router.link z 'a.delete[href=#]',
                       #  z 'i.icon.icon-delete'
                       #  z 'span', 'Delete'
     else if _.isArray games
@@ -59,13 +59,13 @@ module.exports = class DevDashboardGames
 
         z 'ul',
           z 'li',
-            z.router.a '[href=github.com/claydotio/clay-sdk]',
+            z.router.link z 'a[href=github.com/claydotio/clay-sdk]',
               'Read the developer documentation'
           z 'li',
-            z.router.a '[href=github.com/claydotio/clay-sdk]',
+            z.router.link z 'a[href=github.com/claydotio/clay-sdk]',
               'Integrate the Clay SDK'
           z 'li',
-            z.router.a '[href=
+            z.router.link z 'a[href=
             github.com/claydotio/design-assets/blob/master/design_style_guide.md
             ]',
               'Create beautiful promotional graphics'
@@ -73,4 +73,4 @@ module.exports = class DevDashboardGames
         z 'h1', 'Have any questions? Let us help.'
         z 'ul',
           z 'li',
-            z.router.a '[href=mailto:contact@clay.io]', 'Contact us'
+            z.router.link z 'a[href=mailto:contact@clay.io]', 'Contact us'

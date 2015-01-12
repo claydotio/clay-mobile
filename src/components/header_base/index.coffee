@@ -11,7 +11,7 @@ module.exports = class HeaderBase
   render: ({logoUrl, homeUrl, links}) ->
     z '.z-header-base',
       z '.l-content-container.l-flex.l-vertical-center',
-        z.router.a ".logo[href=#{homeUrl}]",
+        z.router.link z "a.logo[href=#{homeUrl}]",
           z "img[src=#{logoUrl}]"
         z 'nav.navigation',
           z 'ul',
@@ -23,6 +23,6 @@ module.exports = class HeaderBase
                     {onclick: link.onclick},
                     link.text
                 else
-                  z.router.a "[href=#{link.url}]",
+                  z.router.link z "a[href=#{link.url}]",
                     {onclick: link.onclick},
                     link.text
