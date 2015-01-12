@@ -19,5 +19,10 @@ module.exports = class HeaderBase
             z "li#{if link.isSelected then '.is-selected' else ''}",
               z 'div.l-flex.l-vertical-center',
                 if link.isExternal
-                then z "a[href=#{link.url}][target=_blank]", link.text
-                else z.router.a "[href=#{link.url}]", link.text
+                  z "a[href=#{link.url}][target=_blank]",
+                    {onclick: link.onclick},
+                    link.text
+                else
+                  z.router.a "[href=#{link.url}]",
+                    {onclick: link.onclick},
+                    link.text

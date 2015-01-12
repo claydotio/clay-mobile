@@ -1,6 +1,7 @@
 z = require 'zorium'
 
 HeaderBase = require '../header_base'
+User = require '../../models/user'
 
 styles = require './index.styl'
 
@@ -25,7 +26,11 @@ module.exports = class DevHeader
           }
           {
             text: 'Logout'
-            url: '/developers/logout'
+            url: '/developers/login'
+            onclick: (e) ->
+              e.preventDefault()
+              User.logout()
+              z.router.go '/developers/login'
           }
         ]
       }

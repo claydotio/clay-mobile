@@ -13,7 +13,6 @@ HomePage = require './pages/home'
 PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
 DevLoginPage = require './pages/dev_login'
-DevLogoutPage = require './pages/dev_logout'
 DevDashboardPage = require './pages/dev_dashboard'
 DevEditGamePage = require './pages/dev_edit_game'
 PushToken = require './models/push_token'
@@ -89,7 +88,6 @@ z.router.add '/game/:key', PlayGamePage
 z.router.add '/games/:filter', GamesPage
 
 z.router.add '/developers/login', DevLoginPage
-z.router.add '/developers/logout', DevLogoutPage
 
 z.router.add '/developers', DevDashboardPage
 z.router.add '/developers/dashboard/:tab', DevDashboardPage
