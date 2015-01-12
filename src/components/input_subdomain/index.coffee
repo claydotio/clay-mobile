@@ -20,7 +20,7 @@ module.exports = class InputSubdomain
   render: ({value, theme}) =>
     z "div.z-input-subdomain#{if theme then theme else ''}",
       z 'input[type=text]',
-        onchange: (e) =>
+        onkeyup: (e) =>
           @state.set value: e.target.value
         value: value
 

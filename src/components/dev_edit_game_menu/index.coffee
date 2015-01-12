@@ -11,7 +11,6 @@ module.exports = class DevEditGameMenu
 
     @state = z.state {step, gameId: null, isApprovable: false}
 
-  onMount: =>
     Game.getEditingGame().then (game) =>
       @state.set
         gameId: game.id
@@ -31,7 +30,7 @@ module.exports = class DevEditGameMenu
       log.trace err
       error = JSON.parse err._body
       # TODO: (Austin) better error handling UX
-      alert error.detail
+      alert "Error: #{error.detail}"
     .catch log.trace
 
   render: (

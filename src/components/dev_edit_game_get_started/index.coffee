@@ -55,7 +55,7 @@ module.exports = class DevEditGameGetStarted
       log.trace err
       error = JSON.parse err._body
       # TODO: (Austin) better error handling UX
-      alert error.detail
+      alert "Error: #{error.detail}"
       throw err
 
   render: ({gameId, titleBlock, subdomainBlock, gameIdBlock}) ->

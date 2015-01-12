@@ -3,6 +3,7 @@ _ = require 'lodash'
 Dropzone = require 'dropzone'
 
 styleConfig = require '../../stylus/vars.json'
+User = require '../../models/user'
 
 styles = require './index.styl'
 
@@ -15,6 +16,11 @@ createLoadingCanvas = ($parent) ->
   loadingCanvas.style.width = loadingCanvas.style.height =
     "#{LOADING_CANVAS_SIZE_PX}px"
 
+  ctx = loadingCanvas.getContext '2d'
+  pixelRatioSize = LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
+  ctx.translate pixelRatioSize / 2, pixelRatioSize / 2 # change center
+  ctx.rotate (-1 / 2) * Math.PI # rotate -90 deg
+
   $parent.appendChild loadingCanvas
   return loadingCanvas
 
@@ -22,10 +28,6 @@ renderLoadingCanvas = (ctx, percentUploaded) ->
   lineWidth = 3
   pixelRatioSize = LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
 
-  ctx.translate pixelRatioSize / 2, pixelRatioSize / 2 # change center
-  ctx.rotate (-1 / 2) * Math.PI # rotate -90 deg
-
-  #imd = ctx.getImageData(0, 0, 240, 240);
   radius = (pixelRatioSize - lineWidth) / 2
   drawCircle = (color, lineWidth, percent) ->
     percent = Math.min(Math.max(0, percent or 1), 1)
@@ -41,12 +43,14 @@ renderLoadingCanvas = (ctx, percentUploaded) ->
 
 
 module.exports = class ZipUploader
-  constructor: ->
+  constructor: ({url, inputName}) ->
     styles.use()
 
     @state = z.state {
       percentUploaded: 0
       loading: false
+      url
+      inputName
     }
 
 
@@ -56,19 +60,26 @@ module.exports = class ZipUploader
     # override the default listeners that do styling
     # so we can use our own rendering system
     # http://stackoverflow.com/questions/18645945/override-default-event-listeners-in-dropzone-js
-    dropzone = new Dropzone $el, {
-      url: 'http://clay.io'
-      acceptedFiles: 'application/zip,' +
-                     'application/x-zip-compressed,' +
-                     'application/octet-stream'
-      addedfile: (file) =>
-        # file = accepted, width, height, size, name, processing
-        @state.set loading: true
+    User.getMe().then ({accessToken}) =>
+      dropzone = new Dropzone $el, {
+        url: "#{@state().url}?accessToken=#{accessToken}"
+        method: 'put'
+        paramName: @state().inputName
+        acceptedFiles: 'application/zip,' +
+                       'application/x-zip-compressed,' +
+                       'application/octet-stream'
+        addedfile: =>
+          @state.set loading: true
+        complete: =>
+          @state.set loading: false
+        error: (File, res) ->
+          # TODO: (Austin) better error handling UX
+          alert "Error: #{res.detail}"
 
-      uploadprogress: (file, percentUploaded) =>
-        @state.set {percentUploaded}
-        renderLoadingCanvas loadingCanvas.getContext('2d'), percentUploaded
-    }
+        uploadprogress: (file, percentUploaded) =>
+          @state.set {percentUploaded}
+          renderLoadingCanvas loadingCanvas.getContext('2d'), percentUploaded
+      }
 
   render: ->
     z 'div.z-zip-uploader',

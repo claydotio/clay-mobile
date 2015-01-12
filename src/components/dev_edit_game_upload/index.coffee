@@ -3,8 +3,10 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 Dropzone = require 'dropzone'
 
+config = require '../../config'
 ZipUploader = require '../zip_uploader'
 InputText = require '../input_text'
+Game = require '../../models/game'
 
 styles = require './index.styl'
 
@@ -13,30 +15,16 @@ module.exports = class DevEditGameUpload
     styles.use()
 
     @state = z.state
-      zipUpload: new ZipUploader()
-      externalHostInput: new InputText {
-        placeholder: 'http://yourcoolgame.com'
-        theme: '.theme-medium-width'
-      }
+      gameId: null
+      zipUpload: null
 
-  onBeforeUnmount: =>
-    @save()
-    .catch log.trace
-
-  save: =>
-    externalHostPath = @state().externalHostInput.getValue()
-    if externalHostPath
-      Game.updateById(@state().gameId, {
-        path: externalHostPath
-      })
-      .catch (err) ->
-        log.trace err
-        error = JSON.parse err._body
-        # TODO: (Austin) better error handling UX
-        alert error.detail
-        throw err
-    else
-      Promise.resolve(null)
+    Game.getEditingGame().then (game) =>
+      @state.set
+        gameId: game.id
+        zipUpload: new ZipUploader {
+          url: "#{config.CLAY_API_URL}/games/#{game.id}/zip"
+          inputName: 'zip'
+        }
 
   render: ({zipUpload, externalHostInput}) ->
     # TODO (Austin): remove when v-dom diff/zorium unmount work properly
@@ -45,10 +33,6 @@ module.exports = class DevEditGameUpload
         z 'form.form',
           # .dz-message necessary to be clickable (no workaround)
           zipUpload
-
-          z 'label.external-host',
-            z 'div.label-text', 'Game hosted elsewhere? Enter the URL:'
-            externalHostInput
 
         z 'div.help.l-flex-right',
           z 'h1',

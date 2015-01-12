@@ -20,15 +20,17 @@ createLoadingCanvas = ($parent) ->
   loadingCanvas.style.top = '50%'
   loadingCanvas.style.marginTop = -1 * LOADING_CANVAS_SIZE_PX / 2 + 'px'
 
+  ctx = loadingCanvas.getContext '2d'
+  pixelRatioSize = LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
+  ctx.translate pixelRatioSize / 2, pixelRatioSize / 2 # change center
+  ctx.rotate (-1 / 2) * Math.PI # rotate -90 deg
+
   $parent.appendChild loadingCanvas
   return loadingCanvas
 
 renderLoadingCanvas = (ctx, percentUploaded) ->
   lineWidth = 3
   pixelRatioSize = LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
-
-  ctx.translate pixelRatioSize / 2, pixelRatioSize / 2 # change center
-  ctx.rotate (-1 / 2) * Math.PI # rotate -90 deg
 
   #imd = ctx.getImageData(0, 0, 240, 240);
   radius = (pixelRatioSize - lineWidth) / 2
@@ -109,6 +111,9 @@ module.exports = class ImageUploader
           @state.set loading: true
         complete: =>
           @state.set loading: false
+        error: (File, res) ->
+          # TODO: (Austin) better error handling UX
+          alert "Error: #{res.detail}"
 
         uploadprogress: (file, percentUploaded) =>
           @state.set {percentUploaded}

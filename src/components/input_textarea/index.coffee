@@ -17,7 +17,7 @@ module.exports = class InputTextarea
   render: ({value}) ->
     z 'div.z-input-textarea',
       z 'textarea', {
-      onchange: (e) =>
+      onkeyup: (e) =>
         @state.set value: e.target.value
       },
         value

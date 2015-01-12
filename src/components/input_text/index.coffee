@@ -27,6 +27,6 @@ module.exports = class InputText
       z "input[type=#{type}]
         #{if disabled then '[disabled]' else ''}
         #{if placeholder then "[placeholder=#{placeholder}]" else ''}",
-        onchange: (e) =>
+        onkeyup: (e) =>
           @state.set value: e.target.value
         value: value
