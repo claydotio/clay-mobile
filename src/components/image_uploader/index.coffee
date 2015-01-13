@@ -9,24 +9,13 @@ styles = require './index.styl'
 
 LOADING_CANVAS_SIZE_PX = 80
 
-createLoadingCanvas = ($parent) ->
-  loadingCanvas = document.createElement 'canvas'
-  loadingCanvas.width = loadingCanvas.height =
-    LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
-  loadingCanvas.style.width = loadingCanvas.style.height =
-    "#{LOADING_CANVAS_SIZE_PX}px"
-  loadingCanvas.style.left = '50%'
-  loadingCanvas.style.marginLeft = -1 * LOADING_CANVAS_SIZE_PX / 2 + 'px'
-  loadingCanvas.style.top = '50%'
-  loadingCanvas.style.marginTop = -1 * LOADING_CANVAS_SIZE_PX / 2 + 'px'
-
-  ctx = loadingCanvas.getContext '2d'
+initLoadingCanvas = ($loadingCanvas) ->
+  ctx = $loadingCanvas.getContext '2d'
   pixelRatioSize = LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
   ctx.translate pixelRatioSize / 2, pixelRatioSize / 2 # change center
   ctx.rotate (-1 / 2) * Math.PI # rotate -90 deg
 
-  $parent.appendChild loadingCanvas
-  return loadingCanvas
+  return ctx
 
 renderLoadingCanvas = (ctx, percentUploaded) ->
   lineWidth = 3
@@ -94,8 +83,7 @@ module.exports = class ImageUploader
     }
 
   onMount: ($el) =>
-
-    loadingCanvas = createLoadingCanvas $el
+    loadingCanvasCtx = initLoadingCanvas $el.children[0]
 
     # override the default listeners that do styling
     # so we can use our own rendering system
@@ -120,7 +108,7 @@ module.exports = class ImageUploader
 
         uploadprogress: (file, percentUploaded) =>
           @state.set {percentUploaded}
-          renderLoadingCanvas loadingCanvas.getContext('2d'), percentUploaded
+          renderLoadingCanvas loadingCanvasCtx, percentUploaded
 
         thumbnail: (file, dataUrl) =>
           @setThumbnail dataUrl
@@ -144,13 +132,23 @@ module.exports = class ImageUploader
       renderSafeWidth
       renderSafeHeight
     }
-  ) ->
-    z "div.z-image-uploader#{if loading then '.is-loading' else ''}",
-      {
-        style:
-          width: "#{renderWidth}px"
-          height: "#{renderHeight}px"
+  ) =>
+    z "div.z-image-uploader#{if loading then '.is-loading' else ''}", {
+      style:
+        width: "#{renderWidth}px"
+        height: "#{renderHeight}px"
       },
+      z 'canvas.loading-canvas', {
+        width: LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
+        height: LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
+        style:
+          width: "#{LOADING_CANVAS_SIZE_PX}px"
+          height: "#{LOADING_CANVAS_SIZE_PX}px"
+          left: '50%'
+          marginLeft: -1 * LOADING_CANVAS_SIZE_PX / 2 + 'px'
+          top: '50%'
+          marginTop: -1 * LOADING_CANVAS_SIZE_PX / 2 + 'px'
+      }
       # .dz-message necessary to be clickable (no workaround)
       z 'div.dz-message.clickable.l-flex.l-vertical-center',
         z 'div.content.percentage',
@@ -165,8 +163,8 @@ module.exports = class ImageUploader
           z 'a.close[href=#]',
             onclick: (e) =>
               e.preventDefault()
-              # FIXME
-              @setThumbnail(null)
+              # FIXME this is re-rendering the wrong object somehow
+              @setThumbnail null
             z 'i.icon.icon-close'
           z "img[src=#{thumbnail}]"
           if safeWidth isnt width or
