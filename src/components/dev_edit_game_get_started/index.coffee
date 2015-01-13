@@ -3,9 +3,7 @@ log = require 'clay-loglevel'
 _ = require 'lodash'
 
 Game = require '../../models/game'
-InputBlock = require '../input_block'
 InputText = require '../input_text'
-InputSubdomain = require '../input_subdomain'
 
 styles = require './index.styl'
 
@@ -15,44 +13,39 @@ module.exports = class DevEditGameGetStarted
 
     @state = z.state
       game: null
-      titleBlock: new InputBlock {
+      titleInput: new InputText {
         label: 'Game Title'
         labelWidth: 125
-        input: new InputText {
-          value: ''
-          theme: '.theme-medium-width'
-          onchange: (val) ->
-            Game.updateEditingGame name: val
-            .catch log.trace
-        }
+        value: ''
+        theme: '.theme-medium-width'
+        onchange: (val) ->
+          Game.updateEditingGame name: val
+          .catch log.trace
       }
-      subdomainBlock: new InputBlock {
+      subdomainInput: new InputText {
         label: 'Subdomain'
         labelWidth: 125
-        input: new InputSubdomain {
-          value: ''
-          theme: '.theme-small-width'
-          onchange: (val) ->
-            Game.updateEditingGame key: val
-            .catch log.trace
-        }
+        value: ''
+        theme: '.theme-subdomain'
+        onchange: (val) ->
+          Game.updateEditingGame key: val
+          .catch log.trace
         helpText: 'Your game will be accessible at http://SUBDOMAIN.clay.io'
+        postfix: '.clay.io'
       }
-      gameIdBlock: new InputBlock {
+      gameIdInput: new InputText {
         label: 'SDK Game ID'
         labelWidth: 125
-        input: new InputText {
-          value: ''
-          disabled: true
-          theme: '.theme-tiny-width'
-        }
+        value: ''
+        disabled: true
+        theme: '.theme-tiny-width'
       }
 
     Game.getEditingGame().then (game) =>
       @state.set game: game
-      @state().titleBlock.input.setValue game.name
-      @state().subdomainBlock.input.setValue game.key
-      @state().gameIdBlock.input.setValue game.id
+      @state().titleInput.setValue game.name
+      @state().subdomainInput.setValue game.key
+      @state().gameIdInput.setValue game.id
 
     Game.getEditingGame() (game) =>
       if game
@@ -64,8 +57,8 @@ module.exports = class DevEditGameGetStarted
   save: =>
     # images saved immediately (no need to hit 'next step')
     Game.updateById(@state().game.id, {
-      name: @state().titleBlock.input.getValue()
-      key: @state().subdomainBlock.input.getValue()
+      name: @state().titleInput.getValue()
+      key: @state().subdomainInput.getValue()
     })
     .then Game.updateEditingGame
     .catch (err) ->
@@ -75,7 +68,7 @@ module.exports = class DevEditGameGetStarted
       alert "Error: #{error.detail}"
       throw err
 
-  render: ({game, titleBlock, subdomainBlock, gameIdBlock}) ->
+  render: ({game, titleInput, subdomainInput, gameIdInput}) ->
     # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
     z 'div.z-dev-edit-game-get-started', {key: 2},
@@ -88,9 +81,9 @@ module.exports = class DevEditGameGetStarted
             .catch log.trace
         },
 
-        titleBlock
-        subdomainBlock
-        gameIdBlock
+        titleInput
+        subdomainInput
+        gameIdInput
 
         z 'div.next-step-container',
           z 'button.button-secondary.next-step',

@@ -5,11 +5,9 @@ _ = require 'lodash'
 config = require '../../config'
 Game = require '../../models/game'
 ImageUploader = require '../image_uploader'
-InputBlock = require '../input_block'
-InputBlockRadio = require '../input_block_radio'
+InputRadios = require '../input_radios'
 InputSelect = require '../input_select'
 InputTextarea = require '../input_textarea'
-InputRadio = require '../input_radio'
 
 styles = require './index.styl'
 
@@ -26,72 +24,70 @@ module.exports = class DevEditGameDetails
       screenshotUpload3: null
       screenshotUpload4: null
       screenshotUpload5: null
-      categoryBlock: new InputBlock {
+      categoryInput: new InputSelect {
         label: 'Category'
-        input: new InputSelect {
-          options: [
-            {label: 'Action', value: 'action'}
-            {label: 'Adventure', value: 'adventure'}
-            {label: 'Arcade', value: 'arcade'}
-            {label: 'Puzzle', value: 'puzzle'}
-            {label: 'Racing', value: 'racing'}
-            {label: 'Stategy', value: 'strategy'}
-          ]
-          onchange: (val) ->
-            Game.updateEditingGame category: val
-            .catch log.trace
-        }
+        options: [
+          {label: 'Action', value: 'action'}
+          {label: 'Adventure', value: 'adventure'}
+          {label: 'Arcade', value: 'arcade'}
+          {label: 'Puzzle', value: 'puzzle'}
+          {label: 'Racing', value: 'racing'}
+          {label: 'Stategy', value: 'strategy'}
+        ]
+        onchange: (val) ->
+          Game.updateEditingGame category: val
+          .catch log.trace
       }
-      descriptionBlock: new InputBlock {
+      descriptionInput: new InputTextarea {
         label: 'Description'
-        input: new InputTextarea {
-          value: ''
-          onchange: (val) ->
-            Game.updateEditingGame description: val
-            .catch log.trace
-        }
+        value: ''
+        onchange: (val) ->
+          Game.updateEditingGame description: val
+          .catch log.trace
       }
-      orientationBlock: new InputBlockRadio {
+      orientationInput: new InputRadios {
+        hideLabel: true
         onchange: (val) ->
           Game.updateEditingGame orientation: val
           .catch log.trace
         radios:
-          portrait: new InputRadio {
+          portrait: {
             label: 'Portrait'
             name: 'orientation'
             value: 'portrait'
           }
-          landscape: new InputRadio {
+          landscape: {
             label: 'Landscape'
             name: 'orientation'
             value: 'landscape'
           }
-          both: new InputRadio {
+          both: {
             label: 'Both'
             name: 'orientation'
             value: 'both'
             isChecked: true
           }
       }
-      devicesBlock: new InputBlockRadio {
+      devicesInput: new InputRadios {
+        hideLabel: true
         onchange: (val) ->
           isDesktop = val is 'both' or val is 'desktop'
           isMobile = val is 'both' or val is 'mobile'
           Game.updateEditingGame {isDesktop, isMobile}
           .catch log.trace
         radios:
-          desktop: new InputRadio {
+          desktop: {
             label: 'Desktop'
             name: 'devices'
             value: 'desktop'
             isChecked: true
           }
-          mobile: new InputRadio {
+          mobile: {
             label: 'Mobile'
             name: 'devices'
             value: 'mobile'
           }
-          both: new InputRadio {
+          both: {
             label: 'Both'
             name: 'devices'
             value: 'both'
@@ -115,14 +111,14 @@ module.exports = class DevEditGameDetails
         @state().screenshotUpload5.setThumbnail(game.screenshotImages?[4] or '')
 
   setFormValues: (game) =>
-    @state().categoryBlock.input.setValue game.category
-    @state().descriptionBlock.input.setValue game.description
-    @state().orientationBlock.radios[game.orientation]?.setChecked()
+    @state().categoryInput.setValue game.category
+    @state().descriptionInput.setValue game.description
+    @state().orientationInput.setValue game.orientation
 
     deviceString = if game.isMobile and game.isDesktop then 'both'
     else if game.isMobile then 'mobile'
     else 'desktop'
-    @state().devicesBlock.radios[deviceString]?.setChecked()
+    @state().devicesInput.setValue deviceString
 
   setImageUploaders: (game) =>
     @state.set
@@ -243,15 +239,15 @@ module.exports = class DevEditGameDetails
     .catch log.trace
 
   save: =>
-    devices = @state().devicesBlock.getChecked().getValue()
+    devices = @state().devicesInput.getValue()
     isDesktop = devices is 'both' or devices is 'desktop'
     isMobile = devices is 'both' or devices is 'mobile'
 
     # images saved immediately (no need to hit 'next step')
     Game.updateById(@state().game.id, {
-      category: @state().categoryBlock.input.getValue()
-      description: @state().descriptionBlock.input.getValue()
-      orientation: @state().orientationBlock.getChecked().getValue()
+      category: @state().categoryInput.getValue()
+      description: @state().descriptionInput.getValue()
+      orientation: @state().orientationInput.getValue()
       isDesktop
       isMobile
     })
@@ -266,10 +262,10 @@ module.exports = class DevEditGameDetails
   render: (
     {
       game
-      categoryBlock
-      descriptionBlock
-      orientationBlock
-      devicesBlock
+      categoryInput
+      descriptionInput
+      orientationInput
+      devicesInput
       iconUpload
       headerUpload
       screenshotUpload1
@@ -291,14 +287,14 @@ module.exports = class DevEditGameDetails
             .catch log.trace
         },
 
-        categoryBlock
-        descriptionBlock
+        categoryInput
+        descriptionInput
 
         z 'h2.title', 'Supported Game Orientations'
-        orientationBlock
+        orientationInput
 
         z 'h2.title', 'Supported Device Types'
-        devicesBlock
+        devicesInput
 
         z 'hr'
 

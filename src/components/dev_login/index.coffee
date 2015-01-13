@@ -4,7 +4,6 @@ log = require 'clay-loglevel'
 config = require '../../config'
 request = require '../../lib/request'
 VerticalDivider = require '../../components/vertical_divider'
-InputBlock = require '../input_block'
 InputText = require '../input_text'
 User = require '../../models/user'
 Developer = require '../../models/developer'
@@ -16,32 +15,33 @@ module.exports = class DevLogin
     styles.use()
 
     @state = z.state
-      emailBlock: new InputBlock {
+      emailInput: new InputText {
         label: 'Email'
-        input: new InputText {value: '', theme: '.theme-full-width'}
+        value: ''
+        theme: '.theme-full-width'
       }
-      passwordBlock: new InputBlock {
+      passwordInput: new InputText {
+        type: 'password'
         label: 'Password'
-        input: new InputText {
-          value: ''
-          theme: '.theme-full-width'
-          type: 'password'
-        }
+        value: ''
+        theme: '.theme-full-width'
       }
-      applyEmailBlock: new InputBlock {
+      applyEmailInput: new InputText {
         label: 'Email'
-        input: new InputText {value: '', theme: '.theme-full-width'}
+        value: ''
+        theme: '.theme-full-width'
       }
-      applyGameUrlBlock: new InputBlock {
+      applyGameUrlInput: new InputText {
         label: 'Game URL'
-        input: new InputText {value: '', theme: '.theme-full-width'}
+        value: ''
+        theme: '.theme-full-width'
       }
       verticalDivider: new VerticalDivider()
 
   login: (e) =>
     e?.preventDefault()
-    email = @state().emailBlock.input.getValue()
-    password = @state().passwordBlock.input.getValue()
+    email = @state().emailInput.getValue()
+    password = @state().passwordInput.getValue()
     User.setMe User.loginBasic {email, password}
     .then ({id}) ->
       Developer.find {ownerId: id }
@@ -66,8 +66,8 @@ module.exports = class DevLogin
         qs:
           accessToken: accessToken
         body:
-          email: @state().applyEmailBlock.input.getValue()
-          gameUrl: @state().applyGameUrlBlock.input.getValue()
+          email: @state().applyEmailInput.getValue()
+          gameUrl: @state().applyGameUrlInput.getValue()
       })
       .then ->
         # TODO: (Austin) application success page
@@ -81,10 +81,10 @@ module.exports = class DevLogin
 
   render: (
     {
-      emailBlock
-      passwordBlock
-      applyEmailBlock
-      applyGameUrlBlock
+      emailInput
+      passwordInput
+      applyEmailInput
+      applyGameUrlInput
       verticalDivider
     }
   ) ->
@@ -100,8 +100,8 @@ module.exports = class DevLogin
           z 'div.friendly-message', 'Hey, good to see you again.'
           z 'form',
             {onsubmit: @login},
-            emailBlock
-            passwordBlock
+            emailInput
+            passwordInput
             # TODO (Austin) forgot password, whenever someone aks for it
             z 'button.button-secondary.sign-in-button', 'Sign In'
           z 'div.tos',
@@ -122,8 +122,8 @@ module.exports = class DevLogin
 
           z 'form',
             {onsubmit: @apply},
-            applyEmailBlock
-            applyGameUrlBlock
+            applyEmailInput
+            applyGameUrlInput
             z 'button.button-primary.apply-button', 'Apply!'
 
       z 'div.player-message',

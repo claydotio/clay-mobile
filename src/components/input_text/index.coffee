@@ -1,33 +1,28 @@
 z = require 'zorium'
 
+InputBase = require '../input_base'
+
 styles = require './index.styl'
 
-module.exports = class InputText
-  constructor: ({value, type, theme, disabled, placeholder, @onchange}) ->
+module.exports = class InputText extends InputBase
+  constructor: ({type, disabled, postfix}) ->
     styles.use()
+
+    super
 
     type ?= 'text'
 
-    @state = z.state {
-      value
+    @state.set {
       type
       disabled
-      placeholder
-      theme
+      postfix
     }
 
-  getValue: =>
-    @state().value
-
-  setValue: (val) =>
-    @state.set value: val
-    @onchange? val
-
-  render: ({value, type, disabled, placeholder, theme}) =>
+  getInput: ({value, type, disabled, theme, postfix}) =>
     z "div.z-input-text#{if theme then theme else ''}",
-      z "input[type=#{type}]
-        #{if disabled then '[disabled]' else ''}
-        #{if placeholder then "[placeholder=#{placeholder}]" else ''}",
+      z "input[type=#{type}]#{if disabled then '[disabled]' else ''}",
         onkeyup: (e) =>
           @setValue e.target.value
         value: value
+      if postfix
+        z 'input[type=text][disabled].postfix', value: postfix

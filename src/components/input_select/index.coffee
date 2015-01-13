@@ -1,26 +1,28 @@
 z = require 'zorium'
 _ = require 'lodash'
 
+InputBase = require '../input_base'
+
 styles = require './index.styl'
 
-module.exports = class InputSelect
-  constructor: ({options, @onchange}) ->
+module.exports = class InputSelect extends InputBase
+  constructor: ({options}) ->
     styles.use()
 
-    @state = z.state {options, value: options[0]?.value}
+    super
+
+    @state.set {options, value: options[0]?.value}
 
     _.map options, (option) =>
       if option.isSelected
         @state.set value: option.value
 
-  getValue: =>
-    @state().value
-
   setValue: (val) =>
-    @state.set value: val
-    @onchange? val
+    if _.find @state().options, {value: val}
+      @state.set value: val
+      @onchange? val
 
-  render: ({options, value}) =>
+  getInput: ({options, value}) =>
     z 'div.z-input-select',
       z 'select', {
         onchange: (e) =>

@@ -83,7 +83,6 @@ class Game
 
   isDetailsComplete: (game) ->
     return game and
-           game.category
            game.description and
            (game.isDesktop or game.isMobile) and
            game.headerImage and
