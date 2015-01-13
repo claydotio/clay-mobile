@@ -1,4 +1,5 @@
 z = require 'zorium'
+_ = require 'lodash'
 
 localstore = require '../lib/localstore'
 config = require '../config'
@@ -68,23 +69,29 @@ class Game
         body: {developerId}
 
   setEditingGame: (gamePromise) ->
-    @editingGame = gamePromise
+    @editingGame.set gamePromise
+
+  updateEditingGame: (gameDiff) =>
+    @getEditingGame().then (game) =>
+      @setEditingGame Promise.resolve _.defaults(gameDiff, game)
 
   getEditingGame: ->
     return @editingGame
 
   isStartComplete: (game) ->
-    return game.key and game.name
+    return game and game.key and game.name
 
   isDetailsComplete: (game) ->
-    return game.description and
+    return game and
+           game.category
+           game.description and
            (game.isDesktop or game.isMobile) and
            game.headerImage and
            game.iconImage and
            game.screenshotImages?.length >= config.SCREENSHOT_MIN_COUNT
 
   isUploadComplete: (game) ->
-    return !!game.gameUrl
+    return !!game?.gameUrl
 
   isApprovable: (game) =>
     return @isStartComplete(game) and

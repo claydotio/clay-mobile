@@ -24,6 +24,9 @@ module.exports = class DevEditGameUpload
         zipUpload: new ZipUploader {
           url: "#{config.CLAY_API_URL}/games/#{game.id}/zip"
           inputName: 'zip'
+          onchange: (isSet) ->
+            Game.updateEditingGame gameUrl: isSet
+            .catch log.trace
         }
 
   render: ({zipUpload, externalHostInput}) ->

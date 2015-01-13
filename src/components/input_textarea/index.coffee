@@ -3,7 +3,7 @@ z = require 'zorium'
 styles = require './index.styl'
 
 module.exports = class InputTextarea
-  constructor: ({value}) ->
+  constructor: ({value, @onchange}) ->
     styles.use()
 
     @state = z.state value: value
@@ -13,11 +13,12 @@ module.exports = class InputTextarea
 
   setValue: (val) =>
     @state.set value: val
+    @onchange? val
 
-  render: ({value}) ->
+  render: ({value}) =>
     z 'div.z-input-textarea',
       z 'textarea', {
       onkeyup: (e) =>
-        @state.set value: e.target.value
+        @setValue e.target.value
       },
         value

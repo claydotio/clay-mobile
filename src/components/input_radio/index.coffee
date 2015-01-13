@@ -17,6 +17,9 @@ module.exports = class InputRadio
   isChecked: =>
     return @state().isChecked
 
+  setChecked: =>
+    @state.set isChecked: true
+
   onChecked: (onCheckedFn) =>
     @state.set onChecked: onCheckedFn
 

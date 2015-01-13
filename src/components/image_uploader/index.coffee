@@ -54,6 +54,7 @@ module.exports = class ImageUploader
       label
       url
       method
+      @onchange
       thumbnail
       renderHeight
       width
@@ -109,9 +110,11 @@ module.exports = class ImageUploader
         thumbnailHeight: @state().renderHeight
         addedfile: =>
           @state.set loading: true
-        complete: =>
+        success: (fie, res) =>
           @state.set loading: false
-        error: (File, res) ->
+          @onchange? res
+        error: (File, res) =>
+          @state.set loading: false
           # TODO: (Austin) better error handling UX
           alert "Error: #{res.detail}"
 

@@ -4,20 +4,21 @@ _ = require 'lodash'
 styles = require './index.styl'
 
 module.exports = class InputBlockRadio
-  constructor: ({radios}) ->
+  constructor: ({@radios, @onchange}) ->
     styles.use()
 
     @state = z.state {
-      radios
-      checked: 0
+      @radios
+      checked: _.first Object.keys @radios
     }
 
-    _.map @state().radios, (radio, i) =>
+    _.map @state().radios, (radio, val) =>
       if radio.isChecked()
-        @state.set checked: i
+        @state.set checked: val
 
       radio.onChecked =>
-        @state.set checked: i
+        @state.set checked: val
+        @onchange? val
 
   getChecked: =>
     @state().radios[@state().checked]

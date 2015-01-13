@@ -19,13 +19,24 @@ module.exports = class DevEditGameMenu
         isDetailsComplete: Game.isDetailsComplete game
         isUploadComplete: Game.isUploadComplete game
 
+    Game.getEditingGame() (game) =>
+      unless game
+        return
+      @state.set
+        isApprovable: Game.isApprovable game
+        isStartComplete: Game.isStartComplete game
+        isDetailsComplete: Game.isDetailsComplete game
+        isUploadComplete: Game.isUploadComplete game
+
   publish: (e) =>
     e?.preventDefault()
 
     Game.updateById(@state().gameId, {
       status: 'Approved'
-    }).then =>
-      z.router.go "/developers/published/#{@state().gameId}"
+    })
+    .then Game.updateEditingGame
+    .then =>
+      z.router.go "/developers/edit-game/published/#{@state().gameId}"
     .catch (err) ->
       log.trace err
       error = JSON.parse err._body

@@ -18,9 +18,8 @@ module.exports = class DevEditGameDetails
     styles.use()
 
     @state = z.state
-      gameId: null
+      game: null
       iconUpload: null
-      accentUpload: null
       headerUpload: null
       screenshotUpload1: null
       screenshotUpload2: null
@@ -38,49 +37,79 @@ module.exports = class DevEditGameDetails
             {label: 'Racing', value: 'racing'}
             {label: 'Stategy', value: 'strategy'}
           ]
+          onchange: (val) ->
+            Game.updateEditingGame category: val
+            .catch log.trace
         }
       }
       descriptionBlock: new InputBlock {
         label: 'Description'
-        input: new InputTextarea value: ''
+        input: new InputTextarea {
+          value: ''
+          onchange: (val) ->
+            Game.updateEditingGame description: val
+            .catch log.trace
+        }
       }
       orientationBlock: new InputBlockRadio {
-        radios: [
-          new InputRadio {
+        onchange: (val) ->
+          Game.updateEditingGame orientation: val
+          .catch log.trace
+        radios:
+          portrait: new InputRadio {
             label: 'Portrait'
             name: 'orientation'
             value: 'portrait'
           }
-          new InputRadio {
+          landscape: new InputRadio {
             label: 'Landscape'
             name: 'orientation'
             value: 'landscape'
           }
-          new InputRadio {
+          both: new InputRadio {
             label: 'Both'
             name: 'orientation'
             value: 'both'
             isChecked: true
           }
-        ]
       }
       devicesBlock: new InputBlockRadio {
-        radios: [
-          new InputRadio label: 'Desktop', name: 'devices', value: 'desktop'
-          new InputRadio label: 'Mobile', name: 'devices', value: 'mobile'
-          new InputRadio {
+        onchange: (val) ->
+          isDesktop = val is 'both' or val is 'desktop'
+          isMobile = val is 'both' or val is 'mobile'
+          Game.updateEditingGame {isDesktop, isMobile}
+          .catch log.trace
+        radios:
+          desktop: new InputRadio {
+            label: 'Desktop'
+            name: 'devices'
+            value: 'desktop'
+            isChecked: true
+          }
+          mobile: new InputRadio {
+            label: 'Mobile'
+            name: 'devices'
+            value: 'mobile'
+          }
+          both: new InputRadio {
             label: 'Both'
             name: 'devices'
             value: 'both'
-            isChecked: true
           }
-        ]
       }
 
     Game.getEditingGame().then (game) =>
+      @state().categoryBlock.input.setValue game.category
       @state().descriptionBlock.input.setValue game.description
+      @state().orientationBlock.radios[game.orientation]?.setChecked()
+
+      deviceString = if game.isMobile and game.isDesktop then 'both'
+      else if game.isMobile then 'mobile'
+      else 'desktop'
+      @state().devicesBlock.radios[deviceString]?.setChecked()
+
       @state.set
-        gameId: game.id
+        game: game
         iconUpload: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/iconImage"
           inputName: 'iconImage'
@@ -89,15 +118,9 @@ module.exports = class DevEditGameDetails
           renderHeight: 110
           width: 512
           height: 512
-        )
-        accentUpload: new ImageUploader(
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/accentImage"
-          inputName: 'accentImage'
-          thumbnail: game.accentImage
-          label: 'Accent'
-          renderHeight: 110
-          width: 900
-          height: 300
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+            .catch log.trace
         )
         headerUpload: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/headerImage"
@@ -109,6 +132,9 @@ module.exports = class DevEditGameDetails
           height: 850
           safeWidth: 1700
           safeHeight: 850
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+            .catch log.trace
         )
         screenshotUpload1: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -118,6 +144,9 @@ module.exports = class DevEditGameDetails
           renderHeight: 110
           width: 320
           height: 320
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+            .catch log.trace
         )
         screenshotUpload2: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -127,6 +156,9 @@ module.exports = class DevEditGameDetails
           renderHeight: 110
           width: 320
           height: 320
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+            .catch log.trace
         )
         screenshotUpload3: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -136,6 +168,9 @@ module.exports = class DevEditGameDetails
           renderHeight: 110
           width: 320
           height: 320
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+            .catch log.trace
         )
         screenshotUpload4: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -145,6 +180,9 @@ module.exports = class DevEditGameDetails
           renderHeight: 110
           width: 320
           height: 320
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+            .catch log.trace
         )
         screenshotUpload5: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -154,7 +192,14 @@ module.exports = class DevEditGameDetails
           renderHeight: 110
           width: 320
           height: 320
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+            .catch log.trace
         )
+
+    Game.getEditingGame() (game) =>
+      if game
+        @state.set game: game
 
   onBeforeUnmount: =>
     @save()
@@ -166,12 +211,14 @@ module.exports = class DevEditGameDetails
     isMobile = devices is 'both' or devices is 'mobile'
 
     # images saved immediately (no need to hit 'next step')
-    Game.updateById(@state().gameId, {
+    Game.updateById(@state().game.id, {
+      category: @state().categoryBlock.input.getValue()
       description: @state().descriptionBlock.input.getValue()
       orientation: @state().orientationBlock.getChecked().getValue()
       isDesktop
       isMobile
     })
+    .then Game.updateEditingGame
     .catch (err) ->
       log.trace err
       error = JSON.parse err._body
@@ -181,13 +228,12 @@ module.exports = class DevEditGameDetails
 
   render: (
     {
-      gameId
+      game
       categoryBlock
       descriptionBlock
       orientationBlock
       devicesBlock
       iconUpload
-      accentUpload
       headerUpload
       screenshotUpload1
       screenshotUpload2
@@ -204,7 +250,7 @@ module.exports = class DevEditGameDetails
           e?.preventDefault()
 
           @save().then ->
-            z.router.go "/developers/edit-game/upload/#{gameId}"
+            z.router.go "/developers/edit-game/upload/#{game.id}"
             .catch log.trace
         },
 
@@ -226,7 +272,6 @@ module.exports = class DevEditGameDetails
             looks great and get more people playing.'
 
         iconUpload
-        accentUpload
         headerUpload
 
         z 'h2.title',
@@ -243,8 +288,7 @@ module.exports = class DevEditGameDetails
 
         z 'div.next-step-container',
           z 'button.button-secondary.next-step',
-            # FIXME: check that all images, etc... are uploaded
-            unless true
+            unless Game.isDetailsComplete game
               disabled: true
             ,
             'Next step'

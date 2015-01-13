@@ -43,7 +43,7 @@ renderLoadingCanvas = (ctx, percentUploaded) ->
 
 
 module.exports = class ZipUploader
-  constructor: ({url, inputName}) ->
+  constructor: ({url, inputName, @onchange}) ->
     styles.use()
 
     @state = z.state {
@@ -70,9 +70,11 @@ module.exports = class ZipUploader
                        'application/octet-stream'
         addedfile: =>
           @state.set loading: true
-        complete: =>
+        success: (fie, res) =>
           @state.set loading: false
-        error: (File, res) ->
+          @onchange? true
+        error: (File, res) =>
+          @state.set loading: false
           # TODO: (Austin) better error handling UX
           alert "Error: #{res.detail}"
 
