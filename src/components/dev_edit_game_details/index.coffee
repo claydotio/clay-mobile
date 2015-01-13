@@ -147,6 +147,13 @@ module.exports = class DevEditGameDetails
           onchange: (diff) ->
             Game.updateEditingGame diff
             .catch log.trace
+          onremove: =>
+            screenshotImages = @state().game.screenshotImages
+            # FIXME: this approach only works with one delete at a time
+            # (other delete will delete the wrong array item)
+            screenshotImages.splice 0, 1
+            Game.updateEditingGame {screenshotImages}
+            Game.updateById @state().game.id, {screenshotImages}
         )
         screenshotUpload2: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -159,6 +166,11 @@ module.exports = class DevEditGameDetails
           onchange: (diff) ->
             Game.updateEditingGame diff
             .catch log.trace
+          onremove: =>
+            screenshotImages = @state().game.screenshotImages
+            screenshotImages.splice 1, 1
+            Game.updateEditingGame {screenshotImages}
+            Game.updateById @state().game.id, {screenshotImages}
         )
         screenshotUpload3: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -171,6 +183,11 @@ module.exports = class DevEditGameDetails
           onchange: (diff) ->
             Game.updateEditingGame diff
             .catch log.trace
+          onremove: =>
+            screenshotImages = @state().game.screenshotImages
+            screenshotImages.splice 2, 1
+            Game.updateEditingGame {screenshotImages}
+            Game.updateById @state().game.id, {screenshotImages}
         )
         screenshotUpload4: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -183,6 +200,11 @@ module.exports = class DevEditGameDetails
           onchange: (diff) ->
             Game.updateEditingGame diff
             .catch log.trace
+          onremove: =>
+            screenshotImages = @state().game.screenshotImages
+            screenshotImages.splice 3, 1
+            Game.updateEditingGame {screenshotImages}
+            Game.updateById @state().game.id, {screenshotImages}
         )
         screenshotUpload5: new ImageUploader(
           url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
@@ -195,6 +217,11 @@ module.exports = class DevEditGameDetails
           onchange: (diff) ->
             Game.updateEditingGame diff
             .catch log.trace
+          onremove: =>
+            screenshotImages = @state().game.screenshotImages
+            screenshotImages.splice 4, 1
+            Game.updateEditingGame {screenshotImages}
+            Game.updateById @state().game.id, {screenshotImages}
         )
 
     Game.getEditingGame() (game) =>

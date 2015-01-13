@@ -44,6 +44,7 @@ module.exports = class ImageUploader
       url
       method
       @onchange
+      @onremove
       thumbnail
       renderHeight
       width
@@ -165,6 +166,7 @@ module.exports = class ImageUploader
               e.preventDefault()
               # FIXME this is re-rendering the wrong object somehow
               @setThumbnail null
+              @onremove?()
             z 'i.icon.icon-close'
           z "img[src=#{thumbnail}]"
           if safeWidth isnt width or
