@@ -10,11 +10,11 @@ class Developer
     request PATH,
       qs: query
 
-  create: ({devName}) ->
+  create: ->
     User.getMe().then ({accessToken}) ->
       request PATH,
         method: 'POST'
         qs: {accessToken}
-        body: {devName}
+        body: {}
 
 module.exports = new Developer()
