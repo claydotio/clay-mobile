@@ -99,128 +99,11 @@ module.exports = class DevEditGameDetails
       }
 
     Game.getEditingGame().then (game) =>
-      @state().categoryBlock.input.setValue game.category
-      @state().descriptionBlock.input.setValue game.description
-      @state().orientationBlock.radios[game.orientation]?.setChecked()
-
-      deviceString = if game.isMobile and game.isDesktop then 'both'
-      else if game.isMobile then 'mobile'
-      else 'desktop'
-      @state().devicesBlock.radios[deviceString]?.setChecked()
-
       @state.set
         game: game
-        iconUpload: new ImageUploader(
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/iconImage"
-          inputName: 'iconImage'
-          thumbnail: game.iconImage
-          label: 'Icon'
-          renderHeight: 110
-          width: 512
-          height: 512
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-            .catch log.trace
-        )
-        headerUpload: new ImageUploader(
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/headerImage"
-          inputName: 'headerImage'
-          thumbnail: game.headerImage
-          label: 'Header'
-          renderHeight: 110
-          width: 2550
-          height: 850
-          safeWidth: 1700
-          safeHeight: 850
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-            .catch log.trace
-        )
-        screenshotUpload1: new ImageUploader(
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-          method: 'post'
-          inputName: 'screenshotImage'
-          thumbnail: game.screenshotImages?[0]
-          renderHeight: 110
-          width: 320
-          height: 320
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-            .catch log.trace
-          onremove: =>
-            screenshotImages = @state().game.screenshotImages
-            screenshotImages.splice 0, 1
-            Game.updateEditingGame {screenshotImages}
-            Game.updateById @state().game.id, {screenshotImages}
-        )
-        screenshotUpload2: new ImageUploader(
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-          method: 'post'
-          inputName: 'screenshotImage'
-          thumbnail: game.screenshotImages?[1]
-          renderHeight: 110
-          width: 320
-          height: 320
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-            .catch log.trace
-          onremove: =>
-            screenshotImages = @state().game.screenshotImages
-            screenshotImages.splice 1, 1
-            Game.updateEditingGame {screenshotImages}
-            Game.updateById @state().game.id, {screenshotImages}
-        )
-        screenshotUpload3: new ImageUploader(
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-          method: 'post'
-          inputName: 'screenshotImage'
-          thumbnail: game.screenshotImages?[2]
-          renderHeight: 110
-          width: 320
-          height: 320
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-            .catch log.trace
-          onremove: =>
-            screenshotImages = @state().game.screenshotImages
-            screenshotImages.splice 2, 1
-            Game.updateEditingGame {screenshotImages}
-            Game.updateById @state().game.id, {screenshotImages}
-        )
-        screenshotUpload4: new ImageUploader(
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-          method: 'post'
-          inputName: 'screenshotImage'
-          thumbnail: game.screenshotImages?[3]
-          renderHeight: 110
-          width: 320
-          height: 320
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-            .catch log.trace
-          onremove: =>
-            screenshotImages = @state().game.screenshotImages
-            screenshotImages.splice 3, 1
-            Game.updateEditingGame {screenshotImages}
-            Game.updateById @state().game.id, {screenshotImages}
-        )
-        screenshotUpload5: new ImageUploader(
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-          method: 'post'
-          inputName: 'screenshotImage'
-          thumbnail: game.screenshotImages?[4]
-          renderHeight: 110
-          width: 320
-          height: 320
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-            .catch log.trace
-          onremove: =>
-            screenshotImages = @state().game.screenshotImages
-            screenshotImages.splice 4, 1
-            Game.updateEditingGame {screenshotImages}
-            Game.updateById @state().game.id, {screenshotImages}
-        )
+
+      @setFormValues game
+      @setImageUploaders game
 
     Game.getEditingGame() (game) =>
       if game
@@ -230,6 +113,130 @@ module.exports = class DevEditGameDetails
         @state().screenshotUpload3.setThumbnail(game.screenshotImages?[2] or '')
         @state().screenshotUpload4.setThumbnail(game.screenshotImages?[3] or '')
         @state().screenshotUpload5.setThumbnail(game.screenshotImages?[4] or '')
+
+  setFormValues: (game) =>
+    @state().categoryBlock.input.setValue game.category
+    @state().descriptionBlock.input.setValue game.description
+    @state().orientationBlock.radios[game.orientation]?.setChecked()
+
+    deviceString = if game.isMobile and game.isDesktop then 'both'
+    else if game.isMobile then 'mobile'
+    else 'desktop'
+    @state().devicesBlock.radios[deviceString]?.setChecked()
+
+  setImageUploaders: (game) =>
+    @state.set
+      iconUpload: new ImageUploader(
+        url: "#{config.CLAY_API_URL}/games/#{game.id}/iconImage"
+        inputName: 'iconImage'
+        thumbnail: game.iconImage
+        label: 'Icon'
+        renderHeight: 110
+        width: 512
+        height: 512
+        onchange: (diff) ->
+          Game.updateEditingGame diff
+          .catch log.trace
+      )
+      headerUpload: new ImageUploader(
+        url: "#{config.CLAY_API_URL}/games/#{game.id}/headerImage"
+        inputName: 'headerImage'
+        thumbnail: game.headerImage
+        label: 'Header'
+        renderHeight: 110
+        width: 2550
+        height: 850
+        safeWidth: 1700
+        safeHeight: 850
+        onchange: (diff) ->
+          Game.updateEditingGame diff
+          .catch log.trace
+      )
+      screenshotUpload1: new ImageUploader(
+        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
+        method: 'post'
+        inputName: 'screenshotImage'
+        thumbnail: game.screenshotImages?[0]
+        renderHeight: 110
+        width: 320
+        height: 320
+        onchange: (diff) ->
+          Game.updateEditingGame diff
+          .catch log.trace
+        onremove: =>
+          screenshotImages = @state().game.screenshotImages
+          screenshotImages.splice 0, 1
+          Game.updateEditingGame {screenshotImages}
+          Game.updateById @state().game.id, {screenshotImages}
+      )
+      screenshotUpload2: new ImageUploader(
+        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
+        method: 'post'
+        inputName: 'screenshotImage'
+        thumbnail: game.screenshotImages?[1]
+        renderHeight: 110
+        width: 320
+        height: 320
+        onchange: (diff) ->
+          Game.updateEditingGame diff
+          .catch log.trace
+        onremove: =>
+          screenshotImages = @state().game.screenshotImages
+          screenshotImages.splice 1, 1
+          Game.updateEditingGame {screenshotImages}
+          Game.updateById @state().game.id, {screenshotImages}
+      )
+      screenshotUpload3: new ImageUploader(
+        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
+        method: 'post'
+        inputName: 'screenshotImage'
+        thumbnail: game.screenshotImages?[2]
+        renderHeight: 110
+        width: 320
+        height: 320
+        onchange: (diff) ->
+          Game.updateEditingGame diff
+          .catch log.trace
+        onremove: =>
+          screenshotImages = @state().game.screenshotImages
+          screenshotImages.splice 2, 1
+          Game.updateEditingGame {screenshotImages}
+          Game.updateById @state().game.id, {screenshotImages}
+      )
+      screenshotUpload4: new ImageUploader(
+        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
+        method: 'post'
+        inputName: 'screenshotImage'
+        thumbnail: game.screenshotImages?[3]
+        renderHeight: 110
+        width: 320
+        height: 320
+        onchange: (diff) ->
+          Game.updateEditingGame diff
+          .catch log.trace
+        onremove: =>
+          screenshotImages = @state().game.screenshotImages
+          screenshotImages.splice 3, 1
+          Game.updateEditingGame {screenshotImages}
+          Game.updateById @state().game.id, {screenshotImages}
+      )
+      screenshotUpload5: new ImageUploader(
+        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
+        method: 'post'
+        inputName: 'screenshotImage'
+        thumbnail: game.screenshotImages?[4]
+        renderHeight: 110
+        width: 320
+        height: 320
+        onchange: (diff) ->
+          Game.updateEditingGame diff
+          .catch log.trace
+        onremove: =>
+          screenshotImages = @state().game.screenshotImages
+          screenshotImages.splice 4, 1
+          Game.updateEditingGame {screenshotImages}
+          Game.updateById @state().game.id, {screenshotImages}
+      )
 
   onBeforeUnmount: =>
     @save()
