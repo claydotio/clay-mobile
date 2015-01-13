@@ -149,8 +149,6 @@ module.exports = class DevEditGameDetails
             .catch log.trace
           onremove: =>
             screenshotImages = @state().game.screenshotImages
-            # FIXME: this approach only works with one delete at a time
-            # (other delete will delete the wrong array item)
             screenshotImages.splice 0, 1
             Game.updateEditingGame {screenshotImages}
             Game.updateById @state().game.id, {screenshotImages}
@@ -227,6 +225,11 @@ module.exports = class DevEditGameDetails
     Game.getEditingGame() (game) =>
       if game
         @state.set game: game
+        @state().screenshotUpload1.setThumbnail(game.screenshotImages?[0] or '')
+        @state().screenshotUpload2.setThumbnail(game.screenshotImages?[1] or '')
+        @state().screenshotUpload3.setThumbnail(game.screenshotImages?[2] or '')
+        @state().screenshotUpload4.setThumbnail(game.screenshotImages?[3] or '')
+        @state().screenshotUpload5.setThumbnail(game.screenshotImages?[4] or '')
 
   onBeforeUnmount: =>
     @save()
