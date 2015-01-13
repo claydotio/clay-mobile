@@ -19,7 +19,7 @@ module.exports = class InputBase
       value
       theme
       helpText
-      value: null
+      value
     }
 
   getInput: -> null

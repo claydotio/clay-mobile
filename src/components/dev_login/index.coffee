@@ -74,7 +74,6 @@ module.exports = class DevLogin
         alert 'Application recieved. Thanks!'
       .catch (err) ->
         log.trace err
-        console.log err
         error = JSON.parse err._body
         # TODO: (Austin) better error handling UX
         alert "Error: #{error.detail}"

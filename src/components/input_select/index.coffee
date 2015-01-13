@@ -13,10 +13,6 @@ module.exports = class InputSelect extends InputBase
 
     @state.set {options, value: options[0]?.value}
 
-    _.map options, (option) =>
-      if option.isSelected
-        @state.set value: option.value
-
   setValue: (val) =>
     if _.find @state().options, {value: val}
       @state.set value: val

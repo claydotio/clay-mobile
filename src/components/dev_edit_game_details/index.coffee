@@ -50,6 +50,7 @@ module.exports = class DevEditGameDetails
         onchange: (val) ->
           Game.updateEditingGame orientation: val
           .catch log.trace
+        value: 'both'
         radios:
           portrait: {
             label: 'Portrait'
@@ -65,7 +66,6 @@ module.exports = class DevEditGameDetails
             label: 'Both'
             name: 'orientation'
             value: 'both'
-            isChecked: true
           }
       }
       devicesInput: new InputRadios {
@@ -75,12 +75,12 @@ module.exports = class DevEditGameDetails
           isMobile = val is 'both' or val is 'mobile'
           Game.updateEditingGame {isDesktop, isMobile}
           .catch log.trace
+        value: 'desktop'
         radios:
           desktop: {
             label: 'Desktop'
             name: 'devices'
             value: 'desktop'
-            isChecked: true
           }
           mobile: {
             label: 'Mobile'
