@@ -17,7 +17,7 @@ statusCheck = (response) ->
     Promise.reject response
 
 toJson = (response) ->
-  response.json()
+  if response?._body then response.json() else {}
 
 module.exports = (url, options) ->
   if _.isObject options?.body or _.isArray options?.body

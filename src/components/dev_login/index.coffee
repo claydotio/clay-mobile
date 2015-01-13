@@ -1,6 +1,8 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
 
+config = require '../../config'
+request = require '../../lib/request'
 VerticalDivider = require '../../components/vertical_divider'
 InputBlock = require '../input_block'
 InputText = require '../input_text'
@@ -56,7 +58,26 @@ module.exports = class DevLogin
     .catch log.trace
 
   apply: (e) =>
-    null # FIXME
+    e.preventDefault()
+
+    User.getMe().then ({accessToken}) =>
+      request("#{config.CLAY_API_URL}/developerApplications", {
+        method: 'post'
+        qs:
+          accessToken: accessToken
+        body:
+          email: @state().applyEmailBlock.input.getValue()
+          gameUrl: @state().applyGameUrlBlock.input.getValue()
+      })
+      .then ->
+        # TODO: (Austin) application success page
+        alert 'Application recieved. Thanks!'
+      .catch (err) ->
+        log.trace err
+        console.log err
+        error = JSON.parse err._body
+        # TODO: (Austin) better error handling UX
+        alert "Error: #{error.detail}"
 
   render: (
     {

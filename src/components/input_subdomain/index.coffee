@@ -16,7 +16,7 @@ module.exports = class InputSubdomain
 
   setValue: (val) =>
     @state.set value: val
-    @onchange val
+    @onchange? val
 
   render: ({value, theme}) =>
     z "div.z-input-subdomain#{if theme then theme else ''}",

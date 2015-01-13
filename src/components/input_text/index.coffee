@@ -21,7 +21,7 @@ module.exports = class InputText
 
   setValue: (val) =>
     @state.set value: val
-    @onchange val
+    @onchange? val
 
   render: ({value, type, disabled, placeholder, theme}) =>
     z "div.z-input-text#{if theme then theme else ''}",
