@@ -21,7 +21,6 @@ renderLoadingCanvas = (ctx, percentUploaded) ->
   lineWidth = 3
   pixelRatioSize = LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
 
-  #imd = ctx.getImageData(0, 0, 240, 240);
   radius = (pixelRatioSize - lineWidth) / 2
   drawCircle = (color, lineWidth, percent) ->
     percent = Math.min(Math.max(0, percent or 1), 1)

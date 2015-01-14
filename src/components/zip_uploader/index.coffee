@@ -9,20 +9,13 @@ styles = require './index.styl'
 
 LOADING_CANVAS_SIZE_PX = 320
 
-createLoadingCanvas = ($parent) ->
-  loadingCanvas = document.createElement 'canvas'
-  loadingCanvas.width = loadingCanvas.height =
-    LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
-  loadingCanvas.style.width = loadingCanvas.style.height =
-    "#{LOADING_CANVAS_SIZE_PX}px"
-
-  ctx = loadingCanvas.getContext '2d'
+initLoadingCanvas = ($loadingCanvas) ->
+  ctx = $loadingCanvas.getContext '2d'
   pixelRatioSize = LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
   ctx.translate pixelRatioSize / 2, pixelRatioSize / 2 # change center
   ctx.rotate (-1 / 2) * Math.PI # rotate -90 deg
 
-  $parent.appendChild loadingCanvas
-  return loadingCanvas
+  return ctx
 
 renderLoadingCanvas = (ctx, percentUploaded) ->
   lineWidth = 3
@@ -55,7 +48,7 @@ module.exports = class ZipUploader
 
 
   onMount: ($el) =>
-    loadingCanvas = createLoadingCanvas $el
+    loadingCanvasCtx = initLoadingCanvas $el.children[0]
 
     # override the default listeners that do styling
     # so we can use our own rendering system
@@ -80,11 +73,22 @@ module.exports = class ZipUploader
 
         uploadprogress: (file, percentUploaded) =>
           @state.set {percentUploaded}
-          renderLoadingCanvas loadingCanvas.getContext('2d'), percentUploaded
+          renderLoadingCanvas loadingCanvasCtx, percentUploaded
       }
 
   render: ->
     z 'div.z-zip-uploader',
+      z 'canvas.loading-canvas', {
+        width: LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
+        height: LOADING_CANVAS_SIZE_PX * window.devicePixelRatio
+        style:
+          width: "#{LOADING_CANVAS_SIZE_PX}px"
+          height: "#{LOADING_CANVAS_SIZE_PX}px"
+          left: '50%'
+          marginLeft: -1 * LOADING_CANVAS_SIZE_PX / 2 + 'px'
+          top: '50%'
+          marginTop: -1 * LOADING_CANVAS_SIZE_PX / 2 + 'px'
+      }
       # .dz-message necessary to be clickable (no workaround)
       z 'div.upload-dropzone.dz-message.l-flex.l-vertical-center',
         z 'div.upload-content',
