@@ -11,56 +11,48 @@ module.exports = class DevEditGameGetStarted
   constructor: ->
     styles.use()
 
+    gameObservable = Game.getEditingGame()
+
     @state = z.state
-      game: null
-      titleInput: new InputText {
-        label: 'Game Title'
-        labelWidth: 125
-        value: ''
-        theme: '.theme-medium-width'
-        onchange: (val) ->
-          Game.updateEditingGame name: val
-          .catch log.trace
-      }
-      subdomainInput: new InputText {
-        label: 'Subdomain'
-        labelWidth: 125
-        value: ''
-        theme: '.theme-subdomain'
-        onchange: (val) ->
-          Game.updateEditingGame key: val
-          .catch log.trace
-        helpText: 'Your game will be accessible at http://SUBDOMAIN.clay.io'
-        postfix: '.clay.io'
-      }
-      gameIdInput: new InputText {
-        label: 'SDK Game ID'
-        labelWidth: 125
-        value: ''
-        disabled: true
-        theme: '.theme-tiny-width'
-      }
-
-    Game.getEditingGame().then (game) =>
-      @state.set game: game
-      @state().titleInput.setValue game.name
-      @state().subdomainInput.setValue game.key
-      @state().gameIdInput.setValue game.id
-
-    Game.getEditingGame() (game) =>
-      if game
-        @state.set game: game
+      game: gameObservable
+      titleInput: z.observe gameObservable.then (game) ->
+        new InputText {
+          label: 'Game Title'
+          labelWidth: 125
+          value: game.name
+          theme: '.theme-medium-width'
+          onchange: (val) ->
+            Game.updateEditingGame name: val
+        }
+      subdomainInput: z.observe gameObservable.then (game) ->
+        new InputText {
+          label: 'Subdomain'
+          labelWidth: 125
+          value: game.key
+          theme: '.theme-subdomain'
+          onchange: (val) ->
+            Game.updateEditingGame key: val
+          helpText: 'Your game will be accessible at http://SUBDOMAIN.clay.io'
+          postfix: '.clay.io'
+        }
+      gameIdInput: z.observe gameObservable.then (game) ->
+        new InputText {
+          label: 'SDK Game ID'
+          labelWidth: 125
+          value: game.id
+          disabled: true
+          theme: '.theme-tiny-width'
+        }
 
   onBeforeUnmount: =>
     @save()
 
   save: =>
     # images saved immediately (no need to hit 'next step')
-    Game.updateById(@state().game.id, {
+    Game.updateById @state().game.id, {
       name: @state().titleInput.getValue()
       key: @state().subdomainInput.getValue()
-    })
-    .then Game.updateEditingGame
+    }
     .catch (err) ->
       log.trace err
       error = JSON.parse err._body

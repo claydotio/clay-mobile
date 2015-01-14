@@ -163,7 +163,6 @@ module.exports = class ImageUploader
           z 'a.close[href=#]',
             onclick: (e) =>
               e.preventDefault()
-              # FIXME this is re-rendering the wrong object somehow
               @setThumbnail null
               @onremove?()
             z 'i.icon.icon-close'

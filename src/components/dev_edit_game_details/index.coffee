@@ -11,237 +11,154 @@ InputTextarea = require '../input_textarea'
 
 styles = require './index.styl'
 
+getDeviceStringFromBooleans = (isDesktop, isMobile) ->
+  if isMobile and isDesktop then 'both' \
+  else if isMobile then 'mobile'
+  else 'desktop'
+
+getDeviceBooleansFromString = (stringDevice) ->
+  isDesktop = stringDevice is 'both' or stringDevice is 'desktop'
+  isMobile = stringDevice is 'both' or stringDevice is 'mobile'
+
 module.exports = class DevEditGameDetails
   constructor: ->
     styles.use()
 
+    gameObservable = Game.getEditingGame()
+
     @state = z.state
-      game: null
-      iconUpload: null
-      headerUpload: null
-      screenshotUpload1: null
-      screenshotUpload2: null
-      screenshotUpload3: null
-      screenshotUpload4: null
-      screenshotUpload5: null
-      categoryInput: new InputSelect {
-        label: 'Category'
-        options: [
-          {label: 'Action', value: 'action'}
-          {label: 'Adventure', value: 'adventure'}
-          {label: 'Arcade', value: 'arcade'}
-          {label: 'Puzzle', value: 'puzzle'}
-          {label: 'Racing', value: 'racing'}
-          {label: 'Stategy', value: 'strategy'}
-        ]
-        onchange: (val) ->
-          Game.updateEditingGame category: val
-          .catch log.trace
-      }
-      descriptionInput: new InputTextarea {
-        label: 'Description'
-        value: ''
-        onchange: (val) ->
-          Game.updateEditingGame description: val
-          .catch log.trace
-      }
-      orientationInput: new InputRadios {
-        hideLabel: true
-        onchange: (val) ->
-          Game.updateEditingGame orientation: val
-          .catch log.trace
-        value: 'both'
-        radios:
-          portrait: {
-            label: 'Portrait'
-            name: 'orientation'
-            value: 'portrait'
+      game: gameObservable
+      iconUpload: z.observe gameObservable.then (game) ->
+        new ImageUploader {
+          url: "#{config.CLAY_API_URL}/games/#{game.id}/iconImage"
+          inputName: 'iconImage'
+          thumbnail: game.iconImage
+          label: 'Icon'
+          renderHeight: 110
+          width: 512
+          height: 512
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+        }
+      headerUpload: z.observe gameObservable.then (game) ->
+        new ImageUploader {
+          url: "#{config.CLAY_API_URL}/games/#{game.id}/headerImage"
+          inputName: 'headerImage'
+          thumbnail: game.headerImage
+          label: 'Header'
+          renderHeight: 110
+          width: 2550
+          height: 850
+          safeWidth: 1700
+          safeHeight: 850
+          onchange: (diff) ->
+            Game.updateEditingGame diff
+        }
+      screenshots: z.observe gameObservable.then (game) =>
+        _.map _.range(0, 5), (i) =>
+          new ImageUploader {
+            url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
+            method: 'post'
+            inputName: 'screenshotImage'
+            thumbnail: game.screenshotImages?[i]
+            renderHeight: 110
+            width: 320
+            height: 320
+            onchange: (diff) ->
+              Game.updateEditingGame diff
+            onremove: =>
+              @removeScreenshot i
           }
-          landscape: {
-            label: 'Landscape'
-            name: 'orientation'
-            value: 'landscape'
-          }
-          both: {
-            label: 'Both'
-            name: 'orientation'
-            value: 'both'
-          }
-      }
-      devicesInput: new InputRadios {
-        hideLabel: true
-        onchange: (val) ->
-          isDesktop = val is 'both' or val is 'desktop'
-          isMobile = val is 'both' or val is 'mobile'
-          Game.updateEditingGame {isDesktop, isMobile}
-          .catch log.trace
-        value: 'desktop'
-        radios:
-          desktop: {
-            label: 'Desktop'
-            name: 'devices'
-            value: 'desktop'
-          }
-          mobile: {
-            label: 'Mobile'
-            name: 'devices'
-            value: 'mobile'
-          }
-          both: {
-            label: 'Both'
-            name: 'devices'
-            value: 'both'
-          }
-      }
-
-    Game.getEditingGame().then (game) =>
-      @state.set
-        game: game
-
-      @setFormValues game
-      @setImageUploaders game
+      categoryInput: z.observe gameObservable.then (game) ->
+        new InputSelect {
+          label: 'Category'
+          value: game.category
+          options: [
+            {label: 'Action', value: 'action'}
+            {label: 'Adventure', value: 'adventure'}
+            {label: 'Arcade', value: 'arcade'}
+            {label: 'Puzzle', value: 'puzzle'}
+            {label: 'Racing', value: 'racing'}
+            {label: 'Stategy', value: 'strategy'}
+          ]
+          onchange: (val) ->
+            Game.updateEditingGame category: val
+        }
+      descriptionInput: z.observe gameObservable.then (game) ->
+        new InputTextarea {
+          label: 'Description'
+          value: game.description
+          onchange: (val) ->
+            Game.updateEditingGame description: val
+        }
+      orientationInput: z.observe gameObservable.then (game) ->
+        new InputRadios {
+          hideLabel: true
+          value: game.orientation or 'both'
+          radios:
+            portrait: {
+              label: 'Portrait'
+              name: 'orientation'
+              value: 'portrait'
+            }
+            landscape: {
+              label: 'Landscape'
+              name: 'orientation'
+              value: 'landscape'
+            }
+            both: {
+              label: 'Both'
+              name: 'orientation'
+              value: 'both'
+            }
+          onchange: (val) ->
+            Game.updateEditingGame orientation: val
+        }
+      devicesInput: z.observe gameObservable.then (game) ->
+        deviceString = getDeviceStringFromBooleans game.isDesktop, game.isMobile
+        new InputRadios {
+          hideLabel: true
+          value: deviceString
+          radios:
+            desktop: {
+              label: 'Desktop'
+              name: 'devices'
+              value: 'desktop'
+            }
+            mobile: {
+              label: 'Mobile'
+              name: 'devices'
+              value: 'mobile'
+            }
+            both: {
+              label: 'Both'
+              name: 'devices'
+              value: 'both'
+            }
+          onchange: (val) ->
+            {isDesktop, isMobile} = getDeviceBooleansFromString val
+            Game.updateEditingGame {isDesktop, isMobile}
+        }
 
     Game.getEditingGame() (game) =>
       if game
-        @state.set game: game
-        @state().screenshotUpload1.setThumbnail(game.screenshotImages?[0] or '')
-        @state().screenshotUpload2.setThumbnail(game.screenshotImages?[1] or '')
-        @state().screenshotUpload3.setThumbnail(game.screenshotImages?[2] or '')
-        @state().screenshotUpload4.setThumbnail(game.screenshotImages?[3] or '')
-        @state().screenshotUpload5.setThumbnail(game.screenshotImages?[4] or '')
+        _.map @state().screenshots, (screenshot, i) ->
+          screenshot.setThumbnail(game.screenshotImages?[i] or '')
 
-  setFormValues: (game) =>
-    @state().categoryInput.setValue game.category
-    @state().descriptionInput.setValue game.description
-    @state().orientationInput.setValue game.orientation
-
-    deviceString = if game.isMobile and game.isDesktop then 'both'
-    else if game.isMobile then 'mobile'
-    else 'desktop'
-    @state().devicesInput.setValue deviceString
-
-  setImageUploaders: (game) =>
-    @state.set
-      iconUpload: new ImageUploader(
-        url: "#{config.CLAY_API_URL}/games/#{game.id}/iconImage"
-        inputName: 'iconImage'
-        thumbnail: game.iconImage
-        label: 'Icon'
-        renderHeight: 110
-        width: 512
-        height: 512
-        onchange: (diff) ->
-          Game.updateEditingGame diff
-          .catch log.trace
-      )
-      headerUpload: new ImageUploader(
-        url: "#{config.CLAY_API_URL}/games/#{game.id}/headerImage"
-        inputName: 'headerImage'
-        thumbnail: game.headerImage
-        label: 'Header'
-        renderHeight: 110
-        width: 2550
-        height: 850
-        safeWidth: 1700
-        safeHeight: 850
-        onchange: (diff) ->
-          Game.updateEditingGame diff
-          .catch log.trace
-      )
-      screenshotUpload1: new ImageUploader(
-        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-        method: 'post'
-        inputName: 'screenshotImage'
-        thumbnail: game.screenshotImages?[0]
-        renderHeight: 110
-        width: 320
-        height: 320
-        onchange: (diff) ->
-          Game.updateEditingGame diff
-          .catch log.trace
-        onremove: =>
-          screenshotImages = @state().game.screenshotImages
-          screenshotImages.splice 0, 1
-          Game.updateEditingGame {screenshotImages}
-          Game.updateById @state().game.id, {screenshotImages}
-      )
-      screenshotUpload2: new ImageUploader(
-        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-        method: 'post'
-        inputName: 'screenshotImage'
-        thumbnail: game.screenshotImages?[1]
-        renderHeight: 110
-        width: 320
-        height: 320
-        onchange: (diff) ->
-          Game.updateEditingGame diff
-          .catch log.trace
-        onremove: =>
-          screenshotImages = @state().game.screenshotImages
-          screenshotImages.splice 1, 1
-          Game.updateEditingGame {screenshotImages}
-          Game.updateById @state().game.id, {screenshotImages}
-      )
-      screenshotUpload3: new ImageUploader(
-        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-        method: 'post'
-        inputName: 'screenshotImage'
-        thumbnail: game.screenshotImages?[2]
-        renderHeight: 110
-        width: 320
-        height: 320
-        onchange: (diff) ->
-          Game.updateEditingGame diff
-          .catch log.trace
-        onremove: =>
-          screenshotImages = @state().game.screenshotImages
-          screenshotImages.splice 2, 1
-          Game.updateEditingGame {screenshotImages}
-          Game.updateById @state().game.id, {screenshotImages}
-      )
-      screenshotUpload4: new ImageUploader(
-        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-        method: 'post'
-        inputName: 'screenshotImage'
-        thumbnail: game.screenshotImages?[3]
-        renderHeight: 110
-        width: 320
-        height: 320
-        onchange: (diff) ->
-          Game.updateEditingGame diff
-          .catch log.trace
-        onremove: =>
-          screenshotImages = @state().game.screenshotImages
-          screenshotImages.splice 3, 1
-          Game.updateEditingGame {screenshotImages}
-          Game.updateById @state().game.id, {screenshotImages}
-      )
-      screenshotUpload5: new ImageUploader(
-        url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-        method: 'post'
-        inputName: 'screenshotImage'
-        thumbnail: game.screenshotImages?[4]
-        renderHeight: 110
-        width: 320
-        height: 320
-        onchange: (diff) ->
-          Game.updateEditingGame diff
-          .catch log.trace
-        onremove: =>
-          screenshotImages = @state().game.screenshotImages
-          screenshotImages.splice 4, 1
-          Game.updateEditingGame {screenshotImages}
-          Game.updateById @state().game.id, {screenshotImages}
-      )
 
   onBeforeUnmount: =>
     @save()
     .catch log.trace
 
+  removeScreenshot: (i) =>
+    screenshotImages = @state().game.screenshotImages
+    screenshotImages.splice i, 1
+    Game.updateById @state().game.id, {screenshotImages}
+    Game.updateEditingGame {screenshotImages}
+
   save: =>
-    devices = @state().devicesInput.getValue()
-    isDesktop = devices is 'both' or devices is 'desktop'
-    isMobile = devices is 'both' or devices is 'mobile'
+    deviceString = @state().devicesInput.getValue()
+    {isDesktop, isMobile} = getDeviceBooleansFromString deviceString
 
     # images saved immediately (no need to hit 'next step')
     Game.updateById(@state().game.id, {
@@ -251,7 +168,6 @@ module.exports = class DevEditGameDetails
       isDesktop
       isMobile
     })
-    .then Game.updateEditingGame
     .catch (err) ->
       log.trace err
       error = JSON.parse err._body
@@ -268,11 +184,7 @@ module.exports = class DevEditGameDetails
       devicesInput
       iconUpload
       headerUpload
-      screenshotUpload1
-      screenshotUpload2
-      screenshotUpload3
-      screenshotUpload4
-      screenshotUpload5
+      screenshots
     }
   ) ->
     # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
@@ -287,14 +199,14 @@ module.exports = class DevEditGameDetails
             .catch log.trace
         },
 
-        categoryInput
-        descriptionInput
+        z 'div', categoryInput
+        z 'div', descriptionInput
 
         z 'h2.title', 'Supported Game Orientations'
-        orientationInput
+        z 'div', orientationInput
 
         z 'h2.title', 'Supported Device Types'
-        devicesInput
+        z 'div', devicesInput
 
         z 'hr'
 
@@ -312,12 +224,7 @@ module.exports = class DevEditGameDetails
           z 'div.label-info',
             "#{config.SCREENSHOT_MIN_COUNT} required, minimum 320px dimension"
 
-        # FIXME: ability to remove screenshots
-        screenshotUpload1
-        screenshotUpload2
-        screenshotUpload3
-        screenshotUpload4
-        screenshotUpload5
+        z 'div', screenshots
 
         z 'div.next-step-container',
           z 'button.button-secondary.next-step',

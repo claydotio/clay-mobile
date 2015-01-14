@@ -11,6 +11,7 @@ PATH = config.CLAY_API_URL + '/games'
 class Game
   constructor: ->
     @editingGame = z.observe Promise.resolve null
+    @editingGameId = null
 
   # TODO: (Zoli) Deprecate
   getTop: ({limit, skip}) ->
@@ -68,14 +69,25 @@ class Game
           accessToken: me.accessToken
         body: {developerId}
 
-  setEditingGame: (gamePromise) ->
+  # FIXME: implement game component saves somewhere other than
+  # onBeforeUnmount. Once that's done, remove this check. editingGame is
+  # set to null here before the onBeforeUnmount, causing the save to fail
+  # also remove in pages/dev_edit_game
+  setEditingGameId: (gameId) =>
+    @editingGameId = gameId
+
+  getEditingGameId: =>
+    return @editingGameId
+
+  setEditingGame: (gamePromise) =>
+    # FIXME: this gets called from page before onbeforeunmount, making it null
     @editingGame.set gamePromise
 
   updateEditingGame: (gameDiff) =>
-    @getEditingGame().then (game) =>
-      @setEditingGame Promise.resolve _.defaults(gameDiff, game)
+    @setEditingGame @getEditingGame().then (game) ->
+      _.defaults(gameDiff, game)
 
-  getEditingGame: ->
+  getEditingGame: =>
     return @editingGame
 
   isStartComplete: (game) ->

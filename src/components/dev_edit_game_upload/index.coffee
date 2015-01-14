@@ -1,7 +1,6 @@
 z = require 'zorium'
 _ = require 'lodash'
 log = require 'clay-loglevel'
-Dropzone = require 'dropzone'
 
 config = require '../../config'
 ZipUploader = require '../zip_uploader'
@@ -14,14 +13,11 @@ module.exports = class DevEditGameUpload
   constructor: ->
     styles.use()
 
-    @state = z.state
-      gameId: null
-      zipUpload: null
+    gameObservable = Game.getEditingGame()
 
-    Game.getEditingGame().then (game) =>
-      @state.set
-        gameId: game.id
-        zipUpload: new ZipUploader {
+    @state = z.state
+      zipUpload: z.observe gameObservable.then (game) ->
+        new ZipUploader {
           url: "#{config.CLAY_API_URL}/games/#{game.id}/zip"
           inputName: 'zip'
           onchange: (isSet) ->
@@ -29,7 +25,7 @@ module.exports = class DevEditGameUpload
             .catch log.trace
         }
 
-  render: ({zipUpload, externalHostInput}) ->
+  render: ({zipUpload}) ->
     # TODO (Austin): remove when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
     z 'div.z-dev-edit-game-upload.l-flex', {key: 3},

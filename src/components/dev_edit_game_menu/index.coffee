@@ -9,34 +9,17 @@ module.exports = class DevEditGameMenu
   constructor: ({step}) ->
     styles.use()
 
-    @state = z.state {step, gameId: null, isApprovable: false}
-
-    Game.getEditingGame().then (game) =>
-      @state.set
-        gameId: game.id
-        isApprovable: Game.isApprovable game
-        isStartComplete: Game.isStartComplete game
-        isDetailsComplete: Game.isDetailsComplete game
-        isUploadComplete: Game.isUploadComplete game
-
-    Game.getEditingGame() (game) =>
-      unless game
-        return
-      @state.set
-        isApprovable: Game.isApprovable game
-        isStartComplete: Game.isStartComplete game
-        isDetailsComplete: Game.isDetailsComplete game
-        isUploadComplete: Game.isUploadComplete game
+    gamePromise = Game.getEditingGame()
+    @state = z.state {step, game: gamePromise}
 
   publish: (e) =>
     e?.preventDefault()
 
-    Game.updateById(@state().gameId, {
+    Game.updateById(@state().game.id, {
       status: 'Approved'
     })
-    .then Game.updateEditingGame
     .then =>
-      z.router.go "/developers/edit-game/published/#{@state().gameId}"
+      z.router.go "/developers/edit-game/published/#{@state().game.id}"
     .catch (err) ->
       log.trace err
       error = JSON.parse err._body
@@ -44,16 +27,12 @@ module.exports = class DevEditGameMenu
       alert "Error: #{error.detail}"
     .catch log.trace
 
-  render: (
-    {
-      step
-      gameId
-      isApprovable
-      isStartComplete
-      isDetailsComplete
-      isUploadComplete
-    }
-  ) ->
+  render: ({step, game}) ->
+    isStartComplete = Game.isStartComplete game
+    isDetailsComplete = Game.isDetailsComplete game
+    isUploadComplete = Game.isUploadComplete game
+    isApprovable = Game.isApprovable game
+
     z '.z-dev-edit-game-menu',
       z '.menu',
         z.router.link z 'a.menu-item[href=/developers]',
@@ -62,21 +41,21 @@ module.exports = class DevEditGameMenu
 
       z '.menu',
         z.router.link z "a.menu-item
-          [href=/developers/edit-game/start/#{gameId}]
+          [href=/developers/edit-game/start/#{game?.id}]
           #{if step is 'start' then '.is-selected' else ''}
           #{if isStartComplete then '.is-completed' else ''}",
           z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Get started'
             z 'i.icon.icon-check'
         z.router.link z "a.menu-item
-          [href=/developers/edit-game/details/#{gameId}]
+          [href=/developers/edit-game/details/#{game?.id}]
           #{if step is 'details' then '.is-selected' else ''}
           #{if isDetailsComplete then '.is-completed' else ''}",
           z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Add details'
             z 'i.icon.icon-check'
         z.router.link z "a.menu-item
-          [href=/developers/edit-game/upload/#{gameId}]
+          [href=/developers/edit-game/upload/#{game?.id}]
           #{if step is 'upload' then '.is-selected' else ''}
           #{if isUploadComplete then '.is-completed' else ''}",
           z 'div.l-flex.l-vertical-center.menu-item-content',

@@ -24,11 +24,19 @@ module.exports = class DevEditGame
       gamePromise = Game.get(params.gameId).then (game) =>
         @state.set isLoading: false
         return game
-      Game.setEditingGame gamePromise
+      # FIXME: implement game component saves somewhere other than
+      # onBeforeUnmount. Once that's done, remove this check. editingGame is
+      # set to null here before the onBeforeUnmount, causing the save to fail
+      # also remove in models/game.coffee
+      if Game.getEditingGameId() isnt params.gameId
+        Game.setEditingGameId params.gameId
+        Game.setEditingGame gamePromise
     else
+      # create a new game
       gamePromise = User.getMe().then ({id}) =>
         Developer.find({ownerId: id}).then (developers) =>
           Game.create(developers?[0].id).then (game) =>
+            Game.setEditingGameId game.id
             @state.set isLoading: false
             return game
       Game.setEditingGame gamePromise
