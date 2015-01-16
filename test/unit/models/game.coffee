@@ -1,13 +1,17 @@
 _ = require 'lodash'
 should = require('clay-chai').should()
+Zock = new (require 'zock')()
 
 config = require 'config'
 Game = require 'models/game'
 localstore = require 'lib/localstore'
-ZockService = require '../../_services/zock'
 MockGame = require '../../_models/game'
 
 describe 'Game', ->
+
+  before ->
+    window.XMLHttpRequest = ->
+      Zock.XMLHttpRequest()
 
   beforeEach ->
     localStorage.clear()
@@ -26,20 +30,20 @@ describe 'Game', ->
       gamePlayObject.count.should.be 2
 
   it 'find()', ->
-    ZockService
+    Zock
       .base(config.CLAY_API_URL)
       .get '/games'
       .reply 200, (res) ->
-        res.query.ownerId.should.be '1'
+        res.query.developerId.should.be '1'
         return MockGame
 
     Game.find({developerId: '1'}).then (response) ->
       response.should.be MockGame
 
   it 'get()', ->
-    ZockService
+    Zock
       .base(config.CLAY_API_URL)
-      .get '/games/1'
+      .get "/games/#{MockGame.id}"
       .reply 200, (res) ->
         return MockGame
 
@@ -47,7 +51,7 @@ describe 'Game', ->
       response.should.be MockGame
 
   it 'get() multiple games', ->
-    ZockService
+    Zock
       .base(config.CLAY_API_URL)
       .get '/games/1,2'
       .reply 200, (res) ->
@@ -70,13 +74,13 @@ describe 'Game', ->
       game.should.be modifiedGame
 
   it 'isStartComplete()', ->
-    MockGame.isStartComplete().should.be.true
+    Game.isStartComplete(MockGame).should.be.true
 
-  it 'isEditingComplete()', ->
-    MockGame.isEditingComplete().should.be.true
+  it 'isDetailsComplete()', ->
+    Game.isDetailsComplete(MockGame).should.be.true
 
   it 'isUploadComplete()', ->
-    MockGame.isUploadComplete().should.be.true
+    Game.isUploadComplete(MockGame).should.be.true
 
   it 'isApprovable()', ->
-    MockGame.isApprovable().should.be.true
+    Game.isApprovable(MockGame).should.be.true

@@ -1,14 +1,21 @@
 _ = require 'lodash'
 should = require('clay-chai').should()
+Zock = new (require 'zock')()
 
+config = require 'config'
+localstore = require 'lib/localstore'
 GamePlayer = require 'components/game_player'
 Modal = require 'models/modal'
-localstore = require 'lib/localstore'
-
 MockGame = require '../../_models/game'
 
 describe 'GamePlayer', ->
   it 'shows share modal on 3rd visit', ->
+    Zock
+      .base(config.CLAY_API_URL)
+      .get '/games/findOne'
+      .reply 200, (res) ->
+        return MockGame
+
     gamePlayCountKey = "game:playCount:#{MockGame.key}"
     localstore.set gamePlayCountKey, {count: 0}
 

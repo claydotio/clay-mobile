@@ -1,6 +1,6 @@
 module.exports =
-  id: 1
-  developerId: 1
+  id: '1'
+  developerId: '1'
   key: 'validgamekey'
   name: 'GAME_NAME'
   description: 'GAME_DESCRIPTION'
@@ -9,10 +9,47 @@ module.exports =
   rating: 4.4
   gameUrl: 'http://validgameurl.com'
   orientation: 'portrait'
-  isMobile: false
+  isMobile: true
   isDesktop: false
-  headerImage: 'http://someurl.com/valid_header_image.png'
-  iconImage: 'http://someurl.com/valid_header_image.png'
-  screenshotImages: ['http://someurl.com/valid_screenshot_image.png']
+  headerImage:
+    originalUrl: 'http://someurl.com/valid_header_image.png'
+    versions: [
+      {
+        width: 1225
+        height: 425
+        url: 'http://someurl.com/valid_header_image_version.png'
+      }
+    ]
+  iconImage:
+    originalUrl: 'http://someurl.com/valid_icon_image.png'
+    versions: [
+      {
+        width: 256
+        height: 256
+        url: 'http://someurl.com/valid_icon_image_version.png'
+      }
+    ]
+  screenshotImages: [
+    {
+      originalUrl: 'http://someurl.com/valid_screenshot_image_1.png'
+      versions: [
+        {
+          width: 500
+          height: 500
+          url: 'http://someurl.com/valid_screenshot_image_1_version.png'
+        }
+      ]
+    }
+    {
+      originalUrl: 'http://someurl.com/valid_screenshot_image_2.png'
+      versions: [
+        {
+          width: 500
+          height: 500
+          url: 'http://someurl.com/valid_screenshot_image_version_2.png'
+        }
+      ]
+    }
+  ]
   status: 'Approved'
   category: 'action'

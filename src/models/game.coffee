@@ -84,10 +84,10 @@ class Game
       @updateById game.id, game
 
   isStartComplete: (game) ->
-    return game and game.key and game.name
+    return Boolean game and game.key and game.name
 
   isDetailsComplete: (game) ->
-    return game and
+    return Boolean game and
            game.description and
            (game.isDesktop or game.isMobile) and
            game.headerImage and
@@ -98,7 +98,7 @@ class Game
     return Boolean game?.gameUrl
 
   isApprovable: (game) =>
-    return @isStartComplete(game) and
+    return Boolean @isStartComplete(game) and
            @isDetailsComplete(game) and
            @isUploadComplete(game)
 

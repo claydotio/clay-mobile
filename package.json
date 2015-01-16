@@ -49,7 +49,7 @@
     "lodash-contrib": "241.4.14",
     "mocha": "1.20.1",
     "nock": "0.52.4",
-    "rewire": "2.1.2",
+    "rewire": "git://github.com/claydotio/rewire.git#you-dont-even-want-to-know-how-long-this-took-to-find",
     "rewire-webpack": "0.2.0",
     "style-loader": "0.8.1",
     "stylus-loader": "0.4.0",
