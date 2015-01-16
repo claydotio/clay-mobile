@@ -21,9 +21,9 @@ module.exports = class DevEditGamePublished
       z 'div.game-published', 'Your game has been published.'
       z 'div.play-now', 'Play it now at ',
         z "a[href=http://#{game?.key}.clay.io]", "#{game?.key}.clay.io"
-      z.router.link z 'a[href=/developers].button-secondary.go-to-dashboard',
+      z.router.link z 'a[href=/dashboard].button-secondary.go-to-dashboard',
         'Go to dashboard'
       z 'div',
-        z.router.link z "a[href=/developers/edit-game/start/#{game?.id}]
+        z.router.link z "a[href=/edit-game/start/#{game?.id}]
         .edit-game",
           'Edit game listing'

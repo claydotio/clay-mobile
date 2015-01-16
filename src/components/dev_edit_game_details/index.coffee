@@ -183,7 +183,7 @@ module.exports = class DevEditGameDetails
           e?.preventDefault()
 
           Game.saveEditingGame().then ->
-            z.router.go "/developers/edit-game/upload/#{game.id}"
+            z.router.go "/edit-game/upload/#{game.id}"
           .catch (err) ->
             log.trace err
             error = JSON.parse err._body

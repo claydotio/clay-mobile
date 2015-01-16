@@ -1,5 +1,6 @@
 z = require 'zorium'
 
+config = require '../../config'
 HeaderBase = require '../header_base'
 
 module.exports = class GuestHeader
@@ -11,7 +12,7 @@ module.exports = class GuestHeader
         links: [
           {
             text: 'Sign in'
-            url: '/developers/login'
+            url: "//#{config.DEV_HOST}/login"
             isSelected: currentPage is 'login'
           }
         ]

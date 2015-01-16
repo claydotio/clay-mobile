@@ -17,6 +17,7 @@ DevDashboardPage = require './pages/dev_dashboard'
 DevEditGamePage = require './pages/dev_edit_game'
 PushToken = require './models/push_token'
 User = require './models/user'
+Developer = require './models/developer'
 UrlService = require './services/url'
 PortalService = require './services/portal'
 ErrorReportService = require './services/error_report'
@@ -80,20 +81,28 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.router.setMode 'pathname'
 
+subdomain = UrlService.getSubdomain()
+
 root = document.getElementById('app')
 z.router.setRoot root
-z.router.add '/', if EnvironmentService.isMobile() then GamesPage else HomePage
-z.router.add '/games', GamesPage
-z.router.add '/game/:key', PlayGamePage
-z.router.add '/games/:filter', GamesPage
 
-z.router.add '/developers/login', DevLoginPage
+if subdomain is 'dev'
+  z.router.add '/login', DevLoginPage
 
-z.router.add '/developers', DevDashboardPage
-z.router.add '/developers/dashboard/:tab', DevDashboardPage
-z.router.add '/developers/edit-game', DevEditGamePage
-z.router.add '/developers/edit-game/:currentStep', DevEditGamePage
-z.router.add '/developers/edit-game/:currentStep/:gameId', DevEditGamePage
+  z.router.add '/dashboard', DevDashboardPage
+  z.router.add '/dashboard/:tab', DevDashboardPage
+  z.router.add '/edit-game', DevEditGamePage
+  z.router.add '/edit-game/:currentStep', DevEditGamePage
+  z.router.add '/edit-game/:currentStep/:gameId', DevEditGamePage
+
+else
+  z.router.add '/', if EnvironmentService.isMobile() \
+                    then GamesPage
+                    else HomePage
+  z.router.add '/games', GamesPage
+  z.router.add '/game/:key', PlayGamePage
+  z.router.add '/games/:filter', GamesPage
+
 
 new Promise (resolve) ->
   #############
@@ -130,18 +139,6 @@ new Promise (resolve) ->
       User.convertExperiment 'hit_from_share'
     .catch log.trace
 
-  #####################
-  # ENGAGED GAMEPLAYS #
-  #####################
-
-  hasVisitedBefore = _.contains document.cookie, config.ACCESS_TOKEN_COOKIE_KEY
-
-  if isFromShare and not hasVisitedBefore
-    # The anon-token is unique for each 'app', so always use the marketplace one
-    uniqBody = if maybeKikAnonToken then {uniq: maybeKikAnonToken} else {}
-    User.convertExperiment 'new_unique_from_share', uniqBody
-    .catch log.trace
-
   ####################
   #    ANALYTICS     #
   ####################
@@ -171,15 +168,24 @@ new Promise (resolve) ->
   # ROUTING #
   ###########
 
-  # Passed via message to denote game (share button in drawer uses this)
-  gameKey = kik?.message?.gameKey or UrlService.getSubdomain()
-
-  if gameKey
-    PushToken.createByGameKey gameKey
-    z.router.go "/game/#{gameKey}"
+  if subdomain is 'dev'
+    User.getMe().then ({id}) ->
+      Developer.find({ownerId: id})
+    .then (developers) ->
+      if _.isEmpty developers
+        z.router.go '/login'
+      else
+        z.router.go '/dashboard'
   else
-    PushToken.createForMarketplace()
-    z.router.go()
+    # Passed via message to denote game (share button in drawer uses this)
+    gameKey = kik?.message?.gameKey or subdomain
+
+    if gameKey
+      PushToken.createByGameKey gameKey
+      z.router.go "/game/#{gameKey}"
+    else
+      PushToken.createForMarketplace()
+      z.router.go()
 
   log.info 'App Ready'
 .catch log.trace
