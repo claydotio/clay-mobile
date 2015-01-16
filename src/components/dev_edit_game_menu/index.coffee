@@ -19,8 +19,9 @@ module.exports = class DevEditGameMenu
 
   publish: =>
     @state.set isLoading: true
-    Game.updateById @state().game.id, @state().game
-    Game.updateById @state().game.id, status: 'Approved'
+    Game.saveEditingGame()
+    .then =>
+      Game.updateById @state().game.id, status: 'Approved'
     .then =>
       @state.set isLoading: false
     .catch (err) =>
@@ -29,7 +30,7 @@ module.exports = class DevEditGameMenu
 
   save: =>
     @state.set isLoading: true
-    Game.updateById @state().game.id, @state().game
+    Game.saveEditingGame()
     .then =>
       @state.set isLoading: false
     .catch (err) =>
@@ -59,7 +60,7 @@ module.exports = class DevEditGameMenu
             .catch (err) ->
               error = JSON.parse err._body
               # TODO: (Austin) better error handling UX
-              alert "Error: #{error.detail}"
+              window.alert "Error: #{error.detail}"
             .catch log.trace
           },
           z 'div.l-flex.l-vertical-center.menu-item-content',
@@ -76,7 +77,7 @@ module.exports = class DevEditGameMenu
             .catch (err) ->
               error = JSON.parse err._body
               # TODO: (Austin) better error handling UX
-              alert "Error: #{error.detail}"
+              window.alert "Error: #{error.detail}"
             .catch log.trace
           },
           z 'div.l-flex.l-vertical-center.menu-item-content',
@@ -93,7 +94,7 @@ module.exports = class DevEditGameMenu
             .catch (err) ->
               error = JSON.parse err._body
               # TODO: (Austin) better error handling UX
-              alert "Error: #{error.detail}"
+              window.alert "Error: #{error.detail}"
             .catch log.trace
           },
           z 'div.l-flex.l-vertical-center.menu-item-content',
@@ -112,7 +113,7 @@ module.exports = class DevEditGameMenu
             .catch (err) ->
               error = JSON.parse err._body
               # TODO: (Austin) better error handling UX
-              alert "Error: #{error.detail}"
+              window.alert "Error: #{error.detail}"
             .catch log.trace
           },
           z 'div.l-flex.l-vertical-center.menu-item-content',

@@ -31,4 +31,4 @@ module.exports = class InputBase
             if helpText
               z 'i.icon.icon-help',
                 title: helpText
-                onclick: -> alert helpText
+                onclick: -> window.alert helpText

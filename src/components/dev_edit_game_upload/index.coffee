@@ -19,7 +19,7 @@ module.exports = class DevEditGameUpload
     o_hasUploaded = z.observe false
     o_hasUploaded (hasUploaded) ->
       if hasUploaded
-        Game.updateEditingGame gameUrl: true
+        Game.setEditingGame Game.get(o_game().id)
 
     @state = z.state
       zipUpload: z.observe o_game.then (game) ->

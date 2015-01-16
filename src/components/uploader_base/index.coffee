@@ -97,7 +97,7 @@ module.exports = class UploaderBase
       error: (file, res) =>
         @state.set isLoading: false
         # TODO: (Austin) better error handling UX
-        alert "Error: #{res.detail}"
+        window.alert "Error: #{res.detail}"
 
       uploadprogress: (file, percentUploaded) =>
         @state.percentUploaded.set percentUploaded

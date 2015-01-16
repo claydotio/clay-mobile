@@ -54,13 +54,13 @@ module.exports = class DevEditGameGetStarted
         onsubmit: (e) ->
           e?.preventDefault()
 
-          Game.updateById(game.id, game).then ->
+          Game.saveEditingGame().then ->
             z.router.go "/developers/edit-game/details/#{game.id}"
           .catch (err) ->
             log.trace err
             error = JSON.parse err._body
             # TODO: (Austin) better error handling UX
-            alert "Error: #{error.detail}"
+            window.alert "Error: #{error.detail}"
           .catch log.trace
         },
 

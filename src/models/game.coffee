@@ -72,12 +72,16 @@ class Game
   setEditingGame: (gamePromise) =>
     @o_editingGame.set gamePromise
 
+  getEditingGame: =>
+    return @o_editingGame
+
   updateEditingGame: (gameDiff) =>
     @setEditingGame @getEditingGame().then (game) ->
       _.defaults(gameDiff, game)
 
-  getEditingGame: =>
-    return @o_editingGame
+  saveEditingGame: =>
+    @getEditingGame().then (game) =>
+      @updateById game.id, game
 
   isStartComplete: (game) ->
     return game and game.key and game.name

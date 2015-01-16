@@ -93,7 +93,7 @@ module.exports = class DevLogin
                 log.trace err
                 error = JSON.parse err._body
                 # TODO: (Austin) better error handling UX
-                alert "Error: #{error.detail}"
+                window.alert "Error: #{error.detail}"
                 throw err
               .catch log.trace
             },
@@ -123,12 +123,12 @@ module.exports = class DevLogin
               @apply()
               .then ->
                 # TODO: (Austin) application success page
-                alert 'Application recieved. Thanks!'
+                window.alert 'Application recieved. Thanks!'
               .catch (err) ->
                 log.trace err
                 error = JSON.parse err._body
                 # TODO: (Austin) better error handling UX
-                alert "Error: #{error.detail}"
+                window.alert "Error: #{error.detail}"
                 throw err
               .catch log.trace
             },

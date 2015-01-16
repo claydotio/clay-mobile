@@ -60,13 +60,8 @@ module.exports = class DevEditGameDetails
         return
       screenshotImages = _.filter val
       # need to save this instantly since we have cap # of screenshots
-      Game.updateById o_game().id, {
-        links:
-          screenshotImages: screenshotImages
-      }
-      Game.updateEditingGame {screenshotImages}
-
-
+      Game.updateEditingGame({screenshotImages})
+      Game.saveEditingGame()
 
     @state = z.state
       game: o_game
@@ -187,13 +182,13 @@ module.exports = class DevEditGameDetails
         onsubmit: (e) ->
           e?.preventDefault()
 
-          Game.updateById(game.id, game).then ->
+          Game.saveEditingGame().then ->
             z.router.go "/developers/edit-game/upload/#{game.id}"
           .catch (err) ->
             log.trace err
             error = JSON.parse err._body
             # TODO: (Austin) better error handling UX
-            alert "Error: #{error.detail}"
+            window.alert "Error: #{error.detail}"
           .catch log.trace
         },
 
@@ -213,7 +208,7 @@ module.exports = class DevEditGameDetails
           z 'i.icon.icon-help',
             title: 'We require a few images for your game to make sure it
             looks great and get more people playing.'
-            onclick: (e) -> alert e.target.title
+            onclick: (e) -> window.alert e.target.title
 
         z 'div.uploader-container', iconUpload
         z 'div.uploader-container', headerUpload
