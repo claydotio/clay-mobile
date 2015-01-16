@@ -15,20 +15,16 @@ module.exports = class InputRadios extends InputBase
       radios
     }
 
-  setValue: (val) =>
-    if _.find @state().radios, {value: val}
-      @state.set value: val
-      @onchange? val
-
-  getInput: ({radios, value}) =>
+  getInput$: =>
+    {radios} = @state()
     z 'div.z-input-radios',
       _.map radios, (radio) =>
         z 'label',
           z "input[type=radio][name=#{radio.name}]", {
-            checked: radio.value is value
+            checked: radio.value is @state.o_value()
             value: radio.value
             onchange: (e) =>
               if e.target.checked
-                @setValue radio.value
+                @state.o_value.set radio.value
           }
           radio.label

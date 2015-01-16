@@ -3,9 +3,10 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 
 config = require '../../config'
-ZipUploader = require '../zip_uploader'
+UploaderZip = require '../uploader_zip'
 InputText = require '../input_text'
 Game = require '../../models/game'
+User = require '../../models/user'
 
 styles = require './index.styl'
 
@@ -13,24 +14,30 @@ module.exports = class DevEditGameUpload
   constructor: ->
     styles.use()
 
-    gameObservable = Game.getEditingGame()
+    o_game = Game.getEditingGame()
+
+    o_hasUploaded = z.observe false
+    o_hasUploaded (hasUploaded) ->
+      if hasUploaded
+        Game.updateEditingGame gameUrl: true
 
     @state = z.state
-      zipUpload: z.observe gameObservable.then (game) ->
-        new ZipUploader {
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/zip"
-          inputName: 'zip'
-          onchange: (isSet) ->
-            Game.updateEditingGame gameUrl: isSet
-            .catch log.trace
-        }
+      zipUpload: z.observe o_game.then (game) ->
+        User.getMe().then ({accessToken}) ->
+          new UploaderZip {
+            url: "#{config.CLAY_API_URL}/games/#{game.id}/" +
+                 "zip?accessToken=#{accessToken}"
+            inputName: 'zip'
+            width: 320
+            height: 320
+            o_hasUploaded: o_hasUploaded
+          }
 
   render: ({zipUpload}) ->
     # TODO (Austin): remove when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
     z 'div.z-dev-edit-game-upload.l-flex', {key: 3},
         z 'form.form',
-          # .dz-message necessary to be clickable (no workaround)
           zipUpload
 
         z 'div.help.l-flex-right',

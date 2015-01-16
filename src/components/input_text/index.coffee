@@ -5,7 +5,7 @@ InputBase = require '../input_base'
 styles = require './index.styl'
 
 module.exports = class InputText extends InputBase
-  constructor: ({type, disabled, postfix}) ->
+  constructor: ({type, postfix}) ->
     styles.use()
 
     super
@@ -14,15 +14,18 @@ module.exports = class InputText extends InputBase
 
     @state.set {
       type
-      disabled
       postfix
     }
 
-  getInput: ({value, type, disabled, theme, postfix}) =>
+  setValue: (e) =>
+    @state.o_value.set e.target.value
+
+  getInput$: =>
+    {type, disabled, theme, postfix} = @state()
     z "div.z-input-text#{if theme then theme else ''}",
       z "input[type=#{type}]#{if disabled then '[disabled]' else ''}",
-        onkeyup: (e) =>
-          @setValue e.target.value
-        value: value
+        onkeyup: @setValue
+        onchange: @setValue
+        value: @state.o_value()
       if postfix
         z 'input[type=text][disabled].postfix', value: postfix

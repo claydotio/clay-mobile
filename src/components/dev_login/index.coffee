@@ -14,69 +14,55 @@ module.exports = class DevLogin
   constructor: ->
     styles.use()
 
+    @o_email = z.observe ''
+    @o_password = z.observe ''
+    @o_applyEmail = z.observe ''
+    @o_applyGameUrl = z.observe ''
+
     @state = z.state
       emailInput: new InputText {
         label: 'Email'
-        value: ''
+        o_value: @o_email
         theme: '.theme-full-width'
       }
       passwordInput: new InputText {
         type: 'password'
         label: 'Password'
-        value: ''
+        o_value: @o_password
         theme: '.theme-full-width'
       }
       applyEmailInput: new InputText {
         label: 'Email'
-        value: ''
+        o_value: @o_applyEmail
         theme: '.theme-full-width'
       }
       applyGameUrlInput: new InputText {
         label: 'Game URL'
-        value: ''
+        o_value: @o_applyGameUrl
         theme: '.theme-full-width'
       }
       verticalDivider: new VerticalDivider()
 
-  login: (e) =>
-    e?.preventDefault()
-    email = @state().emailInput.getValue()
-    password = @state().passwordInput.getValue()
-    User.setMe User.loginBasic {email, password}
+  login: =>
+    User.loginBasic {email: @o_email(), password: @o_password()}
+    .then (me) ->
+      User.setMe me
     .then ({id}) ->
       Developer.find {ownerId: id }
     .then (developers) ->
-      if developers.length is 0
+      if _.isEmpty developers
         Developer.create()
-    .then ->
-      z.router.go '/developers'
-    .catch (err) ->
-      log.trace err
-      error = JSON.parse err._body
-      # TODO: (Austin) better error handling UX
-      alert "Error: #{error.detail}"
-    .catch log.trace
 
-  apply: (e) =>
-    e.preventDefault()
-
+  apply: =>
     User.getMe().then ({accessToken}) =>
       request("#{config.CLAY_API_URL}/developerApplications", {
         method: 'post'
         qs:
           accessToken: accessToken
         body:
-          email: @state().applyEmailInput.getValue()
-          gameUrl: @state().applyGameUrlInput.getValue()
+          email: @o_applyEmail()
+          gameUrl: @o_applyGameUrl()
       })
-      .then ->
-        # TODO: (Austin) application success page
-        alert 'Application recieved. Thanks!'
-      .catch (err) ->
-        log.trace err
-        error = JSON.parse err._body
-        # TODO: (Austin) better error handling UX
-        alert "Error: #{error.detail}"
 
   render: (
     {
@@ -97,8 +83,20 @@ module.exports = class DevLogin
         z 'div.login',
           z 'h1', 'Sign In'
           z 'div.friendly-message', 'Hey, good to see you again.'
-          z 'form',
-            {onsubmit: @login},
+          z 'form', {
+            onsubmit: (e) =>
+              e.preventDefault()
+              @login()
+              .then ->
+                z.router.go '/developers'
+              .catch (err) ->
+                log.trace err
+                error = JSON.parse err._body
+                # TODO: (Austin) better error handling UX
+                alert "Error: #{error.detail}"
+                throw err
+              .catch log.trace
+            },
             emailInput
             passwordInput
             # TODO (Austin) forgot password, whenever someone aks for it
@@ -119,8 +117,21 @@ module.exports = class DevLogin
               Share your awesome game with us and we'll send you an
               invite when we can."
 
-          z 'form',
-            {onsubmit: @apply},
+          z 'form', {
+            onsubmit: (e) =>
+              e.preventDefault()
+              @apply()
+              .then ->
+                # TODO: (Austin) application success page
+                alert 'Application recieved. Thanks!'
+              .catch (err) ->
+                log.trace err
+                error = JSON.parse err._body
+                # TODO: (Austin) better error handling UX
+                alert "Error: #{error.detail}"
+                throw err
+              .catch log.trace
+            },
             applyEmailInput
             applyGameUrlInput
             z 'button.button-primary.apply-button', 'Apply!'

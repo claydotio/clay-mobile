@@ -8,13 +8,13 @@ $zIndexUnsafeOverlay = 2
 $zIndexSafe = 3
 $zIndexClose = 4
 
-.z-image-uploader
+.z-uploader-image
   background: $greyLightest
   border: 1px solid $greyLighter
+  width: 100%
+  height: 100%
   text-align: center
-  display: inline-block
   vertical-align: top
-  margin: 0 10px 10px 0
   position: relative
   box-sizing: border-box
   overflow: hidden
@@ -29,9 +29,6 @@ $zIndexClose = 4
 
     > .percentage
       display: none
-
-  > canvas
-    display: none
 
   > .thumbnail
     position: absolute
@@ -90,12 +87,6 @@ $zIndexClose = 4
 
       > .percentage
         display: block
-
-    > canvas
-      display: block
-      position: absolute
-      left: 0
-      top: 0
 
     > .thumbnail
       opacity: 0.3

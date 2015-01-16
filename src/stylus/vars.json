@@ -26,11 +26,11 @@
   "$fontSizeXLarge": "3.6rem",
   "$fontSizeXXLarge": "4.2rem",
 
-  "$z1Shadow": "0 1px 6px rgba(0, 0, 0, .24)",
-  "$z2Shadow": "0 3px 8px rgba(0, 0, 0, .32)",
-  "$z3Shadow": "0 6px 10px rgba(0, 0, 0, .23), 0 10px 30px rgba(0, 0, 0, .19)",
-  "$z4Shadow": "0 10px 18px rgba(0, 0, 0, .22), 0 14px 45px rgba(0, 0, 0, .25)",
-  "$z5Shadow": "0 15px 20px rgba(0, 0, 0, .22), 0 19px 60px rgba(0, 0, 0, .3)",
+  "$z1Shadow": "0 2px 6px 0 rgba(0, 0, 0, 0.15)",
+  "$z2Shadow": "0 2px 4px 0 rgba(0, 0, 0, 0.05), 0 6px 18px 0 rgba(0, 0, 0, 0.15)",
+  "$z3Shadow": "0 11px 10px 0 rgba(0, 0, 0, 0.05), 0 13px 30px 0 rgba(0, 0, 0, 0.15)",
+  "$z4Shadow": "0 14px 12px 0 rgba(0, 0, 0, 0.05), 0 20px 40px 0 rgba(0, 0, 0, 0.15)",
+  "$z5Shadow": "0 17px 17px 0 rgba(0, 0, 0, 0.05), 0 27px 55px 0 rgba(0, 0, 0, 0.15)",
 
   "$iconTiny": "0.8rem",
   "$iconSmall": "1.2rem",

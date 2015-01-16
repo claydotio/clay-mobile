@@ -2,8 +2,6 @@ z = require 'zorium'
 
 HeaderBase = require '../header_base'
 
-# only styles used are from HeaderBase
-
 module.exports = class GuestHeader
   constructor: ({currentPage} = {}) ->
     @state = z.state

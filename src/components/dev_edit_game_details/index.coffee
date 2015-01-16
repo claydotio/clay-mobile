@@ -4,7 +4,8 @@ _ = require 'lodash'
 
 config = require '../../config'
 Game = require '../../models/game'
-ImageUploader = require '../image_uploader'
+User = require '../../models/user'
+UploaderImage = require '../uploader_image'
 InputRadios = require '../input_radios'
 InputSelect = require '../input_select'
 InputTextarea = require '../input_textarea'
@@ -19,161 +20,153 @@ getDeviceStringFromBooleans = (isDesktop, isMobile) ->
 getDeviceBooleansFromString = (stringDevice) ->
   isDesktop = stringDevice is 'both' or stringDevice is 'desktop'
   isMobile = stringDevice is 'both' or stringDevice is 'mobile'
+  {isDesktop, isMobile}
 
 module.exports = class DevEditGameDetails
   constructor: ->
     styles.use()
 
-    gameObservable = Game.getEditingGame()
+    o_game = Game.getEditingGame()
+
+    o_iconImage = z.observe o_game.then (game) -> game.iconImage
+    o_iconImage (iconImage) ->
+      Game.updateEditingGame iconImage: iconImage
+    o_headerImage = z.observe o_game.then (game) -> game.headerImage
+    o_headerImage (val) ->
+      Game.updateEditingGame headerImage: val
+    o_category = z.observe o_game.then (game) -> game.category or 'action'
+    o_category (val) ->
+      Game.updateEditingGame category: val
+    o_description = z.observe o_game.then (game) -> game.description
+    o_description (val) ->
+      Game.updateEditingGame description: val
+    o_devices = z.observe o_game.then (game) ->
+      getDeviceStringFromBooleans game.isDesktop, game.isMobile
+    o_devices (val) ->
+      {isDesktop, isMobile} = getDeviceBooleansFromString val
+      Game.updateEditingGame {isDesktop, isMobile}
+    o_orientation = z.observe o_game.then (game) -> game.orientation or 'both'
+    o_orientation (val) ->
+      Game.updateEditingGame orientation: val
+
+    # TODO: (Austin) when observable properly supports arrays, use an array here
+    o_screenshotImages = z.observe _.reduce _.range(5), (images, image, i) ->
+      images[i] = z.observe o_game.then (game) -> game.screenshotImages[i]
+      return images
+    , {}
+
+    o_screenshotImages (val) ->
+      unless o_game()
+        return
+      screenshotImages = _.filter val
+      # need to save this instantly since we have cap # of screenshots
+      Game.updateById o_game().id, {
+        links:
+          screenshotImages: screenshotImages
+      }
+      Game.updateEditingGame {screenshotImages}
+
+
 
     @state = z.state
-      game: gameObservable
-      iconUpload: z.observe gameObservable.then (game) ->
-        new ImageUploader {
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/iconImage"
-          inputName: 'iconImage'
-          thumbnail: game.iconImage
-          label: 'Icon'
-          renderHeight: 110
-          width: 512
-          height: 512
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-        }
-      headerUpload: z.observe gameObservable.then (game) ->
-        new ImageUploader {
-          url: "#{config.CLAY_API_URL}/games/#{game.id}/headerImage"
-          inputName: 'headerImage'
-          thumbnail: game.headerImage
-          label: 'Header'
-          renderHeight: 110
-          width: 2550
-          height: 850
-          safeWidth: 1700
-          safeHeight: 850
-          onchange: (diff) ->
-            Game.updateEditingGame diff
-        }
-      screenshots: z.observe gameObservable.then (game) =>
-        _.map _.range(0, 5), (i) =>
-          new ImageUploader {
-            url: "#{config.CLAY_API_URL}/games/#{game.id}/screenshotImages"
-            method: 'post'
-            inputName: 'screenshotImage'
-            thumbnail: game.screenshotImages?[i]
-            renderHeight: 110
-            width: 320
-            height: 320
-            onchange: (diff) ->
-              Game.updateEditingGame diff
-            onremove: =>
-              @removeScreenshot i
+      game: o_game
+      iconUpload: z.observe o_game.then (game) ->
+        User.getMe().then ({accessToken}) ->
+          new UploaderImage {
+            url: "#{config.CLAY_API_URL}/games/#{game.id}/" +
+                  "links/iconImage?accessToken=#{accessToken}"
+            inputName: 'image'
+            o_uploadedObj: o_iconImage
+            label: 'Icon'
+            height: 110
+            loadingCircleDiameter: 80
+            sourceWidth: 512
+            sourceHeight: 512
           }
-      categoryInput: z.observe gameObservable.then (game) ->
-        new InputSelect {
-          label: 'Category'
-          value: game.category
-          options: [
-            {label: 'Action', value: 'action'}
-            {label: 'Adventure', value: 'adventure'}
-            {label: 'Arcade', value: 'arcade'}
-            {label: 'Puzzle', value: 'puzzle'}
-            {label: 'Racing', value: 'racing'}
-            {label: 'Stategy', value: 'strategy'}
-          ]
-          onchange: (val) ->
-            Game.updateEditingGame category: val
-        }
-      descriptionInput: z.observe gameObservable.then (game) ->
-        new InputTextarea {
-          label: 'Description'
-          value: game.description
-          onchange: (val) ->
-            Game.updateEditingGame description: val
-        }
-      orientationInput: z.observe gameObservable.then (game) ->
-        new InputRadios {
-          hideLabel: true
-          value: game.orientation or 'both'
-          radios:
-            portrait: {
-              label: 'Portrait'
-              name: 'orientation'
-              value: 'portrait'
-            }
-            landscape: {
-              label: 'Landscape'
-              name: 'orientation'
-              value: 'landscape'
-            }
-            both: {
-              label: 'Both'
-              name: 'orientation'
-              value: 'both'
-            }
-          onchange: (val) ->
-            Game.updateEditingGame orientation: val
-        }
-      devicesInput: z.observe gameObservable.then (game) ->
-        deviceString = getDeviceStringFromBooleans game.isDesktop, game.isMobile
-        new InputRadios {
-          hideLabel: true
-          value: deviceString
-          radios:
-            desktop: {
-              label: 'Desktop'
-              name: 'devices'
-              value: 'desktop'
-            }
-            mobile: {
-              label: 'Mobile'
-              name: 'devices'
-              value: 'mobile'
-            }
-            both: {
-              label: 'Both'
-              name: 'devices'
-              value: 'both'
-            }
-          onchange: (val) ->
-            {isDesktop, isMobile} = getDeviceBooleansFromString val
-            Game.updateEditingGame {isDesktop, isMobile}
-        }
-
-    Game.getEditingGame() (game) =>
-      if game
-        _.map @state().screenshots, (screenshot, i) ->
-          screenshot.setThumbnail(game.screenshotImages?[i] or '')
-
-
-  onBeforeUnmount: =>
-    @save()
-    .catch log.trace
-
-  removeScreenshot: (i) =>
-    screenshotImages = @state().game.screenshotImages
-    screenshotImages.splice i, 1
-    Game.updateById @state().game.id, {screenshotImages}
-    Game.updateEditingGame {screenshotImages}
-
-  save: =>
-    deviceString = @state().devicesInput.getValue()
-    {isDesktop, isMobile} = getDeviceBooleansFromString deviceString
-
-    # images saved immediately (no need to hit 'next step')
-    Game.updateById(@state().game.id, {
-      category: @state().categoryInput.getValue()
-      description: @state().descriptionInput.getValue()
-      orientation: @state().orientationInput.getValue()
-      isDesktop
-      isMobile
-    })
-    .catch (err) ->
-      log.trace err
-      error = JSON.parse err._body
-      # TODO: (Austin) better error handling UX
-      alert "Error: #{error.detail}"
-      throw err
+      headerUpload: z.observe o_game.then (game) ->
+        User.getMe().then ({accessToken}) ->
+          new UploaderImage {
+            url: "#{config.CLAY_API_URL}/games/#{game.id}/" +
+                  "links/headerImage?accessToken=#{accessToken}"
+            inputName: 'image'
+            o_uploadedObj: o_headerImage
+            label: 'Header'
+            height: 110
+            loadingCircleDiameter: 80
+            sourceWidth: 2550
+            sourceHeight: 850
+            sourceSafeWidth: 1700
+            sourceSafeHeight: 850
+          }
+      screenshots: z.observe Promise.all([
+        o_screenshotImages, o_game, User.getMe()
+      ]).then ([screenshots, game, {accessToken}]) ->
+        _.map _.range(5), (i) ->
+          new UploaderImage {
+            url: "#{config.CLAY_API_URL}/games/#{game.id}/" +
+                  "links/screenshotImages?accessToken=#{accessToken}"
+            method: 'post'
+            inputName: 'image'
+            o_uploadedObj: o_screenshotImages[i]
+            height: 110
+            loadingCircleDiameter: 80
+            sourceWidth: 320
+            sourceHeight: 320
+          }
+      categoryInput: new InputSelect {
+        label: 'Category'
+        o_value: o_category
+        options: [
+          {label: 'Action', value: 'action'}
+          {label: 'Adventure', value: 'adventure'}
+          {label: 'Arcade', value: 'arcade'}
+          {label: 'Puzzle', value: 'puzzle'}
+          {label: 'Racing', value: 'racing'}
+          {label: 'Stategy', value: 'strategy'}
+        ]
+      }
+      descriptionInput: new InputTextarea {
+        label: 'Description'
+        o_value: o_description
+      }
+      orientationInput: new InputRadios {
+        o_value: o_orientation
+        radios:
+          portrait: {
+            label: 'Portrait'
+            name: 'orientation'
+            value: 'portrait'
+          }
+          landscape: {
+            label: 'Landscape'
+            name: 'orientation'
+            value: 'landscape'
+          }
+          both: {
+            label: 'Both'
+            name: 'orientation'
+            value: 'both'
+          }
+      }
+      devicesInput: new InputRadios {
+        o_value: o_devices
+        radios:
+          desktop: {
+            label: 'Desktop'
+            name: 'devices'
+            value: 'desktop'
+          }
+          mobile: {
+            label: 'Mobile'
+            name: 'devices'
+            value: 'mobile'
+          }
+          both: {
+            label: 'Both'
+            name: 'devices'
+            value: 'both'
+          }
+      }
 
   render: (
     {
@@ -191,12 +184,17 @@ module.exports = class DevEditGameDetails
     # https://github.com/claydotio/zorium/issues/13
     z 'div.z-dev-edit-game-details', {key: 1},
       z 'form.form', {
-        onsubmit: (e) =>
+        onsubmit: (e) ->
           e?.preventDefault()
 
-          @save().then ->
+          Game.updateById(game.id, game).then ->
             z.router.go "/developers/edit-game/upload/#{game.id}"
-            .catch log.trace
+          .catch (err) ->
+            log.trace err
+            error = JSON.parse err._body
+            # TODO: (Austin) better error handling UX
+            alert "Error: #{error.detail}"
+          .catch log.trace
         },
 
         z 'div', categoryInput
@@ -215,16 +213,18 @@ module.exports = class DevEditGameDetails
           z 'i.icon.icon-help',
             title: 'We require a few images for your game to make sure it
             looks great and get more people playing.'
+            onclick: (e) -> alert e.target.title
 
-        iconUpload
-        headerUpload
+        z 'div.uploader-container', iconUpload
+        z 'div.uploader-container', headerUpload
 
         z 'h2.title',
           'Screenshots'
           z 'div.label-info',
             "#{config.SCREENSHOT_MIN_COUNT} required, minimum 320px dimension"
 
-        z 'div', screenshots
+        _.map screenshots, (screenshot) ->
+          z 'div.uploader-container', screenshot
 
         z 'div.next-step-container',
           z 'button.button-secondary.next-step',

@@ -9,25 +9,21 @@ module.exports = class DevEditGamePublished
   constructor: ->
     styles.use()
 
+    o_game = Game.getEditingGame()
+
     @state = z.state
-      gameKey: ''
-      gameId: null
+      game: o_game
 
-    Game.getEditingGame().then (game) =>
-      @state.set
-        gameKey: game.key
-        gameId: game.id
-
-  render: ({gameKey, gameId}) ->
+  render: ({game}) ->
     z 'div.z-dev-edit-game-published',
       z 'i.icon.icon-happy'
       z 'h1', 'Awesome!'
       z 'div.game-published', 'Your game has been published.'
       z 'div.play-now', 'Play it now at ',
-        z "a[href=http://#{gameKey}.clay.io]", "#{gameKey}.clay.io"
+        z "a[href=http://#{game?.key}.clay.io]", "#{game?.key}.clay.io"
       z.router.link z 'a[href=/developers].button-secondary.go-to-dashboard',
         'Go to dashboard'
       z 'div',
-        z.router.link z "a[href=/developers/edit-game/start/#{gameId}]
+        z.router.link z "a[href=/developers/edit-game/start/#{game?.id}]
         .edit-game",
           'Edit game listing'

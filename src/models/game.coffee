@@ -10,7 +10,7 @@ PATH = config.CLAY_API_URL + '/games'
 
 class Game
   constructor: ->
-    @editingGame = z.observe Promise.resolve null
+    @o_editingGame = z.observe Promise.resolve null
     @editingGameId = null
 
   # TODO: (Zoli) Deprecate
@@ -61,7 +61,7 @@ class Game
   # DEV METHODS #
   ###############
 
-  create: (developerId) ->
+  create: ({developerId}) ->
     User.getMe().then (me) ->
       request PATH,
         method: 'POST'
@@ -69,26 +69,15 @@ class Game
           accessToken: me.accessToken
         body: {developerId}
 
-  # FIXME: implement game component saves somewhere other than
-  # onBeforeUnmount. Once that's done, remove this check. editingGame is
-  # set to null here before the onBeforeUnmount, causing the save to fail
-  # also remove in pages/dev_edit_game
-  setEditingGameId: (gameId) =>
-    @editingGameId = gameId
-
-  getEditingGameId: =>
-    return @editingGameId
-
   setEditingGame: (gamePromise) =>
-    # FIXME: this gets called from page before onbeforeunmount, making it null
-    @editingGame.set gamePromise
+    @o_editingGame.set gamePromise
 
   updateEditingGame: (gameDiff) =>
     @setEditingGame @getEditingGame().then (game) ->
       _.defaults(gameDiff, game)
 
   getEditingGame: =>
-    return @editingGame
+    return @o_editingGame
 
   isStartComplete: (game) ->
     return game and game.key and game.name
@@ -102,7 +91,7 @@ class Game
            game.screenshotImages?.length >= config.SCREENSHOT_MIN_COUNT
 
   isUploadComplete: (game) ->
-    return !!game?.gameUrl
+    return Boolean game?.gameUrl
 
   isApprovable: (game) =>
     return @isStartComplete(game) and
@@ -115,6 +104,16 @@ class Game
         method: 'PUT'
         qs:
           accessToken: me.accessToken
-        body: gameUpdate
+        body: if _.size(gameUpdate) is 1 and gameUpdate.status then gameUpdate \
+              else _.pick gameUpdate, [
+                'name'
+                'key'
+                'category'
+                'description'
+                'orientation'
+                'isDesktop'
+                'isMobile'
+                'links'
+              ]
 
 module.exports = new Game()

@@ -11,70 +11,61 @@ module.exports = class DevEditGameGetStarted
   constructor: ->
     styles.use()
 
-    gameObservable = Game.getEditingGame()
+    o_game = Game.getEditingGame()
+
+    o_name = z.observe o_game.then (game) -> game.name
+    o_name (val) ->
+      Game.updateEditingGame name: val
+    o_key = z.observe o_game.then (game) -> game.key
+    o_key (val) ->
+      Game.updateEditingGame key: val
 
     @state = z.state
-      game: gameObservable
-      titleInput: z.observe gameObservable.then (game) ->
-        new InputText {
-          label: 'Game Title'
-          labelWidth: 125
-          value: game.name
-          theme: '.theme-medium-width'
-          onchange: (val) ->
-            Game.updateEditingGame name: val
+      game: o_game
+      nameInput: new InputText {
+        label: 'Game Title'
+        labelWidth: 125
+        o_value: o_name
+        theme: '.theme-medium-width'
+      }
+      keyInput: new InputText {
+        label: 'Subdomain'
+        labelWidth: 125
+        o_value: o_key
+        theme: '.theme-subdomain'
+        helpText: 'Your game will be accessible at http://SUBDOMAIN.clay.io'
+        postfix: '.clay.io'
         }
-      subdomainInput: z.observe gameObservable.then (game) ->
-        new InputText {
-          label: 'Subdomain'
-          labelWidth: 125
-          value: game.key
-          theme: '.theme-subdomain'
-          onchange: (val) ->
-            Game.updateEditingGame key: val
-          helpText: 'Your game will be accessible at http://SUBDOMAIN.clay.io'
-          postfix: '.clay.io'
-        }
-      gameIdInput: z.observe gameObservable.then (game) ->
+      gameIdInput: z.observe o_game.then (game) ->
         new InputText {
           label: 'SDK Game ID'
           labelWidth: 125
-          value: game.id
+          o_value: z.observe game.id
           disabled: true
           theme: '.theme-tiny-width'
         }
 
-  onBeforeUnmount: =>
-    @save()
-
-  save: =>
-    # images saved immediately (no need to hit 'next step')
-    Game.updateById @state().game.id, {
-      name: @state().titleInput.getValue()
-      key: @state().subdomainInput.getValue()
-    }
-    .catch (err) ->
-      log.trace err
-      error = JSON.parse err._body
-      # TODO: (Austin) better error handling UX
-      alert "Error: #{error.detail}"
-      throw err
-
-  render: ({game, titleInput, subdomainInput, gameIdInput}) ->
+  render: ({game, nameInput, keyInput, gameIdInput}) ->
     # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
-    z 'div.z-dev-edit-game-get-started', {key: 2},
+    z "div.z-dev-edit-game-get-started
+    #{if Game.editingLoading is true then '.loading' else ''}", {key: 2},
       z 'form.form', {
-        onsubmit: (e) =>
+        onsubmit: (e) ->
           e?.preventDefault()
 
-          @save().then ->
+          Game.updateById(game.id, game).then ->
             z.router.go "/developers/edit-game/details/#{game.id}"
-            .catch log.trace
+          .catch (err) ->
+            log.trace err
+            error = JSON.parse err._body
+            # TODO: (Austin) better error handling UX
+            alert "Error: #{error.detail}"
+          .catch log.trace
         },
 
-        titleInput
-        subdomainInput
+        nameInput
+        keyInput
         gameIdInput
 
         z 'div.next-step-container',

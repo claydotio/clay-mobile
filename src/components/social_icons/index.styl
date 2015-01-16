@@ -4,14 +4,17 @@ json('../../stylus/vars.json')
 
 .z-social-icons
   > .social
-    // offset for li gap margin
-    margin: 0 -4px
     padding: 0
     list-style-type: none
 
     > li
       margin: 0 5px
       display: inline-block
+
+      &:first-child
+        margin-left: 0
+      &:last-child
+        margin-right: 0
 
       > .social-icon
         display: block

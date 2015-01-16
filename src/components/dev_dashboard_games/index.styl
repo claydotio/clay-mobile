@@ -27,16 +27,19 @@ $borderRadius = 3px
       margin: 0
 
     > .games
-      margin: -10px
-
       > .game-container
         display: inline-block
         box-sizing: border-box
         width: 50%
-        padding: 10px
+
+        &:nth-child(odd)
+          padding: 10px 10px 10px 0
+
+        &:nth-child(even)
+          padding: 10px 0 10px 10px
 
         > .game
-          box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2)
+          box-shadow: $z1Shadow
           border-radius: $borderRadius
 
           > .actions
@@ -50,12 +53,15 @@ $borderRadius = 3px
             display: flex
 
             > .action-links
-              // offset `a` gap margin
-              margin: 0 -10px
 
               > a
                 padding: 0 10px
                 color: $greyDarkest
+
+                &:first-child
+                  padding-left: 0
+                &:last-child
+                  padding-right: 0
 
               > .edit
                 > .icon

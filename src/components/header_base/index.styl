@@ -5,49 +5,52 @@ json('../../stylus/vars.json')
   background: $white
   height: 75px
 
-  .logo
-    > img
-      height: 40px
-      vertical-align: middle
+  > .content
+    > .logo
+      > img
+        height: 40px
+        vertical-align: middle
 
-  .navigation
-    margin-left: auto
-    height: 100%
-
-    > ul
-      // offset li gap margin
-      margin: 0
-      padding: 0
-      list-style-type: none
+    > .navigation
+      margin-left: auto
       height: 100%
 
-      > li
-        display: inline-block
-        margin: 0 20px
+      > ul
+        // offset li gap margin
+        margin: 0
+        padding: 0
+        list-style-type: none
         height: 100%
 
-        a
-          font-weight: normal
-          font-size: $fontSizeMedium
+        > li
           display: inline-block
-          vertical-align: middle
-          color: $greyDarker
+          margin: 0 20px
+          height: 100%
 
-          &:hover
-            color: $black
+          > .link-container
+            > a
+              font-weight: normal
+              font-size: $fontSizeMedium
+              display: inline-block
+              vertical-align: middle
+              color: $greyDarker
 
-        &.is-selected
-          position: relative
+              &:hover
+                color: $black
 
-          &:after
-            content: '\2022'
-            position: absolute
-            bottom: 0
-            left: 0
-            width: 100%
-            font-size: $fontSizeLarge
-            text-align: center
-            color: $orange
+          &.is-selected
+            position: relative
 
-          a
-            color: $black
+            &:after
+              content: '\2022'
+              position: absolute
+              bottom: 0
+              left: 0
+              width: 100%
+              font-size: $fontSizeLarge
+              text-align: center
+              color: $orange
+
+            > .link-container
+              > a
+                color: $black

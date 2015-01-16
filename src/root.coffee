@@ -92,8 +92,8 @@ z.router.add '/developers/login', DevLoginPage
 z.router.add '/developers', DevDashboardPage
 z.router.add '/developers/dashboard/:tab', DevDashboardPage
 z.router.add '/developers/edit-game', DevEditGamePage
-z.router.add '/developers/edit-game/:step', DevEditGamePage
-z.router.add '/developers/edit-game/:step/:gameId', DevEditGamePage
+z.router.add '/developers/edit-game/:currentStep', DevEditGamePage
+z.router.add '/developers/edit-game/:currentStep/:gameId', DevEditGamePage
 
 new Promise (resolve) ->
   #############

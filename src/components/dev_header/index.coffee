@@ -3,8 +3,6 @@ z = require 'zorium'
 HeaderBase = require '../header_base'
 User = require '../../models/user'
 
-# only styles used are from HeaderBase
-
 module.exports = class DevHeader
   constructor: ({currentPage} = {}) ->
     @state = z.state

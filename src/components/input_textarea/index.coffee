@@ -5,15 +5,18 @@ InputBase = require '../input_base'
 styles = require './index.styl'
 
 module.exports = class InputTextarea extends InputBase
-  constructor: ({value}) ->
+  constructor: ->
     styles.use()
 
     super
 
-  getInput: ({value}) =>
+  setValue: (e) =>
+    @state.o_value.set e.target.value
+
+  getInput$: =>
     z 'div.z-input-textarea',
       z 'textarea', {
-      onkeyup: (e) =>
-        @setValue e.target.value
+        onkeyup: @setValue
+        onchange: @setValue
       },
-        value
+        @state().o_value
