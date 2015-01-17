@@ -120,8 +120,7 @@ app.use helmet.xssFilter()
 
 # Some security options are only enabled for the developer site
 app.use (req, res, next) ->
-  devHostname = config.DEV_HOST.split(':')[0]
-  if req.hostname is devHostname
+  if req.headers.host is config.DEV_HOST
     frameMiddleware = helmet.frameguard()
     hstsMiddleware = helmet.hsts
       # Must be at least 18 weeks to be approved by Google
@@ -189,7 +188,7 @@ router.get '*', (req, res) ->
   host = req.headers.host
 
   # Game Subdomain - 0.0.0.0 used when running tests locally
-  if host isnt config.HOST and host isnt '0.0.0.0'
+  if host isnt config.HOST and host isnt config.DEV_HOST and host isnt '0.0.0.0'
     gameKey = host.split('.')[0]
 
     return renderGamePage gameKey, req.clay.me, req.clay.experiments
