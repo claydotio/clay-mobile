@@ -6,7 +6,8 @@ _ = require 'lodash'
 config = require '../../config'
 User = require '../../models/user'
 Modal = require '../../models/modal'
-KikService = require '../../services/kik'
+PortalService = require '../../services/portal'
+UrlService = require '../../services/url'
 ModalHeader = require '../modal_header'
 
 styles = require './index.styl'
@@ -25,7 +26,12 @@ module.exports = class GameShare
 
   shareGame: (e) =>
     e?.preventDefault()
-    KikService.shareGame @game
+
+    text = "Come play #{@game.name} with me!
+           #{UrlService.getMarketplaceGame({@game})}"
+    PortalService.get 'share.any',
+      gameId: @game.id
+      text: text
     .catch log.trace
 
     @close()
