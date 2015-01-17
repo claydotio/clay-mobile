@@ -93,6 +93,8 @@ module.exports = class Drawer
       drawerIsOpen = ''
       drawerOverlayIsOpen = ''
 
+    headerImageUrl = @game.headerImage?.versions[0].url or @game.promo440Url
+
     # TODO: (Austin) some sort of fast-click equivalent on top of zorium
     [
       z "div.z-drawer-overlay#{drawerOverlayIsOpen}",
@@ -110,7 +112,7 @@ module.exports = class Drawer
         z 'div.z-drawer-inner',
           z 'div.z-drawer-promo',
             style:
-              backgroundImage: "url(#{@game.promo440Url})",
+              backgroundImage: "url(#{headerImageUrl})",
             z 'div.z-drawer-promo-text',
               z 'div.z-drawer-promo-descriptor', "You're playing"
               z 'h1.z-drawer-promo-title', @game.name

@@ -34,7 +34,7 @@ module.exports = class GamePromo
       style:
         width: "#{@width}px",
       z 'img',
-        src: @game.promo440Url
+        src: @game.headerImage?.versions[0].url or @game.promo440Url
         width: @width
         height: @height
       z '.z-game-promo-info',

@@ -27,7 +27,7 @@ module.exports = class GameShoeBox
   render: =>
     z "a.z-game-shoe-box[href=#{@gameSubdomainUrl}]", {onclick: @loadGame}, [
       z 'img',
-        src: @game.icon128Url
+        src: @game.iconImage?.versions[0].url or @game.icon128Url
       z '.z-game-shoe-box-info', [
         z 'h3', @game.name
         @RatingsWidget
