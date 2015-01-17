@@ -113,9 +113,10 @@ stylesSrc = [
   '\'unsafe-inline\''
   if config.ENV is config.ENVS.DEV then webpackDevHost
 ]
-app.use helmet.contentSecurityPolicy
-  scriptSrc: scriptSrc
-  stylesSrc: stylesSrc
+# FIXME: disabled for kik
+# app.use helmet.contentSecurityPolicy
+#   scriptSrc: scriptSrc
+#   stylesSrc: stylesSrc
 app.use helmet.xssFilter()
 
 # Some security options are only enabled for the developer site

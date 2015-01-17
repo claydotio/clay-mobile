@@ -42,6 +42,7 @@
 
     {! kik !}
     <meta name="kik-unsupported" content="android-2.3,ios-5">
+    <meta name="kik-user-token" content="ag9zfmNhcmRzLW1hbmFnZXJyEQsSBFVzZXIYgICAgNHYrQoM">
 
     <link rel="kik-icon" href="{iconKik}">
     <link rel="canonical" href="{canonical}">
