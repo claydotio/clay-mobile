@@ -42,7 +42,7 @@ class KikService
       kik?.send?(
         title: "Play #{game.name}!"
         text: game.description
-        pic: game.promo440Url
+        pic: game.headerImage?.versions[0].url or game.promo440Url
         big: true
         data: {gameKey: game.key, share: {originUserId: user.id}}
       )
@@ -50,7 +50,7 @@ class KikService
       kik?.send?(
         title: "Play #{game.name}!"
         text: game.description
-        pic: game.icon128Url
+        pic: game.iconImage?.versions[0].url or game.icon128Url
         data: {gameKey: game.key}
       )
 

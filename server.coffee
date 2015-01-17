@@ -261,11 +261,11 @@ renderGamePage = (gameKey, me, experiments) ->
       distjs: distJs
 
       # TODO: (Zoli) This isn't good enough
-      icon256: game.icon128Url
-      icon76: game.icon128Url
-      icon120: game.icon128Url
-      icon152: game.icon128Url
-      iconKik: game.icon128Url
+      icon256: game.iconImage?.versions[0].url or game.icon128Url
+      icon76: game.iconImage?.versions[0].url or game.icon128Url
+      icon120: game.iconImage?.versions[0].url or game.icon128Url
+      icon152: game.iconImage?.versions[0].url or game.icon128Url
+      iconKik: game.iconImage?.versions[0].url or game.icon128Url
 
       # TODO: (Zoli) this should be returned by the server
       icon440x280: "http://cdn.wtf/g/#{game.id}/meta/promo_440.png"
