@@ -117,7 +117,7 @@ class User
         qs:
           accessToken: me.accessToken
         body:
-          kikAnonToken
+          {kikAnonToken}
 
   loginBasic: ({email, password}) =>
     @getMe().then (me) ->
