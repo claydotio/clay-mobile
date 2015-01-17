@@ -12,7 +12,7 @@ module.exports = class GuestHeader
         links: [
           {
             text: 'Sign in'
-            url: "//#{config.DEV_HOST}/login"
+            url: "https://#{config.DEV_HOST}/login"
             isSelected: currentPage is 'login'
           }
         ]
