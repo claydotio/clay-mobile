@@ -117,12 +117,13 @@ app.use helmet.contentSecurityPolicy
   scriptSrc: scriptSrc
   stylesSrc: stylesSrc
 app.use helmet.xssFilter()
-app.use helmet.frameguard()
 
+# Some security options are only enabled for the developer site
 app.use (req, res, next) ->
   devHostname = config.DEV_HOST.split(':')[0]
   if req.hostname is devHostname
-    middleware = helmet.hsts
+    frameMiddleware = helmet.frameguard()
+    hstsMiddleware = helmet.hsts
       # Must be at least 18 weeks to be approved by Google
       # https://hstspreload.appspot.com/
       maxAge: EIGHTEEN_WEEKS_MS
@@ -133,7 +134,11 @@ app.use (req, res, next) ->
       preload: true # include in Google Chrome
       force: true
 
-    return middleware(req, res, next)
+    return frameMiddleware req, res, (err) ->
+      if err
+        return next(err)
+
+      return hstsMiddleware req, res, next
   return next()
 
 app.disable 'x-powered-by'
