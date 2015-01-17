@@ -88,7 +88,7 @@ module.exports = class DevLogin
               e.preventDefault()
               @login()
               .then ->
-                z.router.go '/developers'
+                z.router.go '/dashboard'
               .catch (err) ->
                 log.trace err
                 error = JSON.parse err._body

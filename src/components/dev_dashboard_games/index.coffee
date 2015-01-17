@@ -48,7 +48,7 @@ module.exports = class DevDashboardGames
                     z 'span.status', game.status
                     z 'div.action-links',
                       z.router.link z "a.edit[href=
-                                      /developers/edit-game/start/#{game.id}]",
+                                      /edit-game/start/#{game.id}]",
                         z 'i.icon.icon-edit'
                         z 'span', 'Edit'
 

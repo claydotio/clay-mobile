@@ -8,11 +8,11 @@ module.exports = class DevHeader
     @state = z.state
       header: new HeaderBase {
         logoUrl: '//cdn.wtf/d/images/logos/logo_dev.svg'
-        homeUrl: '/developers'
+        homeUrl: '/dashboard'
         links: [
           {
             text: 'Dashboard'
-            url: '/developers'
+            url: '/dashboard'
             isSelected: currentPage is 'dashboard'
           }
           {
@@ -22,12 +22,12 @@ module.exports = class DevHeader
           }
           {
             text: 'Logout'
-            url: '/developers/login'
+            url: '/login'
             isExternal: true
             onclick: (e) ->
               e.preventDefault()
               User.logout()
-              z.router.go '/developers/login'
+              z.router.go '/login'
           }
         ]
       }

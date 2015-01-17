@@ -45,18 +45,18 @@ module.exports = class DevEditGameMenu
 
     z '.z-dev-edit-game-menu',
       z '.menu',
-        z.router.link z 'a.menu-item[href=/developers]',
+        z.router.link z 'a.menu-item[href=/dashboard]',
           z 'div.menu-item-content',
             z 'div.text', 'Back to dashboard'
 
       z '.menu',
-        z "a.menu-item[href=/developers/edit-game/start/#{game?.id}]
+        z "a.menu-item[href=/edit-game/start/#{game?.id}]
         #{if currentStep is 'start' then '.is-selected' else ''}
         #{if isStartComplete then '.is-completed' else ''}", {
           onclick: (e) =>
             e?.preventDefault()
             @save().then ->
-              z.router.go "/developers/edit-game/start/#{game?.id}"
+              z.router.go "/edit-game/start/#{game?.id}"
             .catch (err) ->
               error = JSON.parse err._body
               # TODO: (Austin) better error handling UX
@@ -66,14 +66,14 @@ module.exports = class DevEditGameMenu
           z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Get started'
             z 'i.icon.icon-check'
-        z "a.menu-item[href=/developers/edit-game/details/#{game?.id}]
+        z "a.menu-item[href=/edit-game/details/#{game?.id}]
         #{if currentStep is 'details' then '.is-selected' else ''}
         #{if isDetailsComplete then '.is-completed' else ''}", {
           onclick: (e) =>
             e?.preventDefault()
 
             @save().then ->
-              z.router.go "/developers/edit-game/details/#{game?.id}"
+              z.router.go "/edit-game/details/#{game?.id}"
             .catch (err) ->
               error = JSON.parse err._body
               # TODO: (Austin) better error handling UX
@@ -83,14 +83,14 @@ module.exports = class DevEditGameMenu
           z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Add details'
             z 'i.icon.icon-check'
-        z "a.menu-item  [href=/developers/edit-game/upload/#{game?.id}]
+        z "a.menu-item  [href=/edit-game/upload/#{game?.id}]
         #{if currentStep is 'upload' then '.is-selected' else ''}
         #{if isUploadComplete then '.is-completed' else ''}", {
           onclick: (e) =>
             e?.preventDefault()
 
             @save().then ->
-              z.router.go "/developers/edit-game/upload/#{game?.id}"
+              z.router.go "/edit-game/upload/#{game?.id}"
             .catch (err) ->
               error = JSON.parse err._body
               # TODO: (Austin) better error handling UX
@@ -109,7 +109,7 @@ module.exports = class DevEditGameMenu
             e?.preventDefault()
 
             @publish().then ->
-              z.router.go "/developers/edit-game/published/#{game.id}"
+              z.router.go "/edit-game/published/#{game.id}"
             .catch (err) ->
               error = JSON.parse err._body
               # TODO: (Austin) better error handling UX

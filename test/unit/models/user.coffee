@@ -1,11 +1,16 @@
 should = require('clay-chai').should()
+Zock = new (require 'zock')()
 
 config = require 'config'
 User = require 'models/user'
 MockUser = require '../../_models/user'
-ZockService = require '../../_services/zock'
 
 describe 'UserModel', ->
+
+  before ->
+    window.XMLHttpRequest = ->
+      Zock.XMLHttpRequest()
+
   it 'returns cached local user', ->
     User.setMe {id: 123, username: 'tester'}
     .then (user) ->
@@ -17,10 +22,8 @@ describe 'UserModel', ->
         sameUser.should.be user
 
   it 'loginBasic()', ->
-    ZockService
+    Zock
       .base(config.CLAY_API_URL)
-      .post '/users/login/anon'
-      .reply 200, {accessToken: 'ACCESS_TOKEN'}
       .post '/users/login/basic'
       .reply 200, (res) ->
         res.query.accessToken.should.be 'ACCESS_TOKEN' and

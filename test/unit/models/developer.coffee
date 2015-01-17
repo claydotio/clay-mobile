@@ -1,14 +1,18 @@
 should = require('clay-chai').should()
+Zock = new (require 'zock')()
 
 config = require 'config'
 Developer = require 'models/developer'
 MockDeveloper = require '../../_models/developer'
-ZockService = require '../../_services/zock'
 
 describe 'Developer', ->
 
+  before ->
+    window.XMLHttpRequest = ->
+      Zock.XMLHttpRequest()
+
   it 'find()', ->
-    ZockService
+    Zock
       .base(config.CLAY_API_URL)
       .get '/developers'
       .reply 200, (res) ->
@@ -19,7 +23,7 @@ describe 'Developer', ->
       response.should.be MockDeveloper
 
   it 'create()', ->
-    ZockService
+    Zock
       .base(config.CLAY_API_URL)
       .post '/users/login/anon'
       .reply 200, {accessToken: 'ACCESS_TOKEN'}

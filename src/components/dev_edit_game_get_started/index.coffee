@@ -55,7 +55,7 @@ module.exports = class DevEditGameGetStarted
           e?.preventDefault()
 
           Game.saveEditingGame().then ->
-            z.router.go "/developers/edit-game/details/#{game.id}"
+            z.router.go "/edit-game/details/#{game.id}"
           .catch (err) ->
             log.trace err
             error = JSON.parse err._body

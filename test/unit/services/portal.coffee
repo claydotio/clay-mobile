@@ -1,9 +1,12 @@
 _ = require 'lodash'
 should = require('clay-chai').should()
 rewire = require 'rewire'
+Zock = new (require 'zock')()
 
+config = require 'config'
 PortalService = rewire 'services/portal'
 User = require 'models/user'
+MockGame = require '../../_models/game'
 
 PortalService.registerMethods()
 
@@ -38,6 +41,9 @@ emit = (message) ->
 describe 'PortalService', ->
 
   before ->
+    window.XMLHttpRequest = ->
+      Zock.XMLHttpRequest()
+
     portal = PortalService.__get__ 'portal'
     portal.down()
     portal.up timeout: 1
@@ -59,61 +65,86 @@ describe 'PortalService', ->
 
   describe 'share.any()', ->
     before ->
-      PortalService.__set__ 'kik.enabled', -> false
+      Zock
+        .base(config.CLAY_API_URL)
+        .get "/games/#{MockGame.id}"
+        .reply 200, (res) ->
+          return MockGame
 
     it 'shares via kik', ->
       kikSent = false
-      PortalService.__set__ 'kik.send', (params) ->
-        params.title.should.be 'Prism'
-        params.text.should.be 'HELLO'
-        kikSent = true
-        return params
+      overrides =
+        kik:
+          enabled: true
+          send: (params) ->
+            params.title.should.be MockGame.name
+            params.text.should.be 'HELLO'
+            kikSent = true
+            return params
 
-      emit {method: 'share.any', id: 1, params: [{text: 'HELLO', gameId: '1'}]}
-      .then ->
-        kikSent.should.be true
+      PortalService.__with__(overrides) ->
+        emit {method: 'share.any', id: 1, params: [
+          {text: 'HELLO', gameId: MockGame.id}
+        ]}
+        .then ->
+          kikSent.should.be true
 
     it 'shares via twitter if kik unavailable', (done) ->
-      PortalService.__set__ 'kik.send', null
+      overrides =
+        kik:
+          enabled: false
+        window:
+          open: (url) ->
+            url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
+            done()
 
-      PortalService.__set__ 'window.open', (url) ->
-        url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
-        done()
-
-      emit {method: 'share.any', id: 1, params: [{text: 'HELLO'}], gameId: '1'}
-      .catch done
+      PortalService.__with__(overrides) ->
+        emit {method: 'share.any', id: 1, params: [
+          {text: 'HELLO', gameId: MockGame.id}
+        ]}
+        .catch done
 
   describe 'kik methods', ->
-    before ->
-      PortalService.__set__ 'kik',
-        send: (params) ->
-          return params
-        enabled: true
-        browser:
-          setOrientationLock: -> null
-        metrics:
-          enableGoogleAnalytics: -> null
-
     it 'kik.isEnabled', ->
-      emit {method: 'kik.isEnabled', id: 1}
-      .then (res) ->
-        res.result.should.be true
+      overrides =
+        kik:
+          enabled: true
+      PortalService.__with__(overrides) ->
+        emit {method: 'kik.isEnabled', id: 1}
+        .then (res) ->
+          res.result.should.be true
 
     it 'kik.send', ->
-      emit {method: 'kik.send', params: [{title: 'abc', text: 'def'}], id: 1}
-      .then (data) ->
-        data.result.title.should.be 'abc'
-        data.result.text.should.be 'def'
+      overrides =
+        kik:
+          send: (params) ->
+            return params
+          enabled: true
+      PortalService.__with__(overrides) ->
+        emit {method: 'kik.send', params: [{title: 'abc', text: 'def'}], id: 1}
+        .then (data) ->
+          data.result.title.should.be 'abc'
+          data.result.text.should.be 'def'
 
     it 'kik.browser.setOrientationLock', ->
-      emit {method: 'kik.browser.setOrientationLock', id: 1}
-        .then (res) ->
-          should.not.exist res.result
+      overrides =
+        kik:
+          browser:
+            setOrientationLock: -> null
+      PortalService.__with__(overrides) ->
+        emit {method: 'kik.browser.setOrientationLock', id: 1}
+          .then (res) ->
+            should.not.exist res.result
 
     it 'kik.metrics.enableGoogleAnalytics', ->
-      emit {method: 'kik.metrics.enableGoogleAnalytics', id: 1}
-        .then (res) ->
-          should.not.exist res.result
+      overrides =
+        kik:
+          metrics:
+            enableGoogleAnalytics: -> null
+      PortalService.__with__(overrides) ->
+        emit {method: 'kik.metrics.enableGoogleAnalytics', id: 1}
+          .then (res) ->
+            should.not.exist res.result
 
   describe 'unsupported methods', ->
     it 'fails', ->

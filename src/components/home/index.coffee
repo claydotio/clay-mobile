@@ -55,7 +55,7 @@ module.exports = class Home
                         and more - inviting their friends to play your game!'
         z '.dev-actions',
           z 'a.button-primary.get-started' +
-            "[href=//#{config.DEV_HOST}/developers/login]",
+            "[href=//#{config.DEV_HOST}/login]",
             'Get started!'
           z 'a.button-ghost.explore-sdk'+
             '[href=https://github.com/claydotio/clay-sdk]', 'Explore the SDK'
