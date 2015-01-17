@@ -14,8 +14,8 @@ styles = require './index.styl'
 
 getDeviceStringFromBooleans = (isDesktop, isMobile) ->
   if isMobile and isDesktop then 'both' \
-  else if isMobile then 'mobile'
-  else 'desktop'
+  else if isDesktop then 'desktop'
+  else 'mobile'
 
 getDeviceBooleansFromString = (stringDevice) ->
   isDesktop = stringDevice is 'both' or stringDevice is 'desktop'

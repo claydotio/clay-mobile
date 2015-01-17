@@ -103,21 +103,28 @@ class Game
            @isUploadComplete(game)
 
   updateById: (gameId, gameUpdate) ->
+    isPublishAction = _.size(gameUpdate) is 1 and gameUpdate.status
+    unless isPublishAction
+      links = _.pick gameUpdate, [
+                'screenshotImages'
+              ]
+      gameUpdate = _.pick gameUpdate, [
+                     'name'
+                     'key'
+                     'category'
+                     'description'
+                     'orientation'
+                     'isDesktop'
+                     'isMobile'
+                     'links'
+                   ]
+      gameUpdate.links = links
+
     User.getMe().then (me) ->
       request "#{PATH}/#{gameId}",
         method: 'PUT'
         qs:
           accessToken: me.accessToken
-        body: if _.size(gameUpdate) is 1 and gameUpdate.status then gameUpdate \
-              else _.pick gameUpdate, [
-                'name'
-                'key'
-                'category'
-                'description'
-                'orientation'
-                'isDesktop'
-                'isMobile'
-                'links'
-              ]
+        body: gameUpdate
 
 module.exports = new Game()

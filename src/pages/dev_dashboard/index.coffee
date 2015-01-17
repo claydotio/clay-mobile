@@ -13,7 +13,7 @@ module.exports = class DevDashboard
       devDashboardMenu: new DevDashboardMenu({selected: params.tab})
       devDashboardContact: new DevDashboardContact()
       devDashboardGames: new DevDashboardGames()
-      devDashboardFooter: new DevBottomPadding()
+      devBottomPadding: new DevBottomPadding()
       selectedTab: params.tab
 
   render: (
@@ -22,7 +22,7 @@ module.exports = class DevDashboard
       devDashboardMenu
       devDashboardContact
       devDashboardGames
-      DevBottomPadding
+      devBottomPadding
       selectedTab
     }
   ) ->
@@ -33,4 +33,4 @@ module.exports = class DevDashboard
         z 'div.l-flex-1',
           if selectedTab is 'contact' then devDashboardContact
           else devDashboardGames
-      z 'div', DevBottomPadding
+      z 'div', devBottomPadding

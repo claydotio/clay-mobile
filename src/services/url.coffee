@@ -25,7 +25,7 @@ class UrlService
   # returns the full url to a game's subdomain page (eg http://slime.clay.io)
   getGameSubdomain: ({game, protocol}) =>
     protocol ?= if kik?.enabled and @isRootPath() then 'card' else 'http'
-    return "#{protocol}://#{game.key}.#{config.HOST}"
+    return "#{protocol}://#{game?.key}.#{config.HOST}"
 
   # url is optional, if undefined use config.HOST as base domain
   getSubdomain: ({url} = {}) ->

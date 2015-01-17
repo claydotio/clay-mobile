@@ -18,9 +18,11 @@ module.exports = class DevDashboardContact
         'Have a general question? Experiencing issues and need help? '
         'Let us know!'
       z 'div.buttons',
-        z 'a.button-primary.contact-us[href=mailto:contact@clay.io]',
+        z 'a.button-primary.contact-us[href=mailto:contact@clay.io]
+        [target=_blank]',
           'Contact us'
-        z 'a.button-secondary.submit-feedback[href=mailto:contact@clay.io]',
+        z 'a.button-secondary.submit-feedback[href=mailto:contact@clay.io]
+        [target=_blank]',
           'Submit feedback'
       z 'h1', 'Just looking to say hi?'
       z 'div', 'Get social and follow us.'

@@ -61,7 +61,7 @@ module.exports = class UploaderImage extends UploaderBase
       # .dz-message necessary to be clickable (no workaround)
       z 'div.dz-message.clickable.l-flex.l-vertical-center',
         z 'div.content.percentage',
-          "#{percentUploaded}%"
+          "#{Math.round(percentUploaded)}%"
         z 'div.content.drop-here',
           z 'div', '+'
           z 'div', label
