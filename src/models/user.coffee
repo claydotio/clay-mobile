@@ -13,22 +13,25 @@ getCookieValue = (key) ->
   match = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)')
   return if match then match.pop() else null
 
+secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
+# The '.' prefix allows subdomains access
+domain = '.' + secondLevelDomain
+
 setHostCookie = (key, value) ->
-  secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
   # The '.' prefix allows subdomains access
-  domain = '.' + secondLevelDomain
   document.cookie = "#{key}=#{value};path=/;domain=#{domain}"
+
+deleteHostCookie = (key) ->
+  document.cookie = "#{key}=;path=/;domain=#{domain};" +
+                    'expires=Thu, 01 Jan 1970 00:00:01 GMT'
 
 class User
 
-  getMe: ->
+  getMe: =>
     unless me
       me = if window._clay?.me
       then Promise.resolve window._clay.me
-      else request PATH + '/login/anon',
-        method: 'POST'
-        qs:
-          accessToken: getCookieValue config.ACCESS_TOKEN_COOKIE_KEY
+      else @loginAnon()
 
       # Save accessToken in cookie
       me.then (user) ->
@@ -101,6 +104,12 @@ class User
         body:
           [ op: 'add', path: '/-', value: gameId ]
 
+  loginAnon: ->
+    request PATH + '/login/anon',
+      method: 'POST'
+      qs:
+        accessToken: getCookieValue config.ACCESS_TOKEN_COOKIE_KEY
+
   loginKikAnon: (kikAnonToken) =>
     @getMe().then (me) ->
       request PATH + '/login/kikAnon',
@@ -108,7 +117,21 @@ class User
         qs:
           accessToken: me.accessToken
         body:
-          kikAnonToken: kikAnonToken
+          kikAnonToken
 
+  loginBasic: ({email, password}) =>
+    @getMe().then (me) ->
+      request PATH + '/login/basic',
+        method: 'POST'
+        qs:
+          accessToken: me.accessToken
+        body: {
+          email
+          password
+        }
+
+  logout: ->
+    deleteHostCookie config.ACCESS_TOKEN_COOKIE_KEY
+    @setMe @loginAnon
 
 module.exports = new User()

@@ -1,0 +1,33 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-dev-edit-game-details
+  width: 100%
+  padding: 20px 0
+
+  > .form
+
+    > .title
+      color: $greyDarker
+      font-weight: bold
+      font-size: $fontSizeMedium
+      margin-top: 20px
+
+      > .label-info
+        font-size: $fontSizeSmall
+        margin-top: 2px
+
+    > hr
+      margin: 40px 0 20px 0
+
+    > .next-step-container
+      clearfix()
+
+      > .next-step
+        float: right
+        margin-top: 20px
+
+    > .uploader-container
+      display: inline-block
+      margin: 0 10px 10px 0

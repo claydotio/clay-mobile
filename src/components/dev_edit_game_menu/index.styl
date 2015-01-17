@@ -1,0 +1,80 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-dev-edit-game-menu
+  > .menu
+    box-shadow: $z1Shadow
+    width: 240px
+    margin: 20px 40px 20px 0
+    font-size: $fontSizeMedium
+    border-radius: 3px
+
+    > .menu-item
+      display: block
+      background: $white
+      font-weight: bold
+      color: $greyDarker
+      border-radius: 3px
+      overflow: hidden
+
+      > .menu-item-content
+        > .icon-check
+          border-radius: 12px
+          width: 24px
+          height: 24px
+          line-height: 24px
+          margin-left: auto
+          margin-right: 10px
+          background: $greyLighter
+          color: $white
+          font-size: $iconTiny
+          text-align: center
+          box-sizing: border-box
+          padding: 1px 2px 0 0
+          transition: background 0.2s
+
+        > .text
+          padding: 15px 20px
+
+      &.is-selected
+        color: $black
+        background: $greyLightest
+        position: relative
+
+        &:before
+          content: ''
+          background: $orange
+          height: 100%
+          width: 5px
+          position: absolute
+
+      &.is-completed
+        > .menu-item-content
+          > .icon-check
+            background: $blue
+            transition: background 0.2s
+
+    > .test-game
+      color: $black
+
+      &.is-disabled
+        color: $greyDarker
+        pointer-events: none
+        cursor: default
+
+    > .publish
+      background: $blue
+      color: $white
+      width: 100%
+      text-align: left
+
+      &:disabled
+        opacity: 0.2
+        cursor: not-allowed
+        pointer-events: none
+
+      > .menu-item-content
+        > .icon-arrow-right
+          margin-left: auto
+          margin-right: 10px

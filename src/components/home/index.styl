@@ -1,0 +1,121 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-home
+  > .hero
+    height: 325px
+    display: flex
+    justify-content: space-between
+
+    > .info
+      max-width: 500px
+      align-self: flex-end
+
+
+      > h1
+        color: $greyDarkest
+        font-size: $fontSizeXXLarge
+        font-weight: lighter
+        margin-bottom: 20px
+
+      > .sub-head
+        color: $greyDarker
+        font-size: $fontSizeMedium
+        margin-bottom: 20px
+
+      > .google-play, .kik
+        height: 40px
+        margin-bottom: 40px
+
+      > .google-play
+        margin-right: 20px
+
+    > img
+      width: 430px
+      height: 325px
+
+  > .featured
+    background: $white
+
+    .link
+      display: inline-block
+      width: 225px
+      margin: 40px 10px
+
+      > .image
+        box-shadow: $z1Shadow
+        width: 100%
+        transition: box-shadow 0.5s
+
+      > .image:hover
+        box-shadow: $z2Shadow
+        transition: box-shadow 0.5s
+
+    .link:first-child
+      margin-left: 0
+
+    .link:last-child
+      margin-right: 0
+
+  > .dev-info
+    text-align: center
+
+    > h1
+      display: inline-block
+      font-weight: lighter
+      font-size: $fontSizeXXLarge
+      max-width: 550px
+      margin: 40px 0
+
+    > .sdk-features
+      > .sdk-feature
+        display: inline-block
+        width: 320px
+
+        > .icon
+          color $blue
+          font-size: $iconXXLarge
+
+        > .title
+          font-size: $fontSizeLarge
+          font-weight: bold
+          padding: 20px
+
+        > .info
+          display: block
+          margin: 0 auto
+          max-width: 270px
+          font-size: $fontSizeMedium
+          color: $greyDarker
+
+    > .dev-actions
+      padding: 40px
+
+      > .get-started
+        width: 180px
+        margin-right: 40px
+
+      > .explore-sdk
+        color: $blue
+
+  > .team
+    background: $white
+    text-align: center
+
+    > .l-content-container
+      > h1
+        font-weight: lighter
+        font-size: $fontSizeXXLarge
+        padding: 40px 0 20px 0
+        margin: 0
+
+      > .info
+        margin: 0 auto
+        max-width: 440px
+        color: $greyDarker
+        font-size: $fontSizeMedium
+
+      > .apply
+        width: 180px
+        margin: 40px 0

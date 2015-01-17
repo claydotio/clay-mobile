@@ -32,11 +32,13 @@ prism =
   description: 'The most amazing game ever'
   rating: 5
 
+mock = null
+
+window.XMLHttpRequest = ->
+  mock.XMLHttpRequest()
+
 mock = new Zock()
-  .base(config.FC_API_URL)
-  .post '/experiments'
-  .reply 200, {}
-  .base(config.CLAY_API_URL)
+  .base(config.API_URL)
   .logger log.info
   .post '/users/login/anon'
   .reply 200, id: 1, accessToken: 'thisisanaccesstoken', links: {}
@@ -74,9 +76,8 @@ mock = new Zock()
   .post '/pushTokens'
   .reply 200, (res) ->
     {gameId: prism.id, token: 'mocked_token'}
-
-
-window.XMLHttpRequest = ->
-  mock.XMLHttpRequest()
+  .base(config.FC_API_URL)
+  .post '/experiments'
+  .reply 200, {}
 
 module.exports = mock

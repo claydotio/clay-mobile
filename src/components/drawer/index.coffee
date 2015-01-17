@@ -12,6 +12,7 @@ Modal = require '../../models/modal'
 User = require '../../models/user'
 UrlService = require '../../services/url'
 PortalService = require '../../services/portal'
+GooglePlayAdService = require '../../services/google_play_ad'
 
 styles = require './index.styl'
 

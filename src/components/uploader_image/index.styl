@@ -1,0 +1,92 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+$borderRadius = 3px
+$zIndexThumbnail = 1
+$zIndexUnsafeOverlay = 2
+$zIndexSafe = 3
+$zIndexClose = 4
+
+.z-uploader-image
+  background: $greyLightest
+  border: 1px solid $greyLighter
+  width: 100%
+  height: 100%
+  text-align: center
+  vertical-align: top
+  position: relative
+  box-sizing: border-box
+  overflow: hidden
+
+  > .clickable
+    height: 100%
+    cursor: pointer
+
+    > .content
+      width: 100%
+      text-align: center
+
+    > .percentage
+      display: none
+
+  > .thumbnail
+    position: absolute
+    z-index: $zIndexThumbnail
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+
+    > .close
+      position: absolute
+      top: 10px
+      right: 10px
+      z-index: $zIndexClose
+
+      > .icon-close
+        color: $white
+        font-size: $iconMedium
+        text-shadow: 0 1px 6px rgba(0, 0, 0, .44)
+
+    > img
+      width: 100%
+      height: 100%
+
+    > .safe-unsafe
+      > .unsafe-overlay
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        z-index: $zIndexUnsafeOverlay
+        background: rgba(0, 0, 0, 0.3)
+
+      > .safe
+        position: absolute
+        z-index: $zIndexSafe
+        overflow: hidden
+        border: 3px solid rgba(255, 255, 255, 0.5)
+        box-sizing: border-box
+
+        > .safe-text
+          position: absolute
+          margin: 10px
+          text-shadow: 0 0 4px $white
+
+        > img
+          width: 100%
+          height: 100%
+
+  &.is-loading
+
+    > .clickable
+      > .drop-here
+        display: none
+
+      > .percentage
+        display: block
+
+    > .thumbnail
+      opacity: 0.3

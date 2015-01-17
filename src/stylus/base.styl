@@ -5,15 +5,24 @@ json('./vars.json')
 
 @font-face
   font-family: 'Roboto'
-  src: url('//cdn.wtf/d/fonts/roboto/regular.ttf') format("opentype")
-  font-weight: normal
   font-style: normal
+  font-weight: 300
+  src: local('Roboto Light'), local('Roboto-Light'),
+       url('//cdn.wtf/d/fonts/roboto/light.ttf') format('opentype')
 
 @font-face
   font-family: 'Roboto'
-  src: url('//cdn.wtf/d/fonts/roboto/bold.ttf') format("opentype")
-  font-weight: bold
   font-style: normal
+  font-weight: 500
+  src: local('Roboto Medium'), local('Roboto-Medium'),
+       url('//cdn.wtf/d/fonts/roboto/medium.ttf') format('opentype')
+
+@font-face
+  font-family: 'Roboto'
+  font-style: normal
+  font-weight: 700
+  src: local('Roboto Bold'), local('Roboto-Bold'),
+       url('//cdn.wtf/d/fonts/roboto/bold.ttf') format('opentype')
 
 @require './layout.styl'
 @require './button.styl'
@@ -33,12 +42,13 @@ html
 
 body
   background: $bgColor
-  color: $grayDark
+  color: $greyDarkest
   font: $fontSizeSmall 'Roboto'
+  font-weight: 500
 
 a
   text-decoration: none
-  color: $grayDark
+  color: $greyDarkest
   -webkit-tap-highlight-color: $transparent
 
 h1
@@ -52,3 +62,31 @@ button
   outline: none
   appearance: none
   -webkit-tap-highlight-color: $transparent
+
+input[type=checkbox]
+  width: 20px
+  height: 20px
+  vertical-align: bottom
+  cursor: pointer
+  // No IE support!
+  appearance: none
+  position: relative
+  outline: 0
+  box-sizing: border-box
+  background: $greyMedium
+  border-radius: $inputBorderRadius px
+
+input[type=checkbox]:checked
+  background: $orange
+  color: $white
+  outline: 0
+  &:after
+    // icon font
+    font-family: 'icons'
+    content: '\e808'
+    position: absolute
+    top: 0
+    left: -2px
+    text-align: center
+    width: 25px
+    font-size: 18px

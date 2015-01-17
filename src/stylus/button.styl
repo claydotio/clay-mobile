@@ -1,18 +1,20 @@
 $buttonRadius = 20
-$primaryButtonHeight = 40
+$buttonHeight = 40
 
 .button-primary, .button-secondary, .button-circle
   position: relative // for active state
   display: inline-block
-  height: $primaryButtonHeight px
+  height: $buttonHeight px
+  line-height: $buttonHeight px
   margin-bottom: 0 // for input.button-...
   border-radius: $buttonRadius px
-  box-shadow: 0.5px 0.866px 3px 0px rgba(0, 0, 0, 0.3)
+  box-shadow: $z1Shadow
   font-size: $fontSizeMedium
   font-weight: bold
   touch-action: manipulation
   cursor: pointer
   white-space: nowrap
+  transition: box-shadow 0.5s
 
   &.is-block
     display: block
@@ -22,10 +24,15 @@ $primaryButtonHeight = 40
     background: $blue
     color: $white
 
+  &:hover
+    box-shadow: $z2Shadow
+    transition: box-shadow 0.5s
+
   &:disabled
     opacity: 0.5
     cursor: not-allowed
     pointer-events: none
+    transition: opacity 0.2s
 
   // darken the button when active
   // stylus has a darken() function, but this implementation will use the
@@ -46,8 +53,8 @@ $primaryButtonHeight = 40
   padding: 0 20px
 
 .button-circle
-  width: $primaryButtonHeight px
-  height: $primaryButtonHeight px
+  width: $buttonHeight px
+  height: $buttonHeight px
 
 .button-primary
   background: $orange
@@ -70,7 +77,7 @@ $primaryButtonHeight = 40
     width: 100% // because bootstrap does it
 
   &:disabled
-    color: $disabledColor
+    color: $greyMedium
 
   &:active
     background: $activeBgColor

@@ -1,14 +1,22 @@
 {
-  "$orange": "#fcaa2f",
-  "$blue": "#67afe6",
-  "$bgColor": "#f2f2f2",
-  "$dividerColor": "#e6e6e6",
-  "$disabledColor": "#cccccc",
-  "$white": "#ffffff",
+  "$orange": "#ff8a00",
+  "$orangeAccent": "#f47300",
+  "$blue": "#008aff",
+  "$red": "#e74c3c",
+  "$green": "#2ecc71",
+
   "$black": "#000000",
-  "$grayDark": "#262626",
-  "$grayLight": "#757575",
+  "$greyDarkest": "#262626",
+  "$greyDarker": "#757575",
+  "$greyDark": "#999999",
+  "$greyMedium": "#cccccc",
+  "$greyLight": "#dedede",
+  "$greyLighter": "#e6e6e6",
+  "$greyLightest": "#f7f7f7",
+  "$white": "#ffffff",
+
   "$transparent": "transparent",
+  "$bgColor": "#f2f2f2",
   "$activeBgColor": "rgba(0, 0, 0, 0.05)",
   "$overlayColor": "rgba(0, 0, 0, 0.7)",
 
@@ -18,12 +26,21 @@
   "$fontSizeXLarge": "3.6rem",
   "$fontSizeXXLarge": "4.2rem",
 
+  "$z1Shadow": "0 2px 6px 0 rgba(0, 0, 0, 0.15)",
+  "$z2Shadow": "0 2px 4px 0 rgba(0, 0, 0, 0.05), 0 6px 18px 0 rgba(0, 0, 0, 0.15)",
+  "$z3Shadow": "0 11px 10px 0 rgba(0, 0, 0, 0.05), 0 13px 30px 0 rgba(0, 0, 0, 0.15)",
+  "$z4Shadow": "0 14px 12px 0 rgba(0, 0, 0, 0.05), 0 20px 40px 0 rgba(0, 0, 0, 0.15)",
+  "$z5Shadow": "0 17px 17px 0 rgba(0, 0, 0, 0.05), 0 27px 55px 0 rgba(0, 0, 0, 0.15)",
+
   "$iconTiny": "0.8rem",
   "$iconSmall": "1.2rem",
+  "$iconMedium": "1.8rem",
   "$iconLarge": "2.2rem",
+  "$iconXLarge": "3.2rem",
   "$iconXXLarge": "4.2rem",
 
   "$logoSvg": "//cdn.wtf/d/images/logos/logo_standard_bw.svg",
+  "$logoCloudSvg": "//cdn.wtf/d/images/logos/logo_cloud.svg",
   "$icon256": "//cdn.wtf/d/images/icons/icon_256.png",
 
   "$marketplaceGamePromoWidth": 440,

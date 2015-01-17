@@ -1,0 +1,60 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-input-text
+  display: inline-block
+
+  > input
+    border-radius: 3px
+    width: 360px
+    height: 40px
+    line-height: 38px
+    padding: 0 10px
+    border: 1px solid $greyLighter
+    color: $greyDarkest
+    box-sizing: border-box
+    background: $white
+    display: inline-block
+    vertical-align: middle
+
+    &:focus
+      border: 1px solid $greyMedium
+      outline: 0px
+
+    &:disabled
+      font-family: monospace
+      font-weight: bold
+      color: $greyDark
+
+    &:-webkit-input-placeholder
+      color: $greyMedium
+
+  &.theme-full-width
+    width: 100%
+
+    > input
+      width: 100%
+
+  &.theme-tiny-width input
+    width: 120px
+
+  &.theme-small-width input
+    width: 150px
+
+  &.theme-medium-width input
+    width: 320px
+
+  &.theme-subdomain
+    > input
+      width: 175px
+      border-top-right-radius: 0
+      border-bottom-right-radius: 0
+
+    > .postfix
+      font-family: inherit
+      color: $greyDarkest
+      width: 60px
+      border-left: 0
+      border-top-left-radius: 0
+      border-bottom-left-radius: 0

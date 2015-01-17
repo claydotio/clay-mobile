@@ -1,0 +1,22 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-input-base
+  display: block
+  margin: 10px 0
+
+  > .label
+    > .content
+      > .label-text
+        vertical-align: middle
+        width: 100px
+        font-weight: bold
+        color: $greyDarker
+        font-size: $fontSizeMedium
+
+      > .input-container
+        > .icon-help
+          font-size: $iconMedium
+          margin-left: 10px
+          color: $greyDarker

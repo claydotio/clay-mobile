@@ -1,0 +1,31 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-input-radios
+  > label
+    cursor: pointer
+    display: inline-block
+    margin-right: 20px
+    line-height: 20px
+
+
+    > input[type=radio]
+      width: 20px
+      height: 20px
+      border-radius: 10px
+      vertical-align: bottom
+      cursor: pointer
+      // No IE support!
+      appearance: none
+      position: relative
+      outline: 0
+      box-sizing: border-box
+      background: $greyMedium
+      margin-right: 10px
+
+      &:checked
+        background: $orange
+        color: $white
+        outline: 0
+        box-shadow: inset 0 0 0 2px $orange, inset 0 0 0 4px $bgColor

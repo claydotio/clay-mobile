@@ -9,16 +9,25 @@ log = require 'clay-loglevel'
 kik = require 'kik'
 
 config = require './config'
+HomePage = require './pages/home'
 PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
+DevLoginPage = require './pages/dev_login'
+DevDashboardPage = require './pages/dev_dashboard'
+DevEditGamePage = require './pages/dev_edit_game'
 PushToken = require './models/push_token'
 User = require './models/user'
+Developer = require './models/developer'
 UrlService = require './services/url'
 PortalService = require './services/portal'
 ErrorReportService = require './services/error_report'
+EnvironmentService = require './services/environment'
+
+baseStyles = require './stylus/base.styl'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 
+baseStyles.use()
 PortalService.registerMethods()
 
 ##############
@@ -75,12 +84,45 @@ if kik?.enabled or not window.history?.pushState or window.location.hash
 else
   z.router.setMode 'pathname'
 
+subdomain = UrlService.getSubdomain()
+
 root = document.getElementById('app')
 z.router.setRoot root
-z.router.add '/', GamesPage
-z.router.add '/games', GamesPage
-z.router.add '/game/:key', PlayGamePage
-z.router.add '/games/:filter', GamesPage
+
+if subdomain is 'dev'
+  z.router.add '/login', DevLoginPage
+
+  z.router.add '/dashboard', DevDashboardPage
+  z.router.add '/dashboard/:tab', DevDashboardPage
+  z.router.add '/edit-game', DevEditGamePage
+  z.router.add '/edit-game/:currentStep', DevEditGamePage
+  z.router.add '/edit-game/:currentStep/:gameId', DevEditGamePage
+
+else
+  z.router.add '/', if EnvironmentService.isMobile() \
+                    then GamesPage
+                    else HomePage
+  z.router.add '/games', GamesPage
+  z.router.add '/game/:key', PlayGamePage
+  z.router.add '/games/:filter', GamesPage
+
+route = ->
+  # Passed via message to denote game (share button in drawer uses this)
+  gameKey = kik?.message?.gameKey or (subdomain isnt 'dev' and subdomain)
+
+  if gameKey
+    PushToken.createByGameKey gameKey
+    z.router.go "/game/#{gameKey}"
+  else
+    PushToken.createForMarketplace()
+    z.router.go()
+
+  # FIXME when zorium hsa better support for redirects, move this up
+  if subdomain is 'dev' and z.router.currentPath is null
+    User.getMe().then ({id}) ->
+      Developer.find({ownerId: id})
+    .then (developers) ->
+      z.router.go if _.isEmpty developers then '/login' else '/dashboard'
 
 new Promise (resolve) ->
   #############
@@ -117,18 +159,6 @@ new Promise (resolve) ->
       User.convertExperiment 'hit_from_share'
     .catch log.trace
 
-  #####################
-  # ENGAGED GAMEPLAYS #
-  #####################
-
-  hasVisitedBefore = _.contains document.cookie, config.ACCESS_TOKEN_COOKIE_KEY
-
-  if isFromShare and not hasVisitedBefore
-    # The anon-token is unique for each 'app', so always use the marketplace one
-    uniqBody = if maybeKikAnonToken then {uniq: maybeKikAnonToken} else {}
-    User.convertExperiment 'new_unique_from_share', uniqBody
-    .catch log.trace
-
   ####################
   #    ANALYTICS     #
   ####################
@@ -158,15 +188,7 @@ new Promise (resolve) ->
   # ROUTING #
   ###########
 
-  # Passed via message to denote game (share button in drawer uses this)
-  gameKey = kik?.message?.gameKey or UrlService.getSubdomain()
-
-  if gameKey
-    PushToken.createByGameKey gameKey
-    z.router.go "/game/#{gameKey}"
-  else
-    PushToken.createForMarketplace()
-    z.router.go()
+  route()
 
   log.info 'App Ready'
 .catch log.trace

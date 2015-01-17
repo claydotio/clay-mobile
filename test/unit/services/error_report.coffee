@@ -1,27 +1,25 @@
 Joi = require 'joi'
 log = require 'clay-loglevel'
-Zock = require 'zock'
+Zock = new (require 'zock')()
 
 config = require 'config'
 ErrorReportService = require 'services/error_report'
 
 describe 'ErrorReportService', ->
 
+  before ->
+    window.XMLHttpRequest = ->
+      Zock.XMLHttpRequest()
+
   it 'report()', (done) ->
-    mock = new Zock()
+    Zock
       .base(config.CLAY_API_URL)
-      .logger log.info
       .post '/log'
       .reply 200, (res) ->
         schema = Joi.object().keys
           message: Joi.string()
 
         Joi.validate res.body, schema, {presence: 'required'}, (err) ->
-          window.XMLHttpRequest = originalXMLHttpRequestFn
           done err
 
-    originalXMLHttpRequestFn = window.XMLHttpRequest
-    window.XMLHttpRequest = ->
-      mock.XMLHttpRequest()
-
-    ErrorReportService.report new Error()
+    ErrorReportService.report new Error('err')

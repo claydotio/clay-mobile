@@ -57,8 +57,9 @@ class PortalService
         tweet(text)
 
       return null
-    .catch ->
+    .catch (err) ->
       tweet(text)
+      log.trace err
       return null
 
 module.exports = new PortalService()
