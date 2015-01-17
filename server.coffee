@@ -8,11 +8,13 @@ compress = require 'compression'
 log = require 'loglevel'
 cookieParser = require 'cookie-parser'
 request = require 'request-promise'
+helmet = require 'helmet'
 
 config = require './src/config'
 
 API_REQUEST_TIMEOUT = 1000 # 1 second
 HEALTHCHECK_TIMEOUT = 600
+EIGHTEEN_WEEKS_MS = 10886400000 # 18 weeks
 
 router = express.Router()
 log.enableAll()
@@ -26,9 +28,6 @@ indexTpl = dust.compile fs.readFileSync('index.dust', 'utf-8'), 'index'
 
 distJs = if config.ENV is config.ENVS.PROD \
           then fs.readFileSync('dist/js/bundle.js', 'utf-8')
-          else null
-distCss = if config.ENV is config.ENVS.PROD \
-          then fs.readFileSync('dist/css/bundle.css', 'utf-8')
           else null
 
 dust.loadSource indexTpl
@@ -98,17 +97,56 @@ isKikUseragentMiddleware = ->
 app = express()
 
 app.use compress()
-if config.ENV is config.ENVS.PROD
-then app.use express['static'](__dirname + '/dist')
-else app.use express['static'](__dirname + '/build')
 
-# After checking static files
+# Security
+webpackDevHost = config.WEBPACK_DEV_HOSTNAME + ':' + config.WEBPACK_DEV_PORT
+scriptSrc = [
+  '\'unsafe-eval\''
+  '\'unsafe-inline\''
+  'cdn.wtf'
+  'www.google-analytics.com'
+  'cdn.kik.com'
+  if config.ENV is config.ENVS.DEV then webpackDevHost
+
+]
+stylesSrc = [
+  '\'unsafe-inline\''
+  if config.ENV is config.ENVS.DEV then webpackDevHost
+]
+app.use helmet.contentSecurityPolicy
+  scriptSrc: scriptSrc
+  stylesSrc: stylesSrc
+app.use helmet.xssFilter()
+app.use helmet.frameguard()
+
+app.use (req, res, next) ->
+  devHostname = config.DEV_HOST.split(':')[0]
+  if req.hostname is devHostname
+    middleware = helmet.hsts
+      # Must be at least 18 weeks to be approved by Google
+      # https://hstspreload.appspot.com/
+      maxAge: EIGHTEEN_WEEKS_MS
+      # required for Google approval, but disabled because of this post
+      # http://serverfault.com
+      # /questions/482350/can-i-turn-on-hsts-for-1-subdomain
+      #includeSubdomains: true
+      preload: true # include in Google Chrome
+      force: true
+
+    return middleware(req, res, next)
+  return next()
+
+app.disable 'x-powered-by'
+app.use helmet.noSniff()
+app.use helmet.crossdomain()
+
 app.use cookieParser()
 app.use useragent.express()
 app.use isKikUseragentMiddleware()
 app.use clayUserSessionMiddleware()
 app.use clayFlakCannonSessionMiddleware()
 app.use router
+
 
 # Routes
 router.get '/healthcheck', (req, res) ->
@@ -189,7 +227,6 @@ renderHomePage = do ->
     me: 'REPLACE_WITH_ME'
     experiments: 'REPLACE_WITH_EXPERIMENTS'
     distjs: distJs
-    distcss: distCss
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
 
@@ -218,7 +255,6 @@ renderGamePage = (gameKey, me, experiments) ->
       keywords: "#{game.name}, mobile games,  free mobile games"
       name: "#{game.name} - Clay.io"
       distjs: distJs
-      distcss: distCss
 
       # TODO: (Zoli) This isn't good enough
       icon256: game.icon128Url

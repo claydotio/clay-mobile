@@ -23,8 +23,11 @@ PortalService = require './services/portal'
 ErrorReportService = require './services/error_report'
 EnvironmentService = require './services/environment'
 
+baseStyles = require './stylus/base.styl'
+
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
 
+baseStyles.use()
 PortalService.registerMethods()
 
 ##############

@@ -5,6 +5,7 @@ module.exports =
   DEV_HOST: process.env.CLAY_MOBILE_DEV_HOST or 'dev.clay.io'
   PORT: process.env.CLAY_MOBILE_PORT or process.env.PORT or 50040
   WEBPACK_DEV_HOSTNAME: process.env.WEBPACK_DEV_HOSTNAME or 'localhost'
+  WEBPACK_DEV_PORT: 3004
   MOCK: process.env.MOCK or false
   ENV: process.env.NODE_ENV or 'production'
   ACCESS_TOKEN_COOKIE_KEY: 'accessToken2'
