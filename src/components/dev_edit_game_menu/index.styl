@@ -55,6 +55,14 @@ json('../../stylus/vars.json')
             background: $blue
             transition: background 0.2s
 
+    > .test-game
+      color: $black
+
+      &.is-disabled
+        color: $greyDarker
+        pointer-events: none
+        cursor: default
+
     > .publish
       background: $blue
       color: $white

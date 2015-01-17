@@ -43,6 +43,24 @@ module.exports = class DevEditGameMenu
     isUploadComplete = Game.isUploadComplete game
     isApprovable = Game.isApprovable game
 
+    menuSteps = [
+      {
+        step: 'step'
+        text: 'Get started'
+        isCompleted: isStartComplete
+      }
+      {
+        step: 'details'
+        text: 'Add details'
+        isCompleted: isDetailsComplete
+      }
+      {
+        step: 'upload'
+        text: 'Upload game'
+        isCompleted: isUploadComplete
+      }
+    ]
+
     z '.z-dev-edit-game-menu',
       z '.menu',
         z.router.link z 'a.menu-item[href=/dashboard]',
@@ -50,61 +68,33 @@ module.exports = class DevEditGameMenu
             z 'div.text', 'Back to dashboard'
 
       z '.menu',
-        z "a.menu-item[href=/edit-game/start/#{game?.id}]
-        #{if currentStep is 'start' then '.is-selected' else ''}
-        #{if isStartComplete then '.is-completed' else ''}", {
-          onclick: (e) =>
-            e?.preventDefault()
-            @save().then ->
-              z.router.go "/edit-game/start/#{game?.id}"
-            .catch (err) ->
-              error = JSON.parse err._body
-              # TODO: (Austin) better error handling UX
-              window.alert "Error: #{error.detail}"
-            .catch log.trace
-          },
-          z 'div.l-flex.l-vertical-center.menu-item-content',
-            z 'div.text', 'Get started'
-            z 'i.icon.icon-check'
-        z "a.menu-item[href=/edit-game/details/#{game?.id}]
-        #{if currentStep is 'details' then '.is-selected' else ''}
-        #{if isDetailsComplete then '.is-completed' else ''}", {
-          onclick: (e) =>
-            e?.preventDefault()
-
-            @save().then ->
-              z.router.go "/edit-game/details/#{game?.id}"
-            .catch (err) ->
-              error = JSON.parse err._body
-              # TODO: (Austin) better error handling UX
-              window.alert "Error: #{error.detail}"
-            .catch log.trace
-          },
-          z 'div.l-flex.l-vertical-center.menu-item-content',
-            z 'div.text', 'Add details'
-            z 'i.icon.icon-check'
-        z "a.menu-item  [href=/edit-game/upload/#{game?.id}]
-        #{if currentStep is 'upload' then '.is-selected' else ''}
-        #{if isUploadComplete then '.is-completed' else ''}", {
-          onclick: (e) =>
-            e?.preventDefault()
-
-            @save().then ->
-              z.router.go "/edit-game/upload/#{game?.id}"
-            .catch (err) ->
-              error = JSON.parse err._body
-              # TODO: (Austin) better error handling UX
-              window.alert "Error: #{error.detail}"
-            .catch log.trace
-          },
-          z 'div.l-flex.l-vertical-center.menu-item-content',
-            z 'div.text', 'Upload game'
-            z 'i.icon.icon-check'
-
+        _.map menuSteps, ({step, text, isCompleted}) =>
+          z "a.menu-item[href=/edit-game/#{step}/#{game?.id}]
+          #{currentStep is step and '.is-selected'}
+          #{isCompleted and '.is-completed'}", {
+            onclick: (e) =>
+              console.log 'click'
+              e?.preventDefault()
+              @save().then ->
+                z.router.go "/edit-game/#{step}/#{game?.id}"
+              .catch (err) ->
+                error = JSON.parse err._body
+                # TODO: (Austin) better error handling UX
+                window.alert "Error: #{error.detail}"
+              .catch log.trace
+            },
+            z 'div.l-flex.l-vertical-center.menu-item-content',
+              z 'div.text', text
+              z 'i.icon.icon-check'
 
       z '.menu',
+        z "a.menu-item.test-game[href=//#{game?.key}.clay.io][target=_blank]
+        #{not isUploadComplete or not game.key and '.is-disabled'}",
+          z 'div.l-flex.l-vertical-center.menu-item-content',
+            z 'div.text', 'Test game'
+
         z "button.menu-item.publish
-        #{if not isApprovable then '[disabled]' else ''}", {
+        #{not isApprovable and '[disabled]'}", {
           onclick: (e) =>
             e?.preventDefault()
 

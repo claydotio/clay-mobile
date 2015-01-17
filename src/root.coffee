@@ -103,6 +103,23 @@ else
   z.router.add '/game/:key', PlayGamePage
   z.router.add '/games/:filter', GamesPage
 
+route = ->
+  # Passed via message to denote game (share button in drawer uses this)
+  gameKey = kik?.message?.gameKey or (subdomain isnt 'dev' and subdomain)
+
+  if gameKey
+    PushToken.createByGameKey gameKey
+    z.router.go "/game/#{gameKey}"
+  else
+    PushToken.createForMarketplace()
+    z.router.go()
+
+  # FIXME when zorium hsa better support for redirects, move this up
+  if subdomain is 'dev' and z.router.currentPath is null
+    User.getMe().then ({id}) ->
+      Developer.find({ownerId: id})
+    .then (developers) ->
+      z.router.go if _.isEmpty developers then '/login' else '/dashboard'
 
 new Promise (resolve) ->
   #############
@@ -168,24 +185,7 @@ new Promise (resolve) ->
   # ROUTING #
   ###########
 
-  if subdomain is 'dev'
-    User.getMe().then ({id}) ->
-      Developer.find({ownerId: id})
-    .then (developers) ->
-      if _.isEmpty developers
-        z.router.go '/login'
-      else
-        z.router.go '/dashboard'
-  else
-    # Passed via message to denote game (share button in drawer uses this)
-    gameKey = kik?.message?.gameKey or subdomain
-
-    if gameKey
-      PushToken.createByGameKey gameKey
-      z.router.go "/game/#{gameKey}"
-    else
-      PushToken.createForMarketplace()
-      z.router.go()
+  route()
 
   log.info 'App Ready'
 .catch log.trace
