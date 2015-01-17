@@ -1,5 +1,6 @@
 z = require 'zorium'
 
+config = require '../../config'
 SocialIcons = require '../social_icons'
 styleConfig = require '../../stylus/vars.json'
 
@@ -19,14 +20,14 @@ module.exports = class GuestFooter
           z 'h3.title', 'About'
           z 'div.l-flex.links-container',
             z 'ul.links',
-              z 'li', z 'a[href=/blog]', 'Blog'
-              z 'li', z 'a[href=/about]', 'Team'
+              z 'li', z "a[href=//#{config.HOST}/blog]", 'Blog'
+              z 'li', z "a[href=//#{config.HOST}/about]", 'Team'
               z 'li', z 'a[href=mailto:jobs@clay.io' +
                         '?Subject=Let\'s change the world]', 'Jobs'
             z 'ul.links',
-              z 'li', z 'a[href=/contact]', 'Contact'
-              z 'li', z 'a[href=/tos]', 'Terms'
-              z 'li', z 'a[href=/privacy]', 'Privacy'
+              z 'li', z 'a[href=/dashboard/contact]', 'Contact'
+              z 'li', z "a[href=//#{config.HOST}/tos]", 'Terms'
+              z 'li', z "a[href=//#{config.HOST}/privacy]", 'Privacy'
         z '.section',
           z 'h3.title', 'Connect'
           SocialIcons

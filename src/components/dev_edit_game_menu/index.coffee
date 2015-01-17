@@ -3,6 +3,7 @@ log = require 'clay-loglevel'
 
 Game = require '../../models/game'
 Spinner = require '../spinner'
+UrlService = require '../../services/url'
 
 styles = require './index.styl'
 
@@ -42,10 +43,11 @@ module.exports = class DevEditGameMenu
     isDetailsComplete = Game.isDetailsComplete game
     isUploadComplete = Game.isUploadComplete game
     isApprovable = Game.isApprovable game
+    gameUrl = UrlService.getGameSubdomain {game}
 
     menuSteps = [
       {
-        step: 'step'
+        step: 'start'
         text: 'Get started'
         isCompleted: isStartComplete
       }
@@ -73,7 +75,6 @@ module.exports = class DevEditGameMenu
           #{currentStep is step and '.is-selected'}
           #{isCompleted and '.is-completed'}", {
             onclick: (e) =>
-              console.log 'click'
               e?.preventDefault()
               @save().then ->
                 z.router.go "/edit-game/#{step}/#{game?.id}"
@@ -88,8 +89,8 @@ module.exports = class DevEditGameMenu
               z 'i.icon.icon-check'
 
       z '.menu',
-        z "a.menu-item.test-game[href=//#{game?.key}.clay.io][target=_blank]
-        #{not isUploadComplete or not game.key and '.is-disabled'}",
+        z "a.menu-item.test-game[href=#{gameUrl}][target=_blank]
+        #{(not isUploadComplete or not game.key) and '.is-disabled'}",
           z 'div.l-flex.l-vertical-center.menu-item-content',
             z 'div.text', 'Test game'
 

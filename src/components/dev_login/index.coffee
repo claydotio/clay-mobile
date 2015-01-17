@@ -146,5 +146,5 @@ module.exports = class DevLogin
               http://play.google.com/store/apps/details?id=com.clay.clay]',
               z 'img' +
                 '[src=//cdn.wtf/d/images/google_play/google_play_get_it.svg]'
-            z 'a.kik[href=http://kik.com][target=_blank]',
+            z 'span.kik',
               z 'img[src=//cdn.wtf/d/images/kik/kik_logo.svg]'
