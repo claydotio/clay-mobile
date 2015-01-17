@@ -90,6 +90,8 @@ describe 'PortalService', ->
           kikSent.should.be true
 
     it 'shares via twitter if kik unavailable', (done) ->
+      # FIXME: Yeah... so this line is necessary. Probably a rewire bug.
+      PortalService.__set__ 'kik', {enabled: true}
       overrides =
         kik:
           enabled: false
