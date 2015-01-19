@@ -110,14 +110,11 @@ class User
       qs:
         accessToken: getCookieValue config.ACCESS_TOKEN_COOKIE_KEY
 
-  loginKikAnon: (kikAnonToken) =>
-    @getMe().then (me) ->
-      request PATH + '/login/kikAnon',
-        method: 'POST'
-        qs:
-          accessToken: me.accessToken
-        body:
-          {kikAnonToken}
+  loginKikAnon: (kikAnonToken) ->
+    request PATH + '/login/kikAnon',
+      method: 'POST'
+      body:
+        {kikAnonToken}
 
   loginBasic: ({email, password}) =>
     @getMe().then (me) ->
