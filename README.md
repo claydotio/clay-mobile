@@ -1,5 +1,9 @@
 # Clay Mobile
 
+The beautiful frontend for [Clay.io](http://clay.io). Powered by [Zorium](http://zorium.org), CoffeeScript, Stylus, Gulp, webpack and sweat.
+
+![Clay.io](https://raw.githubusercontent.com/claydotio/design-assets/master/images/desktop_site/devices.jpg)
+
 ### Getting Started
 `npm install`
 `npm run dev`
