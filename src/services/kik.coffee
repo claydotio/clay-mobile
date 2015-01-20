@@ -13,7 +13,7 @@ class KikService
   isFromPush: =>
     unless @isFromPushPromise
       @isFromPushPromise = new Promise (resolve, reject) ->
-        kik.push.handler ->
+        kik?.push?.handler ->
           resolve true
         setTimeout (-> resolve false), KIK_PUSH_HANDLER_TIMEOUT
 

@@ -1,69 +1,42 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
 
-localstore = require '../../lib/localstore'
 User = require '../../models/user'
-Modal = require '../../models/modal'
 Header = require '../../components/header'
 ModalViewer = require '../../components/modal_viewer'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
 GooglePlayAdService = require '../../services/google_play_ad'
-GooglePlayAdControl = require '../../components/google_play_ad'
-GooglePlayAdInstallButton =
-  require '../../components/google_play_ad/install_button'
-GooglePlayAdModalControl = require '../../components/google_play_ad_modal'
-GooglePlayAdModalHeaderBackground =
-  require '../../components/google_play_ad_modal/header_background'
+GooglePlayAd = require '../../components/google_play_ad'
 
 module.exports = class GamesPage
   constructor: ->
-    @Header = new Header()
-    @ModalViewer = new ModalViewer()
-    @PopularGames = null
-    @RecentGames = new RecentGames()
 
-    @PopularGames = null
-    User.getMe().then (user) =>
-      hasRecentGames = user.links.recentGames
-      if hasRecentGames
-        @PopularGames = new PopularGames({featuredGameRow: 1})
-      else
-        @PopularGames = new PopularGames({featuredGameRow: 0})
+    @state = z.state
+      header: new Header()
+      modalViewer: new ModalViewer()
+      recentGames: new RecentGames()
+      popularGames: z.observe User.getMe().then( (user) ->
+        hasRecentGames = user.links.recentGames
+        return if hasRecentGames \
+               then new PopularGames({featuredGameRow: 1})
+               else new PopularGames({featuredGameRow: 0})
+      ).catch log.trace
+      googlePlayAd: if GooglePlayAdService.shouldShowAds() \
+                    then new GooglePlayAd()
+                    else null
 
-      z.redraw()
+    @googlePlayAdModalPromise = GooglePlayAdService.shouldShowAdModal()
+    .then (shouldShow) ->
+      if shouldShow
+        GooglePlayAdService.showAdModal()
     .catch log.trace
 
-    User.getExperiments().then (params) =>
-      if params.googlePlayAd isnt 'none' and GooglePlayAdService.shouldShowAds()
-        @GooglePlayAd = if params.googlePlayAd is 'install-button' \
-                        then new GooglePlayAdInstallButton()
-                        else new GooglePlayAdControl()
-
-  showGooglePlayAdModal: ->
-    User.getExperiments().then (params) ->
-      unless params.googlePlayModal is 'none'
-        GooglePlayAdModalComponent =
-                              if params.googlePlayModal is 'header-background' \
-                              then new GooglePlayAdModalHeaderBackground()
-                              else new GooglePlayAdModalControl()
-        Modal.openComponent(
-          component: GooglePlayAdModalComponent
-        )
-
-        localstore.set 'hasSeenGooglePlayAd', seen: true
-
-  onMount: =>
-    if GooglePlayAdService.shouldShowAds()
-      localstore.get('hasSeenGooglePlayAd').then (hasSeenAd) =>
-        unless hasSeenAd
-          @showGooglePlayAdModal()
-
-  render: =>
+  render: ({header, googlePlayAd, recentGames, popularGames, modalViewer}) ->
     z 'div', [
-      z 'div', @Header
-      z 'div', @GooglePlayAd
-      z 'div', @RecentGames
-      z 'div', @PopularGames
-      @ModalViewer
+      z 'div', header
+      z 'div', googlePlayAd
+      z 'div', recentGames
+      z 'div', popularGames
+      modalViewer
     ]

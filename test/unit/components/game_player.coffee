@@ -1,45 +1,34 @@
 _ = require 'lodash'
+rewire = require 'rewire'
 should = require('clay-chai').should()
 Zock = new (require 'zock')()
+Promise = require 'bluebird'
 
 config = require 'config'
 localstore = require 'lib/localstore'
-GamePlayer = require 'components/game_player'
+GamePlayer = rewire 'components/game_player'
 Modal = require 'models/modal'
+Game = require 'models/game'
 MockGame = require '../../_models/game'
 
 describe 'GamePlayer', ->
-  it 'shows share modal on 3rd visit', ->
-    Zock
-      .base(config.CLAY_API_URL)
-      .get '/games/findOne'
-      .reply 200, (res) ->
-        return MockGame
+  it 'shows share modal only on 3rd visit', ->
+    visitCount = 0
+    overrides =
+      Game:
+        getByKey: (key) ->
+          Promise.resolve MockGame
+        incrementPlayCount: ->
+          Promise.resolve visitCount
 
-    gamePlayCountKey = "game:playCount:#{MockGame.key}"
-    localstore.set gamePlayCountKey, {count: 0}
-
-    GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
-    GamePlayerComponent.onFirstRender()
-    GamePlayerComponent.showShareModalPromise
-    .then ->
-      should.not.exist(Modal.component)
-      GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
-      GamePlayerComponent.onFirstRender()
-      GamePlayerComponent.showShareModalPromise
-    .then ->
-      should.not.exist(Modal.component)
-      GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
-      GamePlayerComponent.onFirstRender()
-      GamePlayerComponent.showShareModalPromise
-    .then ->
-      Modal.component.should.exist
-      Modal.closeComponent()
-      GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
-      GamePlayerComponent.onFirstRender()
-      GamePlayerComponent.showShareModalPromise
-    .then ->
-      should.not.exist(Modal.component)
-      GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
-      GamePlayerComponent.onFirstRender()
-      GamePlayerComponent.showShareModalPromise
+    GamePlayer.__with__(overrides) ->
+      Promise.each _.range(10), (newVisitCount) ->
+        visitCount += 1
+        GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
+        GamePlayerComponent.showShareModalPromise
+        .then ->
+          if visitCount is 3
+            Modal.component.should.exist
+            Modal.closeComponent()
+          else
+            should.not.exist Modal.component

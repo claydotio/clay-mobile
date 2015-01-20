@@ -9,24 +9,20 @@ module.exports = class GooglePlayAdDrawer
   constructor: ->
     styles.use()
 
-  openGooglePlay: ->
+  openGooglePlay: (e) ->
+    e.preventDefault()
     User.convertExperiment('to_google_play').catch log.trace
     ga? 'send', 'event', 'to_google_play', 'convert'
     window.open 'https://play.google.com/store/apps/details?id=com.clay.clay'
 
-  render: ->
+  render: =>
     z 'div.z-google-play-ad-drawer',
-      z 'div.l-flex',
-        z 'div.google-play-icon',
-          z 'img',
-            src: '//cdn.wtf/d/images/google_play/google_play_icon.svg'
-            width: 22
-            height: 24
-        z 'div.content',
+      z 'div.content',
+        z 'div.content-text',
           z 'h2', 'Get the app!'
-          z 'div.message',
-            'Play your favorite games even faster. '
-            'Official app now on Google Play!'
-      z 'button.button-secondary.is-block',
+          z 'div', 'Play your favorite games even faster. '
+          z 'div', 'Official app now on Google Play!'
+      z 'button.button-ghost.is-block.install-button',
         onclick: @openGooglePlay,
-        'Download now'
+        z 'i.icon.icon-arrow-down'
+        z 'span.button-text', 'Install now'
