@@ -32,68 +32,6 @@ distJs = if config.ENV is config.ENVS.PROD \
 
 dust.loadSource indexTpl
 
-# Middlewares
-clayUserSessionMiddleware = ->
-  (req, res, next) ->
-    req.clay = {}
-    req.clay.me = null
-
-    # Don't inject anything for kik, it will use kikAnonToken
-    # They delete cookies all the time, inflating signup metrics
-    if req.useragent.isProbablyKik
-      return next()
-
-    loginUrl = config.CLAY_API_URL + '/users/login/anon'
-    meUrl = config.CLAY_API_URL + '/users/me'
-    accessToken = req.cookies[config.ACCESS_TOKEN_COOKIE_KEY]
-
-    # Don't inject user because the page is sent over http
-    if accessToken
-      return next()
-    else
-      isSubdomain = req.headers.host isnt config.HOST
-      if isSubdomain
-        return next()
-
-      Promise.cast request.post loginUrl
-      .timeout API_REQUEST_TIMEOUT
-      .then (body) ->
-        req.clay.me = JSON.parse body
-        next()
-      .catch (err) ->
-        log.trace err
-        next()
-
-clayFlakCannonSessionMiddleware = ->
-  (req, res, next) ->
-    me = req.clay?.me
-    req.clay.experiments = null
-    unless me
-      return next()
-
-    experimentsUrl = config.FC_API_URL + '/experiments'
-    Promise.cast request.post experimentsUrl,
-      {json: userId: me.id}
-    .timeout API_REQUEST_TIMEOUT
-    .then (body) ->
-      req.clay.experiments = body
-      next()
-    .catch (err) ->
-      log.trace err
-      next()
-
-isKikUseragentMiddleware = ->
-  (req, res, next) ->
-    {source, isMac, isSafari, isMobile} = req.useragent
-
-    isKik = /^Kik/.test source
-    isKikBot = /KikBot/.test source
-    isiOSWebView = isMac and not isSafari and isMobile
-
-    req.useragent.isProbablyKik = isKik or isKikBot or isiOSWebView
-
-    next()
-
 app = express()
 
 app.use compress()
@@ -147,9 +85,6 @@ app.use helmet.crossdomain()
 
 app.use cookieParser()
 app.use useragent.express()
-app.use isKikUseragentMiddleware()
-app.use clayUserSessionMiddleware()
-app.use clayFlakCannonSessionMiddleware()
 app.use router
 
 
@@ -171,13 +106,13 @@ router.get '/game/:key', (req, res) ->
   log.info 'AGENT ', req.useragent.source
   gameKey = req.params.key
 
-  renderGamePage gameKey, req.clay.me, req.clay.experiments
+  renderGamePage gameKey
   .then (html) ->
     res.send html
   .catch (err) ->
     log.trace err
 
-    renderHomePage(req.clay.me, req.clay.experiments)
+    renderHomePage()
     .then (html) ->
       res.send html
     .catch (err) ->
@@ -192,19 +127,19 @@ router.get '*', (req, res) ->
   if host isnt config.HOST and host isnt config.DEV_HOST and host isnt '0.0.0.0'
     gameKey = host.split('.')[0]
 
-    return renderGamePage gameKey, req.clay.me, req.clay.experiments
+    return renderGamePage gameKey
       .then (html) ->
         res.send html
       .catch (err) ->
         log.trace err
-        renderHomePage(req.clay.me, req.clay.experiments)
+        renderHomePage()
         .then (html) ->
           res.send html
         .catch (err) ->
           log.trace err
           res.status(500).send()
 
-  renderHomePage(req.clay.me, req.clay.experiments)
+  renderHomePage()
   .then (html) ->
     res.send html
   .catch (err) ->
@@ -229,18 +164,13 @@ renderHomePage = do ->
     iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
     url: 'http://clay.io/'
     canonical: 'http://clay.io'
-    me: 'REPLACE_WITH_ME'
-    experiments: 'REPLACE_WITH_EXPERIMENTS'
     distjs: distJs
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
 
-  (me, experiments) ->
-    rendered.then (html) ->
-      html.replace 'REPLACE_WITH_ME', JSON.stringify me
-      .replace 'REPLACE_WITH_EXPERIMENTS', JSON.stringify experiments
+  -> rendered
 
-renderGamePage = (gameKey, me, experiments) ->
+renderGamePage = (gameKey) ->
 
   gameUrl = config.CLAY_API_URL + "/games/findOne?key=#{gameKey}"
 
@@ -272,9 +202,6 @@ renderGamePage = (gameKey, me, experiments) ->
       icon440x280: "http://cdn.wtf/g/#{game.id}/meta/promo_440.png"
       url: "http://#{game.key}.clay.io"
       canonical: "http://#{game.key}.clay.io"
-
-      me: JSON.stringify me
-      experiments: JSON.stringify experiments
 
     Promise.promisify(dust.render, dust) 'index', page
 
