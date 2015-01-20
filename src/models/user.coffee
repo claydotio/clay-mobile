@@ -29,9 +29,7 @@ class User
 
   getMe: =>
     unless me
-      me = if window._clay?.me
-      then Promise.resolve window._clay.me
-      else @loginAnon()
+      me = @loginAnon()
 
       # Save accessToken in cookie
       me.then (user) ->
@@ -68,9 +66,7 @@ class User
 
   getExperiments: =>
     unless experiments
-      experiments = if window._clay?.experiments
-      then Promise.resolve window._clay.experiments
-      else @getMe().then (user) ->
+      experiments = @getMe().then (user) ->
         request config.FC_API_URL + '/experiments',
           method: 'POST'
           body:
