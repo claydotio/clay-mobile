@@ -6,12 +6,13 @@ The beautiful frontend for [Clay.io](http://clay.io). Powered by [Zorium](http:/
 
 ### Getting Started
 `npm install`
-`npm run dev`
+`npm run mock`
 
 ### Install pre-commit hook
 `ln -s ../../pre-commit.sh .git/hooks/pre-commit`
 
 ### Commands
+##### `npm run mock` - Start the debug server, stubbing API calls, watching files
 ##### `npm run dev` - Start the debug server, watching files
 ##### `npm test` - Run the test suite (opens Chrome and Firefox)
 
@@ -20,11 +21,6 @@ The beautiful frontend for [Clay.io](http://clay.io). Powered by [Zorium](http:/
 ##### `NODE_ENV=production npm start` - Start the debug server, serving from ./dist
 
 ##### `npm run build` - Compiles + Minifies assets -> ./dist
-
-#### Typical Dev Command
-`CLAY_API_URL=http://192.168.0.100:3001 FC_API_URL=http://192.168.0.100:3002 HOST=192.168.0.100:3000 WEBPACK_DEV_HOSTNAME=192.168.0.100 npm run dev`
-
-CLAY_API_URL is only if you're running [clay-mobile-api](https://github.com/claydotio/clay-mobile-api) locally. FC_API_URL is only if you're running [flak-cannon](https://github.com/claydotio/flak-cannon) locally. Replace 192.168.0.100 with your local IP.
 
 ### Dev Environment
 ##### Editor: Atom.io
