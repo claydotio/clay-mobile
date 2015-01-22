@@ -76,6 +76,9 @@ else
 # ROUTING SETUP #
 #################
 
+z.router.on 'route', (path) ->
+  ga? 'send', 'pageview', path
+
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
 # Also, if someone recieved a link with a hash, respect it

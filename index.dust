@@ -63,7 +63,6 @@
 
       ga('create', 'UA-27992080-6', 'auto');
       ga('require', 'displayfeatures');
-      ga('send', 'pageview');
     </script>
     <script>
       // We save some native methods to temp variables and re-set to
