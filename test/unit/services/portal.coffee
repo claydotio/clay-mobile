@@ -74,8 +74,9 @@ describe 'PortalService', ->
     it 'shares via kik', ->
       kikSent = false
       overrides =
+        EnvironmentService:
+          isKikEnabled: -> true
         kik:
-          enabled: true
           send: (params) ->
             params.title.should.be MockGame.name
             params.text.should.be 'HELLO'
@@ -109,8 +110,8 @@ describe 'PortalService', ->
   describe 'kik methods', ->
     it 'kik.isEnabled', ->
       overrides =
-        kik:
-          enabled: true
+        EnvironmentService:
+          isKikEnabled: -> true
       PortalService.__with__(overrides) ->
         emit {method: 'kik.isEnabled', id: 1}
         .then (res) ->
@@ -118,10 +119,11 @@ describe 'PortalService', ->
 
     it 'kik.send', ->
       overrides =
+        EnvironmentService:
+          isKikEnabled: -> true
         kik:
           send: (params) ->
             return params
-          enabled: true
       PortalService.__with__(overrides) ->
         emit {method: 'kik.send', params: [{title: 'abc', text: 'def'}], id: 1}
         .then (data) ->

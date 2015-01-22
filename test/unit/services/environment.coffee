@@ -39,3 +39,20 @@ describe 'EnvironmentService', ->
           userAgent: 'not cl@yapp'
       EnvironmentService.__with__(overrides) ->
         EnvironmentService.isClayApp().should.be.false
+
+  describe 'isKikEnabled', ->
+    it 'true', ->
+      overrides =
+        kik:
+          enabled: true
+
+      EnvironmentService.__with__(overrides) ->
+        EnvironmentService.isKikEnabled().should.be true
+
+    it 'false', ->
+      overrides =
+        kik:
+          enabled: false
+
+      EnvironmentService.__with__(overrides) ->
+        EnvironmentService.isKikEnabled().should.be false

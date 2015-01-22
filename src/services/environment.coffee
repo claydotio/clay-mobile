@@ -1,3 +1,5 @@
+kik = require 'kik'
+
 class EnvironmentService
   isMobile: ->
     ///
@@ -25,5 +27,9 @@ class EnvironmentService
 
   isClayApp: ->
     _.contains navigator.userAgent, 'Clay'
+
+  # Kik.enabled is not documented by Kik - could change version-by-version
+  isKikEnabled: ->
+    kik?.enabled
 
 module.exports = new EnvironmentService()

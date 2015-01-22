@@ -1,6 +1,7 @@
 kik = require 'kik'
 
 config = require '../config'
+EnvironmentService = require './environment'
 
 host = window.location.host
 
@@ -10,7 +11,7 @@ class UrlService
     return host is config.HOST
 
   getMarketplaceBase: ({protocol} = {}) ->
-    protocol ?= if kik?.enabled then 'card' else 'http'
+    protocol ?= if EnvironmentService.isKikEnabled() then 'card' else 'http'
     return "#{protocol}://#{config.HOST}"
 
   # full path to marketplace and game
@@ -24,7 +25,8 @@ class UrlService
 
   # returns the full url to a game's subdomain page (eg http://slime.clay.io)
   getGameSubdomain: ({game, protocol}) =>
-    protocol ?= if kik?.enabled and @isRootPath() then 'card' else 'http'
+    protocol ?= if EnvironmentService.isKikEnabled() and @isRootPath() \
+                then 'card' else 'http'
     return "#{protocol}://#{game?.key}.#{config.HOST}"
 
   # url is optional, if undefined use config.HOST as base domain

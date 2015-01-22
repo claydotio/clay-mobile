@@ -62,6 +62,12 @@ if kik?.picker?.reply
 # LOGGING #
 ###########
 
+ga? 'set', 'dimension1', if EnvironmentService.isClayApp() then 'clay_app' \
+                         else if EnvironmentService.isKikEnabled() then 'kik' \
+                         else if EnvironmentService.isAndroid() then 'android' \
+                         else 'web'
+
+
 window.addEventListener 'error', ErrorReportService.report
 
 if config.ENV isnt config.ENVS.PROD
@@ -82,7 +88,10 @@ z.router.on 'route', (path) ->
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
 # Also, if someone recieved a link with a hash, respect it
-if kik?.enabled or not window.history?.pushState or window.location.hash
+if EnvironmentService.isKikEnabled() or
+    not window.history?.pushState or
+    window.location.hash
+
   z.router.setMode 'hash'
 else
   z.router.setMode 'pathname'
@@ -136,7 +145,7 @@ User.incrementVisitCount()
     #############
 
     # If on kik, login with anonymous user token (from marketplace)
-    if kik?.enabled
+    if EnvironmentService.isKikEnabled()
       if UrlService.isRootPath()
         kik.getAnonymousUser (token) ->
           resolve token
