@@ -4,12 +4,8 @@ log = require 'clay-loglevel'
 
 config = require '../../config'
 CrossPromotion = require '../cross_promotion'
-GooglePlayAdDrawerControl = require '../google_play_ad_drawer'
-GooglePlayAdDrawerInstallButton =
-  require '../google_play_ad_drawer/install_button'
+GooglePlayAdDrawer = require '../google_play_ad_drawer'
 Nub = require '../nub'
-Modal = require '../../models/modal'
-User = require '../../models/user'
 UrlService = require '../../services/url'
 PortalService = require '../../services/portal'
 GooglePlayAdService = require '../../services/google_play_ad'
@@ -19,56 +15,54 @@ styles = require './index.styl'
 GAME_BOX_ICON_SIZE = 118
 
 module.exports = class Drawer
-  constructor: ({@game}) ->
+  constructor: ({game}) ->
     styles.use()
 
-    @isOpen = false
-
-    @CrossPromotion = new CrossPromotion iconSize: GAME_BOX_ICON_SIZE
-    @Nub = new Nub toggleCallback: @toggleState
-
-    @GooglePlayAdDrawer = null
-    User.getExperiments().then (params) =>
-      if params.googlePlayDrawer isnt 'none' and
-      GooglePlayAdService.shouldShowAds()
-        @GooglePlayAdDrawer = if params.googlePlayDrawer is 'install-button' \
-                              then new GooglePlayAdDrawerInstallButton()
-                              else new GooglePlayAdDrawerControl()
-    .then z.redraw
+    @state = z.state
+      game: game
+      isOpen: false
+      crossPromotion: new CrossPromotion iconSize: GAME_BOX_ICON_SIZE
+      nub: new Nub toggleCallback: @toggleState
+      googlePlayAdDrawer: if GooglePlayAdService.shouldShowAds() \
+                          then new GooglePlayAdDrawer()
+                          else null
 
   toggleState: (e) =>
     e?.preventDefault()
 
-    @isOpen = not @isOpen
+    {isOpen, game} = @state()
 
-    if @isOpen
-      ga? 'send', 'event', 'drawer', 'open', @game.key
+    @state.set isOpen: not isOpen
 
-    z.redraw()
+    if isOpen
+      ga? 'send', 'event', 'drawer', 'open', game.key
 
   close: (e) =>
     e?.preventDefault()
-    @isOpen = false
-    z.redraw()
+    @state.set isOpen: false
 
   shareGame: (e) =>
     e?.preventDefault()
 
-    text = "Come play #{@game.name} with me!
-           #{UrlService.getMarketplaceGame({@game})}"
+    {game} = @state()
+
+    text = "Come play #{game.name} with me!
+           #{UrlService.getMarketplaceGame({game})}"
 
     PortalService.get 'share.any',
-      gameId: @game.id
+      gameId: game.id
       text: text
 
-    ga? 'send', 'event', 'drawer', 'share', @game.key
+    ga? 'send', 'event', 'drawer', 'share', game.key
 
   openMarketplace: (e) =>
     e?.preventDefault()
 
+    {game} = @state()
+
     # if ga is loaded in, send the event, then load the marketplace
     if ga
-      ga 'send', 'event', 'drawer', 'open_marketplace', @game.key,
+      ga 'send', 'event', 'drawer', 'open_marketplace', game.key,
         {hitCallback: @redirectToMarketplace}
     else
       @redirectToMarketplace()
@@ -85,22 +79,22 @@ module.exports = class Drawer
     else
       window.location.href = UrlService.getMarketplaceBase()
 
-  render: =>
-    if @isOpen
+  render: ({isOpen, game, nub, googlePlayAdDrawer, crossPromotion}) ->
+    if isOpen
       drawerIsOpen = '.is-open'
       drawerOverlayIsOpen = '.is-open'
     else
       drawerIsOpen = ''
       drawerOverlayIsOpen = ''
 
-    headerImageUrl = @game.headerImage?.versions[0].url or @game.promo440Url
+    headerImageUrl = game.headerImage?.versions[0].url or game.promo440Url
 
     # TODO: (Austin) some sort of fast-click equivalent on top of zorium
     [
       z "div.z-drawer-overlay#{drawerOverlayIsOpen}",
         ontouchstart: @close
       z 'div.z-drawer-nub',
-        @Nub
+        nub
       z "div.z-drawer#{drawerIsOpen}",
         z 'div.z-drawer-header',
           z 'a[href=#].z-drawer-close',
@@ -115,7 +109,7 @@ module.exports = class Drawer
               backgroundImage: "url(#{headerImageUrl})",
             z 'div.z-drawer-promo-text',
               z 'div.z-drawer-promo-descriptor', "You're playing"
-              z 'h1.z-drawer-promo-title', @game.name
+              z 'h1.z-drawer-promo-title', game.name
           z 'div.z-drawer-content',
             z '.z-drawer-share',
               z 'div.z-drawer-share-inner',
@@ -123,14 +117,14 @@ module.exports = class Drawer
                   onclick: @shareGame,
                   z 'i.icon.icon-share'
                   'Share with friends'
-            z 'div.z-drawer-google-play-ad-drawer', @GooglePlayAdDrawer
+            z 'div.z-drawer-google-play-ad-drawer', googlePlayAdDrawer
             z "a[href=#{UrlService.getMarketplaceBase()}]
               .z-drawer-marketplace-link",
               onclick: @openMarketplace,
               z 'i.icon.icon-heart'
               z 'span.z-drawer-menu-item', 'Recommended games'
             z 'div.z-drawer-cross-promotion',
-              @CrossPromotion
+              crossPromotion
               z 'button.button-secondary.is-block.z-drawer-browse-more',
                 onclick: @openMarketplace,
                 'Browse more games'

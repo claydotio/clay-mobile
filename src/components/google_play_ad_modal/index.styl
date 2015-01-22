@@ -5,10 +5,23 @@ json('../../stylus/vars.json')
 .z-google-play-ad-modal
 
   > .content
-    padding: 20px
     text-align: center
     font-size: $fontSizeMedium
 
     > .message
+      padding: 20px
       font-weight: bold
-      margin: 20px 0
+
+    > .install-button
+      border-top: 1px solid $greyLight
+      padding: 10px 0
+      color: $blue
+
+      > .icon-arrow-down
+        margin-right: 10px
+        font-size: $iconSmall
+        vertical-align: middle
+
+      > .button-text
+        display: inline-block
+        vertical-align: middle

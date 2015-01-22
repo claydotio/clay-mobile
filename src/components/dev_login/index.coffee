@@ -102,7 +102,7 @@ module.exports = class DevLogin
             # TODO (Austin) forgot password, whenever someone aks for it
             z 'button.button-secondary.sign-in-button', 'Sign In'
           z 'div.tos',
-            'By signup up for Clay.io, you agree to our '
+            'By signing up for Clay.io, you agree to our '
             z 'a[href=/tos]', 'Terms of Service'
 
         verticalDivider

@@ -7,6 +7,7 @@ request = require '../lib/request'
 User = require '../models/user'
 
 PATH = config.CLAY_API_URL + '/games'
+LOCALSTORE_PLAY_COUNT_KEY_PREFIX = 'game:play_count'
 
 class Game
   constructor: ->
@@ -33,6 +34,7 @@ class Game
     request PATH,
       qs: query
 
+  # TODO: (Austin) Deprecate
   findOne: (query) ->
     request PATH + '/findOne',
       qs: query
@@ -44,11 +46,14 @@ class Game
 
     request PATH + "/#{id}"
 
+  getByKey: (key) =>
+    @find({key}).then _.first
+
   incrementPlayCount: (gameKey) ->
     unless typeof gameKey is 'string'
       return Promise.reject new Error 'invalid game key'
 
-    gamePlayCountKey = "game:playCount:#{gameKey}"
+    gamePlayCountKey = "#{LOCALSTORE_PLAY_COUNT_KEY_PREFIX}:#{gameKey}"
 
     localstore.get gamePlayCountKey
     .then (gamePlayObject) ->
@@ -56,6 +61,9 @@ class Game
       localstore.set gamePlayCountKey, {count: gamePlayCount + 1}
     .then (gamePlayObject) ->
       gamePlayObject.count
+
+  getPlayCount: (gameKey) ->
+    localstore.get "#{LOCALSTORE_PLAY_COUNT_KEY_PREFIX}:#{gameKey}"
 
   ###############
   # DEV METHODS #

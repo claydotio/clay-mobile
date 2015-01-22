@@ -32,7 +32,7 @@ describe 'Drawer', ->
 
     DrawerComponent.toggleState()
 
-    $ = DrawerComponent.render()
+    $ = DrawerComponent.render(DrawerComponent.state())
     $drawer = _.find $, ($nodeSet) ->
       domWalker.find $nodeSet, ($node) ->
         return hasClass $node, 'z-drawer'
@@ -41,7 +41,7 @@ describe 'Drawer', ->
 
     DrawerComponent.toggleState()
 
-    $ = DrawerComponent.render()
+    $ = DrawerComponent.render(DrawerComponent.state)
     $drawer = _.find $, ($nodeSet) ->
       domWalker.find $nodeSet, ($node) ->
         return hasClass $node, 'z-drawer'
@@ -60,7 +60,7 @@ describe 'Drawer', ->
     DrawerComponent = new Drawer(MockGame)
 
     DrawerComponent.toggleState()
-    DrawerComponent.isOpen.should.be.true
+    DrawerComponent.state().isOpen.should.be.true
 
     DrawerComponent.close()
-    DrawerComponent.isOpen.should.be.false
+    DrawerComponent.state().isOpen.should.be.false

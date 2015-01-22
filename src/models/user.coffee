@@ -2,9 +2,11 @@ log = require 'clay-loglevel'
 _ = require 'lodash'
 
 request = require '../lib/request'
+localstore = require '../lib/localstore'
 config = require '../config'
 
 PATH = config.CLAY_API_URL + '/users'
+LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 
 me = null
 experiments = null
@@ -99,6 +101,22 @@ class User
           accessToken: me.accessToken
         body:
           [ op: 'add', path: '/-', value: gameId ]
+
+  incrementVisitCount: ->
+    localstore.get LOCALSTORE_VISIT_COUNT_KEY
+    .then (visitCountObject) ->
+      visitCount = if visitCountObject?.count then visitCountObject.count else 0
+      localstore.set LOCALSTORE_VISIT_COUNT_KEY, {count: visitCount + 1}
+    .then (visitCountObject) ->
+      newVisitCount = visitCountObject.count
+      # visit count dimension in GA
+      ga? 'set', 'dimension2', newVisitCount
+      return newVisitCount
+
+  getVisitCount: ->
+    localstore.get LOCALSTORE_VISIT_COUNT_KEY
+    .then (visitCountObject) ->
+      visitCountObject?.count
 
   loginAnon: ->
     request PATH + '/login/anon',

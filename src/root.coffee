@@ -124,22 +124,25 @@ route = ->
     .then (developers) ->
       z.router.go if _.isEmpty developers then '/login' else '/dashboard'
 
-new Promise (resolve) ->
-  #############
-  # USER INIT #
-  #############
+User.incrementVisitCount()
+.catch log.trace
+.then ->
+  new Promise (resolve) ->
+    #############
+    # USER INIT #
+    #############
 
-  # If on kik, login with anonymous user token (from marketplace)
-  if kik?.enabled
-    if UrlService.isRootPath()
-      kik.getAnonymousUser (token) ->
-        resolve token
-    else if kik?.picker
-      marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
-      kik?.picker? marketplaceBaseUrl, {}, (res) ->
-        resolve(res?.anonToken)
+    # If on kik, login with anonymous user token (from marketplace)
+    if kik?.enabled
+      if UrlService.isRootPath()
+        kik.getAnonymousUser (token) ->
+          resolve token
+      else if kik?.picker
+        marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+        kik?.picker? marketplaceBaseUrl, {}, (res) ->
+          resolve(res?.anonToken)
+      else resolve()
     else resolve()
-  else resolve()
 .then (maybeKikAnonToken) ->
 
   if maybeKikAnonToken

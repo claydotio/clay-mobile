@@ -20,7 +20,7 @@ class UrlService
   # FIXME: game methods should be server-side as class methods in game model
   # relative path to game
   getGameRoute: ({game}) ->
-    return "/game/#{game.key}"
+    return "/game/#{game?.key}"
 
   # returns the full url to a game's subdomain page (eg http://slime.clay.io)
   getGameSubdomain: ({game, protocol}) =>

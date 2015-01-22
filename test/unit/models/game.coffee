@@ -13,21 +13,14 @@ describe 'Game', ->
     window.XMLHttpRequest = ->
       Zock.XMLHttpRequest()
 
-  beforeEach ->
-    localStorage.clear()
-
   it 'increments play count by 2', ->
     gameKey = MockGame.key
     Game.incrementPlayCount gameKey
-    .then ->
-      localstore.get "game:playCount:#{gameKey}"
-    .then (gamePlayObject) ->
-      gamePlayObject.count.should.be 1
+    .then (newPlayCount) ->
+      newPlayCount.should.be 1
       Game.incrementPlayCount gameKey
-    .then ->
-      localstore.get "game:playCount:#{gameKey}"
-    .then (gamePlayObject) ->
-      gamePlayObject.count.should.be 2
+    .then (newPlayCount) ->
+      newPlayCount.should.be 2
 
   it 'find()', ->
     Zock
