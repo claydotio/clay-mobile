@@ -8,7 +8,7 @@ module.exports = class GuestHeader
     @state = z.state
       header: new HeaderBase {
         logoUrl: '//cdn.wtf/d/images/logos/logo.svg'
-        homeUrl: '/'
+        homeUrl: "//#{config.HOST}/"
         links: [
           {
             text: 'Sign in'

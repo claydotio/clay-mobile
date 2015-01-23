@@ -25,8 +25,9 @@ module.exports = class Home
         z '.info',
           z 'h1', 'Play hundreds of HTML5 mobile games, instantly!'
           z '.sub-head', 'Get the Android app or visit us on Kik or the web'
-          z 'img.google-play' +
-            '[src=//cdn.wtf/d/images/google_play/google_play_get_it.svg]'
+          z 'a.google-play[target=_blank]
+            [href=https://play.google.com/store/apps/details?id=com.clay.clay]',
+            z 'img[src=//cdn.wtf/d/images/google_play/google_play_get_it.svg]'
           z 'img.kik[src=//cdn.wtf/d/images/kik/kik_logo.svg]'
         z 'img.phones[src=//cdn.wtf/d/images/desktop_site/devices.jpg]' +
           '[width=430][height=325]'
