@@ -133,8 +133,7 @@ module.exports = class DevLogin
         z 'div.apply',
           z 'h1', 'Request an invite'
           z 'div.friendly-message',
-            z 'p',
-              'Keep an eye on your inbox, we send out invites frequently.'
+            'Keep an eye on your inbox, we send out invites frequently.'
 
           z 'form', {
             onsubmit: (e) =>
