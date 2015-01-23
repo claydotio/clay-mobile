@@ -32,6 +32,26 @@ distJs = if config.ENV is config.ENVS.PROD \
 
 dust.loadSource indexTpl
 
+isKikUseragentMiddleware = ->
+  (req, res, next) ->
+    {source, isMac, isSafari, isMobile} = req.useragent
+
+    isKik = /^Kik/.test source
+    isKikBot = /KikBot/.test source
+    isiOSWebView = isMac and not isSafari and isMobile
+
+    req.useragent.isProbablyKik = isKik or isKikBot or isiOSWebView
+
+    next()
+
+# coffeelint: disable=missing_fat_arrows
+Error404 = (message) ->
+  @name = 'Error404'
+  @message = message
+  @stack = (new Error()).stack
+Error404.prototype = new Error()
+# coffeelint: enable=missing_fat_arrows
+
 app = express()
 
 app.use compress()
@@ -85,10 +105,12 @@ app.use helmet.crossdomain()
 
 app.use cookieParser()
 app.use useragent.express()
+app.use isKikUseragentMiddleware()
 app.use router
 
 
 # Routes
+# FIXME: Server-side rendering for SEO
 router.get '/healthcheck', (req, res) ->
   Promise.settle [
       Promise.cast(request.get(config.CLAY_API_URL + '/ping'))
@@ -106,18 +128,26 @@ router.get '/game/:key', (req, res) ->
   log.info 'AGENT ', req.useragent.source
   gameKey = req.params.key
 
-  renderGamePage gameKey
+  renderGamePage gameKey, req.useragent.isProbablyKik
   .then (html) ->
     res.send html
   .catch (err) ->
     log.trace err
 
-    renderHomePage()
-    .then (html) ->
-      res.send html
-    .catch (err) ->
-      log.trace err
-      res.status(500).send()
+    if err instanceof Error404 or err.statusCode is 404
+      fourOhFour()
+      .then (html) ->
+        res.status(404).send html
+      .catch (err) ->
+        log.trace err
+        res.status(500).send()
+    else
+      renderHomePage(req.useragent.isProbablyKik)
+      .then (html) ->
+        res.send html
+      .catch (err) ->
+        log.trace err
+        res.status(500).send()
 
 router.get '*', (req, res) ->
   log.info 'AGENT ', req.useragent.source
@@ -127,19 +157,28 @@ router.get '*', (req, res) ->
   if host isnt config.HOST and host isnt config.DEV_HOST and host isnt '0.0.0.0'
     gameKey = host.split('.')[0]
 
-    return renderGamePage gameKey
+    return renderGamePage gameKey, req.useragent.isProbablyKik
       .then (html) ->
         res.send html
       .catch (err) ->
         log.trace err
-        renderHomePage()
-        .then (html) ->
-          res.send html
-        .catch (err) ->
-          log.trace err
-          res.status(500).send()
 
-  renderHomePage()
+        if err instanceof Error404 or err.statusCode is 404
+          fourOhFour()
+          .then (html) ->
+            res.status(404).send html
+          .catch (err) ->
+            log.trace err
+            res.status(500).send()
+        else
+          renderHomePage(req.useragent.isProbablyKik)
+          .then (html) ->
+            res.send html
+          .catch (err) ->
+            log.trace err
+            res.status(500).send()
+
+  renderHomePage(req.useragent.isProbablyKik)
   .then (html) ->
     res.send html
   .catch (err) ->
@@ -149,13 +188,14 @@ router.get '*', (req, res) ->
 # Cache rendering
 renderHomePage = do ->
   page =
+    isProbablyKik: false
     inlineSource: config.ENV is config.ENVS.PROD
     webpackDevHostname: config.WEBPACK_DEV_HOSTNAME
-    title: 'Free Games'
-    description: 'Play mobile games on your phone for free.
-                  We bring you the best mobile web games.'
-    keywords: 'mobile games, phone games, free mobile games, mobile web games'
-    name: 'Clay.io'
+    title: 'Clay Games - Play Free HTML5 Mobile Games'
+    description: 'Play mobile games instantly on your phone for free.
+                  Clay has the best HTML5 games.'
+    keywords: 'mobile games, clay games, free mobile games, mobile web games'
+    name: 'Clay Games - Play Free HTML5 Mobile Games'
     icon256: '//cdn.wtf/d/images/icons/icon_256.png'
     icon76: '//cdn.wtf/d/images/icons/icon_76.png'
     icon120: '//cdn.wtf/d/images/icons/icon_120.png'
@@ -166,11 +206,40 @@ renderHomePage = do ->
     canonical: 'http://clay.io'
     distjs: distJs
 
+  kikPage = _.defaults
+    isProbablyKik: true
+    title: 'Free Games'
+  , page
+
+  rendered = Promise.promisify(dust.render, dust) 'index', page
+  kikRendered = Promise.promisify(dust.render, dust) 'index', kikPage
+
+  (isProbablyKik) -> if isProbablyKik then kikRendered else rendered
+
+fourOhFour = do ->
+  page =
+    isProbablyKik: false
+    inlineSource: config.ENV is config.ENVS.PROD
+    webpackDevHostname: config.WEBPACK_DEV_HOSTNAME
+    title: 'Game not found - Clay Games'
+    description: 'The HTML5 mobile game you are looking for could not be found'
+    keywords: 'mobile games, clay games, free mobile games, mobile web games'
+    name: 'Game not found - Clay Games'
+    icon256: '//cdn.wtf/d/images/icons/icon_256.png'
+    icon76: '//cdn.wtf/d/images/icons/icon_76.png'
+    icon120: '//cdn.wtf/d/images/icons/icon_120.png'
+    icon152: '//cdn.wtf/d/images/icons/icon_152.png'
+    icon440x280: '//cdn.wtf/d/images/icons/icon_440_280.png'
+    iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
+    url: 'http://clay.io/404'
+    canonical: 'http://clay.io/404'
+    distjs: distJs
+
   rendered = Promise.promisify(dust.render, dust) 'index', page
 
   -> rendered
 
-renderGamePage = (gameKey) ->
+renderGamePage = (gameKey, isProbablyKik) ->
 
   gameUrl = config.CLAY_API_URL + "/games/findOne?key=#{gameKey}"
 
@@ -180,15 +249,18 @@ renderGamePage = (gameKey) ->
   .then (body) ->
     game = JSON.parse body
     if _.isEmpty game
-      throw new Error 'Game not found: ' + gameKey
+      throw new Error404 'Game not found: ' + gameKey
 
     page =
+      isProbablyKik: isProbablyKik
       inlineSource: config.ENV is config.ENVS.PROD
       webpackDevHostname: config.WEBPACK_DEV_HOSTNAME
-      title: "#{game.name}"
+      title: if isProbablyKik \
+             then "#{game.name}"
+             else "#{game.name} - Clay Games Mobile HTML5"
       description: "Play #{game.name}; #{game.description}"
       keywords: "#{game.name}, mobile games,  free mobile games"
-      name: "#{game.name} - Clay.io"
+      name: "#{game.name} - Clay Games Mobile HTML5"
       distjs: distJs
 
       # TODO: (Zoli) This isn't good enough
