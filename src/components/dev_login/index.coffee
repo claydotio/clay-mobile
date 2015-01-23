@@ -79,9 +79,32 @@ module.exports = class DevLogin
           z 'div', 'Welcome, developers.'
           z 'div', 'Sign in to start publishing'
 
+      z '.beta',
+        z 'h1', 'We\'re in beta.'
+        z '.sub-head', 'Clay is being completely rebuilt with all-new tools.
+                 Interested in joining? Here\'s what you need to know'
+        z '.infos',
+          z '.info',
+            z 'i.icon.icon-ticket'
+            z '.title', 'Invite only'
+            z '.info', 'We love our devs. In order to provide the
+                        best support to each of you,
+                        we\'re temporarily limiting sign ups.'
+          z '.info',
+            z 'i.icon.icon-smartphone'
+            z '.title', 'Mobile first'
+            z '.info', 'We have over 5 million people playing mobile games,
+                        so make sure that it works on smartphones.'
+          z '.info',
+            z 'i.icon.icon-mail'
+            z '.title', 'Provide feedback'
+            z '.info', 'We\'re building this for you, the game
+                        developers. So when you join, be sure
+                        to voice your opinion!'
+
       z 'div.login-apply.l-content-container.l-flex',
         z 'div.login',
-          z 'h1', 'Sign In'
+          z 'h1', 'Sign in'
           z 'div.friendly-message', 'Hey, good to see you again.'
           z 'form', {
             onsubmit: (e) =>
@@ -111,11 +134,7 @@ module.exports = class DevLogin
           z 'h1', 'Request an invite'
           z 'div.friendly-message',
             z 'p',
-              'We aim to provide the best possible support to every developer on
-              Clay.'
-            z 'p', "To do this we're limiting signups for now.
-              Share your awesome game with us and we'll send you an
-              invite when we can."
+              'Keep an eye on your inbox, we send out invites frequently.'
 
           z 'form', {
             onsubmit: (e) =>
@@ -134,7 +153,7 @@ module.exports = class DevLogin
             },
             applyEmailInput
             applyGameUrlInput
-            z 'button.button-primary.apply-button', 'Apply!'
+            z 'button.button-primary.apply-button', 'Invite me!'
 
       z 'div.player-message',
         z 'div.l-content-container.content',
