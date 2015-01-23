@@ -143,7 +143,7 @@ module.exports = class DevLogin
                     web browser to play.'
           z 'div.links',
             z 'a.google-play[target=_blank][href=
-              http://play.google.com/store/apps/details?id=com.clay.clay]',
+              https://play.google.com/store/apps/details?id=com.clay.clay]',
               z 'img' +
                 '[src=//cdn.wtf/d/images/google_play/google_play_get_it.svg]'
             z 'span.kik',
