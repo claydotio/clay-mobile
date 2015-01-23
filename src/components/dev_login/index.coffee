@@ -88,14 +88,13 @@ module.exports = class DevLogin
             z 'i.icon.icon-ticket'
             z '.title', 'Invite only'
             z '.info', 'We love our devs. In order to provide the
-                        best possible support to each of you,
+                        best support to each of you,
                         we\'re temporarily limiting sign ups.'
           z '.info',
-            z 'i.icon.icon-package'
-            z '.title', 'SDK required'
-            z '.info', 'To publish your cool new game to Clay
-                        we require the integration of our
-                        brand-new SDK. Don\'t worry, it\'s easy.'
+            z 'i.icon.icon-smartphone'
+            z '.title', 'Mobile first'
+            z '.info', 'We have over 5 million people playing mobile games,
+                        so make sure that it works on smartphones.'
           z '.info',
             z 'i.icon.icon-mail'
             z '.title', 'Provide feedback'

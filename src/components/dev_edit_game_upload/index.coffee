@@ -42,7 +42,7 @@ module.exports = class DevEditGameUpload
           z '.reminder',
             z '.warn', 'REMINDER'
             z 'span', 'Integration of the SDK is required'
-            z '.forgot', 'Forgot? No problem.'
+            z '.forgot', 'Don\'t worry, it just takes a minute.'
             z 'a.button-secondary.add-now[target=_blank]
                 [href=https://github.com/claydotio/clay-sdk]',
               'Add it now'
