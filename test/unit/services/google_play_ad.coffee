@@ -41,16 +41,29 @@ describe 'GooglePlayAdService', ->
 
   describe 'showAdModal', ->
     it 'opens modal', ->
-      GooglePlayAdService.showAdModal()
-      Modal.component.should.exist
-      Modal.closeComponent()
-      GooglePlayAdService.hasAdModalBeenShown = false
+      overrides =
+        User:
+          getExperiments: ->
+            return Promise.resolve {}
+
+      GooglePlayAdService.__with__(overrides) ->
+        GooglePlayAdService.showAdModal()
+        .then ->
+          Modal.component.should.exist
+          Modal.closeComponent()
+          GooglePlayAdService.hasAdModalBeenShown = false
 
     it 'updates hasAdModalBeenShown', ->
-      GooglePlayAdService.hasAdModalBeenShown.should.be.false
-      GooglePlayAdService.showAdModal()
-      GooglePlayAdService.hasAdModalBeenShown.should.be.true
-      GooglePlayAdService.hasAdModalBeenShown = false
+      overrides =
+        User:
+          getExperiments: ->
+            return Promise.resolve {}
+
+      GooglePlayAdService.__with__(overrides) ->
+        GooglePlayAdService.hasAdModalBeenShown.should.be.false
+        GooglePlayAdService.showAdModal().then ->
+          GooglePlayAdService.hasAdModalBeenShown.should.be.true
+          GooglePlayAdService.hasAdModalBeenShown = false
 
   describe 'shouldShowAdModal', ->
     it 'visit 1, 5, 10, 20 -> true, others false', ->
@@ -78,6 +91,8 @@ describe 'GooglePlayAdService', ->
       visitCount = 0
       overrides =
         User:
+          getExperiments: ->
+            return Promise.resolve {}
           getVisitCount: ->
             return Promise.resolve visitCount
         EnvironmentService:
