@@ -5,7 +5,6 @@ log = require 'clay-loglevel'
 Drawer = require '../drawer'
 Spinner = require '../spinner'
 GameShare = require '../game_share'
-GooglePlayAdModal = require '../../components/google_play_ad_modal'
 Game = require '../../models/game'
 Modal = require '../../models/modal'
 User = require '../../models/user'
@@ -63,11 +62,10 @@ module.exports = class GamePlayer
         , ENGAGED_PLAY_TIME
 
     User.convertExperiment('game_play').catch log.trace
-
     GooglePlayAdService.shouldShowAdModal().then (shouldShow) ->
       if shouldShow
-        GooglePlayAdService.showAdModal()
-        ga? 'send', 'event', 'game_share_modal', 'show', gameKey
+        GooglePlayAdService.showAdModal().then ->
+          ga? 'send', 'event', 'game_share_modal', 'show', gameKey
     .catch log.trace
 
     @state.game.then (game) ->
