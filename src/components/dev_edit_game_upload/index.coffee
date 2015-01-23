@@ -39,6 +39,13 @@ module.exports = class DevEditGameUpload
     z 'div.z-dev-edit-game-upload.l-flex', {key: 3},
         z 'form.form',
           zipUpload
+          z '.reminder',
+            z '.warn', 'REMINDER'
+            z 'span', 'Integration of the SDK is required'
+            z '.forgot', 'Forgot? No problem.'
+            z 'a.button-secondary.add-now[target=_blank]
+                [href=https://github.com/claydotio/clay-sdk]',
+              'Add it now'
 
         z 'div.help.l-flex-right',
           z 'h1',
