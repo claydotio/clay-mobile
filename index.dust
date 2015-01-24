@@ -46,6 +46,9 @@
     <link rel="kik-icon" href="{iconKik}">
     <link rel="canonical" href="{canonical}">
 
+    {! fonts !}
+    <link href='//fonts.googleapis.com/css?family=Roboto:500,300,700' rel='stylesheet' type='text/css'>
+
     {! misc !}
     <meta name="theme-color" content="#fcaa2f">
     <link rel="shortcut icon" href="http://cdn.wtf/d/images/icons/favicon.ico">
