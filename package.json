@@ -71,7 +71,6 @@
     "express": "4.10.7",
     "express-useragent": "0.1.3",
     "helmet": "0.5.4",
-    "lodash": "2.4.1",
     "loglevel": "1.2.0",
     "pm2": "0.10.3",
     "portal-gun": "0.0.4",
