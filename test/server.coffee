@@ -5,6 +5,7 @@ should = require('clay-chai').should()
 
 app = require '../server'
 config = require '../src/config'
+MockGame = require './_models/game'
 
 flare = new Flare().express(app)
   .actor 'anon', {}
@@ -22,16 +23,8 @@ ME_ACCESS_TOKEN = 'USER_ACCESS_TOKEN'
 
 nock config.CLAY_API_URL
   .persist()
-  .get '/games/findOne?key=slime'
-  .reply 200,
-    id: 8
-    key: 'slime'
-    gameUrl: 'http://slime.clay.io'
-    icon128Url: 'http://slime.clay.io'
-    promo440Url: 'http://slime.clay.io'
-    name: 'Slime'
-    description: 'a game about slime'
-    rating: 3
+  .get "/games/findOne?key=#{MockGame.key}"
+  .reply 200, MockGame
   .get '/games/findOne?key=NOT_A_VALID_GAME_KEY'
   .reply 200, []
   .post '/users/login/anon'
@@ -81,10 +74,10 @@ describe 'index.dust', ->
 
     it 'Should include game specific HTML', ->
       flare
-        .get '/game/slime'
+        .get "/game/#{MockGame.key}"
         .flare (flare) ->
           flare.res.body.should.contain \
-            '<title>Slime - Clay Games Mobile HTML5</title>'
+            "<title>#{MockGame.name} - Clay Games Mobile HTML5</title>"
 
     it 'Responds with 404 if game not found', ->
       flare
@@ -104,6 +97,14 @@ describe 'index.dust', ->
         .flare (flare) ->
           flare.res.body.should.contain '<title>Free Games</title>'
 
+    it 'Should include icon without protocol', ->
+      flare
+        .get "/game/#{MockGame.key}"
+        .flare (flare) ->
+          iconUrl = MockGame.iconImage.versions[0].url.replace /^https?:/, ''
+          flare.res.body.should.contain \
+            "<link rel=\"kik-icon\" href=\"#{iconUrl}\">"
+
     it 'Should include 500 character description', ->
       flare
         .get '/'
@@ -114,9 +115,9 @@ describe 'index.dust', ->
 
     it 'Should include game specific HTML', ->
       flare
-        .get '/game/slime'
+        .get "/game/#{MockGame.key}"
         .flare (flare) ->
-          flare.res.body.should.contain '<title>Slime</title>'
+          flare.res.body.should.contain "<title>#{MockGame.name}</title>"
 
     it 'Responds with 404 if game not found', ->
       flare
