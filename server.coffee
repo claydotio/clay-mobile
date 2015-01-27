@@ -251,6 +251,8 @@ renderGamePage = (gameKey, isProbablyKik) ->
     if _.isEmpty game
       throw new Error404 'Game not found: ' + gameKey
 
+    iconUrl = game.iconImage?.versions[0].url or game.icon128Url
+
     page =
       isProbablyKik: isProbablyKik
       inlineSource: config.ENV is config.ENVS.PROD
@@ -264,11 +266,12 @@ renderGamePage = (gameKey, isProbablyKik) ->
       distjs: distJs
 
       # TODO: (Zoli) This isn't good enough
-      icon256: game.iconImage?.versions[0].url or game.icon128Url
-      icon76: game.iconImage?.versions[0].url or game.icon128Url
-      icon120: game.iconImage?.versions[0].url or game.icon128Url
-      icon152: game.iconImage?.versions[0].url or game.icon128Url
-      iconKik: game.iconImage?.versions[0].url or game.icon128Url
+      icon256: iconUrl
+      icon76: iconUrl
+      icon120: iconUrl
+      icon152: iconUrl
+      # Kik ignores icons that aren't over same protocol
+      iconKik: iconUrl?.replace /^https?:/, ''
 
       # TODO: (Zoli) this should be returned by the server
       icon440x280: "http://cdn.wtf/g/#{game.id}/meta/promo_440.png"
