@@ -105,6 +105,14 @@ describe 'index.dust', ->
           flare.res.body.should.contain \
             "<link rel=\"kik-icon\" href=\"#{iconUrl}\">"
 
+    it 'Should include 500 character description', ->
+      flare
+        .get '/'
+        .flare (flare) ->
+          descriptionRegex = /<meta name="description" content="(.*?)">/
+          description = flare.res.body.match(descriptionRegex)[1]
+          description.length.should.be 500
+
     it 'Should include game specific HTML', ->
       flare
         .get "/game/#{MockGame.key}"

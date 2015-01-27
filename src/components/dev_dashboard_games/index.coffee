@@ -76,4 +76,4 @@ module.exports = class DevDashboardGames
         z 'h1', 'Have any questions? Let us help.'
         z 'ul',
           z 'li',
-            z.router.link z 'a[href=/dashboard/contact', 'Contact us'
+            z.router.link z 'a[href=/dashboard/contact]', 'Contact us'

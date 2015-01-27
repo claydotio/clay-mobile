@@ -174,6 +174,15 @@ User.incrementVisitCount()
       User.convertExperiment 'hit_from_share'
     .catch log.trace
 
+  # track kik metrics (users sending messages, etc...)
+  kik?.metrics?.enableGoogleAnalytics?()
+
+  ###########
+  # ROUTING #
+  ###########
+
+  route()
+
   ####################
   #    ANALYTICS     #
   ####################
@@ -191,19 +200,10 @@ User.incrementVisitCount()
       ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
   .catch log.trace
 
-  # track kik metrics (users sending messages, etc...)
-  kik?.metrics?.enableGoogleAnalytics?()
-
   window.setTimeout ->
     User.logEngagedActivity()
     .catch log.trace
   , ENGAGED_ACTIVITY_TIME
-
-  ###########
-  # ROUTING #
-  ###########
-
-  route()
 
   log.info 'App Ready'
 .catch log.trace
