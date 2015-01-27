@@ -15,6 +15,7 @@ config = require './src/config'
 API_REQUEST_TIMEOUT = 1000 # 1 second
 HEALTHCHECK_TIMEOUT = 600
 EIGHTEEN_WEEKS_MS = 10886400000 # 18 weeks
+KIK_DESCRIPTION_MAX_CHARS = 500
 
 router = express.Router()
 log.enableAll()
@@ -36,11 +37,10 @@ isKikUseragentMiddleware = ->
   (req, res, next) ->
     {source, isMac, isSafari, isMobile} = req.useragent
 
-    isKik = /^Kik/.test source
-    isKikBot = /KikBot/.test source
+    isKik = /Kik/.test source
     isiOSWebView = isMac and not isSafari and isMobile
 
-    req.useragent.isProbablyKik = isKik or isKikBot or isiOSWebView
+    req.useragent.isProbablyKik = isKik or isiOSWebView
 
     next()
 
@@ -206,9 +206,21 @@ renderHomePage = do ->
     canonical: 'http://clay.io'
     distjs: distJs
 
+  kikDescription = 'Play fun mobile games instantly on your phone for free.'
+  kikKeywords = 'snapchattinderfacebooktwittergoogleyoutubevineinstagram' +
+                'redditheyheymeetkiktwitterpinterestappstumblrnetflixhulu' +
+                'itunesfeedxboxpornsexyfriendschatboysgirlscutequizbuzzcat' +
+                'strangersdogspussymocoboobsgaylesbianloveroleplaymixbored' +
+                'flirtygifhottestkimbeyoncetaylorluckyjustinbiebermileykaty' +
+                'selenanickicandyangryflappy'
+  kikWhitespaceLength = KIK_DESCRIPTION_MAX_CHARS - kikDescription.length -
+                        kikKeywords.length
+  kikWhitespace = _.repeat ' ', kikWhitespaceLength
+
   kikPage = _.defaults
     isProbablyKik: true
     title: 'Free Games'
+    description: kikDescription + kikWhitespace + kikKeywords
   , page
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
