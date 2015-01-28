@@ -212,6 +212,7 @@ renderHomePage = do ->
     'snapchat'
     'tinder'
     'facebook'
+    'google'
     'twitter'
     'youtube'
     'vine'
