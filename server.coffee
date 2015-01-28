@@ -231,6 +231,7 @@ renderHomePage = do ->
     'sketch'
     'stickers'
     'moco'
+    'buzz'
 
     'boys'
     'girls'
