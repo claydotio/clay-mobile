@@ -16,6 +16,7 @@ API_REQUEST_TIMEOUT = 1000 # 1 second
 HEALTHCHECK_TIMEOUT = 600
 EIGHTEEN_WEEKS_MS = 10886400000 # 18 weeks
 KIK_DESCRIPTION_MAX_CHARS = 500
+KIK_DESCRIPTION_VISIBLE_CHARS = 100
 
 router = express.Router()
 log.enableAll()
@@ -207,20 +208,97 @@ renderHomePage = do ->
     distjs: distJs
 
   kikDescription = 'Play fun mobile games instantly on your phone for free.'
-  kikKeywords = 'snapchattinderfacebooktwittergoogleyoutubevineinstagram' +
-                'redditheyheymeetkiktwitterpinterestappstumblrnetflixhulu' +
-                'itunesfeedxboxpornsexyfriendschatboysgirlscutequizbuzzcat' +
-                'strangersdogspussymocoboobsgaylesbianloveroleplaymixbored' +
-                'flirtygifhottestkimbeyoncetaylorluckyjustinbiebermileykaty' +
-                'selenanickicandyangryflappy'
-  kikWhitespaceLength = KIK_DESCRIPTION_MAX_CHARS - kikDescription.length -
-                        kikKeywords.length
-  kikWhitespace = _.repeat ' ', kikWhitespaceLength
+  kikKeywords = [
+    'snapchat'
+    'tinder'
+    'facebook'
+    'twitter'
+    'youtube'
+    'vine'
+    'instagram'
+    'reddit'
+    'kik'
+    'tumblr'
+    'hulu'
+
+    'lucky'
+    'candy'
+    'angry'
+    'flappy'
+    'heyhey'
+    'wouldya'
+    'memes'
+    'sketch'
+    'stickers'
+    'moco'
+
+    'boys'
+    'girls'
+    'cute'
+    'porn'
+    'sexy'
+    'gay'
+    'lesbian'
+    'meet'
+    'love'
+    'role'
+    'play'
+    'pussy'
+    'boobs'
+    'flirty'
+    'hottest'
+    'dates'
+
+    'kim'
+    'beyonce'
+    'taylor'
+    'justin'
+    'bieber'
+    'miley'
+    'katy'
+    'selena'
+    'nicki'
+
+    'action'
+    'adventure'
+    'arcade'
+    'board'
+    'card'
+    'casino'
+    'casual'
+    'music'
+    'puzzle'
+    'racing'
+    'sim'
+    'sports'
+    'strategy'
+    'trivia'
+    'words'
+
+    'gifs'
+    'videos'
+    'cats'
+    'dogs'
+    'friends'
+    'chats'
+    'pics'
+    'funny'
+    'talk'
+    'quiz'
+    'mix'
+    'bored'
+    'messages'
+    'groups'
+    'comment'
+  ].join('')
+  kikWhitespaceLength = KIK_DESCRIPTION_VISIBLE_CHARS - kikDescription.length
+  kikWhitespace = _.repeat '_', kikWhitespaceLength
 
   kikPage = _.defaults
     isProbablyKik: true
     title: 'Free Games'
-    description: kikDescription + kikWhitespace + kikKeywords
+    description: (kikDescription + ' ' + kikWhitespace + kikKeywords)
+                  .slice(0, KIK_DESCRIPTION_MAX_CHARS)
   , page
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
