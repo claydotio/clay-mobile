@@ -57,6 +57,10 @@ app = express()
 
 app.use compress()
 
+if config.ENV is config.ENVS.PROD
+then app.use express['static'](__dirname + '/dist')
+else app.use express['static'](__dirname + '/build')
+
 # Security
 webpackDevHost = config.WEBPACK_DEV_HOSTNAME + ':' + config.WEBPACK_DEV_PORT
 scriptSrc = [
@@ -108,7 +112,6 @@ app.use cookieParser()
 app.use useragent.express()
 app.use isKikUseragentMiddleware()
 app.use router
-
 
 # Routes
 # FIXME: Server-side rendering for SEO
