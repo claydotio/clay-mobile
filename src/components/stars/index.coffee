@@ -2,8 +2,9 @@ z = require 'zorium'
 _ = require 'lodash'
 
 styles = require './index.styl'
+User = require '../../models/user'
 
-module.exports = class RatingsWidget
+module.exports = class Stars
   # set interactive to true if tapping on a star should fill up to that star
   constructor: ({stars, @interactive}) ->
     styles.use()
@@ -12,6 +13,12 @@ module.exports = class RatingsWidget
       stars = 5
     if stars < 0
       stars = 0
+
+    @isHidden = true
+    User.getExperiments().then ({hideStars}) =>
+      if hideStars isnt 'hidden'
+        @isHidden = false
+        z.redraw()
 
     @setStarAmounts(stars)
 
@@ -33,7 +40,7 @@ module.exports = class RatingsWidget
     halfStars = @halfStars
     fullStars = @fullStars
 
-    z 'div.z-stars', _.map _.range(5), (i) ->
+    z "div.z-stars#{@isHidden and '.hidden' or ''}", _.map _.range(5), (i) ->
       rating = i + 1
       # what to do when a star is clicked
 

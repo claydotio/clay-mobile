@@ -16,18 +16,16 @@ SCROLL_THRESHOLD = 250
 BOXES_PER_ROW_SMALL_SCREEN = 2
 BOXES_PER_ROW_MEDIUM_SCREEN = 3
 
-elTopPosition = ($el) ->
-  if $el
-  then $el.offsetTop + elTopPosition($el.offsetParent)
+elTopPosition = ($$el) ->
+  if $$el
+  then $$el.offsetTop + elTopPosition($$el.offsetParent)
   else 0
 
-module.exports = class GameResults
+module.exports = class PopularGames
   constructor: ({featuredGameRow} = {}) ->
     styles.use()
 
     featuredGameRow ?= 0
-
-    @gameLinks = []
 
     if window.matchMedia('(min-width: 360px)').matches
       @gameBoxSize = 100
@@ -40,13 +38,15 @@ module.exports = class GameResults
       @gamePromoHeight = 178
       @featuredGamePosition = featuredGameRow * BOXES_PER_ROW_SMALL_SCREEN
 
-    @Spinner = new Spinner()
     @isLoading = true
     @isListeningForScroll = true
 
-  onMount: ($el) =>
-    @$el = $el
+    @state = z.state
+      gameLinks: []
+      $spinner: new Spinner()
 
+
+  onMount: (@$$el) =>
     # Bind event listeners
     window.addEventListener 'scroll', @scrollListener
     window.addEventListener 'resize', @scrollListener
@@ -62,14 +62,14 @@ module.exports = class GameResults
       return
 
     # Infinite Scroll
-    $el = @$el
+    $$el = @$$el
 
     scrollTop = window.pageYOffset
     scrollTop ?= document.documentElement.scrollTop
     scrollTop ?= document.body.parentNode.scrollTop
     scrollTop ?= document.body.scrollTop
 
-    totalScrolled = elTopPosition($el) + $el.offsetHeight
+    totalScrolled = elTopPosition($$el) + $$el.offsetHeight
     totalScrollHeight = scrollTop + window.innerHeight
 
     if totalScrolled - totalScrollHeight < SCROLL_THRESHOLD
@@ -87,38 +87,39 @@ module.exports = class GameResults
 
     Game.getTop
       limit: LOAD_MORE_GAMES_LIMIT
-      skip: @gameLinks.length
+      skip: @state().gameLinks.length
     .then (games) =>
-      @gameLinks = @gameLinks.concat _.map games, (game, index) =>
-        if index is @featuredGamePosition
-          type: 'featured'
-          component: new GamePromo(
-            {game, width: @gamePromoWidth, height: @gamePromoHeight}
-          )
-        else
-          type: 'default', component: new GameBox {game, iconSize: @gameBoxSize}
-
       @isLoading = false
 
+      @state.set
+        gameLinks: @state().gameLinks.concat _.map games, (game, index) =>
+          if index is @featuredGamePosition
+            type: 'featured'
+            $component: new GamePromo(
+              {game, width: @gamePromoWidth, height: @gamePromoHeight}
+            )
+          else
+            type: 'default'
+            $component: new GameBox {game, iconSize: @gameBoxSize}
+
       # TODO: (Zoli) force redraw once Zorium batches draws
-      z.redraw()
 
       # Stop loading more
       if _.isEmpty games
         return true
 
-  render: =>
+  render: ({gameLinks, $spinner}) =>
     z 'section.z-game-results',
       z 'div.l-content-container',
-        z 'h2.z-game-results-header', 'Most popular games'
-          z 'div.z-game-results-game-boxes',
-          (_.map @gameLinks, (gameLink) ->
-            if gameLink.type is 'featured'
-              z '.z-game-results-featured-game-box-container',
-                gameLink.component
-            else
-              z '.z-game-results-game-box-container',
-                gameLink.component
-          ).concat [
-            if @isLoading then z '.z-game-results-spinner', @Spinner
-          ]
+        z 'h2.header', 'Most popular games'
+        z 'div.game-boxes',
+        (_.map gameLinks, (gameLink) ->
+          if gameLink.type is 'featured'
+            z '.featured-game-box-container',
+              gameLink.$component
+          else
+            z '.game-box-container',
+              gameLink.$component
+        ).concat [
+          if @isLoading then z '.spinner', $spinner
+        ]
