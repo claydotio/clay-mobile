@@ -13,6 +13,10 @@ class PortalService
 
   get: portal.get
 
+  beforeWindowOpen: portal.beforeWindowOpen
+
+  windowOpen: portal.windowOpen
+
   registerMethods: =>
     portal.register 'auth.getStatus', @authGetStatus
     portal.register 'share.any', @shareAny
@@ -38,10 +42,6 @@ class PortalService
       accessToken: String user.id
 
   shareAny: ({text, gameId}) ->
-    tweet = (text) ->
-      text = encodeURIComponent text.substr 0, 140
-      window.open "https://twitter.com/intent/tweet?text=#{text}"
-
     Game.get(gameId)
     .then (game) ->
       unless game
@@ -54,12 +54,9 @@ class PortalService
           data:
             gameKey: "#{game.key}"
       else
-        tweet(text)
+        console.log 'no handlers found'
+        throw new Error 'No handlers found'
 
-      return null
-    .catch (err) ->
-      tweet(text)
-      log.trace err
       return null
 
 module.exports = new PortalService()

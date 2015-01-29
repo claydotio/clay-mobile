@@ -6,7 +6,7 @@ _ = require 'lodash'
 config = require '../../config'
 User = require '../../models/user'
 Modal = require '../../models/modal'
-PortalService = require '../../services/portal'
+ShareService = require '../../services/share'
 UrlService = require '../../services/url'
 ModalHeader = require '../modal_header'
 
@@ -29,7 +29,7 @@ module.exports = class GameShare
 
     text = "Come play #{@game.name} with me!
            #{UrlService.getMarketplaceGame({@game})}"
-    PortalService.get 'share.any',
+    ShareService.any
       gameId: @game.id
       text: text
     .catch log.trace

@@ -90,23 +90,6 @@ describe 'PortalService', ->
         .then ->
           kikSent.should.be true
 
-    it 'shares via twitter if kik unavailable', (done) ->
-      # FIXME: Yeah... so this line is necessary. Probably a rewire bug.
-      PortalService.__set__ 'kik', {enabled: true}
-      overrides =
-        kik:
-          enabled: false
-        window:
-          open: (url) ->
-            url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
-            done()
-
-      PortalService.__with__(overrides) ->
-        emit {method: 'share.any', id: 1, params: [
-          {text: 'HELLO', gameId: MockGame.id}
-        ]}
-        .catch done
-
   describe 'kik methods', ->
     it 'kik.isEnabled', ->
       overrides =
