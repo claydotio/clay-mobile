@@ -3,7 +3,7 @@ log = require 'clay-loglevel'
 portal = require 'portal-gun'
 
 User = require '../../models/user'
-PortalService = require '../../services/portal'
+ShareService = require '../../services/share'
 
 styles = require './index.styl'
 
@@ -16,9 +16,10 @@ module.exports = class ModalClose
   share: (e) ->
     e?.preventDefault()
 
-    PortalService.get 'share.any',
+    ShareService.any
       gameId: MARKETPLACE_GAME_ID
       text: 'Play with me! http://clay.io'
+    .catch log.trace
 
     ga? 'send', 'event', 'marketplace_share', 'share', 'marketplace'
     User.convertExperiment 'marketplace_share'

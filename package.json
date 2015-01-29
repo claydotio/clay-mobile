@@ -73,7 +73,7 @@
     "helmet": "0.5.4",
     "loglevel": "1.2.0",
     "pm2": "0.10.3",
-    "portal-gun": "0.0.4",
+    "portal-gun": "0.1.0",
     "promiz": "1.0.0",
     "request-promise": "0.3.2",
     "zorium": "0.5.2"

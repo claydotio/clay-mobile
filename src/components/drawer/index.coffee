@@ -7,7 +7,7 @@ CrossPromotion = require '../cross_promotion'
 GooglePlayAdDrawer = require '../google_play_ad_drawer'
 Nub = require '../nub'
 UrlService = require '../../services/url'
-PortalService = require '../../services/portal'
+ShareService = require '../../services/share'
 GooglePlayAdService = require '../../services/google_play_ad'
 
 styles = require './index.styl'
@@ -49,9 +49,10 @@ module.exports = class Drawer
     text = "Come play #{game.name} with me!
            #{UrlService.getMarketplaceGame({game})}"
 
-    PortalService.get 'share.any',
+    ShareService.any
       gameId: game.id
       text: text
+    .catch log.trace
 
     ga? 'send', 'event', 'drawer', 'share', game.key
 
