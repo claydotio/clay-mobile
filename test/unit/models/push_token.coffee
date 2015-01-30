@@ -75,7 +75,7 @@ describe 'PushToken', ->
 
       PushToken.createForMarketplace()
 
-    it 'Attempts to create multiple push tokens and fails', ->
+    it 'Attempts to create multiple push tokens', ->
       Zock
         .base(config.CLAY_API_URL)
         .post '/pushTokens'
@@ -87,7 +87,3 @@ describe 'PushToken', ->
       PushToken.createByGameId MockGame.id
       .then ->
         PushToken.createByGameId MockGame.id
-      .then ->
-        throw new Error 'Expected error'
-      , (err) ->
-        err.message.should.be 'Token already created'
