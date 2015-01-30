@@ -76,9 +76,9 @@ module.exports = class GamePlayer
       ga? 'send', 'event', 'game', 'game_play', game.key
 
   resize: =>
-    @height = window.innerHeight + 'px'
-    @width = window.innerWidth + 'px'
-    z.redraw()
+    @state.set
+      height: window.innerHeight + 'px'
+      width: window.innerWidth + 'px'
 
   logEngagedPlay: =>
     User.convertExperiment('engaged_play').catch log.trace
