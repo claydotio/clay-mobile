@@ -32,10 +32,10 @@ module.exports = class Drawer
 
     {isOpen, game} = @state()
 
-    @state.set isOpen: not isOpen
-
-    if isOpen
+    if not isOpen
       ga? 'send', 'event', 'drawer', 'open', game.key
+
+    @state.set isOpen: not isOpen
 
   close: (e) =>
     e?.preventDefault()
