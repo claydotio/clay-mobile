@@ -124,9 +124,11 @@ route = ->
 
   if gameKey
     PushToken.createByGameKey gameKey
+    .catch log.trace
     z.router.go "/game/#{gameKey}"
   else
     PushToken.createForMarketplace()
+    .catch log.trace
     z.router.go()
 
   # FIXME when zorium hsa better support for redirects, move this up

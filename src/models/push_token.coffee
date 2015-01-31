@@ -20,7 +20,7 @@ class PushToken
     new Promise (resolve, reject) ->
       # TODO: (Austin) remove localStorage in favor of anonymous user sessions
       if localStorage['pushTokenStored']
-        reject new Error 'Token already created'
+        resolve()
       else if kik?.ready and kik?.push
         kik.ready ->
           kik.push.getToken (token) ->
@@ -36,8 +36,6 @@ class PushToken
               resolve()
             .catch (err) ->
               # FIXME: This should store on HTTP 400 if the token already exists
-              # however Zorium doesn't like non-json responses, so the
-              # error isn't clean
               localStorage['pushTokenStored'] = 1
               reject new Error err
       else
