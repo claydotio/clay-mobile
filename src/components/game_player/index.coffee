@@ -37,11 +37,15 @@ module.exports = class GamePlayer
         then new Drawer {game}
         else null
 
-    @showShareModalPromise = Promise.all [
-      Game.incrementPlayCount(@state().gameKey)
+    @playCountPromise = Promise.all [
+      Game.incrementPlayCount(gameKey)
       o_game
     ]
     .then ([playCount, game]) =>
+      isReturningVisitor = playCount > 1
+      if isReturningVisitor
+        ga? 'send', 'event', 'game', 'repeat_play', gameKey
+
       shouldShowModal = playCount is SHARE_MODAL_DISPLAY_PLAY_COUNT
       if shouldShowModal
         @showShareModal game

@@ -25,7 +25,7 @@ describe 'GamePlayer', ->
       Promise.each _.range(10), (newVisitCount) ->
         visitCount += 1
         GamePlayerComponent = new GamePlayer(gameKey: MockGame.key)
-        GamePlayerComponent.showShareModalPromise
+        GamePlayerComponent.playCountPromise
         .then ->
           if visitCount is 3
             Modal.component.should.exist

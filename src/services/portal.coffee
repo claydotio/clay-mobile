@@ -47,6 +47,9 @@ class PortalService
       unless game
         throw new Error 'gameId invalid'
 
+      # WARNING: this is not tracked if game is played inside native app
+      ga? 'send', 'event', 'game', 'share', game.key
+
       if EnvironmentService.isKikEnabled()
         kik.send
           title: "#{game.name}"
