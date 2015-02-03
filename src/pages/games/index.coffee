@@ -30,6 +30,7 @@ module.exports = class GamesPage
     .then (shouldShow) ->
       if shouldShow
         GooglePlayAdService.showAdModal()
+        ga? 'send', 'event', 'google_play_ad_modal', 'show', 'clay'
     .catch log.trace
 
   render: ({header, googlePlayAd, recentGames, popularGames, modalViewer}) ->
