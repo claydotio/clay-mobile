@@ -9,7 +9,6 @@ Game = require '../../models/game'
 Modal = require '../../models/modal'
 User = require '../../models/user'
 UrlService = require '../../services/url'
-KikService  = require '../../services/kik'
 GooglePlayAdService = require '../../services/google_play_ad'
 
 EnvironmentService = require '../../services/environment'
@@ -69,15 +68,11 @@ module.exports = class GamePlayer
     GooglePlayAdService.shouldShowAdModal().then (shouldShow) ->
       if shouldShow
         GooglePlayAdService.showAdModal().then ->
-          ga? 'send', 'event', 'game_share_modal', 'show', gameKey
+          ga? 'send', 'event', 'google_play_ad_modal', 'show', gameKey
     .catch log.trace
 
     @state.game.then (game) ->
-      KikService.isFromPush().then (isFromPush) ->
-        unless isFromPush
-          ga? 'send', 'event', 'game_wo_push', 'game_play', game.key
-      .catch log.trace
-      ga? 'send', 'event', 'game', 'game_play', game.key
+      ga? 'send', 'event', 'game', 'play', game.key
 
   resize: =>
     @state.set
@@ -86,13 +81,7 @@ module.exports = class GamePlayer
 
   logEngagedPlay: =>
     User.convertExperiment('engaged_play').catch log.trace
-    Promise.all [
-      KikService.isFromPush()
-      @state.game
-    ]
-    .then ([isFromPush, game]) ->
-      unless isFromPush
-        ga? 'send', 'event', 'game_wo_push', 'engaged_play', game.key
+    @state.game.then (game) ->
       ga? 'send', 'event', 'game', 'engaged_play', game.key
       User.addRecentGame(game.id)
 
