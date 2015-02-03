@@ -1,9 +1,9 @@
 {
-  "name": "Clay.io Games",
+  "name": "Clay Games",
   "description": "Clay Games offers a wide variety of fun, instantly playable games. Jump into games and share with friends so they can join the fun.",
   "icons": {
-    "512": "https://cdn.wtf/d/images/google_play/app_icon_512.png",
-    "128": "https://cdn.wtf/d/images/google_play/app_icon_128.png"
+    "512": "http://cdn.wtf/d/images/google_play/app_icon_512.png",
+    "128": "http://cdn.wtf/d/images/google_play/app_icon_128.png"
   },
   "developer": {
     "name": "Clay.io",
