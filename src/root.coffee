@@ -22,6 +22,7 @@ UrlService = require './services/url'
 PortalService = require './services/portal'
 ErrorReportService = require './services/error_report'
 EnvironmentService = require './services/environment'
+KikService = require './services/kik'
 
 baseStyles = require './stylus/base.styl'
 
@@ -66,7 +67,6 @@ ga? 'set', 'dimension1', if EnvironmentService.isClayApp() then 'clay_app' \
                          else if EnvironmentService.isKikEnabled() then 'kik' \
                          else if EnvironmentService.isAndroid() then 'android' \
                          else 'web'
-
 
 window.addEventListener 'error', ErrorReportService.report
 
@@ -138,7 +138,10 @@ route = ->
     .then (developers) ->
       z.router.go if _.isEmpty developers then '/login' else '/dashboard'
 
-User.incrementVisitCount()
+Promise.all [User.incrementVisitCount(), KikService.isFromPush()]
+.then ([visitCount, isFromPush]) ->
+  if isFromPush
+    ga? 'set', 'referrer', 'http://kikpush.claycustomreferrer.com'
 .catch log.trace
 .then ->
   new Promise (resolve) ->
