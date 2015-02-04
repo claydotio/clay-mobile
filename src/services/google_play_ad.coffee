@@ -2,8 +2,6 @@ EnvironmentService = require './environment'
 User = require '../models/user'
 Modal = require '../models/modal'
 GooglePlayAdModal = require '../components/google_play_ad_modal'
-GooglePlayAdModalFlat = require '../components/google_play_ad_modal/flat'
-GooglePlayAdModalNoIcon = require '../components/google_play_ad_modal/no_icon'
 
 FIRST_DISPLAY_VISIT_COUNT = 1
 SECOND_DISPLAY_VISIT_COUNT = 5
@@ -15,15 +13,10 @@ class GooglePlayAdService
     @hasAdModalBeenShown = false
 
   showAdModal: =>
-    User.getExperiments().then ({googlePlayAdType2}) =>
-      googlePlayAdModalComponent = switch googlePlayAdType2
-        when 'flat' then new GooglePlayAdModalFlat()
-        when 'no-icon' then new GooglePlayAdModalNoIcon()
-        else new GooglePlayAdModal()
-      Modal.openComponent(
-        component: googlePlayAdModalComponent
-      )
-      @hasAdModalBeenShown = true
+    Modal.openComponent(
+      component: new GooglePlayAdModal()
+    )
+    @hasAdModalBeenShown = true
 
   shouldShowAdModal: =>
     if @shouldShowAds() and not @hasAdModalBeenShown
