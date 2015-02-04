@@ -2,7 +2,6 @@ z = require 'zorium'
 kik = require 'kik'
 log = require 'clay-loglevel'
 
-RatingsWidget = require '../stars'
 User = require '../../models/user'
 UrlService = require '../../services/url'
 
@@ -12,7 +11,6 @@ module.exports = class GameShoeBox
   constructor: ({@game}) ->
     styles.use()
 
-    @RatingsWidget = new RatingsWidget stars: @game.rating
     @gameSubdomainUrl = UrlService.getGameSubdomain {@game}
 
   loadGame: (e) =>
@@ -30,7 +28,6 @@ module.exports = class GameShoeBox
         src: @game.iconImage?.versions[0].url or @game.icon128Url
       z '.z-game-shoe-box-info', [
         z 'h3', @game.name
-        @RatingsWidget
       ]
       z '.z-game-shoe-box-play',
         z 'i.icon.icon-play-circle'
