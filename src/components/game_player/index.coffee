@@ -67,8 +67,8 @@ module.exports = class GamePlayer
     User.convertExperiment('game_play').catch log.trace
     GooglePlayAdService.shouldShowAdModal().then (shouldShow) ->
       if shouldShow
-        GooglePlayAdService.showAdModal().then ->
-          ga? 'send', 'event', 'google_play_ad_modal', 'show', gameKey
+        GooglePlayAdService.showAdModal()
+        ga? 'send', 'event', 'google_play_ad_modal', 'show', gameKey
     .catch log.trace
 
     @state.game.then (game) ->

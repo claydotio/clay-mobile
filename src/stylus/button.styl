@@ -1,7 +1,8 @@
 $buttonRadius = 20
+$buttonFlatRadius = 5
 $buttonHeight = 40
 
-.button-primary, .button-secondary, .button-circle
+.button-primary, .button-secondary, .button-circle, .button-flat
   position: relative // for active state
   display: inline-block
   height: $buttonHeight px
@@ -63,6 +64,9 @@ $buttonHeight = 40
 .button-secondary
   background: $white
   color: $blue
+
+.button-flat
+  border-radius: $buttonFlatRadius px
 
 .button-ghost
   background: none

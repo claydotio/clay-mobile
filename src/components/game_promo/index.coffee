@@ -2,7 +2,6 @@ z = require 'zorium'
 kik = require 'kik'
 log = require 'clay-loglevel'
 
-RatingsWidget = require '../stars'
 UrlService = require '../../services/url'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
@@ -16,7 +15,6 @@ module.exports = class GamePromo
     @width ?= styleConfig.$marketplaceGamePromoWidth
     @height ?= styleConfig.$marketplaceGamePromoHeight
 
-    @RatingsWidget = new RatingsWidget stars: @game.rating
     @gameSubdomainUrl = UrlService.getGameSubdomain {@game}
 
   loadGame: (e) =>
@@ -39,4 +37,3 @@ module.exports = class GamePromo
         height: @height
       z '.z-game-promo-info',
         z 'h3', @game.name
-        @RatingsWidget

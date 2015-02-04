@@ -32,8 +32,8 @@ module.exports = class GooglePlayAdModal
       z 'div.content',
         z 'div.message',
           'Play your favorite games even faster. '
-          'Official app now on Google Play!'
-        z 'button.button-ghost.is-block.install-button',
-          {onclick: @openGooglePlay},
-          z 'i.icon.icon-arrow-down'
-          z 'span.button-text', 'Install now'
+          'Install the app from Google Play!'
+        z '.align-right',
+          z 'button.button-flat.install-button',
+            {onclick: @openGooglePlay},
+            'Install'

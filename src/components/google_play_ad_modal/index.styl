@@ -7,21 +7,20 @@ json('../../stylus/vars.json')
   > .content
     text-align: center
     font-size: $fontSizeMedium
+    background: $white
 
     > .message
       padding: 20px
+      font-size: $fontSizeMedium
+      line-height: $fontSizeLarge
       font-weight: bold
 
-    > .install-button
-      border-top: 1px solid $greyLight
-      padding: 10px 0
-      color: $blue
+    > .align-right
+      text-align: right
 
-      > .icon-arrow-down
-        margin-right: 10px
-        font-size: $iconSmall
-        vertical-align: middle
-
-      > .button-text
-        display: inline-block
-        vertical-align: middle
+      > .install-button
+        width: 150px
+        margin: 0 20px 20px 0
+        background: $green
+        color: $white
+        text-transform: uppercase
