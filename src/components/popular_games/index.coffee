@@ -6,7 +6,6 @@ Game = require '../../models/game'
 GameBox = require '../game_box'
 GamePromo = require '../game_promo'
 Spinner = require '../spinner'
-User = require '../../models/user'
 
 styles = require './index.styl'
 
@@ -86,23 +85,15 @@ module.exports = class PopularGames
     @isLoading = true
     z.redraw()
 
-    Promise.all [
-      Game.getTop
-        limit: LOAD_MORE_GAMES_LIMIT
-        skip: @state().gameLinks.length
-      User.getExperiments()
-    ]
-    .then ([games, {retinaEgg}]) =>
+    Game.getTop
+      limit: LOAD_MORE_GAMES_LIMIT
+      skip: @state().gameLinks.length
+    .then (games) =>
 
       @isLoading = false
 
       @state.set
         gameLinks: @state().gameLinks.concat _.map games, (game, index) =>
-          if game.key is 'egglabrat'
-            if retinaEgg is 'low'
-              game.icon128Url = '//cdn.wtf/d/experiments/egg/egg_icon_128.png'
-            else if retinaEgg is 'retina'
-              game.icon128Url = '//cdn.wtf/d/experiments/egg/egg_icon_350.png'
           if index is @featuredGamePosition
             type: 'featured'
             $component: new GamePromo(
