@@ -2,7 +2,6 @@ z = require 'zorium'
 kik = require 'kik'
 log = require 'clay-loglevel'
 
-Stars = require '../stars'
 User = require '../../models/user'
 UrlService = require '../../services/url'
 GameLockService = require '../../services/game_lock'
@@ -19,7 +18,6 @@ module.exports = class GameBox
 
     iconSize ?= DEFAULT_GAME_BOX_ICON_SIZE
     @state = z.state
-      $stars: new Stars stars: game.rating
       gameSubdomainUrl: UrlService.getGameSubdomain {game}
       isLocked: z.observe GameLockService.isLocked(game)
       game: game
@@ -58,7 +56,7 @@ module.exports = class GameBox
     httpSubDomainUrl = UrlService.getGameSubdomain({game, protocol: 'http'})
     kik?.picker?(httpSubDomainUrl, {}, -> null)
 
-  render: ({$stars, gameSubdomainUrl, isLocked, game, iconSize}) =>
+  render: ({gameSubdomainUrl, isLocked, game, iconSize}) =>
     z "a.z-game-box[href=#{gameSubdomainUrl}]",
       onclick: @loadGame
       style:
@@ -69,7 +67,6 @@ module.exports = class GameBox
         height: iconSize
       z '.info',
         z 'h3', game.name
-        $stars
       if isLocked
         z '.lock',
           z 'i.icon.icon-locked'
