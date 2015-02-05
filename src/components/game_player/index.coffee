@@ -43,7 +43,7 @@ module.exports = class GamePlayer
     .then ([playCount, game]) =>
       isReturningVisitor = playCount > 1
       if isReturningVisitor
-        ga? 'send', 'event', 'game', 'repeat_play', gameKey
+        ga? 'send', 'event', 'game', 'retained_play', gameKey
 
       shouldShowModal = playCount is SHARE_MODAL_DISPLAY_PLAY_COUNT
       if shouldShowModal
