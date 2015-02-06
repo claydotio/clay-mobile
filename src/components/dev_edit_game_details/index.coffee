@@ -210,8 +210,12 @@ module.exports = class DevEditGameDetails
             looks great and get more people playing.'
             onclick: (e) -> window.alert e.target.title
 
-        z 'div.uploader-container', iconUpload
-        z 'div.uploader-container', headerUpload
+        z 'div.uploader-container',
+          iconUpload
+          z 'div.image-size', '512x512'
+        z 'div.uploader-container',
+          headerUpload
+          z 'div.image-size', '2550x850'
 
         z 'h2.title',
           'Screenshots'
