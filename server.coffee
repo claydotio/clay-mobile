@@ -128,6 +128,9 @@ router.get '/healthcheck', (req, res) ->
         flakCannon: flakCannon.isFulfilled()
         healthy: clayApi.isFulfilled() and flakCannon.isFulfilled()
 
+router.get '/ping', (req, res) ->
+  res.end 'pong'
+
 router.get '/game/:key', (req, res) ->
   log.info 'AGENT ', req.useragent.source
   gameKey = req.params.key
