@@ -16,16 +16,30 @@ json('../../stylus/vars.json')
 
     > .upload-content
       width: 100%
+      color: $greyDark
 
-      > .drop-here
+      > .drop-here, >.uploaded
         font-size: $fontSizeLarge
+        font-weight: lighter
         margin: 10px
 
-      > .browse
-        color: $blue
-        display: block
-        font-size: $fontSizeMedium
-        margin-bottom: 20px
+      > .cache-warning
+        font-weight: lighter
+        width: 200px
+        margin: 0 auto 10px auto
+
+      > .green-check
+        width: 60px
+        height: 60px
+        line-height: 60px
+        margin: 0 auto
+        border-radius: 50%
+        background: $green
+        margin-bottom: 10px
+
+        > .icon-check
+          color: $white
+          font-size: $iconXLarge
 
       > .icon-cloud-upload
         color: $greyMedium
@@ -33,3 +47,10 @@ json('../../stylus/vars.json')
         line-height: 80px
         height: 80px
         margin-bottom: 10px
+
+
+      > .browse, > .replace
+        color: $blue
+        display: block
+        font-size: $fontSizeMedium
+        margin-bottom: 20px
