@@ -29,3 +29,11 @@ window.Promise = window.Promise or Promise
 
 # Fetch polyfill - https://github.com/github/fetch
 require 'fetch'
+
+# window.screen.orientation.unlock polyfill
+window.screen ?= {}
+window.screen.orientation ?= {}
+window.screen.orientation.unlock = window.screen.orientation.unlock or
+                                   window.screen.unlockOrientation or
+                                   window.screen.webkitUnlockOrientation or
+                                   window.screen.mozUnlockOrientation

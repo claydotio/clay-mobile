@@ -53,6 +53,8 @@ module.exports = class GamePlayer
   onBeforeUnmount: =>
     window.clearTimeout @state().engagedPlayTimeout
     window.removeEventListener 'resize', @resize
+    # games can lock the orientation... we want to unlock it
+    window.screen.orientation.unlock?()
 
   onMount: ($el) =>
     window.addEventListener 'resize', @resize
