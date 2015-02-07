@@ -7,5 +7,5 @@ module.exports = class Nub
     styles.use()
 
   render: =>
-    z 'div.z-nub.theme-transparent-menu', ontouchstart: @toggleCallback,
+    z 'div.z-nub', ontouchstart: @toggleCallback,
       z 'i.icon.icon-menu'

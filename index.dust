@@ -94,7 +94,7 @@
       </script>
     {:else}
 
-    <script src="//{webpackDevHostname}:3004/js/bundle.js"></script>
+    <script src="//{webpackDevHostname}:3004/js/bundle.js" crossorigin></script>
     {/inlineSource}
   </body>
 

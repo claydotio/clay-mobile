@@ -24,12 +24,13 @@ module.exports = class GamesPage
                then new PopularGames({featuredGameRow: 1})
                else new PopularGames({featuredGameRow: 0})
       ).catch log.trace
-      topCard: z.observe User.getExperiments().then ({feedbackCard}) ->
+      topCard: z.observe User.getExperiments().then( ({feedbackCard}) ->
         return if feedbackCard is 'show' and EnvironmentService.isKikEnabled() \
                then new FeedbackCard()
                else if GooglePlayAdService.shouldShowAds() \
                then new GooglePlayAd()
                else null
+      ).catch log.trace
 
     @googlePlayAdModalPromise = GooglePlayAdService.shouldShowAdModal()
     .then (shouldShow) ->
