@@ -41,7 +41,7 @@ describe 'PushToken', ->
 
     it 'Attempts to create push token by gameId and resolves', ->
       Zock
-        .base(config.CLAY_API_URL)
+        .base(config.PUBLIC_CLAY_API_URL)
         .post '/pushTokens'
         .reply 200, (res) ->
           res.body.gameId.should.be MockGame.id
@@ -52,7 +52,7 @@ describe 'PushToken', ->
 
     it 'Attempts to create push token by gameKey and resolves', ->
       Zock
-        .base(config.CLAY_API_URL)
+        .base(config.PUBLIC_CLAY_API_URL)
         .post '/pushTokens'
         .reply 200, (res) ->
           res.body.gameId.should.be MockGame.id
@@ -66,7 +66,7 @@ describe 'PushToken', ->
 
     it 'Attempts to create push token for marketplace and resolves', ->
       Zock
-        .base(config.CLAY_API_URL)
+        .base(config.PUBLIC_CLAY_API_URL)
         .post '/pushTokens'
         .reply 200, (res) ->
           should.not.exist res.body.gameId
@@ -77,7 +77,7 @@ describe 'PushToken', ->
 
     it 'Attempts to create multiple push tokens', ->
       Zock
-        .base(config.CLAY_API_URL)
+        .base(config.PUBLIC_CLAY_API_URL)
         .post '/pushTokens'
         .reply 200, (res) ->
           res.body.gameId.should.be MockGame.id

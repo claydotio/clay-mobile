@@ -3,7 +3,7 @@ request = require '../lib/request'
 config = require '../config'
 User = require './user'
 
-PATH = config.CLAY_API_URL + '/developers'
+PATH = config.PUBLIC_CLAY_API_URL + '/developers'
 
 class Developer
   find: (query) ->

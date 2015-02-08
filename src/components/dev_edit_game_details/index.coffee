@@ -68,7 +68,7 @@ module.exports = class DevEditGameDetails
       iconUpload: z.observe o_game.then (game) ->
         User.getMe().then ({accessToken}) ->
           new UploaderImage {
-            url: "#{config.CLAY_API_URL}/games/#{game.id}/" +
+            url: "#{config.PUBLIC_CLAY_API_URL}/games/#{game.id}/" +
                   "links/iconImage?accessToken=#{accessToken}"
             inputName: 'image'
             o_uploadedObj: o_iconImage
@@ -81,7 +81,7 @@ module.exports = class DevEditGameDetails
       headerUpload: z.observe o_game.then (game) ->
         User.getMe().then ({accessToken}) ->
           new UploaderImage {
-            url: "#{config.CLAY_API_URL}/games/#{game.id}/" +
+            url: "#{config.PUBLIC_CLAY_API_URL}/games/#{game.id}/" +
                   "links/headerImage?accessToken=#{accessToken}"
             inputName: 'image'
             o_uploadedObj: o_headerImage
@@ -98,7 +98,7 @@ module.exports = class DevEditGameDetails
       ]).then ([screenshots, game, {accessToken}]) ->
         _.map _.range(5), (i) ->
           new UploaderImage {
-            url: "#{config.CLAY_API_URL}/games/#{game.id}/" +
+            url: "#{config.PUBLIC_CLAY_API_URL}/games/#{game.id}/" +
                   "links/screenshotImages?accessToken=#{accessToken}"
             method: 'post'
             inputName: 'image'

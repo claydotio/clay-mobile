@@ -15,7 +15,7 @@ class ErrorReportService
       then arg.message
       else arg
 
-    window.fetch config.CLAY_API_URL + '/log',
+    window.fetch config.PUBLIC_CLAY_API_URL + '/log',
       method: 'POST'
       headers:
         'Accept': 'application/json'

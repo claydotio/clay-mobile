@@ -6,7 +6,7 @@ config = require '../config'
 request = require '../lib/request'
 User = require '../models/user'
 
-PATH = config.CLAY_API_URL + '/games'
+PATH = config.PUBLIC_CLAY_API_URL + '/games'
 LOCALSTORE_PLAY_COUNT_KEY_PREFIX = 'game:play_count'
 
 class Game

@@ -66,7 +66,7 @@ describe 'PortalService', ->
   describe 'share.any()', ->
     before ->
       Zock
-        .base(config.CLAY_API_URL)
+        .base(config.PUBLIC_CLAY_API_URL)
         .get "/games/#{MockGame.id}"
         .reply 200, (res) ->
           return MockGame

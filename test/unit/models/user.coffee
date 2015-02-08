@@ -23,7 +23,7 @@ describe 'UserModel', ->
 
   it 'loginBasic()', ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .post '/users/login/basic'
       .reply 200, (res) ->
         res.query.accessToken.should.be 'ACCESS_TOKEN' and

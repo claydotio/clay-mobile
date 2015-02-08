@@ -25,7 +25,7 @@ module.exports = class DevEditGameUpload
       zipUpload: z.observe o_game.then (game) ->
         User.getMe().then ({accessToken}) ->
           new UploaderZip {
-            url: "#{config.CLAY_API_URL}/games/#{game.id}/" +
+            url: "#{config.PUBLIC_CLAY_API_URL}/games/#{game.id}/" +
                  "zip?accessToken=#{accessToken}"
             inputName: 'zip'
             width: 320

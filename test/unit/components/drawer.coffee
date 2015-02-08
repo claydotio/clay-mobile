@@ -21,10 +21,10 @@ describe 'Drawer', ->
 
   it 'toggles properly', ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .post '/users/login/anon'
       .reply 200, MockUser
-      .base(config.FC_API_URL)
+      .base(config.PUBLIC_FC_API_URL)
       .get '/experiments'
       .reply 200, {}
 
@@ -50,10 +50,10 @@ describe 'Drawer', ->
 
   it 'closes properly', ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .post '/users/login/anon'
       .reply 200, MockUser
-      .base(config.FC_API_URL)
+      .base(config.PUBLIC_FC_API_URL)
       .get '/experiments'
       .reply 200, {}
 
