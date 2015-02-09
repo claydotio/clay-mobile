@@ -13,7 +13,7 @@ describe 'ErrorReportService', ->
 
   it 'report()', (done) ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .post '/log'
       .reply 200, (res) ->
         schema = Joi.object().keys

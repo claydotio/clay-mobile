@@ -5,7 +5,7 @@ request = require '../lib/request'
 localstore = require '../lib/localstore'
 config = require '../config'
 
-PATH = config.CLAY_API_URL + '/users'
+PATH = config.PUBLIC_CLAY_API_URL + '/users'
 LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 
 me = null
@@ -49,7 +49,7 @@ class User
     .catch log.trace
 
     experiments = me.then (user) ->
-      request config.FC_API_URL + '/experiments',
+      request config.PUBLIC_FC_API_URL + '/experiments',
         method: 'POST'
         body:
           userId: user.id
@@ -69,7 +69,7 @@ class User
   getExperiments: =>
     unless experiments
       experiments = @getMe().then (user) ->
-        request config.FC_API_URL + '/experiments',
+        request config.PUBLIC_FC_API_URL + '/experiments',
           method: 'POST'
           body:
             userId: user.id
@@ -78,7 +78,7 @@ class User
 
   setExperimentsFrom: (shareOriginUserId) =>
     experiments = @getMe().then (user) ->
-      request config.FC_API_URL + '/experiments',
+      request config.PUBLIC_FC_API_URL + '/experiments',
         method: 'POST'
         body:
           fromUserId: shareOriginUserId
@@ -86,7 +86,7 @@ class User
 
   convertExperiment: (event, {uniq} = {}) =>
     @getMe().then (user) ->
-      request config.FC_API_URL + '/conversions',
+      request config.PUBLIC_FC_API_URL + '/conversions',
         method: 'POST'
         body:
           event: event

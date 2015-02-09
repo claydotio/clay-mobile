@@ -24,7 +24,7 @@ describe 'Game', ->
 
   it 'find()', ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .get '/games'
       .reply 200, (res) ->
         res.query.developerId.should.be '1'
@@ -35,7 +35,7 @@ describe 'Game', ->
 
   it 'get()', ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .get "/games/#{MockGame.id}"
       .reply 200, (res) ->
         return MockGame
@@ -45,7 +45,7 @@ describe 'Game', ->
 
   it 'get() multiple games', ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .get '/games/1,2'
       .reply 200, (res) ->
         return [MockGame, MockGame]

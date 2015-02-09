@@ -55,7 +55,7 @@ module.exports = class DevLogin
 
   apply: =>
     User.getMe().then ({accessToken}) =>
-      request("#{config.CLAY_API_URL}/developerApplications", {
+      request("#{config.PUBLIC_CLAY_API_URL}/developerApplications", {
         method: 'post'
         qs:
           accessToken: accessToken

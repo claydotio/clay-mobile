@@ -13,7 +13,7 @@ describe 'Developer', ->
 
   it 'find()', ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .get '/developers'
       .reply 200, (res) ->
         res.query.ownerId.should.be '1'
@@ -24,7 +24,7 @@ describe 'Developer', ->
 
   it 'create()', ->
     Zock
-      .base(config.CLAY_API_URL)
+      .base(config.PUBLIC_CLAY_API_URL)
       .post '/users/login/anon'
       .reply 200, {accessToken: 'ACCESS_TOKEN'}
       .post '/developers'
