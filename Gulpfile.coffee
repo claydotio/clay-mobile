@@ -89,7 +89,7 @@ gulp.task 'scripts:test', ->
         { test: /\.json$/, loader: 'json' }
         {
           test: /\.styl$/
-          loader: 'style/useable!css!stylus?paths=components/'
+          loader: 'style/useable!css!stylus?paths=node_modules'
         }
       ]
     externals:
@@ -173,7 +173,7 @@ gulp.task 'scripts:prod', ->
         { test: /\.json$/, loader: 'json' }
         {
           test: /\.styl$/
-          loader: 'style/useable!css!stylus?paths=components/'
+          loader: 'style/useable!css!stylus?paths=node_modules'
         }
       ]
     plugins: [

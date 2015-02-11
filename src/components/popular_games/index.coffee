@@ -28,15 +28,15 @@ module.exports = class PopularGames
     featuredGameRow ?= 0
 
     if window.matchMedia('(min-width: 360px)').matches
-      @gameBoxSize = 100
-      @gamePromoWidth = 320
-      @gamePromoHeight = 204
-      @featuredGamePosition = featuredGameRow * BOXES_PER_ROW_MEDIUM_SCREEN
+      gameBoxSize = 98
+      gamePromoWidth = 328
+      gamePromoHeight = 209
+      featuredGamePosition = featuredGameRow * BOXES_PER_ROW_MEDIUM_SCREEN
     else
-      @gameBoxSize = 135
-      @gamePromoWidth = 280
-      @gamePromoHeight = 178
-      @featuredGamePosition = featuredGameRow * BOXES_PER_ROW_SMALL_SCREEN
+      gameBoxSize = 136
+      gamePromoWidth = 288
+      gamePromoHeight = 183
+      featuredGamePosition = featuredGameRow * BOXES_PER_ROW_SMALL_SCREEN
 
     @isLoading = true
     @isListeningForScroll = true
@@ -111,16 +111,20 @@ module.exports = class PopularGames
 
   render: ({gameLinks, $spinner}) =>
     z 'section.z-game-results',
-      z 'div.l-content-container',
-        z 'h2.header', 'Most popular games'
-        z 'div.game-boxes',
-        (_.map gameLinks, (gameLink) ->
-          if gameLink.type is 'featured'
-            z '.featured-game-box-container',
-              gameLink.$component
-          else
-            z '.game-box-container',
-              gameLink.$component
-        ).concat [
-          if @isLoading then z '.spinner', $spinner
-        ]
+      z 'h2.header', 'Most popular games'
+      z 'div.game-boxes',
+      (_.map gameLinks, (gameLink) ->
+        if gameLink.type is 'featured'
+          z '.featured-game-box-container',
+            z gameLink.$component,
+              game: gameLink.game
+              width: gamePromoWidth
+              height: gamePromoHeight
+        else
+          z '.game-box-container',
+            z gameLink.$component,
+              game: gameLink.game
+              iconSize: gameBoxSize
+      ).concat [
+        if @isLoading then z '.spinner', $spinner
+      ]

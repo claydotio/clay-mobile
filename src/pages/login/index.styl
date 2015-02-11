@@ -1,0 +1,10 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+json('./vars.json')
+
+.z-login-page
+  > .content
+    position: relative
+    z-index: $zIndexLoginPageContent
+    margin-top: -($cardOverlapHeight)px

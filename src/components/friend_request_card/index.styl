@@ -1,0 +1,40 @@
+@require 'nib'
+@require 'zorium-paper/base'
+
+json('../../stylus/vars.json')
+
+.z-friend-request-card
+  zp-shadow-1()
+  background: $white
+  border-radius: 2px
+  padding: 16px
+
+  > .single-friend, > .many-friends
+    display: flex
+
+    > .profile-pic
+      width: 40px
+      height: 40px
+      border-radius: 50%
+      margin-right: 16px
+
+    > .friend-info
+      > .title
+        zp-font-headline()
+        margin: 0 0 12px 0
+
+      > .description
+        zp-font-subhead()
+        margin: 0 0 16px 0
+
+  > .many-friends
+    > .profile-pic
+      display: flex
+      background: $orange500
+      text-align: center
+
+      > .icon
+        margin: auto
+
+  > .actions
+    text-align: right

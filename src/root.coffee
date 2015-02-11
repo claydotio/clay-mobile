@@ -12,12 +12,21 @@ config = require './config'
 HomePage = require './pages/home'
 PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
+JoinPage = require './pages/join'
+LoginPage = require './pages/login'
+ForgotPasswordPage = require './pages/forgot_password'
+ResetPasswordPage = require './pages/reset_password'
+InvitePage = require './pages/invite'
+InviteLandingPage = require './pages/invite_landing'
+WhatIsClayPage = require './pages/what_is_clay'
+FriendsPage = require './pages/friends'
 DevLoginPage = require './pages/dev_login'
 DevDashboardPage = require './pages/dev_dashboard'
 DevEditGamePage = require './pages/dev_edit_game'
 PushToken = require './models/push_token'
 User = require './models/user'
 Developer = require './models/developer'
+NavDrawerModel = require './models/nav_drawer'
 UrlService = require './services/url'
 PortalService = require './services/portal'
 ErrorReportService = require './services/error_report'
@@ -117,8 +126,23 @@ else
   z.router.add '/games', GamesPage
   z.router.add '/game/:key', PlayGamePage
   z.router.add '/games/:filter', GamesPage
+  z.router.add '/join', JoinPage
+  z.router.add '/join/:fromUserId', JoinPage
+  z.router.add '/login', LoginPage
+  z.router.add '/forgot-password', ForgotPasswordPage
+  z.router.add '/reset-password/:phone', ResetPasswordPage
+  z.router.add '/invite', InvitePage
+  z.router.add '/invite-landing/:fromUserId', InviteLandingPage
+  z.router.add '/what-is-clay/:fromUserId', WhatIsClayPage
+  z.router.add '/friends', FriendsPage
 
 route = ->
+  # invite from kik message
+  fromUserId = kik?.message?.fromUserId
+  if fromUserId
+    z.router.go "/invite-landing/#{fromUserId}"
+    return
+
   # Passed via message to denote game (share button in drawer uses this)
   gameKey = kik?.message?.gameKey or (subdomain isnt 'dev' and subdomain)
 

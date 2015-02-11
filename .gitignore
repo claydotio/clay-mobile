@@ -1,7 +1,7 @@
 /node_modules
 /dist
-/build
 /components
+/build
 /specs
 roadmap.md
 sensitive.coffee

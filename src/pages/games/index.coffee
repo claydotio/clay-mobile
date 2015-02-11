@@ -2,35 +2,38 @@ z = require 'zorium'
 log = require 'clay-loglevel'
 
 User = require '../../models/user'
-Header = require '../../components/header'
+AppBar = require '../../components/app_bar'
+MenuButton = require '../../components/menu_button'
+MarketplaceShare = require '../../components/marketplace_share'
+NavDrawer = require '../../components/nav_drawer'
 ModalViewer = require '../../components/modal_viewer'
+HomeCards = require '../../components/home_cards'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
-GooglePlayAd = require '../../components/google_play_ad'
-FeedbackCard = require '../../components/feedback_card'
 GooglePlayAdService = require '../../services/google_play_ad'
-EnvironmentService = require '../../services/environment'
+styleConfig = require '../../stylus/vars.json'
+
+styles = require './index.styl'
 
 module.exports = class GamesPage
   constructor: ->
+    styles.use()
 
     @state = z.state
-      header: new Header()
-      modalViewer: new ModalViewer()
-      recentGames: new RecentGames()
-      popularGames: z.observe User.getMe().then( (user) ->
+      $appBar: new AppBar()
+      $menuButton: new MenuButton()
+      $marketplaceShare: new MarketplaceShare()
+      $navDrawer: new NavDrawer()
+      $modalViewer: new ModalViewer()
+      $homeCards: new HomeCards()
+      $recentGames: new RecentGames()
+      $popularGames: z.observe User.getMe().then( (user) ->
         hasRecentGames = user.links.recentGames
         return if hasRecentGames \
                then new PopularGames({featuredGameRow: 1})
                else new PopularGames({featuredGameRow: 0})
       ).catch log.trace
-      topCard: z.observe User.getExperiments().then( ({feedbackCard}) ->
-        return if feedbackCard is 'show' and EnvironmentService.isKikEnabled() \
-               then new FeedbackCard()
-               else if GooglePlayAdService.shouldShowAds() \
-               then new GooglePlayAd()
-               else null
-      ).catch log.trace
+
 
     @googlePlayAdModalPromise = GooglePlayAdService.shouldShowAdModal()
     .then (shouldShow) ->
@@ -39,11 +42,20 @@ module.exports = class GamesPage
         ga? 'send', 'event', 'google_play_ad_modal', 'show', 'clay'
     .catch log.trace
 
-  render: ({header, topCard, recentGames, popularGames, modalViewer}) ->
-    z 'div', [
-      z 'div', header
-      z 'div', topCard
-      z 'div', recentGames
-      z 'div', popularGames
-      modalViewer
+  render: =>
+    {$appBar, $navDrawer, $homeCards, $menuButton, $marketplaceShare,
+      $recentGames, $popularGames, $modalViewer} = @state()
+
+    z 'div.z-games-page', [
+      z $appBar, {
+        height: "#{styleConfig.$appBarHeightShort}px"
+        $topLeftButton: z $menuButton, {isAlignedLeft: true}
+        $topRightButton: z $marketplaceShare, {isAlignedRight: true}
+      }
+      z $navDrawer, {currentPage: 'games'}
+      $modalViewer
+      z 'div.l-content-container.content',
+        $homeCards
+        $recentGames
+        $popularGames
     ]

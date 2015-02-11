@@ -3,6 +3,7 @@ kik = require 'kik'
 log = require 'clay-loglevel'
 
 User = require '../../models/user'
+Game = require '../../models/game'
 UrlService = require '../../services/url'
 GameLockService = require '../../services/game_lock'
 ShareService = require '../../services/share'
@@ -61,8 +62,8 @@ module.exports = class GameBox
       onclick: @loadGame
       style:
         width: "#{iconSize}px",
-      z 'img',
-        src: game.iconImage?.versions[0].url or game.icon128Url
+      z 'img.image',
+        src: Game.getIconUrl game
         width: iconSize
         height: iconSize
       z '.info',
