@@ -1,0 +1,10 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+json('./vars.json')
+
+.z-reset-password-page
+  > .content
+    position: relative
+    z-index: $zIndexResetPasswordPageContent
+    margin-top: -($cardOverlapHeight)px

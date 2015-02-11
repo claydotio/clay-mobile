@@ -87,6 +87,13 @@ describe 'index.dust', ->
           flare.res.body.should.contain \
             '<title>Game not found - Clay Games</title>'
 
+      it 'Should include invite-landing specific HTML', ->
+        flare
+          .get "/invite-landing/#{MockUser.id}"
+          .flare (flare) ->
+            flare.res.body.should.contain \
+              '<title>Please be my friend on Clay</title>'
+
   describe 'Kik page responses', ->
     before ->
       flare = flare.as 'kik'
@@ -126,3 +133,10 @@ describe 'index.dust', ->
         .flare (flare) ->
           flare.res.body.should.contain \
             '<title>Game not found - Clay Games</title>'
+
+      it 'Should include invite-landing specific HTML', ->
+        flare
+          .get "/invite-landing/#{MockUser.id}"
+          .flare (flare) ->
+            flare.res.body.should.contain \
+              '<title>Please be my friend on Clay</title>'

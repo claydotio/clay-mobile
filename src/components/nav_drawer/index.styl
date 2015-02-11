@@ -1,0 +1,117 @@
+@require 'nib'
+@require 'zorium-paper/base'
+
+json('../../stylus/vars.json')
+
+$navDrawerHeaderHeight = 200
+$zIndexNavDrawerHeader = 100
+
+.z-nav-drawer
+  position: fixed
+  z-index: $zIndexNavDrawer
+  width: 100%
+  height: 100%
+  top: 0
+  left: 0
+  pointer-events: none // not supported in ie9/10 (ie our entire app breaks)
+
+  &.is-open
+    pointer-events: all // not supported in ie9/10
+
+    > .overlay
+      opacity: 0.5
+      transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)
+
+    > .drawer
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)
+
+  > .overlay
+    background: $black
+    opacity: 0
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)
+    width: 100%
+    height: 100%
+
+  > .drawer
+    // width and transform translate set in js
+    height: 100%
+    top: 0
+    position: fixed
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)
+    overflow: auto
+    display: flex
+    flex-direction: column
+    background: $bgColor
+    // prevents flicker glitch http://stackoverflow.com/a/3921870
+    backface-visibility: hidden
+
+    > .header
+      display: flex
+      width: 100%
+      height: ($navDrawerHeaderHeight) px
+      padding: 16px
+      box-sizing: border-box
+      position: relative
+      z-index: $zIndexNavDrawerHeader
+      background: $orange500
+      // prevents flicker glitch http://stackoverflow.com/a/3921870
+      backface-visibility: hidden
+
+      > .user-header
+        display: flex
+        flex-direction: column
+
+        > .avatar
+          width: 72px
+          height: 72px
+          border-radius: 50%
+
+        > .name
+          zp-font-subhead()
+          color: $white
+          margin-top: auto
+          margin-bottom: 8px
+
+      > .guest-header
+        display: flex
+        flex-direction: column
+        width: 100%
+
+        > .description
+          zp-font-subhead()
+          color: $white
+
+        > .actions
+          margin-top: auto
+          align-self: flex-end
+
+    > .content
+      flex: 1
+      width: 100%
+      padding: 16px
+      box-sizing: border-box
+
+      > .menu
+        list-style-type: none
+        margin: 0
+        padding: 0
+
+        > .menu-item
+          > .menu-item-link
+            zp-font-body2()
+            display: block
+            padding: 16px 0
+
+            > .icon
+              display: inline-block
+              vertical-align: middle
+              margin-right: 32px
+
+          &.is-unavailable
+            > .menu-item-link
+              color: $grey400
+              pointer-events: none // not supported in ie9/10 (ie our entire app breaks)
+
+          &.is-selected
+            > .menu-item-link
+              color: $blue500

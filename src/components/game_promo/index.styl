@@ -1,4 +1,5 @@
 @require 'nib'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
@@ -6,18 +7,21 @@ json('../../stylus/vars.json')
   -webkit-tap-highlight-color: $transparent
   font-size: $fontSizeSmall
   display: block
-  margin: 0 5px
 
   &:active
     opacity: 0.6
 
-.z-game-promo-info
-  text-align: left
-  width: 100%
+  > .image
+    zp-shadow-1()
+    border-radius: 2px
 
-  > h3
-    font-size: $fontSizeSmall
-    margin: 3px
-    white-space: nowrap
-    overflow: hidden
-    text-overflow: ellipsis
+  > .info
+    text-align: left
+    width: 100%
+
+    > h3
+      zp-font-caption()
+      margin: 3px
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis

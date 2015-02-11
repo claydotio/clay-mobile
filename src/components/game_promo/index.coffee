@@ -30,10 +30,10 @@ module.exports = class GamePromo
     z "a.z-game-promo[href=#{@gameSubdomainUrl}]",
       onclick: @loadGame
       style:
-        width: "#{@width}px",
-      z 'img',
-        src: @game.headerImage?.versions[0].url or @game.promo440Url
-        width: @width
-        height: @height
-      z '.z-game-promo-info',
-        z 'h3', @game.name
+        width: "#{width}px",
+      z 'img.image',
+        src: game.headerImage?.versions[0].url or game.promo440Url
+        width: width
+        height: height
+      z '.info',
+        z 'h3', game.name

@@ -1,4 +1,5 @@
 @require 'nib'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
@@ -24,8 +25,7 @@ json('../../stylus/vars.json')
     vertical-align: middle
 
     > h3
-      font-size: $fontSizeMedium
-      font-weight: normal
+      zp-font-body1()
       margin: 0
       white-space: nowrap
       overflow: hidden

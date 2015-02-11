@@ -16,16 +16,15 @@ module.exports = class GooglePlayAd
     window.open 'https://play.google.com/store/apps/details?id=com.clay.clay'
 
   render: =>
-    z 'div.l-content-container',
-      z 'a.z-google-play-ad
-        [href=https://play.google.com/store/apps/details?id=com.clay.clay]',
-        onclick: @openGooglePlay
-        z 'div.header'
-        z 'div.content',
-          z 'h2', 'Get the app!'
-          z 'div.message',
-            z 'div', 'Play your favorite games even faster. '
-            z 'div', 'Official app now on Google Play!'
-        z 'button.button-ghost.is-block.install-button',
-          z 'i.icon.icon-arrow-down'
-          z 'span.button-text', 'Install now'
+    z 'a.z-google-play-ad
+      [href=https://play.google.com/store/apps/details?id=com.clay.clay]',
+      onclick: @openGooglePlay
+      z 'div.header'
+      z 'div.content',
+        z 'h2', 'Get the app!'
+        z 'div.message',
+          z 'div', 'Play your favorite games even faster. '
+          z 'div', 'Official app now on Google Play!'
+      z 'button.button-ghost.is-block.install-button',
+        z 'i.icon.icon-arrow-down'
+        z 'span.button-text', 'Install now'

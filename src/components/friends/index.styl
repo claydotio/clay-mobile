@@ -1,0 +1,59 @@
+@require 'nib'
+@require 'zorium-paper/base'
+
+json('../../stylus/vars.json')
+
+$zIndexFriendsFab = 1
+
+.z-friends
+  display: flex
+  height: 100%
+
+  > .no-friends
+    text-align: center
+    margin: auto
+
+    > .title
+      zp-font-subhead()
+
+    > .description
+      zp-font-body1()
+
+  > .friends
+    list-style-type: none
+    margin: 0
+    padding: 0
+
+    > .friend
+      > .friend-link
+        display: flex
+        height: 100%
+        align-items: center
+        padding: 16px 0
+
+        &:active
+          background: $activeBgColor
+
+        > .friend-avatar
+          width: 40px
+          height: 40px
+          border-radius: 50%
+          margin-right: 16px
+
+        > .friend-info
+          > .name
+            zp-font-subhead()
+
+          > .game
+            zp-font-caption()
+
+        > .game-pic
+          margin-left: auto
+          width: 24px
+          height: 24px
+
+  > .fab
+    position: fixed
+    right: 16px
+    bottom: 16px
+    z-index: $zIndexFriendsFab
