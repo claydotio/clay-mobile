@@ -2,7 +2,7 @@ z = require 'zorium'
 log = require 'clay-loglevel'
 
 User = require '../../models/user'
-Header = require '../../components/header'
+AppBar = require '../../components/app_bar'
 ModalViewer = require '../../components/modal_viewer'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
@@ -15,16 +15,16 @@ module.exports = class GamesPage
   constructor: ->
 
     @state = z.state
-      header: new Header()
-      modalViewer: new ModalViewer()
-      recentGames: new RecentGames()
-      popularGames: z.observe User.getMe().then( (user) ->
+      $appBar: new AppBar()
+      $modalViewer: new ModalViewer()
+      $recentGames: new RecentGames()
+      $popularGames: z.observe User.getMe().then( (user) ->
         hasRecentGames = user.links.recentGames
         return if hasRecentGames \
                then new PopularGames({featuredGameRow: 1})
                else new PopularGames({featuredGameRow: 0})
       ).catch log.trace
-      topCard: z.observe User.getExperiments().then( ({feedbackCard}) ->
+      $topCard: z.observe User.getExperiments().then( ({feedbackCard}) ->
         return if feedbackCard is 'show' and EnvironmentService.isKikEnabled() \
                then new FeedbackCard()
                else if GooglePlayAdService.shouldShowAds() \
@@ -39,11 +39,18 @@ module.exports = class GamesPage
         ga? 'send', 'event', 'google_play_ad_modal', 'show', 'clay'
     .catch log.trace
 
-  render: ({header, topCard, recentGames, popularGames, modalViewer}) ->
+  render: (
+    {
+      $appBar
+      $topCard
+      $recentGames
+      $popularGames
+      $modalViewer
+    }) ->
     z 'div', [
-      z 'div', header
-      z 'div', topCard
-      z 'div', recentGames
-      z 'div', popularGames
-      modalViewer
+      z 'div', $appBar
+      z 'div', $topCard
+      z 'div', $recentGames
+      z 'div', $popularGames
+      $modalViewer
     ]

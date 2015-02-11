@@ -12,6 +12,7 @@ config = require './config'
 HomePage = require './pages/home'
 PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
+JoinPage = require './pages/join'
 DevLoginPage = require './pages/dev_login'
 DevDashboardPage = require './pages/dev_dashboard'
 DevEditGamePage = require './pages/dev_edit_game'
@@ -117,6 +118,7 @@ else
   z.router.add '/games', GamesPage
   z.router.add '/game/:key', PlayGamePage
   z.router.add '/games/:filter', GamesPage
+  z.router.add '/join', JoinPage
 
 route = ->
   # Passed via message to denote game (share button in drawer uses this)
