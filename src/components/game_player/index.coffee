@@ -116,7 +116,6 @@ module.exports = class GamePlayer
       z 'div.z-game-player',
         style:
           height: height
-        @SDK
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',
