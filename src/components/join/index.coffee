@@ -1,8 +1,10 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
 
-config = require '../../config'
-AppBar = require '../app_bar'
+PaperCard = require '../paper_card'
+PaperInput = require '../paper_input'
+PaperButton = require '../paper_button'
+styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
@@ -11,10 +13,39 @@ module.exports = class Join
     styles.use()
 
     @state = z.state
-      $appBar: new AppBar heightUnits: 4, barType: 'background'
+      # 16px padding FIXME
+      $formCard: new PaperCard {
+        content: [
+          # FIXME: add z '.z-join_form-card-content'
+          new PaperInput
+            hintText: 'Name'
+            isFloating: true
+            o_value: z.observe ''
+            colors: c500: styleConfig.$orange
+          new PaperInput
+            hintText: 'Phone number'
+            isFloating: true
+            o_value: z.observe ''
+            colors: c500: styleConfig.$orange
+          new PaperInput
+            hintText: 'Password'
+            isFloating: true
+            o_value: z.observe ''
+            colors: c500: styleConfig.$orange
+          # FIXME: align right when we fix the rendering stuff
+          new PaperButton
+            text: 'Sign up'
+            colors: c500: styleConfig.$orange, ink: styleConfig.$white
+        ]
+      }
       showProfilePicture: z.observe false # FIXME
 
-  render: ({$appBar, showProfilePicture}) ->
+  render: ({$formCard, showProfilePicture}) ->
     z '.z-join',
-      z 'div', $appBar
-      z 'h1.join-clay', 'Join Clay'
+      $formCard
+      z 'div.terms',
+        'By signing up, you agree to receive SMS messages and to our '
+        z 'a[href=/privacy]', 'Privacy Policy'
+        ' and '
+        z 'a[href=/tos]', 'Terms'
+        '.'

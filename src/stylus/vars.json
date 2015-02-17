@@ -47,6 +47,7 @@
   "$marketplaceGamePromoHeight": 280,
 
   "$zIndexModal": 900,
-  "$zIndexDrawer": 200,
+  "$zIndexDrawer": 300,
+  "$zIndexJoinPageContent": 200,
   "$zIndexHeader": 100
 }

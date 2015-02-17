@@ -1,0 +1,83 @@
+@require 'nib'
+@require '../../stylus/paper_base'
+json('../../stylus/paper_colors.json')
+
+.z-button
+  min-height: 48px
+  min-width: 48px
+  display: inline-block
+  position: relative
+  background: transparent
+  text-align: center
+  outline: none
+  user-select: none
+  cursor: pointer
+  -webkit-tap-highlight-color: transparent
+
+  > .button
+    z-font-button()
+    display: inline-block
+    position: relative
+    box-sizing: border-box
+    padding: 0 8px
+    min-width: 88px
+    min-height: 36px
+    line-height: 36px
+    margin: 4px
+    background: transparent
+    text-align: center
+    outline: none
+    border-radius: 2px
+    user-select: none
+    cursor: pointer
+    overflow: hidden
+
+    &[disabled]
+      cursor: auto
+      pointer-events: none
+
+  &.is-raised
+    > .button
+      z-shadow-1()
+
+      &:active
+        z-shadow-2()
+
+      &[disabled]
+        box-shadow: none
+        background: $black12
+        color: $black26
+
+  &.is-raised&.is-dark
+    > .button
+      &[disabled]
+        background: $white12
+        color: $white30
+
+  &.is-short
+    > .button
+      min-width: 48px
+
+  &.is-flat
+    > .button
+      &:hover
+        background: alpha(#999, 0.20)
+
+      &:active
+        background: alpha(#999, 0.40)
+
+      &[disabled]
+        color: $black26
+
+  &.is-flat&.is-dark
+    > .button
+      color: $white
+
+      &:hover
+        background: alpha(#ccc, 0.15)
+
+      &:active
+        background: alpha(#ccc, 0.25)
+
+      &[disabled]
+        color: $white30

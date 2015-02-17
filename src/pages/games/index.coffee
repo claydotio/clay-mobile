@@ -15,7 +15,12 @@ module.exports = class GamesPage
   constructor: ->
 
     @state = z.state
-      $appBar: new AppBar()
+      $appBar: new AppBar {
+        height: '56px'
+        topLeftButton: 'menu'
+        topRightButton: 'share'
+        barType: 'navigation'
+      }
       $modalViewer: new ModalViewer()
       $recentGames: new RecentGames()
       $popularGames: z.observe User.getMe().then( (user) ->

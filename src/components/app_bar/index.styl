@@ -8,39 +8,52 @@ json('../../stylus/vars.json')
 
   > .orange-bar
     background: $orange
-    position: fixed
     width: 100%
-    top: 0
     box-sizing: border-box
     padding: 14px 20px
-    box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.13), 0px 3px 6px -2px rgba(0, 0, 0, 0.2)
 
-    > .is-background
-      text-align: center
-
-      > .title
-        font-size: $fontSizeXXLarge
-        font-weight: lighter
-        color: $white
-
-      > .description
-        font-size: $fontSizeMedium
-        font-weight: lighter
-        color: $white
-        // FIXME: what color?
+    > .icon-back-arrow, .icon-menu
+      font-size: $iconMedium
+      color: $white
+      margin-right: 32px
 
 
-    > .is-navigation
-      > .logo
+    > .logo
+      font-size: $fontSizeLarge
+      color: $white
+
+      > .io
+        color: #fff // FIXME $color?
+
+    > .marketplace-share
+      margin-left: auto
+
+  &.is-fixed
+    > .orange-bar
+      position: fixed
+      top: 0
+      box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.13), 0px 3px 6px -2px rgba(0, 0, 0, 0.2)
+
+  &.is-background
+    > .orange-bar
+      > .content
+        width: 100%
+        text-align: center
+        padding: 16px
+        box-sizing: border-box
         display: inline-block
-        float: left
-        line-height: 30px
-        background-image: url($logoSvg)
-        background-repeat: no-repeat
-        width: 125px
-        height: 30px
+        align-self: flex-end
 
-      > .marketplace-share
-        display: inline-block
-        float: right
-        line-height: 30px
+          > .title
+            font-size: $fontSizeXXLarge
+            font-weight: lighter
+            color: $white
+            margin: 0 0 16px 0
+
+          > .description
+            font-size: $fontSizeMedium
+            font-weight: lighter
+            // FIXME: what color?
+            color: $white
+            margin: 0
+            // FIXME: what color?
