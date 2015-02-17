@@ -12,7 +12,14 @@ module.exports = class JoinPage
     styles.use()
 
     @state = z.state
-      $appBar: new AppBar {
+      $appBar: new AppBar()
+      $join: new Join()
+
+  render: =>
+    {$appBar, $join} = @state()
+
+    z 'div.z-join-page',
+      z $appBar, {
         height: '224px'
         paddingBottom: CONTENT_MARGIN * -1 + 'px'
         barType: 'background'
@@ -20,11 +27,6 @@ module.exports = class JoinPage
         title: 'Join Clay'
         description: 'Unlock the full potential.'
       }
-      $join: new Join()
-
-  render: ({$appBar, $join}) ->
-    z 'div.z-join-page',
-      $appBar
       z 'div.l-content-container.content',
         {style: marginTop: "#{CONTENT_MARGIN}px"}
         $join

@@ -3,6 +3,7 @@ z = require 'zorium'
 styles = require './index.styl'
 
 MarketplaceShare = require '../marketplace_share'
+NavDrawerModel = require '../../models/nav_drawer'
 
 module.exports = class AppBar
   # height int
@@ -49,7 +50,12 @@ module.exports = class AppBar
         style: height: height, paddingBottom: paddingBottom
       },
         if topLeftButton is 'menu'
-          z 'i.icon.icon-menu'
+          z 'a.menu', {
+            onclick: (e) ->
+              e?.preventDefault()
+              NavDrawerModel.open()
+          },
+            z 'i.icon.icon-menu'
         else if topLeftButton is 'back'
           z 'i.icon.icon-back-arrow'
 
@@ -59,7 +65,7 @@ module.exports = class AppBar
             z 'span.io', '.io'
 
         if topRightButton is 'signin'
-          z 'i.icon.icon-menu'
+          z 'div', 'Sign In'
         else if topRightButton is 'share'
           z 'div.marketplace-share', $marketplaceShare
 

@@ -76,6 +76,7 @@
     "portal-gun": "0.1.0",
     "promiz": "1.0.0",
     "request-promise": "0.3.2",
-    "zorium": "^0.7.1"
+    "zorium": "^0.7.1",
+    "zorium-paper": "^0.3.0"
   }
 }

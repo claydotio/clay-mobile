@@ -3,6 +3,7 @@ log = require 'clay-loglevel'
 
 User = require '../../models/user'
 AppBar = require '../../components/app_bar'
+NavDrawer = require '../../components/nav_drawer'
 ModalViewer = require '../../components/modal_viewer'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
@@ -15,6 +16,7 @@ module.exports = class GamesPage
   constructor: ->
     @state = z.state
       $appBar: new AppBar()
+      $navDrawer: new NavDrawer()
       $modalViewer: new ModalViewer()
       $recentGames: new RecentGames()
       $popularGames: z.observe User.getMe().then( (user) ->
@@ -41,6 +43,7 @@ module.exports = class GamesPage
   render: =>
     {
       $appBar
+      $navDrawer
       $topCard
       $recentGames
       $popularGames
@@ -54,6 +57,7 @@ module.exports = class GamesPage
         topRightButton: 'share'
         barType: 'navigation'
       }
+      z 'div', $navDrawer
       z 'div', $topCard
       z 'div', $recentGames
       z 'div', $popularGames

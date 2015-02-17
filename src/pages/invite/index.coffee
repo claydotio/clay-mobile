@@ -10,16 +10,18 @@ module.exports = class InvitePage
     styles.use()
 
     @state = z.state
-      $appBar: new AppBar {
+      $appBar: new AppBar()
+      $invite: new Invite()
+
+  render: =>
+    {$appBar, $invite} = @state()
+
+    z 'div.z-invite-page',
+      z $appBar, {
         height: '168px'
         barType: 'background'
         title: 'Invite Friends'
         description: 'Build your friends list, see what they play.'
       }
-      $invite: new Invite()
-
-  render: ({$appBar, $invite}) ->
-    z 'div.z-invite-page',
-      $appBar
       z 'div.l-content-container.content',
         $invite
