@@ -13,14 +13,8 @@ EnvironmentService = require '../../services/environment'
 
 module.exports = class GamesPage
   constructor: ->
-
     @state = z.state
-      $appBar: new AppBar {
-        height: '56px'
-        topLeftButton: 'menu'
-        topRightButton: 'share'
-        barType: 'navigation'
-      }
+      $appBar: new AppBar()
       $modalViewer: new ModalViewer()
       $recentGames: new RecentGames()
       $popularGames: z.observe User.getMe().then( (user) ->
@@ -44,16 +38,22 @@ module.exports = class GamesPage
         ga? 'send', 'event', 'google_play_ad_modal', 'show', 'clay'
     .catch log.trace
 
-  render: (
+  render: =>
     {
       $appBar
       $topCard
       $recentGames
       $popularGames
       $modalViewer
-    }) ->
+    } = @state()
+
     z 'div', [
-      z 'div', $appBar
+      z $appBar, {
+        height: '56px'
+        topLeftButton: 'menu'
+        topRightButton: 'share'
+        barType: 'navigation'
+      }
       z 'div', $topCard
       z 'div', $recentGames
       z 'div', $popularGames

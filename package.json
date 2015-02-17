@@ -52,7 +52,7 @@
     "rewire": "2.1.4",
     "rewire-webpack": "0.2.0",
     "style-loader": "0.8.1",
-    "stylus-loader": "0.4.0",
+    "stylus-loader": "0.5.0",
     "transform-loader": "0.2.1",
     "webpack": "1.4.11",
     "webpack-dev-server": "1.6.5",
@@ -76,6 +76,6 @@
     "portal-gun": "0.1.0",
     "promiz": "1.0.0",
     "request-promise": "0.3.2",
-    "zorium": "^0.6.7"
+    "zorium": "^0.7.0"
   }
 }

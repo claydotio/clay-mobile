@@ -10,7 +10,13 @@ module.exports = class AppBar
   # topRightButton = 'signin', 'share'
   # barType: descriptive - display title and description. min 168 high
   #          navigation - just title. min 56px high
-  constructor: (
+  constructor: ->
+    styles.use()
+
+    @state = z.state
+      $marketplaceShare: new MarketplaceShare()
+
+  render: (
     {
       height
       barType
@@ -20,39 +26,16 @@ module.exports = class AppBar
       title
       description
     }
-  ) ->
-    styles.use()
+  ) =>
+    {$marketplaceShare} = @state()
 
+    isFixed = barType is 'navigation'
+    isBackground = barType is 'background'
+    isNavigation = barType is 'navigation'
     height ?= '56px'
     paddingBottom ?= 0
     barType ?= 'navigation'
 
-    @state = z.state
-      $marketplaceShare: new MarketplaceShare()
-      height: height
-      isFixed: barType is 'navigation'
-      isBackground: barType is 'background'
-      isNavigation: barType is 'navigation'
-      paddingBottom: paddingBottom
-      topLeftButton: topLeftButton
-      topRightButton: topRightButton
-      title: title
-      description: description
-
-  render: (
-    {
-      $marketplaceShare
-      height
-      isFixed
-      isBackground
-      isNavigation
-      paddingBottom
-      topLeftButton
-      topRightButton
-      title
-      description
-    }
-  ) ->
     z 'header.z-app-bar', {
       className: z.classKebab {
         isFixed
@@ -61,6 +44,7 @@ module.exports = class AppBar
       }
       style: height: height
     },
+
       z 'div.orange-bar.l-flex.l-vertical-center', {
         style: height: height, paddingBottom: paddingBottom
       },

@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "normalize.css": "3.0.1",
-    "nib": "1.0.3",
+    "nib": "1.0.4",
     "fetch": "0.3.0"
   }
 }
