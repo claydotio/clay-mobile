@@ -9,9 +9,10 @@ module.exports = class DevDashboardContact
     styles.use()
 
     @state = z.state
-      SocialIcons: new SocialIcons()
+      $socialIcons: new SocialIcons()
 
-  render: ({SocialIcons}) ->
+  render: =>
+    {$socialIcons} = @state()
     z 'div.z-dev-dashboard-contact',
       z 'h1', 'Get in touch with us.'
       z 'div',
@@ -27,4 +28,4 @@ module.exports = class DevDashboardContact
       z 'h1', 'Just looking to say hi?'
       z 'div', 'Get social and follow us.'
       z 'div.social',
-        SocialIcons
+        $socialIcons

@@ -8,10 +8,12 @@ module.exports = class Header
   constructor: ->
     styles.use()
 
-    @MarketplaceShare = new MarketplaceShare()
+    @state = z.state
+      $marketplaceShare: new MarketplaceShare()
 
-  render: ->
+  render: =>
+    {$marketplaceShare} = @state()
     z 'header.z-header',
       z '.orange-bar',
         z.router.link z 'a.logo[href=/]'
-        z 'div.marketplace-share', @MarketplaceShare
+        z 'div.marketplace-share', $marketplaceShare

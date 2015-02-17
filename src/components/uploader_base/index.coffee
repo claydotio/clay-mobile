@@ -108,7 +108,9 @@ module.exports = class UploaderBase
 
   getDropzone$: -> null
 
-  render: ({isLoading, width, height, loadingCircleDiameter}) =>
+  render: =>
+    {isLoading, width, height, loadingCircleDiameter} = @state()
+
     z "div.z-uploader-base#{if isLoading then '.is-loading' else ''}", {
       style:
         width: "#{width}px"

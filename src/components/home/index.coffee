@@ -19,7 +19,8 @@ module.exports = class Home
     @state = z.state
       featuredGames: z.observe Game.get(featuredGameIds).catch log.trace
 
-  render: ({featuredGames}) ->
+  render: =>
+    {featuredGames} = @state()
     z '.z-home',
       z '.hero.l-content-container',
         z '.info',

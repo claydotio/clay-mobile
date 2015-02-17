@@ -39,7 +39,9 @@ module.exports = class GamesPage
         ga? 'send', 'event', 'google_play_ad_modal', 'show', 'clay'
     .catch log.trace
 
-  render: ({header, topCard, recentGames, popularGames, modalViewer}) ->
+  render: =>
+    {header, topCard, recentGames, popularGames, modalViewer} = @state()
+
     z 'div', [
       z 'div', header
       z 'div', topCard
