@@ -9,31 +9,30 @@ styleConfig = require '../../stylus/vars.json'
 styles = require './index.styl'
 
 module.exports = class GamePromo
-  constructor: ({@game, @width, @height}) ->
+  constructor: ->
     styles.use()
 
-    @width ?= styleConfig.$marketplaceGamePromoWidth
-    @height ?= styleConfig.$marketplaceGamePromoHeight
-
-    @gameSubdomainUrl = UrlService.getGameSubdomain {@game}
-
-  loadGame: (e) =>
-    e?.preventDefault()
-
-    ga? 'send', 'event', 'game_promo', 'click', @game.key
+  loadGame: (game) ->
+    ga? 'send', 'event', 'game_promo', 'click', game.key
     User.convertExperiment('game_promo').catch log.trace
-    z.router.go UrlService.getGameRoute {@game}
-    httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
+    z.router.go UrlService.getGameRoute {game}
+    httpSubDomainUrl = UrlService.getGameSubdomain({game, protocol: 'http'})
     kik?.picker?(httpSubDomainUrl, {}, -> null)
 
-  render: =>
-    z "a.z-game-promo[href=#{@gameSubdomainUrl}]",
-      onclick: @loadGame
+  render: ({game, width, height}) =>
+    width ?= styleConfig.$marketplaceGamePromoWidth
+    height ?= styleConfig.$marketplaceGamePromoHeight
+    gameSubdomainUrl = UrlService.getGameSubdomain {game}
+
+    z "a.z-game-promo[href=#{gameSubdomainUrl}]",
+      onclick: (e) =>
+        e?.preventDefault()
+        @loadGame game
       style:
-        width: "#{@width}px",
+        width: "#{width}px",
       z 'img',
-        src: @game.headerImage?.versions[0].url or @game.promo440Url
-        width: @width
-        height: @height
+        src: game.headerImage?.versions[0].url or game.promo440Url
+        width: width
+        height: height
       z '.z-game-promo-info',
-        z 'h3', @game.name
+        z 'h3', game.name

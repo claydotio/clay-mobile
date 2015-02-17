@@ -59,7 +59,7 @@ module.exports = class GamePlayer
     window.clearTimeout @state().engagedPlayTimeout
     window.removeEventListener 'resize', @resize
     # games can lock the orientation... we want to unlock it
-    window.screen.orientation.unlock?()
+    window.screen.unlockOrientation?()
 
   onMount: ($el) =>
     window.addEventListener 'resize', @resize
@@ -106,7 +106,9 @@ module.exports = class GamePlayer
     else
       window.location.href = UrlService.getMarketplaceBase()
 
-  render: ({game, width, height, spinner, drawer}) =>
+  render: =>
+    {game, width, height, spinner, drawer} = @state()
+
     if not game
       z '.z-game-player-missing',
         spinner
@@ -116,7 +118,6 @@ module.exports = class GamePlayer
       z 'div.z-game-player',
         style:
           height: height
-        @SDK
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',

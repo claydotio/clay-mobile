@@ -19,7 +19,8 @@ module.exports = class InputBase
 
   getInput$: -> null
 
-  render: ({label, helpText, labelWidth}) =>
+  render: =>
+    {label, helpText, labelWidth} = @state()
     z 'div.z-input-base',
       z 'label.label',
         z 'div.l-flex.l-vertical-center.content',

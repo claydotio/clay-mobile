@@ -36,41 +36,42 @@ module.exports = class DevEditGame
       currentStep: params.currentStep
       spinner: new Spinner()
       isLoading: true
-      devHeader: new DevHeader(currentPage: 'dashboard')
-      devGameMenu: new DevEditGameMenu {currentStep: params.currentStep}
-      devEditGameGetStarted: new DevEditGameGetStarted()
-      devEditGameDetails: new DevEditGameDetails()
-      devEditGameUpload: new DevEditGameUpload()
-      devEditGamePublished: new DevEditGamePublished()
-      DevBottomPadding: new DevBottomPadding()
+      $devHeader: new DevHeader()
+      $devGameMenu: new DevEditGameMenu {currentStep: params.currentStep}
+      $devEditGameGetStarted: new DevEditGameGetStarted()
+      $devEditGameDetails: new DevEditGameDetails()
+      $devEditGameUpload: new DevEditGameUpload()
+      $devEditGamePublished: new DevEditGamePublished()
+      $devBottomPadding: new DevBottomPadding()
 
-  render: (
+  render: =>
     {
-      devHeader
-      devGameMenu
+      $devHeader
+      $devGameMenu
       isLoading
       spinner
       currentStep
-      devEditGameGetStarted
-      devEditGameDetails
-      devEditGameUpload
-      devEditGamePublished
-      DevBottomPadding
-    }
-  ) ->
+      $devEditGameGetStarted
+      $devEditGameDetails
+      $devEditGameUpload
+      $devEditGamePublished
+      $devBottomPadding
+    } = @state()
+
     z 'div',
-      z 'div', devHeader
+      z 'div',
+        z $devHeader, currentPage: 'dashboard'
       z '.l-content-container',
         z 'div.l-flex',
           if currentStep isnt 'published'
-            z 'div', devGameMenu
+            z 'div', $devGameMenu
           if isLoading
             z 'div.l-flex-1', {style: marginTop: '20px'}, spinner
           else
             z 'div.l-flex-1',
-              if currentStep is 'details' then devEditGameDetails
-              else if currentStep is 'upload' then devEditGameUpload
+              if currentStep is 'details' then $devEditGameDetails
+              else if currentStep is 'upload' then $devEditGameUpload
               else if currentStep is 'published'
-              then devEditGamePublished
-              else devEditGameGetStarted
-      z 'div', DevBottomPadding
+              then $devEditGamePublished
+              else $devEditGameGetStarted
+      z 'div', $devBottomPadding

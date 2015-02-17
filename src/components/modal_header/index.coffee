@@ -15,7 +15,9 @@ module.exports = class ModalHeader
     Modal.closeComponent()
     z.redraw()
 
-  render: ({title, isDark, backgroundImage}) =>
+  render: =>
+    {title, isDark, backgroundImage} = @state()
+
     z "div.z-modal-header#{if isDark then '.is-dark' else ''}",
       style:
         backgroundImage: if backgroundImage then "url(#{backgroundImage})" \

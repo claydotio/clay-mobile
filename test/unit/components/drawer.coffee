@@ -32,7 +32,7 @@ describe 'Drawer', ->
 
     DrawerComponent.toggleState()
 
-    $ = DrawerComponent.render(DrawerComponent.state())
+    $ = DrawerComponent.render()
     $drawer = _.find $, ($nodeSet) ->
       domWalker.find $nodeSet, ($node) ->
         return hasClass $node, 'z-drawer'
@@ -41,7 +41,7 @@ describe 'Drawer', ->
 
     DrawerComponent.toggleState()
 
-    $ = DrawerComponent.render(DrawerComponent.state)
+    $ = DrawerComponent.render()
     $drawer = _.find $, ($nodeSet) ->
       domWalker.find $nodeSet, ($node) ->
         return hasClass $node, 'z-drawer'

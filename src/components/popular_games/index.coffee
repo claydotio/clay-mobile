@@ -28,23 +28,27 @@ module.exports = class PopularGames
     featuredGameRow ?= 0
 
     if window.matchMedia('(min-width: 360px)').matches
-      @gameBoxSize = 100
-      @gamePromoWidth = 320
-      @gamePromoHeight = 204
-      @featuredGamePosition = featuredGameRow * BOXES_PER_ROW_MEDIUM_SCREEN
+      gameBoxSize = 100
+      gamePromoWidth = 320
+      gamePromoHeight = 204
+      featuredGamePosition = featuredGameRow * BOXES_PER_ROW_MEDIUM_SCREEN
     else
-      @gameBoxSize = 135
-      @gamePromoWidth = 280
-      @gamePromoHeight = 178
-      @featuredGamePosition = featuredGameRow * BOXES_PER_ROW_SMALL_SCREEN
+      gameBoxSize = 135
+      gamePromoWidth = 280
+      gamePromoHeight = 178
+      featuredGamePosition = featuredGameRow * BOXES_PER_ROW_SMALL_SCREEN
 
-    @isLoading = true
     @isListeningForScroll = true
 
-    @state = z.state
-      gameLinks: []
+    @state = z.state {
       $spinner: new Spinner()
-
+      isLoading: true
+      gameLinks: []
+      gameBoxSize
+      gamePromoWidth
+      gamePromoHeight
+      featuredGamePosition
+    }
 
   onMount: (@$$el) =>
     # Bind event listeners
@@ -82,26 +86,26 @@ module.exports = class PopularGames
       .catch log.trace
 
   loadMore: =>
-    @isLoading = true
+    {gameLinks, featuredGamePosition} = @state()
+
+    @state.set isLoading: true
     z.redraw()
 
     Game.getTop
       limit: LOAD_MORE_GAMES_LIMIT
-      skip: @state().gameLinks.length
+      skip: gameLinks.length
     .then (games) =>
-
-      @isLoading = false
-
       @state.set
-        gameLinks: @state().gameLinks.concat _.map games, (game, index) =>
-          if index is @featuredGamePosition
+        isLoading: true
+        gameLinks: gameLinks.concat _.map games, (game, index) ->
+          if index is featuredGamePosition
             type: 'featured'
-            $component: new GamePromo(
-              {game, width: @gamePromoWidth, height: @gamePromoHeight}
-            )
+            game: game
+            $component: new GamePromo()
           else
             type: 'default'
-            $component: new GameBox {game, iconSize: @gameBoxSize}
+            game: game
+            $component: new GameBox()
 
       # TODO: (Zoli) force redraw once Zorium batches draws
 
@@ -109,7 +113,15 @@ module.exports = class PopularGames
       if _.isEmpty games
         return true
 
-  render: ({gameLinks, $spinner}) =>
+  render: =>
+    {
+      gameLinks
+      $spinner
+      gamePromoWidth
+      gamePromoHeight
+      gameBoxSize
+    } = @state()
+
     z 'section.z-game-results',
       z 'div.l-content-container',
         z 'h2.header', 'Most popular games'
@@ -117,10 +129,15 @@ module.exports = class PopularGames
         (_.map gameLinks, (gameLink) ->
           if gameLink.type is 'featured'
             z '.featured-game-box-container',
-              gameLink.$component
+              z gameLink.$component,
+                game: gameLink.game
+                width: gamePromoWidth
+                height: gamePromoHeight
           else
             z '.game-box-container',
-              gameLink.$component
+              z gameLink.$component,
+                game: gameLink.game
+                iconSize: gameBoxSize
         ).concat [
           if @isLoading then z '.spinner', $spinner
         ]
