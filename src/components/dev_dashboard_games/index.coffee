@@ -21,7 +21,9 @@ module.exports = class DevDashboardGames
               throw new Error 'Developer not found'
       )
 
-  render: ({games}) ->
+  render: =>
+    {games} = @state()
+
     z 'div.z-dev-dashboard-games',
     if not _.isEmpty games
       z 'div.container',

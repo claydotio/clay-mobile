@@ -38,7 +38,9 @@ module.exports = class DevEditGameMenu
       @state.set isLoading: false
       throw err
 
-  render: ({currentStep, game, isLoading, spinner}) =>
+  render: =>
+    {currentStep, game, isLoading, spinner} = @state()
+
     isStartComplete = Game.isStartComplete game
     isDetailsComplete = Game.isDetailsComplete game
     isUploadComplete = Game.isUploadComplete game

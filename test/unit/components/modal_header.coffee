@@ -14,7 +14,7 @@ class StubComponent
 
   render: =>
     z 'div.parent-component',
-      @ModalHeader.render(@ModalHeader.state())
+      @ModalHeader.render()
 
 domWalker = _.walk ($node) ->
   return $node.children

@@ -106,7 +106,9 @@ module.exports = class GamePlayer
     else
       window.location.href = UrlService.getMarketplaceBase()
 
-  render: ({game, width, height, spinner, drawer}) =>
+  render: =>
+    {game, width, height, spinner, drawer} = @state()
+
     if not game
       z '.z-game-player-missing',
         spinner

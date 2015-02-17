@@ -13,7 +13,8 @@ module.exports = class HomePage
       home: new Home()
       guestFooter: new GuestFooter()
 
-  render: ({legacyBanner, devHeader, home, guestFooter, guestHeader}) ->
+  render: =>
+    {legacyBanner, devHeader, home, guestFooter, guestHeader} = @state()
     z 'div',
       z 'div', legacyBanner
       z 'div', guestHeader

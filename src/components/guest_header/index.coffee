@@ -4,9 +4,14 @@ config = require '../../config'
 HeaderBase = require '../header_base'
 
 module.exports = class GuestHeader
-  constructor: ({currentPage} = {}) ->
+  constructor: ->
     @state = z.state
-      header: new HeaderBase {
+      $header: new HeaderBase()
+
+  render: ({currentPage} = {}) =>
+    {$header} = @state()
+    z '.z-guest-header',
+      z $header, {
         logoUrl: '//cdn.wtf/d/images/logos/logo.svg'
         homeUrl: "//#{config.HOST}/"
         links: [
@@ -17,7 +22,3 @@ module.exports = class GuestHeader
           }
         ]
       }
-
-  render: ({header}) ->
-    z '.z-guest-header',
-      header
