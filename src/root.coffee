@@ -63,10 +63,14 @@ if kik?.picker?.reply
 # LOGGING #
 ###########
 
-ga? 'set', 'dimension1', if EnvironmentService.isClayApp() then 'clay_app' \
-                         else if EnvironmentService.isKikEnabled() then 'kik' \
-                         else if EnvironmentService.isAndroid() then 'android' \
-                         else 'web'
+ga? 'set', 'dimension1', switch
+  when EnvironmentService.isClayApp()
+    'clay_app'
+  when EnvironmentService.isKikEnabled()
+    'kik'
+  when EnvironmentService.isFirefoxOS()
+    'firefox_os'
+  else 'web'
 
 window.addEventListener 'error', ErrorReportService.report
 
