@@ -11,22 +11,35 @@ json('../../stylus/vars.json')
     width: 100%
     box-sizing: border-box
     padding: 0 20px
+    flex-direction: column
 
-    > .icon-back-arrow, .icon-menu
-      font-size: $iconMedium
-      color: $white
-      margin-right: 32px
+    > .top
+      height: 56px
 
+      > .top-left-button
+        margin-right: 32px
 
-    > .logo
-      font-size: $fontSizeLarge
-      color: $white
+        > .back, .menu
+          font-size: $iconMedium
+          color: $white
 
-      > .io
-        color: #fff // FIXME $color?
+      > .top-right-button
+        margin-left: auto
 
-    > .marketplace-share
-      margin-left: auto
+        > .sign-in
+          color: $white
+          font-size: $fontSizeMedium
+          text-transform: uppercase
+
+      > .logo
+        font-size: $fontSizeLarge
+        color: $white
+
+        > .io
+          color: #fff // FIXME $color?
+
+      > .marketplace-share
+        margin-left: auto
 
   &.is-fixed
     > .orange-bar
@@ -39,21 +52,21 @@ json('../../stylus/vars.json')
       > .content
         width: 100%
         text-align: center
-        padding: 16px
-        box-sizing: border-box
+        margin-top: auto
+        margin-bottom: 24px
         display: inline-block
         align-self: flex-end
 
-          > .title
-            font-size: $fontSizeXXLarge
-            font-weight: lighter
-            color: $white
-            margin: 0 0 16px 0
+        > .title
+          font-size: $fontSizeXXLarge
+          font-weight: lighter
+          color: $white
+          margin: 0 0 8px 0
 
-          > .description
-            font-size: $fontSizeMedium
-            font-weight: lighter
-            // FIXME: what color?
-            color: $white
-            margin: 0
-            // FIXME: what color?
+        > .description
+          font-size: $fontSizeMedium
+          font-weight: lighter
+          // FIXME: what color?
+          color: $white
+          margin: 0
+          // FIXME: what color?

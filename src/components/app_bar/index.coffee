@@ -46,28 +46,43 @@ module.exports = class AppBar
       style: height: height
     },
 
-      z 'div.orange-bar.l-flex.l-vertical-center', {
+      z 'div.orange-bar.l-flex', {
         style: height: height, paddingBottom: paddingBottom
       },
-        if topLeftButton is 'menu'
-          z 'a.menu', {
-            onclick: (e) ->
-              e?.preventDefault()
-              NavDrawerModel.open()
-          },
-            z 'i.icon.icon-menu'
-        else if topLeftButton is 'back'
-          z 'i.icon.icon-back-arrow'
+        z 'div.top.l-flex.l-vertical-center',
+          z 'div.top-left-button',
+            if topLeftButton is 'menu'
+              z 'a[href=#].menu', {
+                onclick: (e) ->
+                  e?.preventDefault()
+                  NavDrawerModel.open()
+              },
+                z 'i.icon.icon-menu'
+            else if topLeftButton is 'back'
+              z 'a[href=#].back', {
+                onclick: (e) ->
+                  e?.preventDefault()
+                  window.history.back()
+              },
+                z 'i.icon.icon-back-arrow'
 
-        if isNavigation
-          z.router.link z 'a.logo[href=/]',
-            'Clay'
-            z 'span.io', '.io'
+          if isNavigation
+            z.router.link z 'a.logo[href=/]',
+              if title
+                title
+              else
+                [
+                  'Clay'
+                  z 'span.io', '.io'
+                ]
 
-        if topRightButton is 'signin'
-          z 'div', 'Sign In'
-        else if topRightButton is 'share'
-          z 'div.marketplace-share', $marketplaceShare
+          z 'div.top-right-button',
+            if topRightButton is 'signin'
+              z.router.link z 'a[href=/login].sign-in', 'Sign In'
+            else if topRightButton is 'signup'
+              z.router.link z 'a[href=/join].sign-in', 'Sign Up'
+            else if topRightButton is 'share'
+              z 'div.marketplace-share', $marketplaceShare
 
         if isBackground
           z 'div.content',

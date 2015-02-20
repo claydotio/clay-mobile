@@ -49,5 +49,6 @@
   "$zIndexModal": 900,
   "$zIndexDrawer": 300,
   "$zIndexJoinPageContent": 200,
+  "$zIndexLoginPageContent": 200,
   "$zIndexHeader": 100
 }

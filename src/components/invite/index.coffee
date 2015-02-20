@@ -1,8 +1,8 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
+Button = require 'zorium-paper/button'
 
 config = require '../../config'
-PaperButton = require '../paper_button'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -13,11 +13,11 @@ module.exports = class Invite
 
     @state = z.state
       $continueButton:
-        new PaperButton
-          text: 'Continue'
-          colors: c500: styleConfig.$orange, ink: styleConfig.$white
+        new Button()
 
-  render: ({$continueButton}) ->
+  render: =>
+    {$continueButton} = @state()
+
     z '.z-invite',
       z 'a.invite',
         z 'span.social-icon.twitter'
@@ -33,4 +33,7 @@ module.exports = class Invite
         'Invite by Text Message'
       # FIXME: implement easy way to push buttons all the way to bottom of page
       # and have them pushed down if there's more content
-      z 'div.continue', $continueButton
+      z 'div.continue',
+        z $continueButton,
+          text: 'Continue'
+          colors: c500: styleConfig.$orange, ink: styleConfig.$white

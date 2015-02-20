@@ -9,11 +9,16 @@ RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
 GooglePlayAd = require '../../components/google_play_ad'
 FeedbackCard = require '../../components/feedback_card'
+ReqProfilePicCard = require '../../components/req_profile_pic_card'
 GooglePlayAdService = require '../../services/google_play_ad'
 EnvironmentService = require '../../services/environment'
 
+styles = require './index.styl'
+
 module.exports = class GamesPage
   constructor: ->
+    styles.use()
+
     @state = z.state
       $appBar: new AppBar()
       $navDrawer: new NavDrawer()
@@ -26,11 +31,13 @@ module.exports = class GamesPage
                else new PopularGames({featuredGameRow: 0})
       ).catch log.trace
       $topCard: z.observe User.getExperiments().then( ({feedbackCard}) ->
-        return if feedbackCard is 'show' and EnvironmentService.isKikEnabled() \
-               then new FeedbackCard()
-               else if GooglePlayAdService.shouldShowAds() \
-               then new GooglePlayAd()
-               else null
+        return if 'noProfilePic' # FIXME
+        then new ReqProfilePicCard()
+        else if feedbackCard is 'show' and EnvironmentService.isKikEnabled()
+        then new FeedbackCard()
+        else if GooglePlayAdService.shouldShowAds()
+        then new GooglePlayAd()
+        else null
       ).catch log.trace
 
     @googlePlayAdModalPromise = GooglePlayAdService.shouldShowAdModal()
@@ -50,16 +57,17 @@ module.exports = class GamesPage
       $modalViewer
     } = @state()
 
-    z 'div', [
+    z 'div.z-games-page', [
       z $appBar, {
         height: '56px'
         topLeftButton: 'menu'
         topRightButton: 'share'
         barType: 'navigation'
       }
-      z 'div', $navDrawer
-      z 'div', $topCard
-      z 'div', $recentGames
-      z 'div', $popularGames
+      $navDrawer
       $modalViewer
+      z 'div.l-content-container.content',
+        $topCard
+        $recentGames
+        $popularGames
     ]

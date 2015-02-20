@@ -1,3 +1,4 @@
+z = require 'zorium'
 log = require 'clay-loglevel'
 _ = require 'lodash'
 
@@ -8,7 +9,7 @@ config = require '../config'
 PATH = config.PUBLIC_CLAY_API_URL + '/users'
 LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 
-me = null
+me = z.observe null
 experiments = null
 
 getCookieValue = (key) ->
@@ -30,8 +31,8 @@ deleteHostCookie = (key) ->
 class User
 
   getMe: =>
-    unless me
-      me = @loginAnon()
+    unless me()
+      me.set @loginAnon()
 
       # Save accessToken in cookie
       me.then (user) ->
@@ -41,7 +42,7 @@ class User
     return me
 
   setMe: (_me) ->
-    me = Promise.resolve _me
+    me.set Promise.resolve _me
 
     # Save accessToken in cookie
     me.then (user) ->

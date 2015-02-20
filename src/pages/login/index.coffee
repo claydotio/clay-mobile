@@ -1,7 +1,7 @@
 z = require 'zorium'
 
 AppBar = require '../../components/app_bar'
-Join = require '../../components/join'
+Login = require '../../components/login'
 
 styles = require './index.styl'
 
@@ -13,21 +13,21 @@ module.exports = class JoinPage
 
     @state = z.state
       $appBar: new AppBar()
-      $join: new Join()
+      $login: new Login()
 
   render: =>
-    {$appBar, $join} = @state()
+    {$appBar, $login} = @state()
 
-    z 'div.z-join-page',
+    z 'div.z-login-page',
       z $appBar, {
         height: '224px'
         paddingBottom: CONTENT_MARGIN * -1 + 'px'
         barType: 'background'
         topLeftButton: 'back'
-        topRightButton: 'signin'
-        title: 'Join Clay'
-        description: 'Unlock the full potential.'
+        topRightButton: 'signup'
+        title: 'Sign in'
+        description: 'Welcome back!'
       }
       z 'div.l-content-container.content',
         {style: marginTop: "#{CONTENT_MARGIN}px"}
-        $join
+        $login

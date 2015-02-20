@@ -2,7 +2,7 @@
 
 json('../../stylus/vars.json')
 
-$drawerWidth = 288
+$drawerWidth = 304
 $navDrawerHeaderHeight = 200
 $zIndexNavDrawerHeader = 100
 
@@ -59,6 +59,17 @@ $zIndexNavDrawerHeader = 100
         color: $white
         align-self: flex-end
 
+      > .guest-header
+        flex-direction: column
+
+        > .description
+          font-size: $fontSizeMedium
+          color: $white
+
+        > .actions
+          margin-top: auto
+          align-self: flex-end
+
     > .content
       background: $bgColor
       height: 100%
@@ -85,3 +96,9 @@ $zIndexNavDrawerHeader = 100
             > .icon
               margin-right: 32px
               font-size: $iconMedium
+
+        &:not(.is-logged-in)
+          > .menu-item-friends, > .menu-item-invite
+            > .menu-item-link
+              color: $greyMedium
+              pointer-events: none // not supported in ie9/10 (ie our entire app breaks)

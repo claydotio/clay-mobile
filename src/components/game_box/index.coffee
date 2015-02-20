@@ -31,7 +31,7 @@ module.exports = class GameBox
         @loadGame game
       style:
         width: "#{iconSize}px",
-      z 'img',
+      z 'img.image',
         src: game.iconImage?.versions[0].url or game.icon128Url
         width: iconSize
         height: iconSize
