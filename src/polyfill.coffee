@@ -32,8 +32,10 @@ require 'fetch'
 
 # window.screen.unlockOrientation polyfill
 # Cannot override window.screen.orientation.unlock due to old browser conflicts
+# Be careful with scope application `this`
 window.screen ?= {}
-window.screen.unlockOrientation = window.screen.orientation?.unlock or
+window.screen.unlockOrientation = (window.screen.orientation?.unlock and
+                                  (-> window.screen.orientation.unlock())) or
                                   window.screen.unlockOrientation or
                                   window.screen.webkitUnlockOrientation or
                                   window.screen.mozUnlockOrientation
