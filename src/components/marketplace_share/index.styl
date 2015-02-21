@@ -3,6 +3,13 @@
 json('../../stylus/vars.json')
 
 .z-marketplace-share
-  .icon-share
+  display: block
+  padding: 8px
+
+  &:active
+    border-radius: 50%
+    background: rgba(255, 255, 255, 0.2)
+
+  > .icon-share
     color: $white
     font-size: $iconLarge

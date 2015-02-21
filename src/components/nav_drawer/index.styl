@@ -54,10 +54,19 @@ $zIndexNavDrawerHeader = 100
       z-index: $zIndexNavDrawerHeader
       background: $orange
 
-      > .name
-        font-size: $fontSizeMedium
-        color: $white
-        align-self: flex-end
+      > .user-header
+        flex-direction: column
+
+        > .picture
+          width: 72px
+          height: 72px
+          border-radius: 50%
+
+        > .name
+          font-size: $fontSizeMedium
+          color: $white
+          margin-top: auto
+          margin-bottom: 8px
 
       > .guest-header
         flex-direction: column
@@ -90,8 +99,11 @@ $zIndexNavDrawerHeader = 100
         > .menu-item
           > .menu-item-link
             display: block
-            padding: 16px
+            padding: 16px 0
             font-size: $fontSizeMedium
+
+            &.is-selected
+              color: $blue
 
             > .icon
               margin-right: 32px

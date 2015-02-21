@@ -1,33 +1,32 @@
 z = require 'zorium'
 
 AppBar = require '../../components/app_bar'
-Login = require '../../components/login'
+ForgotPassword = require '../../components/forgot_password'
 
 styles = require './index.styl'
 
 CONTENT_MARGIN = -56
 
-module.exports = class LoginPage
+module.exports = class ForgotPasswordPage
   constructor: ->
     styles.use()
 
     @state = z.state
       $appBar: new AppBar()
-      $login: new Login()
+      $forgotPassword: new ForgotPassword()
 
   render: =>
-    {$appBar, $login} = @state()
+    {$appBar, $forgotPassword} = @state()
 
-    z 'div.z-login-page',
+    z 'div.z-forgot-password-page',
       z $appBar, {
         height: '224px'
         paddingBottom: CONTENT_MARGIN * -1 + 'px'
         barType: 'background'
         topLeftButton: 'back'
-        topRightButton: 'signup'
-        title: 'Sign in'
-        description: 'Welcome back!'
+        title: 'Forgot Password'
+        description: 'Bummer. Let\'s reset it.'
       }
       z 'div.l-content-container.content',
         {style: marginTop: "#{CONTENT_MARGIN}px"}
-        $login
+        $forgotPassword

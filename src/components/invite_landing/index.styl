@@ -1,0 +1,28 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-invite-landing
+  > .header
+    // js sets height
+    background: $orange
+    text-align: center
+    color: $white
+    flex-direction: column
+
+    > .header-content
+        margin-top: auto
+        margin-bottom: 32px
+
+  > .content
+    // js sets height
+    padding: 16px
+    box-sizing: border-box
+    flex-direction: column
+
+    > .skip-friend
+      margin-top: auto
+      display: block
+      text-align: center
+      color: $greyMedium
+      font-size: $fontSizeMedium

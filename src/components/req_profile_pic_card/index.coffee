@@ -3,6 +3,7 @@ Card = require 'zorium-paper/card'
 Button = require 'zorium-paper/button'
 Dropzone = require 'dropzone'
 
+config = require '../../config'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -15,12 +16,25 @@ module.exports = class ReqProfilePicCard
       $card: new Card()
       $dismissButton: new Button()
       $addButton: new Button()
+      isUploaded: false
+
+  onMount: ($el) ->
+    dropzone = new Dropzone $el, {
+      url: "#{config.PUBLIC_CLAY_API_URL}/" # FIXME
+      method: 'PUT'
+      paramName: 'profile_pic'
+      acceptedFiles: 'image/jpeg,image/png'
+      success: (file, res) =>
+        @state.set isUploaded: true
+      error: (file, res) ->
+        # TODO: (Austin) better error handling UX
+        window.alert "Error: #{res.detail}"
+    }
 
   render: =>
     {$card, $dismissButton, $addButton} = @state()
 
     z 'div.z-req-profile-pic-card',
-      z 'input#profile-pic-input[type=file][accept=image/*]'
       z $card,
         content:
           z 'div.z-req-profile-pic-card_content',
@@ -30,7 +44,9 @@ module.exports = class ReqProfilePicCard
               z $dismissButton,
                 text: 'Dismiss'
                 colors: c500: styleConfig.$white, ink: styleConfig.$orange
-              z $addButton,
-                text: 'Add'
-                colors: c500: styleConfig.$white, ink: styleConfig.$orange
-                onclick: @uploadProfilePicture
+              # .dz-message necessary to be clickable (no workaround)
+              z 'div.dz-message.clickable',
+                z $addButton,
+                  text: 'Add'
+                  colors: c500: styleConfig.$white, ink: styleConfig.$orange
+                  onclick: @uploadProfilePicture

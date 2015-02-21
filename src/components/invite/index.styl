@@ -3,31 +3,33 @@
 json('../../stylus/vars.json')
 
 .z-invite
-  .invite
-    display: block
-    font-size: $fontSizeMedium
-    margin: 16px 0
+  > .invite-options
+    > .invite
+      display: block
+      font-size: $fontSizeMedium
+      padding: 16px 0
 
-    > .social-icon
-      display: inline-block
-      width: 40px
-      height: 40px
-      border-radius: 50%
-      background-size: 50% 50%
-      background-position: center center
-      background-repeat: no-repeat
-      vertical-align: middle
-      margin-right: 16px
+      > .social-icon
+        display: inline-block
+        width: 40px
+        height: 40px
+        border-radius: 50%
+        background-size: 50% 50%
+        background-position: center center
+        background-repeat: no-repeat
+        vertical-align: middle
+        margin-right: 16px
 
-    > .facebook
-      // FIXME make into icon font???
-      background-image: url('//cdn.wtf/d/images/social/facebook.svg')
-      background-color: #3B5998
+      > .facebook
+        // FIXME make into icon font???
+        background-image: url('//cdn.wtf/d/images/social/facebook.svg')
+        background-color: #3B5998
 
-    > .twitter
-      // FIXME make into icon font???
-      background-image: url('//cdn.wtf/d/images/social/twitter.svg')
-      background-color: #00aced
+      > .twitter
+        // FIXME make into icon font???
+        background-image: url('//cdn.wtf/d/images/social/twitter.svg')
+        background-color: #00aced
 
   > .continue
+    margin-top: auto
     text-align: right

@@ -14,7 +14,11 @@ PlayGamePage = require './pages/play_game'
 GamesPage = require './pages/games'
 JoinPage = require './pages/join'
 LoginPage = require './pages/login'
+ForgotPasswordPage = require './pages/forgot_password'
+ResetPasswordPage = require './pages/reset_password'
 InvitePage = require './pages/invite'
+InviteLandingPage = require './pages/invite_landing'
+WhatIsClayPage = require './pages/what_is_clay'
 FriendsPage = require './pages/friends'
 DevLoginPage = require './pages/dev_login'
 DevDashboardPage = require './pages/dev_dashboard'
@@ -22,6 +26,7 @@ DevEditGamePage = require './pages/dev_edit_game'
 PushToken = require './models/push_token'
 User = require './models/user'
 Developer = require './models/developer'
+NavDrawerModel = require './models/nav_drawer'
 UrlService = require './services/url'
 PortalService = require './services/portal'
 ErrorReportService = require './services/error_report'
@@ -88,6 +93,7 @@ else
 
 z.router.on 'route', (path) ->
   ga? 'send', 'pageview', path
+  NavDrawerModel.close()
 
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it
@@ -123,7 +129,11 @@ else
   z.router.add '/games/:filter', GamesPage
   z.router.add '/join', JoinPage
   z.router.add '/login', LoginPage
+  z.router.add '/forgot-password', ForgotPasswordPage
+  z.router.add '/reset-password', ResetPasswordPage
   z.router.add '/invite', InvitePage
+  z.router.add '/invite-landing', InviteLandingPage
+  z.router.add '/what-is-clay', WhatIsClayPage
   z.router.add '/friends', FriendsPage
 
 route = ->

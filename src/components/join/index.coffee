@@ -26,7 +26,6 @@ module.exports = class Join
       $phoneNumberInput
       $passwordInput
       $signupButton
-      showProfilePicture
     } = @state()
 
     z '.z-join',

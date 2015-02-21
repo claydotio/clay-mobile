@@ -50,5 +50,7 @@
   "$zIndexDrawer": 300,
   "$zIndexJoinPageContent": 200,
   "$zIndexLoginPageContent": 200,
+  "$zIndexForgotPasswordPageContent": 200,
+  "$zIndexResetPasswordPageContent": 200,
   "$zIndexHeader": 100
 }

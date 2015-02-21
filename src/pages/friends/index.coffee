@@ -30,6 +30,6 @@ module.exports = class FriendsPage
         barType: 'navigation'
         title: 'Friends'
       }
-      z 'div', $navDrawer
+      z $navDrawer, {currentPage: 'friends'}
       z 'div.l-content-container.content', $friends
     ]
