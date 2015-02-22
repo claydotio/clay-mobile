@@ -14,7 +14,7 @@ json('../../stylus/vars.json')
       display: block
       background: $white
       font-weight: bold
-      color: $greyDarker
+      color: $grey600
       border-radius: 3px
       overflow: hidden
 
@@ -26,7 +26,7 @@ json('../../stylus/vars.json')
           line-height: 24px
           margin-left: auto
           margin-right: 10px
-          background: $greyLighter
+          background: $grey200
           color: $white
           font-size: $iconTiny
           text-align: center
@@ -39,12 +39,12 @@ json('../../stylus/vars.json')
 
       &.is-selected
         color: $black
-        background: $greyLightest
+        background: $grey100
         position: relative
 
         &:before
           content: ''
-          background: $orange
+          background: $orange500
           height: 100%
           width: 5px
           position: absolute
@@ -52,19 +52,19 @@ json('../../stylus/vars.json')
       &.is-completed
         > .menu-item-content
           > .icon-check
-            background: $blue
+            background: $blue500
             transition: background 0.2s
 
     > .test-game
       color: $black
 
       &.is-disabled
-        color: $greyDarker
+        color: $grey600
         pointer-events: none
         cursor: default
 
     > .publish
-      background: $blue
+      background: $blue500
       color: $white
       width: 100%
       text-align: left
