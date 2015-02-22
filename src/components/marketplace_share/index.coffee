@@ -4,6 +4,8 @@ portal = require 'portal-gun'
 
 User = require '../../models/user'
 ShareService = require '../../services/share'
+Icon = require '../icon'
+styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
@@ -12,6 +14,9 @@ MARKETPLACE_GAME_ID = '1'
 module.exports = class ModalClose
   constructor: ->
     styles.use()
+
+    @state = z.state
+      $icon: new Icon()
 
   share: (e) ->
     e?.preventDefault()
@@ -26,5 +31,7 @@ module.exports = class ModalClose
     .catch log.trace
 
   render: =>
+    {$icon} = @state()
+
     z 'a.z-marketplace-share[href=#]', onclick: @share,
-      z 'i.icon.icon-share'
+      z $icon, {id: 'share', size: '32px', color: styleConfig.$white}

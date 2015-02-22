@@ -3,7 +3,9 @@ z = require 'zorium'
 styles = require './index.styl'
 
 MarketplaceShare = require '../marketplace_share'
+Icon = require '../icon'
 NavDrawerModel = require '../../models/nav_drawer'
+styleConfig = require '../../stylus/vars.json'
 
 module.exports = class AppBar
   # height int
@@ -16,6 +18,7 @@ module.exports = class AppBar
 
     @state = z.state
       $marketplaceShare: new MarketplaceShare()
+      $icon: new Icon()
 
   render: (
     {
@@ -28,7 +31,7 @@ module.exports = class AppBar
       description
     }
   ) =>
-    {$marketplaceShare} = @state()
+    {$marketplaceShare, $icon} = @state()
 
     isFixed = barType is 'navigation'
     isBackground = barType is 'background'
@@ -57,14 +60,17 @@ module.exports = class AppBar
                   e?.preventDefault()
                   NavDrawerModel.open()
               },
-                z 'i.icon.icon-menu'
+                z $icon, {id: 'menu', size: '32px', color: styleConfig.$white}
             else if topLeftButton is 'back'
               z 'a[href=#].back', {
                 onclick: (e) ->
                   e?.preventDefault()
                   window.history.back()
               },
-                z 'i.icon.icon-back-arrow'
+                z $icon,
+                  id: 'arrow-back'
+                  size: '32px'
+                  color: styleConfig.$white
 
           if isNavigation
             z.router.link z 'a.logo[href=/]',
