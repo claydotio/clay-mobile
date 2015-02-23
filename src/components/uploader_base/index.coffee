@@ -21,7 +21,7 @@ renderLoadingCanvas = (ctx, {size, percentUploaded}) ->
     ctx.stroke()
     return
 
-  drawCircle styleConfig.$green, lineWidth, percentUploaded / 100
+  drawCircle styleConfig.$green500, lineWidth, percentUploaded / 100
 
 
 module.exports = class UploaderBase

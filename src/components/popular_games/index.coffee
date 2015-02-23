@@ -96,7 +96,7 @@ module.exports = class PopularGames
       skip: gameLinks.length
     .then (games) =>
       @state.set
-        isLoading: true
+        isLoading: false
         gameLinks: gameLinks.concat _.map games, (game, index) ->
           if index is featuredGamePosition
             type: 'featured'
@@ -120,6 +120,7 @@ module.exports = class PopularGames
       gamePromoWidth
       gamePromoHeight
       gameBoxSize
+      isLoading
     } = @state()
 
     z 'section.z-game-results',
@@ -138,5 +139,5 @@ module.exports = class PopularGames
               game: gameLink.game
               iconSize: gameBoxSize
       ).concat [
-        if @isLoading then z '.spinner', $spinner
+        if isLoading then z '.spinner', $spinner
       ]
