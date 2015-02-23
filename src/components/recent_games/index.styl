@@ -1,4 +1,5 @@
 @require 'nib'
+@require '../../node_modules/zorium-paper/base.styl'
 
 json('../../stylus/vars.json')
 
@@ -6,8 +7,6 @@ json('../../stylus/vars.json')
   margin-bottom: 35px
 
   > .header
-    color: $greyDarker
-    font-size: $fontSizeMedium
-    font-weight: lighter
-    margin-top: 15px
+    zp-font-subhead()
+    margin-top: 16px
     margin-bottom: 8px

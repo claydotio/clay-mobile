@@ -1,10 +1,10 @@
 @require 'nib'
+@require '../../node_modules/zorium-paper/base.styl'
 
 json('../../stylus/vars.json')
 
 .z-game-box
   -webkit-tap-highlight-color: $transparent
-  font-size: $fontSizeSmall
   display: block
   position: relative
 
@@ -20,7 +20,7 @@ json('../../stylus/vars.json')
     width: 100%
 
     > h3
-      font-size: $fontSizeSmall
+      zp-font-caption()
       margin: 3px
       white-space: nowrap
       overflow: hidden

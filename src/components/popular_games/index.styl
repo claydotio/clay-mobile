@@ -1,12 +1,11 @@
 @require 'nib'
+@require '../../node_modules/zorium-paper/base.styl'
 
 json('../../stylus/vars.json')
 
 .z-game-results
     > .header
-      font-size: $fontSizeMedium
-      font-weight: lighter
-      color: $greyDarker
+      zp-font-subhead()
       margin: 16px 0 8px 0
 
     > .game-boxes

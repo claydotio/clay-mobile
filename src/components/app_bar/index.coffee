@@ -77,7 +77,7 @@ module.exports = class AppBar
                   color: styleConfig.$white
 
           if isNavigation
-            z.router.link z 'a.logo[href=/]',
+            z.router.link z 'a.title[href=/]',
               if title
                 title
               else

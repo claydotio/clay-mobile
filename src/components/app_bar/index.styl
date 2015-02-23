@@ -8,7 +8,8 @@ json('../../stylus/vars.json')
   z-index: $zIndexHeader
 
   > .orange-bar
-    background: $orange
+    background: $orange500
+    color: $orange500Text
     width: 100%
     box-sizing: border-box
     padding: 0 20px
@@ -29,8 +30,8 @@ json('../../stylus/vars.json')
           color: $orange500Text
           text-transform: uppercase
 
-      > .logo
-        font-size: $fontSizeLarge
+      > .title
+        zp-font-headline()
         color: $white
 
         > .io
@@ -57,11 +58,9 @@ json('../../stylus/vars.json')
 
         > .title
           zp-font-display1()
-          color: $white
           margin: 0 0 8px 0
 
         > .description
           zp-font-subhead()
-          // FIXME: what color?
-          color: $white
+          opacity: 0.54
           margin: 0
