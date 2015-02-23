@@ -8,7 +8,7 @@ module.exports = class Icon
   constructor: ->
     styles.use()
 
-  render: ({id, size, color}) ->
+  render: ({icon, size, color}) ->
     z 'svg', {
       namespace: 'http://www.w3.org/2000/svg'
       attributes:
@@ -20,6 +20,6 @@ module.exports = class Icon
       z 'path', {
         namespace: 'http://www.w3.org/2000/svg'
         attributes:
-          d: icons[id]
+          d: icons[icon]
           fill: color
       }

@@ -16,7 +16,7 @@ module.exports = class ModalClose
     styles.use()
 
     @state = z.state
-      $icon: new Icon()
+      $shareIcon: new Icon()
 
   share: (e) ->
     e?.preventDefault()
@@ -31,7 +31,7 @@ module.exports = class ModalClose
     .catch log.trace
 
   render: =>
-    {$icon} = @state()
+    {$shareIcon} = @state()
 
     z 'a.z-marketplace-share[href=#]', onclick: @share,
-      z $icon, {id: 'share', size: '32px', color: styleConfig.$white}
+      z $shareIcon, {icon: 'share', size: '24px', color: styleConfig.$white}

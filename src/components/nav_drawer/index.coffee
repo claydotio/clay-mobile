@@ -3,6 +3,7 @@ log = require 'clay-loglevel'
 Button = require 'zorium-paper/button'
 
 GooglePlayAdCard = require '../google_play_ad'
+Icon = require '../icon'
 NavDrawerModel = require '../../models/nav_drawer'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
@@ -11,6 +12,11 @@ styles = require './index.styl'
 
 PIC = 'https://secure.gravatar.com/' +
        'avatar/2f945ee6bcccd80df1834ddb3a4f18ba.jpg?s=72' # FIXME: remove
+MENU_ITEMS = [
+  {page: 'games', title: 'Games', icon: 'controller'}
+  {page: 'friends', title: 'Friends', icon: 'group', reqAuth: true}
+  {page: 'invite', title: 'Invite Friends', icon: 'close', reqAuth: true} # FIXME
+]
 
 module.exports = class NavDrawer
   constructor: ->
@@ -22,9 +28,14 @@ module.exports = class NavDrawer
       $signinButton: new Button()
       $signupButton: new Button()
       $googlePlayAdCard: new GooglePlayAdCard()
+      $icons: _.reduce MENU_ITEMS, (icons, menuItem) ->
+        icons[menuItem.icon] = new Icon()
+        return icons
+      , {}
 
   render: ({currentPage}) =>
-    {isOpen, user, $signupButton, $signinButton, $googlePlayAdCard} = @state()
+    {isOpen, user, $signupButton, $signinButton,
+      $googlePlayAdCard, $icons} = @state()
 
     isLoggedIn = user?.email # FIXME: replace with user.phoneNumber
 
@@ -64,23 +75,22 @@ module.exports = class NavDrawer
                     NavDrawerModel.close()
                     z.router.go '/join'
         z 'div.content',
-          z 'ul.menu', {className: z.classKebab {isLoggedIn}},
-            z 'li.menu-item.menu-item-games',
-              z.router.link z 'a[href=/games].menu-item-link', {
-                className: z.classKebab isSelected: currentPage is 'games'
-              },
-                z 'i.icon.icon-menu' # FIXME
-                'Games'
-            z 'li.menu-item.menu-item-friends',
-              z.router.link z 'a[href=/friends].menu-item-link', {
-                className: z.classKebab isSelected: currentPage is 'friends'
-              },
-                z 'i.icon.icon-back-arrow' # FIXME
-                'Friends'
-            z 'li.menu-item.menu-item-invite',
-              z.router.link z 'a[href=/invite].menu-item-link', {
-                className: z.classKebab isSelected: currentPage is 'invite'
-              },
-                z 'i.icon.icon-heart' # FIXME
-                'Invite Friends'
+          z 'ul.menu',
+            _.map MENU_ITEMS, (menuItem) ->
+              isSelected = currentPage is menuItem.page
+              isUnavailable = menuItem.reqAuth and not isLoggedIn
+              z "li.menu-item.menu-item-#{menuItem.page}",
+                z.router.link z "a[href=/#{menuItem.page}].menu-item-link", {
+                  className: z.classKebab {isSelected, isUnavailable}
+                },
+                  z '.icon',
+                    z $icons[menuItem.icon],
+                      icon: menuItem.icon
+                      size: '24px'
+                      color: if isSelected
+                      then styleConfig.$blue
+                      else if isUnavailable
+                      then styleConfig.$grey300
+                      else styleConfig.$grey500
+                  menuItem.title
           $googlePlayAdCard

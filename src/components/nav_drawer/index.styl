@@ -102,15 +102,15 @@ $zIndexNavDrawerHeader = 100
             padding: 16px 0
             font-size: $fontSizeMedium
 
+            &.is-unavailable
+              color: $greyMedium
+              pointer-events: none // not supported in ie9/10 (ie our entire app breaks)
+
             &.is-selected
               color: $blue
 
             > .icon
+              display: inline-block
+              vertical-align: middle
               margin-right: 32px
               font-size: $iconMedium
-
-        &:not(.is-logged-in)
-          > .menu-item-friends, > .menu-item-invite
-            > .menu-item-link
-              color: $greyMedium
-              pointer-events: none // not supported in ie9/10 (ie our entire app breaks)

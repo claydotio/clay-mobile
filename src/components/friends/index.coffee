@@ -2,6 +2,7 @@ z = require 'zorium'
 _ = require 'lodash'
 Fab = require 'zorium-paper/floating_action_button'
 
+Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -15,17 +16,22 @@ module.exports = class Friends
 
     @state = z.state
       $fab: new Fab()
+      $groupIcon: new Icon()
+      $addIcon: new Icon()
       friends: z.observe null #_.range(5)
 
   render: =>
-    {$fab, friends} = @state()
+    {$fab, $groupIcon, $addIcon, friends} = @state()
 
     z '.z-friends',
       if _.isEmpty friends
         z 'div.no-friends',
-          z 'i.icon.icon-group'
-          z 'h2', 'Oh no! You don\'t have any friends.'
-          z 'div', 'You should invite someone to join you.'
+          z $groupIcon,
+            icon: 'group'
+            size: '80px'
+            color: styleConfig.$grey300
+          z 'h2.title', 'Oh no! You don\'t have any friends.'
+          z 'div.description', 'You should invite someone to join you.'
       else
         z 'ul.friends',
           _.map friends, ->
@@ -38,4 +44,11 @@ module.exports = class Friends
                 z 'img.game-pic', {src: '//cdn.wtf/g/4800/meta/icon_128.png'}
 
       z 'div.fab',
-        z $fab, {colors: {c500: styleConfig.$orange}, $icon: '+'}
+        z $fab,
+          colors: {c500: styleConfig.$orange}
+          $icon: z $addIcon,
+            icon: 'close'
+            size: '24px'
+            color: styleConfig.$white
+          onclick: ->
+            z.router.go '/invite'

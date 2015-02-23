@@ -15,15 +15,12 @@ module.exports = class Login
       $formCard: new Card()
       $phoneNumberInput: new Input()
       $passwordInput: new Input()
+      $forgotButton: new Button()
       $signinButton: new Button()
 
   render: =>
-    {
-      $formCard
-      $phoneNumberInput
-      $passwordInput
-      $signinButton
-    } = @state()
+    {$formCard, $phoneNumberInput, $passwordInput, $signinButton,
+      $forgotButton} = @state()
 
     z '.z-login',
       z $formCard, {
@@ -40,6 +37,11 @@ module.exports = class Login
               o_value: z.observe ''
               colors: c500: styleConfig.$orange
             z 'div.login-button',
+              z $forgotButton,
+                text: 'Forgot'
+                colors: c500: styleConfig.$white, ink: styleConfig.$grey500
+                onclick: ->
+                  z.router.go '/forgot-password'
               z $signinButton,
                 text: 'Sign in'
                 colors: c500: styleConfig.$orange, ink: styleConfig.$white

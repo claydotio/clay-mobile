@@ -8,17 +8,18 @@ NavDrawerModel = require '../../models/nav_drawer'
 styleConfig = require '../../stylus/vars.json'
 
 module.exports = class AppBar
-  # height int
-  # topLeftButton = 'menu', 'back', null
-  # topRightButton = 'signin', 'share'
-  # barType: descriptive - display title and description. min 168 high
-  #          navigation - just title. min 56px high
+  # height <int>
+  # topLeftButton <string> 'menu', 'back', null
+  # topRightButton <string> 'signin', 'share'
+  # barType <string> 'descriptive' - display title and description. min 168 high
+  #                  'navigation' - just title. min 56px high
   constructor: ->
     styles.use()
 
     @state = z.state
       $marketplaceShare: new MarketplaceShare()
-      $icon: new Icon()
+      $menuIcon: new Icon()
+      $backIcon: new Icon()
 
   render: (
     {
@@ -31,7 +32,7 @@ module.exports = class AppBar
       description
     }
   ) =>
-    {$marketplaceShare, $icon} = @state()
+    {$marketplaceShare, $menuIcon, $backIcon} = @state()
 
     isFixed = barType is 'navigation'
     isBackground = barType is 'background'
@@ -60,16 +61,19 @@ module.exports = class AppBar
                   e?.preventDefault()
                   NavDrawerModel.open()
               },
-                z $icon, {id: 'menu', size: '32px', color: styleConfig.$white}
+                z $menuIcon,
+                  icon: 'menu'
+                  size: '24px'
+                  color: styleConfig.$white
             else if topLeftButton is 'back'
               z 'a[href=#].back', {
                 onclick: (e) ->
                   e?.preventDefault()
                   window.history.back()
               },
-                z $icon,
-                  id: 'arrow-back'
-                  size: '32px'
+                z $backIcon,
+                  icon: 'arrowBack'
+                  size: '24px'
                   color: styleConfig.$white
 
           if isNavigation

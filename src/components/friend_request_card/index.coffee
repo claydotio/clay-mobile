@@ -2,6 +2,7 @@ z = require 'zorium'
 Card = require 'zorium-paper/card'
 Button = require 'zorium-paper/button'
 
+Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -17,10 +18,12 @@ module.exports = class FriendRequestCard
       $card: new Card()
       $dismissButton: new Button()
       $viewFriendsButton: new Button()
+      $groupIcon: new Icon()
       dismissed: false
 
   render: ({newFriends}) =>
-    {$card, $dismissButton, $viewFriendsButton, dismissed} = @state()
+    {$card, $dismissButton, $viewFriendsButton, $groupIcon,
+      dismissed} = @state()
 
     if dismissed
       return
@@ -37,7 +40,13 @@ module.exports = class FriendRequestCard
                   z 'div.description', 'is now your friend!'
             else
               z 'div.many-friends.l-flex',
-                z 'img.profile-pic'
+                z 'div.profile-pic.l-flex.l-vertical-center',
+                  z 'div.icon',
+                    z $groupIcon, {
+                      icon: 'group'
+                      size: '24px'
+                      color: styleConfig.$white
+                    }
                 z 'div.friend-info',
                   z 'div.title', "#{newFriends.length} new friends"
                   z 'div.description', 'You sure are popular!'

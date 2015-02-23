@@ -1,4 +1,5 @@
 @require 'nib'
+@require '../../node_modules/zorium-paper/base.styl'
 
 json('../../stylus/vars.json')
 
@@ -24,7 +25,8 @@ json('../../stylus/vars.json')
 
         > .sign-in
           color: $white
-          font-size: $fontSizeMedium
+          zp-font-button()
+          color: $orange500Text
           text-transform: uppercase
 
       > .logo
@@ -32,7 +34,7 @@ json('../../stylus/vars.json')
         color: $white
 
         > .io
-          color: #fff // FIXME $color?
+          opacity: 0.54
 
       > .marketplace-share
         margin-left: auto
@@ -54,15 +56,12 @@ json('../../stylus/vars.json')
         align-self: flex-end
 
         > .title
-          font-size: $fontSizeXXLarge
-          font-weight: lighter
+          zp-font-display1()
           color: $white
           margin: 0 0 8px 0
 
         > .description
-          font-size: $fontSizeMedium
-          font-weight: lighter
+          zp-font-subhead()
           // FIXME: what color?
           color: $white
           margin: 0
-          // FIXME: what color?
