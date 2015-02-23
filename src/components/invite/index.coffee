@@ -32,4 +32,4 @@ module.exports = class Invite
       z 'div.continue',
         z $continueButton,
           text: 'Continue'
-          colors: c500: styleConfig.$orange, ink: styleConfig.$white
+          colors: c500: styleConfig.$orange500, ink: styleConfig.$white

@@ -1,6 +1,7 @@
 z = require 'zorium'
 _ = require 'lodash'
 Fab = require 'zorium-paper/floating_action_button'
+RipplerService = require 'zorium-paper/services/rippler'
 
 Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
@@ -18,7 +19,7 @@ module.exports = class Friends
       $fab: new Fab()
       $groupIcon: new Icon()
       $addIcon: new Icon()
-      friends: z.observe null #_.range(5)
+      friends: z.observe _.range(5)
 
   render: =>
     {$fab, $groupIcon, $addIcon, friends} = @state()
@@ -36,7 +37,15 @@ module.exports = class Friends
         z 'ul.friends',
           _.map friends, ->
             z 'li.friend',
-              z 'a.friend-link.l-flex.l-vertical-center',
+              z 'a.friend-link.l-flex.l-vertical-center', {
+                onmousedown: z.ev (e, $$el) ->
+                  console.log $$el
+                  RipplerService.ripple {
+                    $$el
+                    mouseX: e.clientX
+                    mouseY: e.clientY
+                  }
+              },
                 z 'img.friend-pic', {src: PIC}
                 z 'div.friend-info',
                   z 'div.name', 'Austin'
@@ -45,7 +54,7 @@ module.exports = class Friends
 
       z 'div.fab',
         z $fab,
-          colors: {c500: styleConfig.$orange}
+          colors: {c500: styleConfig.$orange500}
           $icon: z $addIcon,
             icon: 'close'
             size: '24px'

@@ -2,7 +2,6 @@
 
 json('../../stylus/vars.json')
 
-$drawerWidth = 304
 $navDrawerHeaderHeight = 200
 $zIndexNavDrawerHeader = 100
 
@@ -24,7 +23,7 @@ $zIndexNavDrawerHeader = 100
       transition: background 0.25s
 
     > .drawer
-      left: 0
+      left: 0 !important
       transition: left 0.25s
 
   > .overlay
@@ -34,8 +33,7 @@ $zIndexNavDrawerHeader = 100
     height: 100%
 
   > .drawer
-    width: ($drawerWidth) px
-    left: -($drawerWidth)px
+    // width and left set in js
     height: 100%
     top: 0
     position: fixed
@@ -52,7 +50,7 @@ $zIndexNavDrawerHeader = 100
       box-sizing: border-box
       position: relative
       z-index: $zIndexNavDrawerHeader
-      background: $orange
+      background: $orange500
 
       > .user-header
         flex-direction: column
@@ -103,11 +101,11 @@ $zIndexNavDrawerHeader = 100
             font-size: $fontSizeMedium
 
             &.is-unavailable
-              color: $greyMedium
+              color: $grey400
               pointer-events: none // not supported in ie9/10 (ie our entire app breaks)
 
             &.is-selected
-              color: $blue
+              color: $blue500
 
             > .icon
               display: inline-block

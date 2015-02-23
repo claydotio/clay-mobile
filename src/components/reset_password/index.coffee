@@ -35,17 +35,17 @@ module.exports = class ResetPassword
               hintText: 'Reset Code'
               isFloating: true
               o_value: z.observe ''
-              colors: c500: styleConfig.$orange
+              colors: c500: styleConfig.$orange500
             z $newPasswordInput,
               hintText: 'New Password'
               isFloating: true
               o_value: z.observe ''
-              colors: c500: styleConfig.$orange
+              colors: c500: styleConfig.$orange500
             z 'div.actions',
               z $resendButton,
                 text: 'Resend'
-                colors: c500: styleConfig.$white, ink: styleConfig.$greyDark
+                colors: c500: styleConfig.$white, ink: styleConfig.$black26
               z $changePasswordButton,
                 text: 'Change'
-                colors: c500: styleConfig.$orange, ink: styleConfig.$white
+                colors: c500: styleConfig.$orange500, ink: styleConfig.$white
       }

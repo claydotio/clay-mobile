@@ -53,11 +53,11 @@ module.exports = class FriendRequestCard
             z 'div.actions',
               z $dismissButton,
                 text: 'Dismiss'
-                colors: c500: styleConfig.$white, ink: styleConfig.$orange
+                colors: c500: styleConfig.$white, ink: styleConfig.$orange500
                 onclick: =>
                   @state.set dismissed: true
               z $viewFriendsButton,
                 text: 'View Friends'
-                colors: c500: styleConfig.$white, ink: styleConfig.$orange
+                colors: c500: styleConfig.$white, ink: styleConfig.$orange500
                 onclick: ->
                   z.router.go '/friends'

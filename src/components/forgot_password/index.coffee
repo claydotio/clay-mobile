@@ -31,9 +31,9 @@ module.exports = class ForgotPassword
               hintText: 'Phone number'
               isFloating: true
               o_value: z.observe ''
-              colors: c500: styleConfig.$orange
+              colors: c500: styleConfig.$orange500
             z 'div.reset-button',
               z $signinButton,
                 text: 'Reset'
-                colors: c500: styleConfig.$orange, ink: styleConfig.$white
+                colors: c500: styleConfig.$orange500, ink: styleConfig.$white
       }

@@ -37,11 +37,11 @@ module.exports = class InviteLanding
         z $befriendButton,
           text: 'Cool, I want to be friends!'
           isBlock: true
-          colors: c500: styleConfig.$orange, ink: styleConfig.$white
+          colors: c500: styleConfig.$orange500, ink: styleConfig.$white
         z $whatIsClayButton,
           text: 'What is Clay?'
           isBlock: true
-          colors: c500: styleConfig.$white, ink: styleConfig.$greyDark
+          colors: c500: styleConfig.$white, ink: styleConfig.$black26
           onclick: ->
             z.router.go '/what-is-clay'
 

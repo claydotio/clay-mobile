@@ -38,7 +38,7 @@ module.exports = class InviteLanding
         z $befriendButton,
           text: 'Become friends with NAME' # FIXME
           isBlock: true
-          colors: c500: styleConfig.$orange, ink: styleConfig.$white
+          colors: c500: styleConfig.$orange500, ink: styleConfig.$white
 
         z.router.link z 'a[href=/join].skip-friend',
           'I prefer to play alone'

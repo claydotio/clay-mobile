@@ -1,13 +1,15 @@
 @require 'nib'
+@require '../../node_modules/zorium-paper/base.styl'
 
 json('../../stylus/vars.json')
 
 .z-invite-landing-personal
   > .header
     // js sets height
-    background: $orange
+    background: $orange500
+    zp-font-display1()
+    color: $orange500Text
     text-align: center
-    color: $white
     flex-direction: column
 
     > .header-content
@@ -24,5 +26,5 @@ json('../../stylus/vars.json')
       margin-top: auto
       display: block
       text-align: center
-      color: $greyMedium
+      color: $grey400
       font-size: $fontSizeMedium

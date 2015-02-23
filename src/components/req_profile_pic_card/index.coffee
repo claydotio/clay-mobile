@@ -43,10 +43,10 @@ module.exports = class ReqProfilePicCard
             z 'div.actions',
               z $dismissButton,
                 text: 'Dismiss'
-                colors: c500: styleConfig.$white, ink: styleConfig.$orange
+                colors: c500: styleConfig.$white, ink: styleConfig.$orange500
               # .dz-message necessary to be clickable (no workaround)
               z 'div.dz-message.clickable',
                 z $addButton,
                   text: 'Add'
-                  colors: c500: styleConfig.$white, ink: styleConfig.$orange
+                  colors: c500: styleConfig.$white, ink: styleConfig.$orange500
                   onclick: @uploadProfilePicture

@@ -29,25 +29,26 @@ $zIndexFriendsFab = 1
     > .friend
       > .friend-link
         padding: 16px 0
+        position: relative
+        overflow: hidden
 
         > .friend-pic
-          width: 48px
-          height: 48px
+          width: 40px
+          height: 40px
           border-radius: 50%
           margin-right: 16px
 
         > .friend-info
           > .name
-            font-size: $fontSizeMedium
+            zp-font-subhead()
 
           > .game
-            font-size: $fontSizeSmall
-            color: $greyDark
+            zp-font-caption()
 
         > .game-pic
           margin-left: auto
-          width: 32px
-          height: 32px
+          width: 24px
+          height: 24px
 
   > .fab
     position: fixed

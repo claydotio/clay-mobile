@@ -1,18 +1,28 @@
 @require 'nib'
+@require '../../node_modules/zorium-paper/base.styl'
 
 json('../../stylus/vars.json')
 
 .z-invite-landing
   > .header
     // js sets height
-    background: $orange
-    text-align: center
-    color: $white
+    background: $orange500
     flex-direction: column
+    text-align: center
 
     > .header-content
-        margin-top: auto
-        margin-bottom: 32px
+      margin-top: auto
+      margin-bottom: 32px
+
+      > .name
+        zp-font-display1()
+        color: $orange500Text
+        max-width: 300px
+        margin: 0 auto
+
+      > .description
+        zp-font-subhead()
+        color: $orange500Text
 
   > .content
     // js sets height
@@ -24,5 +34,5 @@ json('../../stylus/vars.json')
       margin-top: auto
       display: block
       text-align: center
-      color: $greyMedium
-      font-size: $fontSizeMedium
+      zp-font-body1()
+      color: $grey400

@@ -36,21 +36,21 @@ module.exports = class Join
               hintText: 'Name'
               isFloating: true
               o_value: z.observe ''
-              colors: c500: styleConfig.$orange
+              colors: c500: styleConfig.$orange500
             z $phoneNumberInput,
               hintText: 'Phone number'
               isFloating: true
               o_value: z.observe ''
-              colors: c500: styleConfig.$orange
+              colors: c500: styleConfig.$orange500
             z $passwordInput,
               hintText: 'Password'
               isFloating: true
               o_value: z.observe ''
-              colors: c500: styleConfig.$orange
+              colors: c500: styleConfig.$orange500
             z 'div.signup-button',
               z $signupButton,
                 text: 'Sign up'
-                colors: c500: styleConfig.$orange, ink: styleConfig.$white
+                colors: c500: styleConfig.$orange500, ink: styleConfig.$white
       }
       z 'div.terms',
         'By signing up, you agree to receive SMS messages and to our '

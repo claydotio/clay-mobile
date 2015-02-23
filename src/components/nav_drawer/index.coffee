@@ -38,6 +38,7 @@ module.exports = class NavDrawer
       $googlePlayAdCard, $icons} = @state()
 
     isLoggedIn = user?.email # FIXME: replace with user.phoneNumber
+    drawerWidth = Math.min( window.innerWidth - 56, 392 )
 
     z 'div.z-nav-drawer', {
       className: z.classKebab {isOpen}
@@ -48,7 +49,11 @@ module.exports = class NavDrawer
           NavDrawerModel.close()
       }
 
-      z 'div.drawer',
+      z 'div.drawer', {
+        style:
+          width: "#{drawerWidth}px"
+          left: "-#{drawerWidth}px"
+      },
         z 'div.header.l-flex',
           if isLoggedIn
             z 'div.user-header.l-flex',
@@ -62,7 +67,7 @@ module.exports = class NavDrawer
               z 'div.actions',
                 z $signinButton,
                   text: 'Sign in'
-                  colors: c500: styleConfig.$orange, ink: styleConfig.$white
+                  colors: c500: styleConfig.$orange500, ink: styleConfig.$white
                   onclick: ->
                     # FIXME: technically this isn't necessary since NavDrawer is
                     # stored on the pagelevel and gets wiped out on route
@@ -70,7 +75,7 @@ module.exports = class NavDrawer
                     z.router.go '/login'
                 z $signupButton,
                   text: 'Sign up'
-                  colors: c500: styleConfig.$white, ink: styleConfig.$orange
+                  colors: c500: styleConfig.$white, ink: styleConfig.$orange500
                   onclick: ->
                     NavDrawerModel.close()
                     z.router.go '/join'
@@ -88,7 +93,7 @@ module.exports = class NavDrawer
                       icon: menuItem.icon
                       size: '24px'
                       color: if isSelected
-                      then styleConfig.$blue
+                      then styleConfig.$blue500
                       else if isUnavailable
                       then styleConfig.$grey300
                       else styleConfig.$grey500
