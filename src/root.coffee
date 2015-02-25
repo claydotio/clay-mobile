@@ -132,11 +132,12 @@ else
   z.router.add '/game/:key', PlayGamePage
   z.router.add '/games/:filter', GamesPage
   z.router.add '/join', JoinPage
+  z.router.add '/join/:fromUserId', JoinPage
   z.router.add '/login', LoginPage
   z.router.add '/forgot-password', ForgotPasswordPage
-  z.router.add '/reset-password', ResetPasswordPage
+  z.router.add '/reset-password/:phone', ResetPasswordPage
   z.router.add '/invite', InvitePage
-  z.router.add '/invite-landing', InviteLandingPage
+  z.router.add '/invite-landing/:fromUserId', InviteLandingPage
   z.router.add '/what-is-clay', WhatIsClayPage
   z.router.add '/friends', FriendsPage
 

@@ -1,15 +1,12 @@
 z = require 'zorium'
 _ = require 'lodash'
 Fab = require 'zorium-paper/floating_action_button'
-RipplerService = require 'zorium-paper/services/rippler'
 
 Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
+User = require '../../models/user'
 
 styles = require './index.styl'
-
-PIC = 'https://secure.gravatar.com/' +
-       'avatar/2f945ee6bcccd80df1834ddb3a4f18ba.jpg?s=72' # FIXME: remove
 
 module.exports = class Friends
   constructor: ->
@@ -19,7 +16,7 @@ module.exports = class Friends
       $fab: new Fab()
       $groupIcon: new Icon()
       $addIcon: new Icon()
-      friends: z.observe _.range(5)
+      friends: z.observe User.getFriends()
 
   render: =>
     {$fab, $groupIcon, $addIcon, friends} = @state()
@@ -35,28 +32,25 @@ module.exports = class Friends
           z 'div.description', 'You should invite someone to join you.'
       else
         z 'ul.friends',
-          _.map friends, ->
+          _.map friends, (friend) ->
+            mostRecentGame = friend.links.recentGames?[0]
             z 'li.friend',
-              z 'a.friend-link.l-flex.l-vertical-center', {
-                onmousedown: z.ev (e, $$el) ->
-                  console.log $$el
-                  RipplerService.ripple {
-                    $$el
-                    mouseX: e.clientX
-                    mouseY: e.clientY
-                  }
-              },
-                z 'img.friend-pic', {src: PIC}
+              z 'a.friend-link.l-flex.l-vertical-center',
+                z 'img.friend-pic', {src: friend.avatarImage?.versions[0].url}
                 z 'div.friend-info',
                   z 'div.name', 'Austin'
-                  z 'div.game', 'Prism' # FIXME
-                z 'img.game-pic', {src: '//cdn.wtf/g/4800/meta/icon_128.png'}
+                  if mostRecentGame
+                    z 'div.game', mostRecentGame.name
+                if mostRecentGame
+                  z 'img.game-pic',
+                    src: mostRecentGame.iconImage?.versions[0].url or
+                         mostRecentGame.icon128Url
 
       z 'div.fab',
         z $fab,
           colors: {c500: styleConfig.$orange500}
           $icon: z $addIcon,
-            icon: 'close'
+            icon: 'add'
             size: '24px'
             color: styleConfig.$white
           onclick: ->

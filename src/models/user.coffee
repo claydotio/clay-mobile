@@ -8,8 +8,9 @@ config = require '../config'
 
 PATH = config.PUBLIC_CLAY_API_URL + '/users'
 LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
+LOCALSTORE_FRIENDS = 'user:friends'
 
-me = z.observe null
+me = z.observe false
 experiments = null
 
 getCookieValue = (key) ->
@@ -31,7 +32,7 @@ deleteHostCookie = (key) ->
 class User
 
   getMe: =>
-    unless me()
+    if me() is false
       me.set @loginAnon()
 
       # Save accessToken in cookie
@@ -119,6 +120,41 @@ class User
     .then (visitCountObject) ->
       visitCountObject?.count
 
+  # TODO: may not have to do this (dropzone)
+  setProfilePicture: =>
+    @getMe().then ({accessToken}) ->
+      request PATH + '/me/avatarImage',
+        method: 'POST',
+        qs:
+          accessToken: accessToken
+        body:
+          {} # FIXME?
+
+  addFriend: (userId) =>
+    @getMe().then ({accessToken}) ->
+      request PATH + '/me/friends',
+        method: 'POST',
+        qs:
+          accessToken: accessToken
+        body:
+          {userId}
+
+  getFriends: =>
+    @getMe().then ({accessToken}) ->
+      request PATH + '/me/friends',
+        method: 'GET'
+        qs:
+          accessToken: accessToken
+
+  getLocalNewFriends: =>
+    Promise.all [
+      localstore.get LOCALSTORE_FRIENDS
+      @getFriends()
+    ]
+    .then ([localFriends, friends]) ->
+      localstore.set LOCALSTORE_FRIENDS, friends
+      return _.filter friends, localFriends
+
   loginAnon: ->
     request PATH + '/login/anon',
       method: 'POST'
@@ -140,6 +176,28 @@ class User
         body: {
           email
           password
+        }
+
+  loginPhone: ({phone, password, recoveryToken}) =>
+    @getMe().then (me) ->
+      request PATH + '/login/phone',
+        method: 'POST'
+        qs:
+          accessToken: me.accessToken
+        body: {
+          phone
+          password
+          recoveryToken
+        }
+
+  loginRecovery: ({phone}) =>
+    @getMe().then (me) ->
+      request PATH + '/login/recovery',
+        method: 'POST'
+        qs:
+          accessToken: me.accessToken
+        body: {
+          phone
         }
 
   logout: ->

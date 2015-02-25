@@ -8,15 +8,16 @@ styles = require './index.styl'
 CONTENT_MARGIN = -56
 
 module.exports = class ResetPasswordPage
-  constructor: ->
+  constructor: ({phone}) ->
     styles.use()
 
     @state = z.state
       $appBar: new AppBar()
       $resetPassword: new ResetPassword()
+      phone: phone
 
   render: =>
-    {$appBar, $resetPassword} = @state()
+    {$appBar, $resetPassword, phone} = @state()
 
     z 'div.z-reset-password-page',
       z $appBar, {
@@ -29,4 +30,4 @@ module.exports = class ResetPasswordPage
       }
       z 'div.l-content-container.content',
         {style: marginTop: "#{CONTENT_MARGIN}px"}
-        $resetPassword
+        z $resetPassword, {phone}

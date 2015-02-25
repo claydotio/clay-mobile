@@ -8,15 +8,16 @@ styles = require './index.styl'
 CONTENT_MARGIN = -56
 
 module.exports = class JoinPage
-  constructor: ->
+  constructor: ({fromUserId}) ->
     styles.use()
 
     @state = z.state
       $appBar: new AppBar()
       $join: new Join()
+      fromUserId: fromUserId
 
   render: =>
-    {$appBar, $join} = @state()
+    {$appBar, $join, fromUserId} = @state()
 
     z 'div.z-join-page',
       z $appBar, {
@@ -30,4 +31,4 @@ module.exports = class JoinPage
       }
       z 'div.l-content-container.content',
         {style: marginTop: "#{CONTENT_MARGIN}px"}
-        $join
+        z $join, {fromUserId}

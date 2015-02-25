@@ -40,7 +40,7 @@ module.exports = class FriendRequestCard
                   z 'div.description', 'is now your friend!'
             else
               z 'div.many-friends.l-flex',
-                z 'div.profile-pic.l-flex.l-vertical-center',
+                z 'div.profile-pic.l-flex',
                   z 'div.icon',
                     z $groupIcon, {
                       icon: 'group'

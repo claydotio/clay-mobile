@@ -6,30 +6,37 @@ json('../../stylus/vars.json')
 .z-invite
   > .invite-options
     > .invite
-      display: block
       zp-font-subhead()
-      padding: 16px 0
+      padding: 8px 0
+
+      &:active
+        background: $activeBgColor
 
       > .social-icon
-        display: inline-block
         width: 40px
         height: 40px
         border-radius: 50%
         background-size: 50% 50%
         background-position: center center
         background-repeat: no-repeat
-        vertical-align: middle
         margin-right: 16px
 
+        > .icon
+          margin: auto
+          // svg's display: inline-block adds bottom margin. this fixes
+          font-size: 0
+
       > .facebook
-        // FIXME make into icon font???
-        background-image: url('//cdn.wtf/d/images/social/facebook.svg')
         background-color: #3B5998
 
       > .twitter
-        // FIXME make into icon font???
-        background-image: url('//cdn.wtf/d/images/social/twitter.svg')
         background-color: #00aced
+
+      > .kik
+        background-color: #83ba23
+
+      > .sms
+        background-color: $grey400
 
   > .continue
     margin-top: auto

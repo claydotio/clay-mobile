@@ -15,7 +15,7 @@ PIC = 'https://secure.gravatar.com/' +
 MENU_ITEMS = [
   {page: 'games', title: 'Games', icon: 'controller'}
   {page: 'friends', title: 'Friends', icon: 'group', reqAuth: true}
-  {page: 'invite', title: 'Invite Friends', icon: 'close', reqAuth: true} # FIXME
+  {page: 'invite', title: 'Invite Friends', icon: 'addCircle', reqAuth: true}
 ]
 
 module.exports = class NavDrawer
@@ -24,7 +24,7 @@ module.exports = class NavDrawer
 
     @state = z.state
       isOpen: z.observe NavDrawerModel.o_isOpen
-      user: User.getMe()
+      me: User.getMe()
       $signinButton: new Button()
       $signupButton: new Button()
       $googlePlayAdCard: new GooglePlayAdCard()
@@ -34,10 +34,12 @@ module.exports = class NavDrawer
       , {}
 
   render: ({currentPage}) =>
-    {isOpen, user, $signupButton, $signinButton,
+    {isOpen, me, $signupButton, $signinButton,
       $googlePlayAdCard, $icons} = @state()
 
-    isLoggedIn = user?.email # FIXME: replace with user.phoneNumber
+    # FIXME: check that me as observable gets updated when profile pic is uploaded
+
+    isLoggedIn = me?.phone
     drawerWidth = Math.min( window.innerWidth - 56, 392 )
 
     z 'div.z-nav-drawer', {
@@ -57,7 +59,7 @@ module.exports = class NavDrawer
         z 'div.header.l-flex',
           if isLoggedIn
             z 'div.user-header.l-flex',
-              z 'img.picture', src: PIC
+              z 'img.picture', src: me.avatarImage?.versions[0].url # FIXME: default image
               z 'div.name', 'Austin Hallock' # FIXME
           else
             z 'div.guest-header.l-flex',

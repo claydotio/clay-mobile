@@ -203,11 +203,13 @@ renderHomePage = do ->
                   Clay has the best HTML5 games.'
     keywords: 'mobile games, clay games, free mobile games, mobile web games'
     name: 'Clay Games - Play Free HTML5 Mobile Games'
-    icon256: '//cdn.wtf/d/images/icons/icon_256.png'
-    icon76: '//cdn.wtf/d/images/icons/icon_76.png'
-    icon120: '//cdn.wtf/d/images/icons/icon_120.png'
-    icon152: '//cdn.wtf/d/images/icons/icon_152.png'
-    icon440x280: '//cdn.wtf/d/images/icons/icon_440_280.png'
+    icon256: 'https://cdn.wtf/d/images/icons/icon_256.png'
+    icon76: 'https://cdn.wtf/d/images/icons/icon_76.png'
+    icon120: 'https://cdn.wtf/d/images/icons/icon_120.png'
+    icon152: 'https://cdn.wtf/d/images/icons/icon_152.png'
+    icon440x280: 'https://cdn.wtf/d/images/icons/icon_440_280.png'
+    # can't specify https because:
+    # https://github.com/kikinteractive/kik-js-issues/issues/12
     iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
     url: 'http://clay.io/'
     canonical: 'http://clay.io'

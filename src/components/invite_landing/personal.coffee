@@ -1,11 +1,12 @@
 z = require 'zorium'
 Button = require 'zorium-paper/button'
 
+User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './personal.styl'
 
-LANDCAPE_HEADER_HEIGHT = 100
+CONTENT_HEIGHT = 200
 
 module.exports = class InviteLanding
   constructor: ->
@@ -15,29 +16,35 @@ module.exports = class InviteLanding
       $befriendButton: new Button()
       $whatIsClayButton: new Button()
 
-  render: =>
+  render: ({fromUserId}) =>
     {$befriendButton, $whatIsClayButton} = @state()
 
-    headerHeight = if window.innerWidth > window.innerHeight
-    then LANDCAPE_HEADER_HEIGHT
-    else window.innerWidth
-
-    z 'div.z-invite-landing-personal',
+    z 'div.z-invite-landing.l-flex',
       z 'header.header.l-flex', {
         style:
-          height: "#{headerHeight}px"
+          height: "#{window.innerHeight - CONTENT_HEIGHT}px"
       },
         z 'div.header-content',
-          z 'h1.name', 'Brittany' # FIXME
-          z 'div.description', 'Has invited you to become friends.'
+          z 'h1.name', 'Brittany'
+          z 'div.description',
+            'Has invited you to become friends.'
       z 'div.content.l-flex', {
         style:
-          minHeight: "#{window.innerHeight - headerHeight}px"
+          height: "#{CONTENT_HEIGHT}px"
       },
         z $befriendButton,
           text: 'Cool, I want to be friends!'
           isBlock: true
           colors: c500: styleConfig.$orange500, ink: styleConfig.$white
+          onclick: ->
+            User.getMe().then ({phone}) ->
+              isLoggedIn = Boolean phone
+              if isLoggedIn
+                User.addFriend(fromUserId).then ->
+                  z.router.go '/'
+              else
+                z.router.go "/join/#{fromUserId}"
+
         z $whatIsClayButton,
           text: 'What is Clay?'
           isBlock: true

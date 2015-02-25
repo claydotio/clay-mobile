@@ -3,18 +3,45 @@
 
 json('../../stylus/vars.json')
 
-.z-invite-landing-personal
+$zIndexInviteLandingHeaderContent = 1
+
+.z-invite-landing
+  flex-direction: column
+
   > .header
     // js sets height
-    background: $orange500
-    zp-font-display1()
-    color: $orange500Text
+    background: url('//cdn.wtf/d/images/general/dot_pattern.svg') $orange500
     text-align: center
-    flex-direction: column
+    padding: 32px 0
+    box-sizing: border-box
+    position: relative
+
+    &:after
+      content: ''
+      position: absolute
+      left: 0
+      top: 0
+      width: 100%
+      height: 100%
+      background: linear-gradient(top, transparent, 70% $orange500)
 
     > .header-content
+      position: relative
+      z-index: $zIndexInviteLandingHeaderContent
+      width: 100%
+      margin-top: auto
+
+      > .name
+        zp-font-display1()
+        color: $orange500Text
+        max-width: 300px
+        margin: 0 auto 16px auto
+
+      > .description
+        margin-bottom: 0
         margin-top: auto
-        margin-bottom: 32px
+        zp-font-subhead()
+        color: $orange500Text
 
   > .content
     // js sets height
@@ -26,5 +53,5 @@ json('../../stylus/vars.json')
       margin-top: auto
       display: block
       text-align: center
+      zp-font-body1()
       color: $grey400
-      font-size: $fontSizeMedium
