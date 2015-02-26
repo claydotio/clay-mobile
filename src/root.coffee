@@ -97,7 +97,6 @@ else
 
 z.router.on 'route', (path) ->
   ga? 'send', 'pageview', path
-  NavDrawerModel.close()
 
 # TODO: (Zoli) route from pathname to hash for kik
 # Kik changes app if the url changes, so don't change it

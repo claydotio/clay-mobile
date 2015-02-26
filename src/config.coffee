@@ -13,7 +13,6 @@ module.exports =
   MOCK: process.env.MOCK or false
   ENV: process.env.NODE_ENV or 'production'
   ACCESS_TOKEN_COOKIE_KEY: 'accessToken2'
-  LOCALSTORE_SHOW_THANKS: 'user:show_thanks'
   FB_APP_ID: process.env.FB_APP_ID or 176274425805503
   SCREENSHOT_MIN_COUNT: 2
   ENVS:

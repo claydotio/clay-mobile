@@ -1,5 +1,5 @@
-@require '../../components/nib/index.styl'
-@require '../../components/normalize.css/normalize.css'
+@require '../../node_modules/nib/index.styl'
+@require '../../node_modules/normalize-css/normalize.css'
 
 json('./vars.json')
 
@@ -17,18 +17,13 @@ json('./vars.json')
 //
 
 html
-  height: 100%
   font-size: 62.5% /* 10px browser default */
 
 body
-  height: 100%
   background: $bgColor
   color: $grey900
   font: $fontSizeSmall 'Roboto'
   font-weight: 500
-
-#app
-  height: 100%
 
 a
   text-decoration: none

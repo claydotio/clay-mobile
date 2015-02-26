@@ -8,68 +8,38 @@ NavDrawerModel = require '../../models/nav_drawer'
 styleConfig = require '../../stylus/vars.json'
 
 module.exports = class AppBar
-  # height <int>
-  # topLeftButton <string> 'menu', 'back', null
-  # topRightButton <string> 'signin', 'share'
-  # barType <string> 'descriptive' - display title and description. min 168 high
-  #                  'navigation' - just title. min 56px high
   constructor: ->
     styles.use()
 
-    @state = z.state
-      $marketplaceShare: new MarketplaceShare()
-      $menuIcon: new Icon()
-      $backIcon: new Icon()
-
-  render: ({height, barType, paddingBottom, topLeftButton, topRightButton,
-            title, description}) =>
-    {$marketplaceShare, $menuIcon, $backIcon} = @state()
+  render: ({height, isDescriptive, overlapBottomPadding, $topLeftButton,
+            $topRightButton, title, description}) ->
 
     # TODO: (Austin) smarter app bar
     # https://github.com/Zorium/zorium-site/blob/master/src/components/header/index.coffee
-    isFixed = barType is 'navigation'
-    isBackground = barType is 'background'
-    isNavigation = barType is 'navigation'
-    height ?= '56px'
-    paddingBottom ?= 0
-    barType ?= 'navigation'
+    isFixed = isDescriptive
+    height ?= "#{styleConfig.$appBarHeightShort}px"
+    # we could potentially make this an observable inside of a model to
+    # share state between AppBar and the overlapping component(s)
+    overlapBottomPadding ?= 0
 
     z 'header.z-app-bar', {
       className: z.classKebab {
-        isFixed
-        isBackground
-        isNavigation
+        isFixed: not isDescriptive
+        isDescriptive
       }
-      style: height: height
+      style:
+        height: height
     },
 
-      z 'div.orange-bar.l-flex', {
-        style: height: height, paddingBottom: paddingBottom
+      z 'div.orange-bar', {
+        style:
+          height: height
+          paddingBottom: overlapBottomPadding
       },
-        z 'div.top.l-flex.l-vertical-center',
-          z 'div.top-left-button',
-            if topLeftButton is 'menu'
-              z 'a[href=#].menu', {
-                onclick: (e) ->
-                  e?.preventDefault()
-                  NavDrawerModel.open()
-              },
-                z $menuIcon,
-                  icon: 'menu'
-                  size: '24px'
-                  color: styleConfig.$white
-            else if topLeftButton is 'back'
-              z 'a[href=#].back', {
-                onclick: (e) ->
-                  e?.preventDefault()
-                  window.history.back()
-              },
-                z $backIcon,
-                  icon: 'arrowBack'
-                  size: '24px'
-                  color: styleConfig.$white
+        z 'div.top',
+          z 'div.top-left-button', $topLeftButton
 
-          if isNavigation
+          unless isDescriptive
             z.router.link z 'a.title[href=/]',
               if title
                 title
@@ -79,15 +49,9 @@ module.exports = class AppBar
                   z 'span.io', '.io'
                 ]
 
-          z 'div.top-right-button',
-            if topRightButton is 'signin'
-              z.router.link z 'a[href=/login].sign-in', 'Sign In'
-            else if topRightButton is 'signup'
-              z.router.link z 'a[href=/join].sign-in', 'Sign Up'
-            else if topRightButton is 'share'
-              z 'div.marketplace-share', $marketplaceShare
+          z 'div.top-right-button', $topRightButton
 
-        if isBackground
+        if isDescriptive
           z 'div.content',
             z 'h1.title', title
             z 'h3.description', description

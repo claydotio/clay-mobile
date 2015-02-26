@@ -1,4 +1,5 @@
 {
+  "$orange200": "#ffcc80",
   "$orange500": "#ff8a00",
   "$orange600": "#f47300",
   "$orange700": "#e96a03",
@@ -7,6 +8,7 @@
   "$orange600Text": "#ffffff",
   "$orange700Text": "#ffffff",
 
+  "$blue200": "#90caf9",
   "$blue500": "#008aff",
   "$blue600": "#0078ff",
   "$blue700": "#0060ff",
@@ -77,6 +79,10 @@
 
   "$marketplaceGamePromoWidth": 440,
   "$marketplaceGamePromoHeight": 280,
+
+  "$appBarHeightShort": 56,
+  "$appBarHeightMedium": 168,
+  "$appBarHeightTall": 224,
 
   "$zIndexModal": 900,
   "$zIndexDrawer": 300,

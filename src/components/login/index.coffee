@@ -1,10 +1,11 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
 Input = require 'zorium-paper/input'
-Button = require 'zorium-paper/button'
-Card = require 'zorium-paper/card'
 
 User = require '../../models/user'
+Card = require '../card'
+ButtonPrimary = require '../button_primary'
+ButtonSecondary = require '../button_secondary'
 PhoneService = require '../../services/phone'
 styleConfig = require '../../stylus/vars.json'
 
@@ -29,8 +30,8 @@ module.exports = class Login
         o_value: o_password
         o_error: o_passwordError
       }
-      $forgotButton: new Button()
-      $signinButton: new Button()
+      $forgotButton: new ButtonSecondary()
+      $signinButton: new ButtonPrimary()
       o_phone: o_phone
       o_phoneError: o_phoneError
       o_password: o_password
@@ -38,8 +39,9 @@ module.exports = class Login
 
   login: =>
     password = @state.o_password()
+    phone = @state.o_phone()
 
-    PhoneService.sanitizePhoneNumber @state.o_phone()
+    PhoneService.normalizePhoneNumber phone
     .then (phone) ->
       User.loginPhone {phone, password}
     .catch (err) =>
@@ -63,29 +65,25 @@ module.exports = class Login
               e.preventDefault()
               @login().catch log.trace
           },
-            # enter button on keyboard only calls onsubmit if there is
-            # an input[type=submit] in the form
-            # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
-            z 'input[type=submit]', {style: display: 'none'}
             z $phoneInput,
               hintText: 'Phone number'
               type: 'tel'
               isFloating: true
-              colors: c500: styleConfig.$orange500
+              colors:
+                c500: styleConfig.$orange500
             z $passwordInput,
               hintText: 'Password'
               type: 'password'
               isFloating: true
-              colors: c500: styleConfig.$orange500
+              colors:
+                c500: styleConfig.$orange500
             z 'div.actions',
               z $forgotButton,
                 text: 'Forgot'
-                colors: c500: styleConfig.$white, ink: styleConfig.$black26
                 onclick: ->
                   z.router.go '/forgot-password'
               z $signinButton,
                 text: 'Sign in'
-                colors: c500: styleConfig.$orange500, ink: styleConfig.$white
                 onclick: =>
                   @login().catch log.trace
       }

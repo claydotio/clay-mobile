@@ -7,10 +7,13 @@ localstore = require '../lib/localstore'
 config = require '../config'
 
 PATH = config.PUBLIC_CLAY_API_URL + '/users'
+DEFAULT_PROFILE_PIC = '//cdn.wtf/d/images/general/profile-square.png'
 LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 LOCALSTORE_FRIENDS = 'user:friends'
+SMALL_AVATAR_SIZE = 96
+LARGE_AVATAR_SIZE = 512
 
-me = z.observe false
+me = z.observe Promise.resolve false
 experiments = null
 
 getCookieValue = (key) ->
@@ -30,6 +33,7 @@ deleteHostCookie = (key) ->
                     'expires=Thu, 01 Jan 1970 00:00:01 GMT'
 
 class User
+  signedUpThisSession: false
 
   getMe: =>
     if me() is false
@@ -57,10 +61,6 @@ class User
           userId: user.id
     return me
 
-  updateMeObservable: (meDiff) =>
-    @setMe @getMe().then (me) ->
-      _.defaults(meDiff, me)
-
   updateMe: (userUpdate) =>
     @getMe().then (me) =>
       request "#{PATH}/me",
@@ -78,6 +78,14 @@ class User
         qs:
           accessToken: accessToken
 
+  isLoggedIn: do ->
+    o_isLoggedIn = z.observe me.then (me) ->
+      Boolean me?.phone
+
+    me (me) ->
+      o_isLoggedIn.set Promise.resolve Boolean me?.phone
+    ->
+      o_isLoggedIn
 
   logEngagedActivity: =>
     @getMe().then (me) =>
@@ -204,7 +212,7 @@ class User
           recoveryToken
         }
 
-  loginRecovery: ({phone}) =>
+  recoverLogin: ({phone}) =>
     @getMe().then (me) ->
       request PATH + '/login/recovery',
         method: 'POST'
@@ -217,5 +225,23 @@ class User
   logout: ->
     deleteHostCookie config.ACCESS_TOKEN_COOKIE_KEY
     @setMe @loginAnon
+
+  getAvatarUrl: (user, {size} = {}) ->
+    size ?= 'small'
+
+    if user?.avatarImage
+      pxSize = if size is 'large' then LARGE_AVATAR_SIZE else SMALL_AVATAR_SIZE
+      avatarObject = _.find user.avatarImage?.versions, width: pxSize
+
+      return avatarObject.url or DEFAULT_PROFILE_PIC
+    else
+      return DEFAULT_PROFILE_PIC
+
+  getSignedUpThisSession: ->
+    return @signedUpThisSession
+
+  setSignedUpThisSession: (signedUp) ->
+    @signedUpThisSession = signedUp
+
 
 module.exports = new User()

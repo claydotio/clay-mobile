@@ -1,11 +1,12 @@
 z = require 'zorium'
 
 AppBar = require '../../components/app_bar'
+BackButton = require '../../components/back_button'
 Login = require '../../components/login'
+styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
-
-CONTENT_MARGIN = -56
+vars = require './vars.json'
 
 module.exports = class LoginPage
   constructor: ->
@@ -13,21 +14,22 @@ module.exports = class LoginPage
 
     @state = z.state
       $appBar: new AppBar()
+      $backButton: new BackButton()
       $login: new Login()
 
   render: =>
-    {$appBar, $login} = @state()
+    {$appBar, $backButton, $login} = @state()
 
     z 'div.z-login-page',
       z $appBar, {
-        height: '224px'
-        paddingBottom: CONTENT_MARGIN * -1 + 'px'
-        barType: 'background'
-        topLeftButton: 'back'
-        topRightButton: 'signup'
+        height: "#{styleConfig.$appBarHeightTall}px"
+        overlapBottomPadding: "#{vars.$cardOverlapHeight}px"
+        isDescriptive: true
+        $topLeftButton: $backButton
+        $topRightButton: z.router.link z 'a[href=/join].sign-in', 'Sign Up'
         title: 'Sign in'
         description: 'Welcome back!'
       }
       z 'div.l-content-container.content',
-        {style: marginTop: "#{CONTENT_MARGIN}px"}
+        {style: marginTop: "-#{vars.$cardOverlapHeight}px"}
         $login

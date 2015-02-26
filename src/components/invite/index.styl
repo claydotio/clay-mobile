@@ -1,18 +1,26 @@
 @require 'nib'
-@require '../../node_modules/zorium-paper/base.styl'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
 .z-invite
+  display: flex
+  min-height: 100%
+  flex-direction: column
+
   > .invite-options
     > .invite
       zp-font-subhead()
       padding: 8px 0
+      display: flex
+      height: 100%
+      align-items: center
 
       &:active
         background: $activeBgColor
 
       > .social-icon
+        display: flex
         width: 40px
         height: 40px
         border-radius: 50%
@@ -34,9 +42,6 @@ json('../../stylus/vars.json')
 
       > .kik
         background-color: #83ba23
-
-      > .sms
-        background-color: $grey400
 
   > .continue
     margin-top: auto

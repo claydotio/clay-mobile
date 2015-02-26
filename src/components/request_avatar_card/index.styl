@@ -1,15 +1,16 @@
 @require 'nib'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
 .z-request-avatar-card_content
   > .title
-    font-size: $fontSizeLarge
+    zp-font-headline()
     font-weight: lighter
     margin: 0 0 12px 0
 
   > .description
-    font-size: $fontSizeMedium
+    zp-font-subhead()
     margin: 0 0 16px 0
 
   > .actions

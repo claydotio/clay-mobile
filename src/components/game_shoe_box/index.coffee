@@ -3,8 +3,8 @@ kik = require 'kik'
 log = require 'clay-loglevel'
 
 User = require '../../models/user'
+Game = require '../../models/game'
 UrlService = require '../../services/url'
-ImageService = require '../../services/image'
 
 styles = require './index.styl'
 
@@ -26,7 +26,7 @@ module.exports = class GameShoeBox
   render: =>
     z "a.z-game-shoe-box[href=#{@gameSubdomainUrl}]", {onclick: @loadGame}, [
       z 'img',
-        src: ImageService.getGameIconUrl @game
+        src: Game.getIconUrl @game
       z '.z-game-shoe-box-info', [
         z 'h3', @game.name
       ]

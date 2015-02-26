@@ -5,7 +5,7 @@ Fab = require 'zorium-paper/floating_action_button'
 Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
 User = require '../../models/user'
-ImageService = require '../../services/image'
+Game = require '../../models/game'
 
 styles = require './index.styl'
 
@@ -14,13 +14,13 @@ module.exports = class Friends
     styles.use()
 
     @state = z.state
-      $fab: new Fab()
+      $addFriendFab: new Fab()
       $groupIcon: new Icon()
       $addIcon: new Icon()
       friends: z.observe User.getFriends()
 
   render: =>
-    {$fab, $groupIcon, $addIcon, friends} = @state()
+    {$addFriendFab, $groupIcon, $addIcon, friends} = @state()
 
     z '.z-friends',
       if _.isEmpty friends
@@ -36,19 +36,19 @@ module.exports = class Friends
           _.map friends, (friend) ->
             mostRecentGame = friend.links.recentGames?[0]
             z 'li.friend',
-              z 'a.friend-link.l-flex.l-vertical-center',
+              z 'a.friend-link',
                 z 'img.friend-avatar',
-                  src: ImageService.getAvatarUrl friend
+                  src: User.getAvatarUrl friend
                 z 'div.friend-info',
-                  z 'div.name', 'Austin'
+                  z 'div.name', friend.name
                   if mostRecentGame
                     z 'div.game', mostRecentGame.name
                 if mostRecentGame
                   z 'img.game-pic',
-                    src: ImageService.getGameIconUrl mostRecentGame
+                    src: Game.getIconUrl mostRecentGame
 
       z 'div.fab',
-        z $fab,
+        z $addFriendFab,
           colors: {c500: styleConfig.$orange500}
           $icon: z $addIcon,
             icon: 'add'

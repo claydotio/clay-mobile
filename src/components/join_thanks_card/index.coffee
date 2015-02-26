@@ -1,7 +1,7 @@
 z = require 'zorium'
-Card = require 'zorium-paper/card'
 Button = require 'zorium-paper/button'
 
+Card = require '../card'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -13,26 +13,31 @@ module.exports = class JoinThanksCard
     @state = z.state
       $card: new Card()
       $dismissButton: new Button()
-      dismissed: false
+      isDismissed: false
 
   render: ({newFriends}) =>
-    {$card, $dismissButton, dismissed} = @state()
+    {$card, $dismissButton, isDismissed} = @state()
 
-    if dismissed
+    # TODO: (Austin) re-implement as stream
+    if isDismissed
       return
 
     z 'div.z-join-thanks-card',
       z $card,
-        colors: c500: styleConfig.$blue500, ink: styleConfig.$white
+        colors:
+          c500: styleConfig.$blue500
+          ink: styleConfig.$white
         content:
           z 'div.z-join-thanks-card_content',
             z 'h1.thanks', 'Thanks for joining!'
             z 'div.description',
-              'You\'ll receive a text message to confirm your account shortly. '
+              'You\'ll receive a welcome text message shortly. '
               'If texting isn\'t your thing, you can opt-out at any time.'
             z 'div.actions',
               z $dismissButton,
                 text: 'Dismiss'
-                colors: c500: styleConfig.$white, ink: styleConfig.$blue500
+                colors:
+                  c500: styleConfig.$white
+                  ink: styleConfig.$blue500
                 onclick: =>
-                  @state.set dismissed: true
+                  @state.set isDismissed: true

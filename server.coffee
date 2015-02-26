@@ -11,7 +11,6 @@ request = require 'request-promise'
 helmet = require 'helmet'
 
 config = require './src/config'
-ImageService = require './src/services/image'
 
 API_REQUEST_TIMEOUT = 1000 # 1 second
 HEALTHCHECK_TIMEOUT = 100
@@ -137,6 +136,31 @@ router.get '/game/:key', (req, res) ->
   gameKey = req.params.key
 
   renderGamePage gameKey, req.useragent.isProbablyKik
+  .then (html) ->
+    res.send html
+  .catch (err) ->
+    log.trace err
+
+    if err instanceof Error404 or err.statusCode is 404
+      fourOhFour()
+      .then (html) ->
+        res.status(404).send html
+      .catch (err) ->
+        log.trace err
+        res.status(500).send()
+    else
+      renderHomePage(req.useragent.isProbablyKik)
+      .then (html) ->
+        res.send html
+      .catch (err) ->
+        log.trace err
+        res.status(500).send()
+
+router.get '/invite-landing/:fromUserId', (req, res) ->
+  log.info 'AGENT ', req.useragent.source
+  fromUserId = req.params.fromUserId
+
+  renderInviteLandingPage fromUserId, req.useragent.isProbablyKik
   .then (html) ->
     res.send html
   .catch (err) ->
@@ -349,7 +373,7 @@ renderGamePage = (gameKey, isProbablyKik) ->
     if _.isEmpty game
       throw new Error404 'Game not found: ' + gameKey
 
-    iconUrl = ImageService.getGameIconUrl game
+    iconUrl = game.iconImage?.versions[0].url or game.icon128Url
 
     page =
       isProbablyKik: isProbablyKik
@@ -377,5 +401,31 @@ renderGamePage = (gameKey, isProbablyKik) ->
       canonical: "http://#{game.key}.clay.io"
 
     Promise.promisify(dust.render, dust) 'index', page
+
+
+renderInviteLandingPage = (fromUserId, isProbablyKik) ->
+
+  page =
+    isProbablyKik: isProbablyKik
+    inlineSource: config.ENV is config.ENVS.PROD
+    webpackDevHostname: config.WEBPACK_DEV_HOSTNAME
+    title: 'Please be my friend on Clay'
+    description: 'Play a bunch of great games and be my friend on Clay'
+    keywords: 'mobile games,  free mobile games'
+    name: 'Please be my friend on Clay'
+    distjs: distJs
+
+    icon256: 'https://cdn.wtf/d/images/icons/icon_256.png'
+    icon76: 'https://cdn.wtf/d/images/icons/icon_76.png'
+    icon120: 'https://cdn.wtf/d/images/icons/icon_120.png'
+    icon152: 'https://cdn.wtf/d/images/icons/icon_152.png'
+    icon440x280: 'https://cdn.wtf/d/images/icons/icon_440_280.png'
+    # can't specify https because:
+    # https://github.com/kikinteractive/kik-js-issues/issues/12
+    iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
+    url: "http://clay.io/invite-landing/#{fromUserId}"
+    canonical: 'http://clay.io' # don't let kik index this page
+
+  Promise.promisify(dust.render, dust) 'index', page
 
 module.exports = app

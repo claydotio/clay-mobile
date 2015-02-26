@@ -1,8 +1,9 @@
 z = require 'zorium'
 Button = require 'zorium-paper/button'
 
+ButtonPrimary = require '../button_primary'
+ButtonSecondary = require '../button_secondary'
 User = require '../../models/user'
-ImageService = require '../../services/image'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './personal.styl'
@@ -14,8 +15,8 @@ module.exports = class InviteLanding
     styles.use()
 
     @state = z.state
-      $befriendButton: new Button()
-      $whatIsClayButton: new Button()
+      $befriendButton: new ButtonPrimary()
+      $whatIsClayButton: new ButtonSecondary()
       fromUser: z.observe User.getById fromUserId
 
   render: =>
@@ -23,30 +24,29 @@ module.exports = class InviteLanding
 
     hasAvatar = Boolean fromUser?.avatarImage
 
-    z 'div.z-invite-landing.l-flex',
-      z 'header.header.l-flex', {
-        className: z.classKebab {hasAvatar}
+    z 'div.z-invite-landing', {
+      className: z.classKebab {hasAvatar}
+    },
+      z 'header.header', {
         style:
           height: "#{window.innerHeight - CONTENT_HEIGHT}px"
           backgroundImage: if hasAvatar
-          then "url(#{ImageService.getAvatarUrl(fromUser, {size: 'large'})})"
+          then "url(#{User.getAvatarUrl(fromUser, {size: 'large'})})"
           else ''
       },
         z 'div.header-content',
           z 'h1.name', fromUser?.name
           z 'div.description',
             'Has invited you to become friends.'
-      z 'div.content.l-flex', {
+      z 'div.content', {
         style:
           height: "#{CONTENT_HEIGHT}px"
       },
         z $befriendButton,
           text: 'Cool, I want to be friends!'
-          isBlock: true
-          colors: c500: styleConfig.$orange500, ink: styleConfig.$white
+          isFullWidth: true
           onclick: ->
-            User.getMe().then ({phone}) ->
-              isLoggedIn = Boolean phone
+            User.isLoggedIn().then (isLoggedIn) ->
               if isLoggedIn
                 User.addFriend(fromUser.id).then ->
                   z.router.go '/'
@@ -55,8 +55,7 @@ module.exports = class InviteLanding
 
         z $whatIsClayButton,
           text: 'What is Clay?'
-          isBlock: true
-          colors: c500: styleConfig.$white, ink: styleConfig.$black26
+          isFullWidth: true
           onclick: ->
             z.router.go "/what-is-clay/#{fromUser.id}"
 
@@ -64,8 +63,7 @@ module.exports = class InviteLanding
           onclick: (e) ->
             e.preventDefault()
 
-            User.getMe().then ({phone}) ->
-              isLoggedIn = Boolean phone
+            User.isLoggedIn().then (isLoggedIn) ->
               z.router.go if isLoggedIn then '/' else "/join/#{fromUser.id}"
         },
           'I prefer to play alone'

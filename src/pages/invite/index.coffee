@@ -1,12 +1,13 @@
 z = require 'zorium'
 
 AppBar = require '../../components/app_bar'
+MenuButton = require '../../components/menu_button'
 Invite = require '../../components/invite'
 NavDrawer = require '../../components/nav_drawer'
+styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
-APP_BAR_HEIGHT = 168
 
 module.exports = class InvitePage
   constructor: ->
@@ -14,23 +15,26 @@ module.exports = class InvitePage
 
     @state = z.state
       $appBar: new AppBar()
+      $menuButton: new MenuButton()
       $invite: new Invite()
       $navDrawer: new NavDrawer()
 
   render: =>
-    {$appBar, $invite, $navDrawer} = @state()
+    {$appBar, $menuButton, $invite, $navDrawer} = @state()
+
+    contentHeight = window.innerHeight - styleConfig.$appBarHeightMedium
 
     z 'div.z-invite-page',
       z $appBar, {
-        height: "#{APP_BAR_HEIGHT}px"
-        barType: 'background'
-        topLeftButton: 'menu'
+        height: "#{styleConfig.$appBarHeightMedium}px"
+        isDescriptive: true
+        $topLeftButton: $menuButton
         title: 'Invite Friends'
         description: 'Build your friends list, see what they play.'
       }
       z $navDrawer, {currentPage: 'invite'}
       z 'div.l-content-container.content', {
         style:
-          height: "#{window.innerHeight - APP_BAR_HEIGHT}px"
+          height: "#{contentHeight}px"
       },
         $invite

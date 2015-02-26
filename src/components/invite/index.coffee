@@ -1,53 +1,50 @@
 z = require 'zorium'
-Button = require 'zorium-paper/button'
 
 Icon = require '../icon'
+ButtonPrimary = require '../button_primary'
 InviteService = require '../../services/invite'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
-SHARE_METHODS =
+shareMethods =
   kik:
     title: 'Invite from Kik'
     icon: 'kik'
-    inviteMethod: InviteService.sendKikInvite
+    inviteFn: InviteService.sendKikInvite
   facebook:
     title: 'Invite from Facebook'
     icon: 'facebook'
-    inviteMethod: InviteService.sendFacebookInvite
+    inviteFn: InviteService.sendFacebookInvite
   twitter:
     title: 'Invite from Twitter'
     icon: 'twitter'
-    inviteMethod: InviteService.sendTwitterInvite
-  # SMS protocol doesn't pre-fill body for iOS 7 and Hangouts, so leaving out
+    inviteFn: InviteService.sendTwitterInvite
 
 module.exports = class Invite
   constructor: ->
     styles.use()
 
     @state = z.state
-      $icons: _.reduce SHARE_METHODS, (icons, method) ->
-        icons[method.icon] = new Icon()
-        return icons
-      , {}
-      $continueButton: new Button()
+      $icons: _.mapValues shareMethods, (method) ->
+        new Icon()
+      $continueButton: new ButtonPrimary()
       me: z.observe User.getMe()
 
   render: =>
     {$icons, $continueButton, me} = @state()
 
-    z '.z-invite.l-flex.l-full-height',
+    z '.z-invite',
       z 'div.invite-options',
-        _.map SHARE_METHODS, (method, key) ->
-          z 'a[href=#].invite.l-flex.l-vertical-center', {
+        _.map shareMethods, (method, key) ->
+          z 'a[href=#].invite', {
             onclick: ->
-              method.inviteMethod {userId: me.id}
+              method.inviteFn {userId: me.id}
           },
-            z "div.social-icon.#{key}.l-flex",
+            z "div.social-icon.#{key}",
               z 'div.icon',
-                z $icons[method.icon],
+                z $icons[key],
                   icon: method.icon
                   size: '24px'
                   color: styleConfig.$white
@@ -56,6 +53,5 @@ module.exports = class Invite
       z 'div.continue',
         z $continueButton,
           text: 'Continue'
-          colors: c500: styleConfig.$orange500, ink: styleConfig.$white
           onclick: ->
             z.router.go '/'

@@ -1,11 +1,11 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
 Input = require 'zorium-paper/input'
-Button = require 'zorium-paper/button'
-Card = require 'zorium-paper/card'
 
 User = require '../../models/user'
 PhoneService = require '../../services/phone'
+Card = require '../card'
+ButtonPrimary = require '../button_primary'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -23,14 +23,16 @@ module.exports = class ForgotPassword
         o_value: o_phone
         o_error: o_phoneError
       }
-      $signinButton: new Button()
+      $signinButton: new ButtonPrimary()
       o_phone: o_phone
       o_phoneError: o_phoneError
 
-  reset: ->
-    PhoneService.sanitizePhoneNumber @state.o_phone()
+  recover: =>
+    phone = @state.o_phone()
+
+    PhoneService.normalizePhoneNumber phone
     .then (phone) ->
-      User.loginRecovery {phone}
+      User.recoverLogin {phone}
     .catch (err) =>
       # TODO: (Austin) better error handling
       error = JSON.parse err._body
@@ -48,20 +50,16 @@ module.exports = class ForgotPassword
           z 'form.z-forgot-password_form', {
             onsubmit: (e) =>
               e.preventDefault()
-              @reset().catch log.trace
+              @recover().catch log.trace
           },
-            # enter button on keyboard only calls onsubmit if there is
-            # an input[type=submit] in the form
-            # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
-            z 'input[type=submit]', {style: display: 'none'}
             z $phoneNumberInput,
               hintText: 'Phone number'
               isFloating: true
-              colors: c500: styleConfig.$orange500
+              colors:
+                c500: styleConfig.$orange500
             z 'div.reset-button',
               z $signinButton,
                 text: 'Reset'
-                colors: c500: styleConfig.$orange500, ink: styleConfig.$white
                 onclick: =>
-                  @reset().catch log.trace
+                  @recover().catch log.trace
       }

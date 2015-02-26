@@ -1,5 +1,5 @@
 @require 'nib'
-@require '../../node_modules/zorium-paper/base.styl'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
@@ -13,10 +13,13 @@ json('../../stylus/vars.json')
     width: 100%
     box-sizing: border-box
     padding: 0 20px
+    display: flex
     flex-direction: column
 
     > .top
       height: 56px
+      display: flex
+      align-items: center
 
       > .top-left-button
         margin-right: 32px
@@ -36,16 +39,13 @@ json('../../stylus/vars.json')
         > .io
           opacity: 0.54
 
-      > .marketplace-share
-        margin-left: auto
-
   &.is-fixed
     > .orange-bar
+      zp-shadow-1()
       position: fixed
       top: 0
-      box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.13), 0px 3px 6px -2px rgba(0, 0, 0, 0.2)
 
-  &.is-background
+  &.is-descriptive
     > .orange-bar
       > .content
         width: 100%

@@ -1,5 +1,5 @@
 @require 'nib'
-@require '../../node_modules/zorium-paper/base.styl'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
@@ -13,7 +13,7 @@ json('../../stylus/vars.json')
     opacity: 0.6
 
   > .image
-    box-shadow: $z1Shadow
+    zp-shadow-1()
     border-radius: 2px
 
   > .info

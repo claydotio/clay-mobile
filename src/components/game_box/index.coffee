@@ -3,8 +3,8 @@ kik = require 'kik'
 log = require 'clay-loglevel'
 
 User = require '../../models/user'
+Game = require '../../models/game'
 UrlService = require '../../services/url'
-ImageService = require '../../services/image'
 
 styles = require './index.styl'
 
@@ -33,7 +33,7 @@ module.exports = class GameBox
       style:
         width: "#{iconSize}px",
       z 'img.image',
-        src: ImageService.getGameIconUrl game
+        src: Game.getIconUrl game
         width: iconSize
         height: iconSize
       z '.info',

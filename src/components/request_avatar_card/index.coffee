@@ -1,10 +1,10 @@
 z = require 'zorium'
-Card = require 'zorium-paper/card'
 Button = require 'zorium-paper/button'
 Dropzone = require 'dropzone'
 
 config = require '../../config'
 User = require '../../models/user'
+Card = require '../card'
 EnvironmentService = require '../../services/environment'
 styleConfig = require '../../stylus/vars.json'
 
@@ -14,7 +14,8 @@ dataUriToBlob = (dataUri) ->
   binary = atob(dataUri.split(',')[1])
   byteArray = _.map _.range(binary.length), (i) ->
     binary.charCodeAt(i)
-  return new Blob([new Uint8Array(byteArray)], {type: 'image/jpeg'});
+  mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+  return new Blob([new Uint8Array(byteArray)], {type: mimeString})
 
 module.exports = class RequestAvatar
   constructor: ->
@@ -39,7 +40,9 @@ module.exports = class RequestAvatar
         previewsContainer: false
         success: (file, res) =>
           @state.set isUploaded: true
-          User.updateMeObservable avatarImage: res
+          User.setMe User.getMe().then (me) ->
+            me.avatarImage = res
+            return me
           ga? 'send', 'event', 'user', 'upload_avatar'
 
         error: (file, res) ->
@@ -50,6 +53,7 @@ module.exports = class RequestAvatar
   render: =>
     {$card, $dismissButton, $addButton, isUploaded, isDismissed} = @state()
 
+    # TODO: (Austin) re-implement as stream
     if isUploaded or isDismissed
       return
 
@@ -62,14 +66,18 @@ module.exports = class RequestAvatar
             z 'div.actions',
               z $dismissButton,
                 text: 'Dismiss'
-                colors: c500: styleConfig.$white, ink: styleConfig.$orange500
+                colors:
+                  c500: styleConfig.$white
+                  ink: styleConfig.$orange500
                 onclick: =>
                   @state.set isDismissed: true
               # .dz-message necessary to be clickable (no workaround)
               z 'div.dz-message.clickable',
                 z $addButton,
                   text: 'Add'
-                  colors: c500: styleConfig.$white, ink: styleConfig.$orange500
+                  colors:
+                    c500: styleConfig.$white
+                    ink: styleConfig.$orange500
                   onclick: =>
                     if EnvironmentService.isKikEnabled()
                       kik.photo?.get? {

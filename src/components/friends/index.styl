@@ -1,19 +1,17 @@
 @require 'nib'
-@require '../../node_modules/zorium-paper/base.styl'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
 $zIndexFriendsFab = 1
 
 .z-friends
+  display: flex
+  height: 100%
+
   > .no-friends
-    position: absolute
-    left: 0
-    top: 50%
-    width: 100%
-    height: 200px
-    margin-top: -100px
     text-align: center
+    margin: auto
 
     > .title
       zp-font-subhead()
@@ -28,6 +26,9 @@ $zIndexFriendsFab = 1
 
     > .friend
       > .friend-link
+        display: flex
+        height: 100%
+        align-items: center
         padding: 16px 0
 
         &:active

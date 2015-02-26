@@ -1,10 +1,12 @@
 @require 'nib'
-@require '../../node_modules/zorium-paper/base.styl'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
 .z-friend-request-card_content
   > .single-friend, > .many-friends
+    display: flex
+
     > .profile-pic
       width: 40px
       height: 40px
@@ -22,9 +24,11 @@ json('../../stylus/vars.json')
 
   > .many-friends
     > .profile-pic
+      display: flex
       background: $orange500
       text-align: center
-      .icon
+
+      > .icon
         margin: auto
 
   > .actions

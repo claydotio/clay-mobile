@@ -1,12 +1,11 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
 Input = require 'zorium-paper/input'
-Button = require 'zorium-paper/button'
-Card = require 'zorium-paper/card'
 
 User = require '../../models/user'
 PhoneService = require '../../services/phone'
-localstore = require '../../lib/localstore'
+ButtonPrimary = require '../button_primary'
+Card = require '../card'
 config = require '../../config'
 styleConfig = require '../../stylus/vars.json'
 
@@ -37,7 +36,7 @@ module.exports = class Join
         o_value: o_password
         o_error: o_passwordError
       }
-      $signupButton: new Button()
+      $signupButton: new ButtonPrimary()
       o_nameError: o_nameError
       o_name: o_name
       o_phone: o_phone
@@ -48,8 +47,9 @@ module.exports = class Join
   signup: (fromUserId) =>
     name = @state.o_name()
     password = @state.o_password()
+    phone = @state.o_phone()
 
-    PhoneService.sanitizePhoneNumber @state.o_phone()
+    PhoneService.normalizePhoneNumber phone
     .then (phone) ->
       User.loginPhone {phone, password}
     .catch (err) =>
@@ -58,11 +58,11 @@ module.exports = class Join
       @state.o_phoneError.set error.detail
       throw err
     .then (me) ->
-      User.setMe Promise.resolve me
+      User.setMe me
     .then (me) ->
       User.updateMe({name: name}).catch log.trace
 
-      localstore.set config.LOCALSTORE_SHOW_THANKS, {set: true}
+      User.setSignedUpThisSession true
 
       if fromUserId
         User.addFriend(fromUserId).catch log.trace
@@ -82,30 +82,28 @@ module.exports = class Join
           z 'form.z-join_form', {
             onsubmit: (e) =>
               e.preventDefault()
-              @signup().catch log.trace
+              @signup(fromUserId).catch log.trace
           },
-            # enter button on keyboard only calls onsubmit if there is
-            # an input[type=submit] in the form
-            # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
-            z 'input[type=submit]', {style: display: 'none'}
             z $nameInput,
               hintText: 'Name'
               isFloating: true
-              colors: c500: styleConfig.$orange500
+              colors:
+                c500: styleConfig.$orange500
             z $phoneInput,
               hintText: 'Phone number'
               type: 'tel'
               isFloating: true
-              colors: c500: styleConfig.$orange500
+              colors:
+                c500: styleConfig.$orange500
             z $passwordInput,
               hintText: 'Password'
               type: 'password'
               isFloating: true
-              colors: c500: styleConfig.$orange500
+              colors:
+                c500: styleConfig.$orange500
             z 'div.signup-button',
               z $signupButton,
                 text: 'Sign up'
-                colors: c500: styleConfig.$orange500, ink: styleConfig.$white
                 onclick: =>
                   @signup(fromUserId).catch log.trace
       }

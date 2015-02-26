@@ -4,40 +4,38 @@ Button = require 'zorium-paper/button'
 
 GooglePlayAdCard = require '../google_play_ad'
 Icon = require '../icon'
+ButtonPrimary = require '../button_primary'
 NavDrawerModel = require '../../models/nav_drawer'
 User = require '../../models/user'
-ImageService = require '../../services/image'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
-MENU_ITEMS = [
-  {page: 'games', title: 'Games', icon: 'controller'}
-  {page: 'friends', title: 'Friends', icon: 'group', reqAuth: true}
-  {page: 'invite', title: 'Invite Friends', icon: 'addCircle', reqAuth: true}
-]
+DRAWER_RIGHT_PADDING = 56
+DRAWER_MAX_WIDTH = 392
 
 module.exports = class NavDrawer
   constructor: ->
     styles.use()
 
     @state = z.state
-      isOpen: z.observe NavDrawerModel.o_isOpen
+      isOpen: NavDrawerModel.isOpen()
       me: User.getMe()
-      $signinButton: new Button()
+      isLoggedIn: User.isLoggedIn()
+      $signinButton: new ButtonPrimary()
       $signupButton: new Button()
       $googlePlayAdCard: new GooglePlayAdCard()
-      $icons: _.reduce MENU_ITEMS, (icons, menuItem) ->
-        icons[menuItem.icon] = new Icon()
+      $icons: _.reduce NavDrawer.PAGES, (icons, page) ->
+        icons[page.ICON] = new Icon()
         return icons
       , {}
 
   render: ({currentPage}) =>
-    {isOpen, me, $signupButton, $signinButton,
+    {isOpen, me, isLoggedIn, $signupButton, $signinButton,
       $googlePlayAdCard, $icons} = @state()
 
-    isLoggedIn = me?.phone
-    drawerWidth = Math.min( window.innerWidth - 56, 392 )
+    drawerWidth = Math.min \
+      window.innerWidth - DRAWER_RIGHT_PADDING, DRAWER_MAX_WIDTH
 
     z 'div.z-nav-drawer', {
       className: z.classKebab {isOpen}
@@ -48,54 +46,74 @@ module.exports = class NavDrawer
           NavDrawerModel.close()
       }
 
-      z 'div.drawer.l-flex', {
+      z 'div.drawer', {
         style:
           width: "#{drawerWidth}px"
           transform: "translate(-#{drawerWidth}px, 0)"
           webkitTransform: "translate(-#{drawerWidth}px, 0)"
       },
-        z 'div.header.l-flex',
+        z 'div.header',
           if isLoggedIn
-            z 'div.user-header.l-flex',
-              z 'img.avatar', src: ImageService.getAvatarUrl me
+            z 'div.user-header',
+              z 'img.avatar', src: User.getAvatarUrl me
               z 'div.name', me.name
           else
-            z 'div.guest-header.l-flex',
+            z 'div.guest-header',
               z 'div.description',
                 z 'div', 'Unlock the full potential.'
                 z 'div', 'Get social and have fun with friends.'
               z 'div.actions',
                 z $signinButton,
                   text: 'Sign in'
-                  colors: c500: styleConfig.$orange500, ink: styleConfig.$white
                   onclick: ->
-                    # FIXME: technically this isn't necessary since NavDrawer is
-                    # stored on the pagelevel and gets wiped out on route
                     NavDrawerModel.close()
                     z.router.go '/login'
                 z $signupButton,
                   text: 'Sign up'
-                  colors: c500: styleConfig.$white, ink: styleConfig.$orange500
+                  colors:
+                    c500: styleConfig.$white
+                    ink: styleConfig.$orange500
                   onclick: ->
                     NavDrawerModel.close()
                     z.router.go '/join'
-        z 'div.content.l-flex-1',
+        z 'div.content',
           z 'ul.menu',
-            _.map MENU_ITEMS, (menuItem) ->
-              isSelected = currentPage is menuItem.page
-              isUnavailable = menuItem.reqAuth and not isLoggedIn
-              z "li.menu-item.menu-item-#{menuItem.page}",
-                z.router.link z "a[href=/#{menuItem.page}].menu-item-link", {
-                  className: z.classKebab {isSelected, isUnavailable}
+            _.map NavDrawer.PAGES, (page) ->
+              isSelected = currentPage is page.ROUTE
+              isUnavailable = page.REQ_AUTH and not isLoggedIn
+              z "li.menu-item.menu-item-#{page.ROUTE}", {
+                className: z.classKebab {isSelected, isUnavailable}
+              },
+                z "a[href=/#{page.ROUTE}].menu-item-link", {
+                  onclick: (e) ->
+                    e.preventDefault()
+                    NavDrawerModel.close()
+                    z.router.go "/#{page.ROUTE}"
                 },
                   z '.icon',
-                    z $icons[menuItem.icon],
-                      icon: menuItem.icon
+                    z $icons[page.ICON],
+                      icon: page.ICON
                       size: '24px'
                       color: if isSelected
                       then styleConfig.$blue500
                       else if isUnavailable
                       then styleConfig.$grey300
                       else styleConfig.$grey500
-                  menuItem.title
+                  page.TITLE
           $googlePlayAdCard
+
+NavDrawer.PAGES =
+  GAMES:
+    ROUTE: 'games'
+    TITLE: 'Games'
+    ICON: 'controller'
+  FRIENDS:
+    ROUTE: 'friends'
+    TITLE: 'Friends'
+    ICON: 'group'
+    REQ_AUTH: true
+  INVITE:
+    ROUTE: 'invite'
+    TITLE: 'Invite Friends'
+    ICON: 'addCircle'
+    REQ_AUTH: true

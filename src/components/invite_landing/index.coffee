@@ -7,7 +7,8 @@ styleConfig = require '../../stylus/vars.json'
 styles = require './index.styl'
 
 CONTENT_HEIGHT = 128
-SHORTENED_NAME_LENGTH = 15
+PROMO_GAME_GRID_WIDTH = 320
+PROMO_GAME_GRID_HEIGHT = 210
 
 module.exports = class InviteLanding
   constructor: ({fromUserId}) ->
@@ -15,40 +16,37 @@ module.exports = class InviteLanding
 
     @state = z.state
       $befriendButton: new Button()
-      $whatIsClayButton: new Button()
       fromUser: z.observe User.getById fromUserId
 
   render: =>
     {$befriendButton, fromUser} = @state()
 
-    shortenedName = fromUser?.name.substring(0, SHORTENED_NAME_LENGTH) or
-      'everyone'
-
-    z 'div.z-invite-landing.l-flex',
+    z 'div.z-invite-landing',
       z 'header.header', {
         style:
           height: "#{window.innerHeight - CONTENT_HEIGHT}px"
       },
-        z 'div.header-content.l-flex',
+        z 'div.header-content',
           z 'h1.name', 'Clay is the best place to play!'
           z 'img.games',
             src: '//cdn.wtf/d/images/general/promo_game_grid.png'
-            width: 320
-            height: 210
+            width: PROMO_GAME_GRID_WIDTH
+            height: PROMO_GAME_GRID_HEIGHT
           z 'div.description',
             z 'div', 'Instantly play hundreds of free games.'
             z 'div', 'No downloads. No installs.'
-      z 'div.content.l-flex', {
+      z 'div.content', {
         style:
           height: "#{CONTENT_HEIGHT}px"
       },
         z $befriendButton,
-          text: "Become friends with #{shortenedName}"
-          isBlock: true
-          colors: c500: styleConfig.$orange500, ink: styleConfig.$white
+          text: "Become friends with #{name or 'everyone'}"
+          isFullWidth: true
+          colors:
+            c500: styleConfig.$orange500
+            ink: styleConfig.$white
           onclick: ->
-            User.getMe().then ({phone}) ->
-              isLoggedIn = Boolean phone
+            User.isLoggedIn().then (isLoggedIn) ->
               if isLoggedIn
                 User.addFriend(fromUser.id).then ->
                   z.router.go '/'

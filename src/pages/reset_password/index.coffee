@@ -1,11 +1,12 @@
 z = require 'zorium'
 
 AppBar = require '../../components/app_bar'
+BackButton = require '../../components/back_button'
 ResetPassword = require '../../components/reset_password'
+styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
-
-CONTENT_MARGIN = -56
+vars = require './vars.json'
 
 module.exports = class ResetPasswordPage
   constructor: ({phone}) ->
@@ -13,21 +14,24 @@ module.exports = class ResetPasswordPage
 
     @state = z.state
       $appBar: new AppBar()
+      $backButton: new BackButton()
       $resetPassword: new ResetPassword()
       phone: phone
 
   render: =>
-    {$appBar, $resetPassword, phone} = @state()
+    {$appBar, $backButton, $resetPassword, phone} = @state()
 
     z 'div.z-reset-password-page',
       z $appBar, {
-        height: '224px'
-        paddingBottom: CONTENT_MARGIN * -1 + 'px'
-        barType: 'background'
-        topLeftButton: 'back'
-        title: 'Reset Password'
-        description: 'Bummer. Let\'s reset it.'
+        height: "#{styleConfig.$appBarHeightMedium}px"
+        overlapBottomPadding: "#{vars.$cardOverlapHeight}px"
+        isDescriptive: true
+        $topLeftButton: $backButton
+        description:
+          z 'div',
+            z 'div', 'We\'ve texted you a reset code.'
+            z 'div', 'Use it to change your password.'
       }
       z 'div.l-content-container.content',
-        {style: marginTop: "#{CONTENT_MARGIN}px"}
+        {style: marginTop: "-#{vars.$cardOverlapHeight}px"}
         z $resetPassword, {phone}

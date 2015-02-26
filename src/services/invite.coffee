@@ -1,20 +1,29 @@
 config = require '../config'
+UrlService = require './url'
+kik = require 'kik'
 
 class InviteService
-  getShareUrl: ({userId}) ->
+  getUrl: ({userId}) ->
     return "http://#{config.HOST}/invite-landing/#{userId}"
 
   sendFacebookInvite: ({userId}) =>
-    inviteUrl = 'https://www.facebook.com/dialog/share?' +
-    "app_id=#{config.FB_APP_ID}" +
-    '&display=popup' +
-    '&href=' + encodeURIComponent(@getShareUrl({userId})) +
-    "&redirect_uri=http://#{config.HOST}"
+    ga? 'send', 'event', 'invite', 'facebook', userId
+
+    queryString = UrlService.serializeQueryString {
+      app_id: config.FB_APP_ID
+      display: 'popup'
+      href: @getUrl {userId}
+      redirect_uri: "http://#{config.HOST}"
+    }
+    inviteUrl = "https://www.facebook.com/dialog/share?#{queryString}"
+
     window.open inviteUrl, '_system'
 
   sendKikInvite: ({userId}) ->
+    ga? 'send', 'event', 'invite', 'kik', userId
+
     kik?.send? {
-      title: 'Be friends with me!'
+      title: 'Please be my friend'
       text: 'Come be my friend and play games with me on Clay :)'
       data: {
         fromUserId: userId
@@ -22,8 +31,13 @@ class InviteService
     }
 
   sendTwitterInvite: ({userId}) =>
-    text = 'Come play games with me!' +
-      encodeURIComponent @getShareUrl({userId})
-    window.open "https://twitter.com/intent/tweet?text=#{text}", '_system'
+    ga? 'send', 'event', 'invite', 'twitter', userId
+
+    queryString = UrlService.serializeQueryString {
+      text: 'Come play games with me! ' + @getUrl({userId})
+    }
+    inviteUrl = "https://twitter.com/intent/tweet?#{queryString}"
+
+    window.open inviteUrl, '_system'
 
 module.exports = new InviteService()

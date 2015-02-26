@@ -1,9 +1,10 @@
 @require 'nib'
 
 json('../../stylus/vars.json')
+json('./vars.json')
 
 .z-forgot-password-page
   > .content
     position: relative
     z-index: $zIndexForgotPasswordPageContent
-    margin-top: -56px
+    margin-top: -($cardOverlapHeight)px

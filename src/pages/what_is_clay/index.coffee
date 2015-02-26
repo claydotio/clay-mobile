@@ -2,7 +2,7 @@ z = require 'zorium'
 
 InviteLanding = require '../../components/invite_landing'
 
-# DELETE IF 'personal' A/B for invite_page FAILS
+# TODO: (Austin) delete page if 'personal' A/B for invite_page fails
 
 module.exports = class WhatIsClay
   constructor: ({fromUserId}) ->
