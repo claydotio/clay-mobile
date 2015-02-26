@@ -1,5 +1,7 @@
 _ = require 'lodash'
 
+MIN_REQUEST_TIME_ERROR_MS = 2000 # 2s
+
 serializeQueryString = (obj, prefix) ->
   str = []
   for p of obj
@@ -20,6 +22,8 @@ toJson = (response) ->
   if response.status is 204 then null else response.json()
 
 module.exports = (url, options) ->
+  startTime = Date.now()
+
   if _.isObject options?.body or _.isArray options?.body
     options.headers = _.defaults (options.headers or {}),
       'Accept': 'application/json'
@@ -32,3 +36,13 @@ module.exports = (url, options) ->
   window.fetch url, options
   .then statusCheck
   .then toJson
+  .then (res) ->
+    endTime = Date.now()
+    requestTime = endTime - startTime
+    if requestTime > MIN_REQUEST_TIME_ERROR_MS
+      setTimeout ->
+        throw new Error "event=long_request,
+                        request_time_ms=#{requestTime},
+                        url=#{url},
+                        options=#{options}"
+    return res
