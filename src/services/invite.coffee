@@ -1,5 +1,4 @@
 config = require '../config'
-UrlService = require './url'
 
 class InviteService
   getShareUrl: ({userId}) ->
@@ -26,9 +25,5 @@ class InviteService
     text = 'Come play games with me!' +
       encodeURIComponent @getShareUrl({userId})
     window.open "https://twitter.com/intent/tweet?text=#{text}", '_system'
-
-  sendSMSInvite: ({userId}) =>
-    inviteUrl = 'sms:?body=Hi! ' + encodeURIComponent @getShareUrl({userId})
-    window.open inviteUrl, '_system'
 
 module.exports = new InviteService()

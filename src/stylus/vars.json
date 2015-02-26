@@ -80,6 +80,7 @@
 
   "$zIndexModal": 900,
   "$zIndexDrawer": 300,
+  "$zIndexNavDrawer": 400,
   "$zIndexJoinPageContent": 200,
   "$zIndexLoginPageContent": 200,
   "$zIndexForgotPasswordPageContent": 200,

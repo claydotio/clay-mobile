@@ -21,10 +21,7 @@ SHARE_METHODS =
     title: 'Invite from Twitter'
     icon: 'twitter'
     inviteMethod: InviteService.sendTwitterInvite
-  sms:
-    title: 'Invite by Text Message'
-    icon: 'chat'
-    inviteMethod: InviteService.sendSMSInvite
+  # SMS protocol doesn't pre-fill body for iOS 7 and Hangouts, so leaving out
 
 module.exports = class Invite
   constructor: ->

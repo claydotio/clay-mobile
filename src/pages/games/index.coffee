@@ -8,11 +8,12 @@ ModalViewer = require '../../components/modal_viewer'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
 GooglePlayAd = require '../../components/google_play_ad'
+JoinThanksCard = require '../../components/join_thanks_card'
 FeedbackCard = require '../../components/feedback_card'
 FriendRequestCard = require '../../components/friend_request_card'
-RequestProfilePicCard = require '../../components/request_profile_pic_card'
+RequestAvatar = require '../../components/request_avatar_card'
 GooglePlayAdService = require '../../services/google_play_ad'
-EnvironmentService = require '../../services/environment'
+CardService = require '../../services/card'
 
 styles = require './index.styl'
 
@@ -37,28 +38,31 @@ module.exports = class GamesPage
 
       newFriends: o_newFriends
 
-      $friendRequestCard: z.observe o_newFriends.then( (newFriends) ->
-        if not _.isEmpty newFriends
-        then new FriendRequestCard()
-        else null
+      $joinThanksCard: z.observe CardService.shouldShowJoinThanksCard() \
+      .then( (shouldShow) ->
+        console.log shouldShow
+        if shouldShow then new JoinThanksCard() else null
       ).catch log.trace
 
-      $requestProfilePicCard: z.observe User.getMe() \
-      .then( ({phone, avatarImage}) ->
-        if phone and not avatarImage
-        then new RequestProfilePicCard()
-        else null
+      $friendRequestCard: z.observe CardService.shouldShowFriendRequestCard() \
+      .then( (shouldShow) ->
+        if shouldShow then new FriendRequestCard() else null
       ).catch log.trace
 
-      $feedbackCard: z.observe User.getExperiments().then( ({feedbackCard}) ->
-        if feedbackCard is 'show' and EnvironmentService.isKikEnabled()
-        then new FeedbackCard()
-        else null
+      $requestAvatar: z.observe CardService.shouldShowRequestAvatarCard() \
+      .then( (shouldShow) ->
+        if shouldShow then new RequestAvatar() else null
       ).catch log.trace
 
-      $googlePlayAdCard: if GooglePlayAdService.shouldShowAds()
-      then new GooglePlayAd()
-      else null
+      $feedbackCard: z.observe CardService.shouldShowFeedbackCard() \
+      .then( (shouldShow) ->
+        if shouldShow then new FeedbackCard() else null
+      ).catch log.trace
+
+      $googlePlayAdCard: z.observe CardService.shouldShowGooglePlayCard() \
+      .then( (shouldShow) ->
+        if shouldShow then new GooglePlayAd() else null
+      ).catch log.trace
 
     @googlePlayAdModalPromise = GooglePlayAdService.shouldShowAdModal()
     .then (shouldShow) ->
@@ -68,9 +72,9 @@ module.exports = class GamesPage
     .catch log.trace
 
   render: =>
-    {$appBar, $navDrawer, newFriends, $friendRequestCard, $requestProfilePicCard
-      $feedbackCard, $googlePlayAdCard, $recentGames, $popularGames,
-      $modalViewer} = @state()
+    {$appBar, $navDrawer, newFriends, $friendRequestCard, $requestAvatar
+      $feedbackCard, $googlePlayAdCard, $joinThanksCard, $recentGames,
+      $popularGames,$modalViewer} = @state()
 
     z 'div.z-games-page', [
       z $appBar, {
@@ -83,8 +87,9 @@ module.exports = class GamesPage
       $modalViewer
       z 'div.l-content-container.content',
         (
-          if not _.isEmpty newFriends then z($friendRequestCard, {newFriends})
-          else $requestProfilePicCard or $feedbackCard or $googlePlayAdCard
+          if $friendRequestCard then z($friendRequestCard, {newFriends})
+          else $joinThanksCard or $requestAvatar or
+                $feedbackCard or $googlePlayAdCard
         )
         $recentGames
         $popularGames

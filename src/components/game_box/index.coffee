@@ -4,6 +4,7 @@ log = require 'clay-loglevel'
 
 User = require '../../models/user'
 UrlService = require '../../services/url'
+ImageService = require '../../services/image'
 
 styles = require './index.styl'
 
@@ -32,7 +33,7 @@ module.exports = class GameBox
       style:
         width: "#{iconSize}px",
       z 'img.image',
-        src: game.iconImage?.versions[0].url or game.icon128Url
+        src: ImageService.getGameIconUrl game
         width: iconSize
         height: iconSize
       z '.info',

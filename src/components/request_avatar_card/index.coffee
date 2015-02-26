@@ -5,11 +5,18 @@ Dropzone = require 'dropzone'
 
 config = require '../../config'
 User = require '../../models/user'
+EnvironmentService = require '../../services/environment'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
-module.exports = class RequestProfilePicCard
+dataUriToBlob = (dataUri) ->
+  binary = atob(dataUri.split(',')[1])
+  byteArray = _.map _.range(binary.length), (i) ->
+    binary.charCodeAt(i)
+  return new Blob([new Uint8Array(byteArray)], {type: 'image/jpeg'});
+
+module.exports = class RequestAvatar
   constructor: ->
     styles.use()
 
@@ -17,12 +24,13 @@ module.exports = class RequestProfilePicCard
       $card: new Card()
       $dismissButton: new Button()
       $addButton: new Button()
+      dropzone: null
       isUploaded: false
       isDismissed: false
 
   onMount: ($el) =>
     User.getMe().then ({accessToken}) =>
-      dropzone = new Dropzone $el, {
+      @state.set dropzone: new Dropzone($el, {
         url: "#{config.PUBLIC_CLAY_API_URL}/users/me/avatarImage" +
              "?accessToken=#{accessToken}"
         method: 'PUT'
@@ -31,11 +39,13 @@ module.exports = class RequestProfilePicCard
         previewsContainer: false
         success: (file, res) =>
           @state.set isUploaded: true
+          User.updateMeObservable avatarImage: res
+          ga? 'send', 'event', 'user', 'upload_avatar'
 
         error: (file, res) ->
           # TODO: (Austin) better error handling UX
           window.alert "Error: #{res.detail}"
-      }
+      })
 
   render: =>
     {$card, $dismissButton, $addButton, isUploaded, isDismissed} = @state()
@@ -43,10 +53,10 @@ module.exports = class RequestProfilePicCard
     if isUploaded or isDismissed
       return
 
-    z 'div.z-req-profile-pic-card',
+    z 'div.z-request-avatar-card',
       z $card,
         content:
-          z 'div.z-req-profile-pic-card_content',
+          z 'div.z-request-avatar-card_content',
             z 'h2.title', 'Add a profile photo'
             z 'div.description', 'Add some personality to your profile :)'
             z 'div.actions',
@@ -60,4 +70,10 @@ module.exports = class RequestProfilePicCard
                 z $addButton,
                   text: 'Add'
                   colors: c500: styleConfig.$white, ink: styleConfig.$orange500
-                  onclick: @uploadProfilePicture
+                  onclick: =>
+                    if EnvironmentService.isKikEnabled()
+                      kik.photo?.get? {
+                        minResults: 1
+                        maxResults: 1
+                      }, (photos) =>
+                        @state().dropzone.addFile dataUriToBlob photos[0]

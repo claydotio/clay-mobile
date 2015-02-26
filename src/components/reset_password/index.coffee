@@ -1,4 +1,5 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 Input = require 'zorium-paper/input'
 Button = require 'zorium-paper/button'
 Card = require 'zorium-paper/card'
@@ -36,6 +37,7 @@ module.exports = class ResetPassword
       o_newPasswordError: o_newPasswordError
 
   resend: (phone) =>
+    ga? 'send', 'event', 'reset_password', 'resend'
     PhoneService.sanitizePhoneNumber phone
     .then (phone) ->
       User.loginRecovery {phone}
@@ -67,17 +69,23 @@ module.exports = class ResetPassword
     z '.z-reset-password',
       z $formCard, {
         content:
-          z '.z-reset-password_form-card-content',
+          z 'form.z-reset-password_form', {
+            onsubmit: (e) =>
+              e.preventDefault()
+              @changePassword( phone ).catch log.trace
+          },
+            # enter button on keyboard only calls onsubmit if there is
+            # an input[type=submit] in the form
+            # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
+            z 'input[type=submit]', {style: display: 'none'}
             z $recoveryTokenInput,
               hintText: 'Reset Code'
               isFloating: true
-              o_value: z.observe ''
               colors: c500: styleConfig.$orange500
             z $newPasswordInput,
               hintText: 'New Password'
               type: 'password'
               isFloating: true
-              o_value: z.observe ''
               colors: c500: styleConfig.$orange500
             z 'div.actions',
               z $resendButton,
@@ -89,5 +97,5 @@ module.exports = class ResetPassword
                 text: 'Change'
                 colors: c500: styleConfig.$orange500, ink: styleConfig.$white
                 onclick: =>
-                  @changePassword phone
+                  @changePassword(phone).catch log.trace
       }

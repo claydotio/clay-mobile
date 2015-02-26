@@ -15,17 +15,28 @@ module.exports = class ForgotPassword
     styles.use()
 
     o_phone = z.observe ''
+    o_phoneError = z.observe null
 
     @state = z.state
       $formCard: new Card()
-      $phoneNumberInput: new Input({o_value: o_phone})
+      $phoneNumberInput: new Input {
+        o_value: o_phone
+        o_error: o_phoneError
+      }
       $signinButton: new Button()
       o_phone: o_phone
+      o_phoneError: o_phoneError
 
   reset: ->
     PhoneService.sanitizePhoneNumber @state.o_phone()
     .then (phone) ->
       User.loginRecovery {phone}
+    .catch (err) =>
+      # TODO: (Austin) better error handling
+      error = JSON.parse err._body
+      @state.o_phoneError.set error.detail
+      throw err
+    .then ->
       z.router.go '/reset-password/' + encodeURIComponent phone
 
   render: =>
@@ -34,11 +45,18 @@ module.exports = class ForgotPassword
     z '.z-forgot-password',
       z $formCard, {
         content:
-          z '.z-forgot-password_form-card-content',
+          z 'form.z-forgot-password_form', {
+            onsubmit: (e) =>
+              e.preventDefault()
+              @reset().catch log.trace
+          },
+            # enter button on keyboard only calls onsubmit if there is
+            # an input[type=submit] in the form
+            # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
+            z 'input[type=submit]', {style: display: 'none'}
             z $phoneNumberInput,
               hintText: 'Phone number'
               isFloating: true
-              o_value: z.observe ''
               colors: c500: styleConfig.$orange500
             z 'div.reset-button',
               z $signinButton,

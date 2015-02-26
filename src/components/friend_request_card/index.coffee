@@ -3,12 +3,10 @@ Card = require 'zorium-paper/card'
 Button = require 'zorium-paper/button'
 
 Icon = require '../icon'
+ImageService = require '../../services/image'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
-
-PIC = 'https://secure.gravatar.com/' +
-       'avatar/2f945ee6bcccd80df1834ddb3a4f18ba.jpg?s=72' # FIXME: remove
 
 module.exports = class FriendRequestCard
   constructor: ->
@@ -34,9 +32,10 @@ module.exports = class FriendRequestCard
           z 'div.z-friend-request-card_content',
             if newFriends.length is 1
               z 'div.single-friend.l-flex',
-                z 'img.profile-pic', src: PIC
+                z 'img.profile-pic',
+                  src: ImageService.getAvatarUrl newFriends[0]
                 z 'div.friend-info',
-                  z 'div.title', 'NAME'
+                  z 'div.title', 'NAME' # FIXME
                   z 'div.description', 'is now your friend!'
             else
               z 'div.many-friends.l-flex',

@@ -21,19 +21,12 @@ module.exports = class AppBar
       $menuIcon: new Icon()
       $backIcon: new Icon()
 
-  render: (
-    {
-      height
-      barType
-      paddingBottom
-      topLeftButton
-      topRightButton
-      title
-      description
-    }
-  ) =>
+  render: ({height, barType, paddingBottom, topLeftButton, topRightButton,
+            title, description}) =>
     {$marketplaceShare, $menuIcon, $backIcon} = @state()
 
+    # TODO: (Austin) smarter app bar
+    # https://github.com/Zorium/zorium-site/blob/master/src/components/header/index.coffee
     isFixed = barType is 'navigation'
     isBackground = barType is 'background'
     isNavigation = barType is 'navigation'

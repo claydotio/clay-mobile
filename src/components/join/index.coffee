@@ -6,6 +6,8 @@ Card = require 'zorium-paper/card'
 
 User = require '../../models/user'
 PhoneService = require '../../services/phone'
+localstore = require '../../lib/localstore'
+config = require '../../config'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -15,18 +17,33 @@ module.exports = class Join
     styles.use()
 
     o_name = z.observe ''
+    o_nameError = z.observe null
     o_phone = z.observe ''
+    o_phoneError = z.observe null
     o_password = z.observe ''
+    o_passwordError = z.observe null
 
     @state = z.state
       $formCard: new Card()
-      $nameInput: new Input({o_value: o_name})
-      $phoneInput: new Input({o_value: o_phone})
-      $passwordInput: new Input({o_value: o_password})
+      $nameInput: new Input {
+        o_value: o_name
+        o_error: o_nameError
+      }
+      $phoneInput: new Input {
+        o_value: o_phone
+        o_error: o_phoneError
+      }
+      $passwordInput: new Input {
+        o_value: o_password
+        o_error: o_passwordError
+      }
       $signupButton: new Button()
+      o_nameError: o_nameError
       o_name: o_name
       o_phone: o_phone
+      o_phoneError: o_phoneError
       o_password: o_password
+      o_passwordError: o_passwordError
 
   signup: (fromUserId) =>
     name = @state.o_name()
@@ -35,11 +52,23 @@ module.exports = class Join
     PhoneService.sanitizePhoneNumber @state.o_phone()
     .then (phone) ->
       User.loginPhone {phone, password}
+    .catch (err) =>
+      # TODO: (Austin) better error handling
+      error = JSON.parse err._body
+      @state.o_phoneError.set error.detail
+      throw err
     .then (me) ->
       User.setMe me
+    .then ->
+      User.updateMe({name: name}).catch log.trace
+
+      localstore.set config.LOCALSTORE_SHOW_THANKS, {set: true}
 
       if fromUserId
-        User.addFriend fromUserId
+        User.addFriend(fromUserId).catch log.trace
+
+      ga? 'send', 'event', 'user', 'signup', fromUserId
+      User.convertExperiment 'phone_signup'
 
       z.router.go '/invite'
 
@@ -50,7 +79,15 @@ module.exports = class Join
     z '.z-join',
       z $formCard, {
         content:
-          z '.z-join_form-card-content',
+          z 'form.z-join_form', {
+            onsubmit: (e) =>
+              e.preventDefault()
+              @signup().catch log.trace
+          },
+            # enter button on keyboard only calls onsubmit if there is
+            # an input[type=submit] in the form
+            # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
+            z 'input[type=submit]', {style: display: 'none'}
             z $nameInput,
               hintText: 'Name'
               isFloating: true

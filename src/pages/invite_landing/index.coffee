@@ -9,15 +9,13 @@ module.exports = class InviteLandingPage
   constructor: ({fromUserId}) ->
     @state = z.state
       $inviteLanding: z.observe User.getExperiments().then( ({inviteLanding}) ->
-        inviteLanding = 'personal' # FIXME
         if inviteLanding is 'personal'
-        then new InviteLandingPersonal()
-        else new InviteLanding()
+        then new InviteLandingPersonal {fromUserId}
+        else new InviteLanding {fromUserId}
       ).catch log.trace
-      fromUserId: fromUserId
 
   render: =>
-    {$inviteLanding, fromUserId} = @state()
+    {$inviteLanding} = @state()
 
     z 'div.z-invite-landing-page',
-      z $inviteLanding, {fromUserId}
+      $inviteLanding

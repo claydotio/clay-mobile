@@ -5,6 +5,7 @@ Fab = require 'zorium-paper/floating_action_button'
 Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
 User = require '../../models/user'
+ImageService = require '../../services/image'
 
 styles = require './index.styl'
 
@@ -36,15 +37,15 @@ module.exports = class Friends
             mostRecentGame = friend.links.recentGames?[0]
             z 'li.friend',
               z 'a.friend-link.l-flex.l-vertical-center',
-                z 'img.friend-pic', {src: friend.avatarImage?.versions[0].url}
+                z 'img.friend-avatar',
+                  src: ImageService.getAvatarUrl friend
                 z 'div.friend-info',
                   z 'div.name', 'Austin'
                   if mostRecentGame
                     z 'div.game', mostRecentGame.name
                 if mostRecentGame
                   z 'img.game-pic',
-                    src: mostRecentGame.iconImage?.versions[0].url or
-                         mostRecentGame.icon128Url
+                    src: ImageService.getGameIconUrl mostRecentGame
 
       z 'div.fab',
         z $fab,

@@ -6,12 +6,11 @@ GooglePlayAdCard = require '../google_play_ad'
 Icon = require '../icon'
 NavDrawerModel = require '../../models/nav_drawer'
 User = require '../../models/user'
+ImageService = require '../../services/image'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
-PIC = 'https://secure.gravatar.com/' +
-       'avatar/2f945ee6bcccd80df1834ddb3a4f18ba.jpg?s=72' # FIXME: remove
 MENU_ITEMS = [
   {page: 'games', title: 'Games', icon: 'controller'}
   {page: 'friends', title: 'Friends', icon: 'group', reqAuth: true}
@@ -51,16 +50,17 @@ module.exports = class NavDrawer
           NavDrawerModel.close()
       }
 
-      z 'div.drawer', {
+      z 'div.drawer.l-flex', {
         style:
           width: "#{drawerWidth}px"
-          left: "-#{drawerWidth}px"
+          transform: "translate(-#{drawerWidth}px, 0)"
+          webkitTransform: "translate(-#{drawerWidth}px, 0)"
       },
         z 'div.header.l-flex',
           if isLoggedIn
             z 'div.user-header.l-flex',
-              z 'img.picture', src: me.avatarImage?.versions[0].url # FIXME: default image
-              z 'div.name', 'Austin Hallock' # FIXME
+              z 'img.avatar', src: ImageService.getAvatarUrl me
+              z 'div.name', me.name
           else
             z 'div.guest-header.l-flex',
               z 'div.description',
@@ -81,7 +81,7 @@ module.exports = class NavDrawer
                   onclick: ->
                     NavDrawerModel.close()
                     z.router.go '/join'
-        z 'div.content',
+        z 'div.content.l-flex-1',
           z 'ul.menu',
             _.map MENU_ITEMS, (menuItem) ->
               isSelected = currentPage is menuItem.page

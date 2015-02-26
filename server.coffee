@@ -11,6 +11,7 @@ request = require 'request-promise'
 helmet = require 'helmet'
 
 config = require './src/config'
+ImageService = require './src/services/image'
 
 API_REQUEST_TIMEOUT = 1000 # 1 second
 HEALTHCHECK_TIMEOUT = 100
@@ -348,7 +349,7 @@ renderGamePage = (gameKey, isProbablyKik) ->
     if _.isEmpty game
       throw new Error404 'Game not found: ' + gameKey
 
-    iconUrl = game.iconImage?.versions[0].url or game.icon128Url
+    iconUrl = ImageService.getGameIconUrl game
 
     page =
       isProbablyKik: isProbablyKik

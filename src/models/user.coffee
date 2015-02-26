@@ -43,7 +43,7 @@ class User
     return me
 
   setMe: (_me) ->
-    me.set Promise.resolve _me
+    me.set z.observe Promise.resolve _me
 
     # Save accessToken in cookie
     me.then (user) ->
@@ -56,6 +56,28 @@ class User
         body:
           userId: user.id
     return me
+
+  updateMeObservable: (meDiff) =>
+    @setMe @getMe().then (me) ->
+      _.defaults(meDiff, me)
+
+  updateMe: (userUpdate) =>
+    @getMe().then (me) =>
+      request "#{PATH}/me",
+        method: 'PUT'
+        qs:
+          accessToken: me.accessToken
+        body: userUpdate
+      .then (res) =>
+        @setMe res
+
+  getById: (userId) =>
+    @getMe().then ({accessToken}) ->
+      request PATH + "/#{userId}",
+        method: 'GET'
+        qs:
+          accessToken: accessToken
+
 
   logEngagedActivity: =>
     @getMe().then (me) =>
@@ -120,17 +142,9 @@ class User
     .then (visitCountObject) ->
       visitCountObject?.count
 
-  # TODO: may not have to do this (dropzone)
-  setProfilePicture: =>
-    @getMe().then ({accessToken}) ->
-      request PATH + '/me/avatarImage',
-        method: 'POST',
-        qs:
-          accessToken: accessToken
-        body:
-          {} # FIXME?
-
   addFriend: (userId) =>
+    ga? 'send', 'event', 'user', 'add_friend', userId
+
     @getMe().then ({accessToken}) ->
       request PATH + '/me/friends',
         method: 'POST',

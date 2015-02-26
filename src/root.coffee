@@ -138,10 +138,16 @@ else
   z.router.add '/reset-password/:phone', ResetPasswordPage
   z.router.add '/invite', InvitePage
   z.router.add '/invite-landing/:fromUserId', InviteLandingPage
-  z.router.add '/what-is-clay', WhatIsClayPage
+  z.router.add '/what-is-clay/:fromUserId', WhatIsClayPage
   z.router.add '/friends', FriendsPage
 
 route = ->
+  # invite from kik message
+  fromUserId = kik?.message?.fromUserId
+  if fromUserId
+    z.router.go "/invite-landing/#{fromUserId}"
+    return
+
   # Passed via message to denote game (share button in drawer uses this)
   gameKey = kik?.message?.gameKey or (subdomain isnt 'dev' and subdomain)
 

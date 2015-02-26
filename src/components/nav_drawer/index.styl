@@ -5,10 +5,9 @@ json('../../stylus/vars.json')
 $navDrawerHeaderHeight = 200
 $zIndexNavDrawerHeader = 100
 
-
 .z-nav-drawer
   position: fixed
-  z-index: $zIndexDrawer // FIXME (name)
+  z-index: $zIndexNavDrawer
   width: 100%
   height: 100%
   top: 0
@@ -19,29 +18,31 @@ $zIndexNavDrawerHeader = 100
     pointer-events: all // not supported in ie9/10
 
     > .overlay
-      background: $overlayColor
-      transition: background 0.25s
+      opacity: 0.5
+      transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)
 
     > .drawer
-      left: 0 !important
-      transition: left 0.25s
+      transform: translate(0, 0) !important
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)
 
   > .overlay
-    background: transparent
-    transition: background 0.25s
+    background: $black
+    opacity: 0
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)
     width: 100%
     height: 100%
 
   > .drawer
-    // width and left set in js
+    // width and transform translate set in js
     height: 100%
     top: 0
     position: fixed
-    z-index: $zIndexDrawer
-    transform: translateZ(0) /* gpu accelerate */
-    transition: left 0.25s
-    text-align: left
-    box-sizing: border-box
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)
+    overflow: auto
+    flex-direction: column
+    background: $bgColor
+    // prevents flicker glitch http://stackoverflow.com/a/3921870
+    backface-visibility: hidden
 
     > .header
       width: 100%
@@ -51,11 +52,13 @@ $zIndexNavDrawerHeader = 100
       position: relative
       z-index: $zIndexNavDrawerHeader
       background: $orange500
+      // prevents flicker glitch http://stackoverflow.com/a/3921870
+      backface-visibility: hidden
 
       > .user-header
         flex-direction: column
 
-        > .picture
+        > .avatar
           width: 72px
           height: 72px
           border-radius: 50%
@@ -78,17 +81,11 @@ $zIndexNavDrawerHeader = 100
           align-self: flex-end
 
     > .content
-      background: $bgColor
-      height: 100%
       width: 100%
-      // necessary for overflow: auto to work right since this is set to 100% height
-      margin-top: -($navDrawerHeaderHeight) px
       padding: 16px
-      padding-top: ($navDrawerHeaderHeight + 16) px
       box-sizing: border-box
       box-shadow: -10px 0 10px 0px rgba(0, 0, 0, 0.04)
       box-sizing: border-box
-      overflow: auto
 
       > .menu
         list-style-type: none
