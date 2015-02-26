@@ -12,7 +12,6 @@ class CardService
       return not _.isEmpty newFriends
 
   shouldShowJoinThanksCard: ->
-    return Promise.resolve true
     User.getMe().then ({phone}) ->
       unless phone
         return false

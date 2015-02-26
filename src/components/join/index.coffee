@@ -58,8 +58,8 @@ module.exports = class Join
       @state.o_phoneError.set error.detail
       throw err
     .then (me) ->
-      User.setMe me
-    .then ->
+      User.setMe Promise.resolve me
+    .then (me) ->
       User.updateMe({name: name}).catch log.trace
 
       localstore.set config.LOCALSTORE_SHOW_THANKS, {set: true}

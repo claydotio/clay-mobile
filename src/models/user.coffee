@@ -43,7 +43,7 @@ class User
     return me
 
   setMe: (_me) ->
-    me.set z.observe Promise.resolve _me
+    me.set _me
 
     # Save accessToken in cookie
     me.then (user) ->

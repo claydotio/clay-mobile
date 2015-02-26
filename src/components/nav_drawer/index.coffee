@@ -36,8 +36,6 @@ module.exports = class NavDrawer
     {isOpen, me, $signupButton, $signinButton,
       $googlePlayAdCard, $icons} = @state()
 
-    # FIXME: check that me as observable gets updated when profile pic is uploaded
-
     isLoggedIn = me?.phone
     drawerWidth = Math.min( window.innerWidth - 56, 392 )
 

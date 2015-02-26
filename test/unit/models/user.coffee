@@ -11,15 +11,25 @@ describe 'UserModel', ->
     window.XMLHttpRequest = ->
       Zock.XMLHttpRequest()
 
-  it 'returns cached local user', ->
-    User.setMe {id: 123, username: 'tester'}
-    .then (user) ->
-      user.id.should.be 123
-      user.username.should.be 'tester'
+  describe 'getMe()', ->
+    it 'returns cached local user', ->
+      User.setMe Promise.resolve {id: 123, username: 'tester'}
+      .then (user) ->
+        user.id.should.be 123
+        user.username.should.be 'tester'
 
-      User.getMe()
-      .then (sameUser) ->
-        sameUser.should.be user
+        User.getMe()
+        .then (sameUser) ->
+          sameUser.should.be user
+
+  describe 'setMe', ->
+    it 'updates existing `me` observable', ->
+      User.setMe Promise.resolve {id: 123, username: 'tester'}
+      .then (user) ->
+        User.setMe Promise.resolve {id: 321, username: 'retset'}
+        .then (differentUser) ->
+          differentUser.id.should.not.equal user.id
+
 
   it 'loginBasic()', ->
     Zock
