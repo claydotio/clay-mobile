@@ -3,13 +3,16 @@ Button = require 'zorium-paper/button'
 
 styleConfig = require '../../stylus/vars.json'
 
-module.exports = class ButtonSecondary
+module.exports = class SecondaryButton
   constructor: ->
     @state = z.state
       $button: new Button()
 
-  render: ({text, onclick, isFullWidth}) =>
+  render: ({text, onclick, isFullWidth, type}) =>
     {$button} = @state()
+
+    isFullWidth ?= false
+    type ?= 'button'
 
     z $button,
       text: text

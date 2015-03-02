@@ -30,8 +30,11 @@ module.exports = class ModalClose
     User.convertExperiment 'marketplace_share'
     .catch log.trace
 
-  render: =>
+  render: ({isShiftedRight}) =>
     {$shareIcon} = @state()
 
-    z 'a.z-marketplace-share[href=#]', onclick: @share,
+    z 'a.z-marketplace-share[href=#]', {
+      className: z.classKebab {isShiftedRight}
+      onclick: @share
+    },
       z $shareIcon, {icon: 'share', size: '24px', color: styleConfig.$white}

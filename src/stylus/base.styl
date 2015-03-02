@@ -1,5 +1,6 @@
 @require '../../node_modules/nib/index.styl'
 @require '../../node_modules/normalize-css/normalize.css'
+@require '../../node_modules/zorium-paper/base.styl'
 
 json('./vars.json')
 
@@ -20,9 +21,9 @@ html
   font-size: 62.5% /* 10px browser default */
 
 body
+  zp-font-body1()
   background: $bgColor
   color: $grey900
-  font: $fontSizeSmall 'Roboto'
   font-weight: 500
 
 a

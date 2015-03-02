@@ -1,11 +1,11 @@
 z = require 'zorium'
 
-styles = require './index.styl'
-
 MarketplaceShare = require '../marketplace_share'
 Icon = require '../icon'
 NavDrawerModel = require '../../models/nav_drawer'
 styleConfig = require '../../stylus/vars.json'
+
+styles = require './index.styl'
 
 module.exports = class AppBar
   constructor: ->
@@ -16,7 +16,6 @@ module.exports = class AppBar
 
     # TODO: (Austin) smarter app bar
     # https://github.com/Zorium/zorium-site/blob/master/src/components/header/index.coffee
-    isFixed = isDescriptive
     height ?= "#{styleConfig.$appBarHeightShort}px"
     # we could potentially make this an observable inside of a model to
     # share state between AppBar and the overlapping component(s)

@@ -6,7 +6,7 @@ Join = require '../../components/join'
 stylusConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
-vars = require './vars.json'
+localStyleConfig = require './vars.json'
 
 module.exports = class JoinPage
   constructor: ({fromUserId}) ->
@@ -24,13 +24,13 @@ module.exports = class JoinPage
     z 'div.z-join-page',
       z $appBar, {
         height: "#{stylusConfig.$appBarHeightTall}px"
-        overlapBottomPadding: "#{vars.$cardOverlapHeight}px"
+        overlapBottomPadding: "#{localStyleConfig.$cardOverlapHeight}px"
         isDescriptive: true
-        $topLeftButton: $backButton
+        $topLeftButton: z $backButton, {isShiftedLeft: true}
         $topRightButton: z.router.link z 'a[href=/login].sign-in', 'Sign In'
         title: 'Join Clay'
         description: 'Unlock the full potential.'
       }
       z 'div.l-content-container.content',
-        {style: marginTop: "-#{vars.$cardOverlapHeight}px"}
+        {style: marginTop: "-#{localStyleConfig.$cardOverlapHeight}px"}
         z $join, {fromUserId}

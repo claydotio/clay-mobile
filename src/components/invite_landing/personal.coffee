@@ -1,8 +1,8 @@
 z = require 'zorium'
 Button = require 'zorium-paper/button'
 
-ButtonPrimary = require '../button_primary'
-ButtonSecondary = require '../button_secondary'
+PrimaryButton = require '../primary_button'
+SecondaryButton = require '../secondary_button'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
 
@@ -15,14 +15,15 @@ module.exports = class InviteLanding
     styles.use()
 
     @state = z.state
-      $befriendButton: new ButtonPrimary()
-      $whatIsClayButton: new ButtonSecondary()
+      $befriendButton: new PrimaryButton()
+      $whatIsClayButton: new SecondaryButton()
       fromUser: z.observe User.getById fromUserId
 
   render: =>
     {$befriendButton, $whatIsClayButton, fromUser} = @state()
 
     hasAvatar = Boolean fromUser?.avatarImage
+    avatarUrl = User.getAvatarUrl(fromUser, {size: User.AVATAR_SIZES.LARGE})
 
     z 'div.z-invite-landing', {
       className: z.classKebab {hasAvatar}
@@ -31,7 +32,7 @@ module.exports = class InviteLanding
         style:
           height: "#{window.innerHeight - CONTENT_HEIGHT}px"
           backgroundImage: if hasAvatar
-          then "url(#{User.getAvatarUrl(fromUser, {size: 'large'})})"
+          then "url(#{avatarUrl})"
           else ''
       },
         z 'div.header-content',

@@ -4,8 +4,7 @@ Input = require 'zorium-paper/input'
 
 User = require '../../models/user'
 PhoneService = require '../../services/phone'
-Card = require '../card'
-ButtonPrimary = require '../button_primary'
+PrimaryButton = require '../primary_button'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -18,12 +17,11 @@ module.exports = class ForgotPassword
     o_phoneError = z.observe null
 
     @state = z.state
-      $formCard: new Card()
       $phoneNumberInput: new Input {
         o_value: o_phone
         o_error: o_phoneError
       }
-      $signinButton: new ButtonPrimary()
+      $signinButton: new PrimaryButton()
       o_phone: o_phone
       o_phoneError: o_phoneError
 
@@ -42,24 +40,22 @@ module.exports = class ForgotPassword
       z.router.go '/reset-password/' + encodeURIComponent phone
 
   render: =>
-    {$formCard, $phoneNumberInput, $signinButton} = @state()
+    {$phoneNumberInput, $signinButton} = @state()
 
     z '.z-forgot-password',
-      z $formCard, {
-        content:
-          z 'form.z-forgot-password_form', {
-            onsubmit: (e) =>
-              e.preventDefault()
+      z 'form.form', {
+        onsubmit: (e) =>
+          e.preventDefault()
+          @recover().catch log.trace
+      },
+        z $phoneNumberInput,
+          hintText: 'Phone number'
+          isFloating: true
+          colors:
+            c500: styleConfig.$orange500
+        z 'div.reset-button',
+          z $signinButton,
+            text: 'Reset'
+            type: 'submit'
+            onclick: =>
               @recover().catch log.trace
-          },
-            z $phoneNumberInput,
-              hintText: 'Phone number'
-              isFloating: true
-              colors:
-                c500: styleConfig.$orange500
-            z 'div.reset-button',
-              z $signinButton,
-                text: 'Reset'
-                onclick: =>
-                  @recover().catch log.trace
-      }

@@ -18,7 +18,7 @@ module.exports = class HomeCards
       me: User.getMe()
       isLoggedIn: o_isLoggedIn
       newFriends: z.observe o_isLoggedIn.then (isLoggedIn) ->
-        return if isLoggedIn \
+        return if isLoggedIn and not EnvironmentService.isiOS() \
                then User.getLocalNewFriends()
                else Promise.resolve []
       isInFeedbackExperiment: z.observe \

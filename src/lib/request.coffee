@@ -1,6 +1,6 @@
 _ = require 'lodash'
 
-UrlService = require '../services/url'
+UrlLib = require './url'
 
 statusCheck = (response) ->
   if response.status >= 200 and response.status < 300
@@ -19,7 +19,7 @@ module.exports = (url, options) ->
     options.body = JSON.stringify options.body
 
   if _.isObject options?.qs
-    url += '?' + UrlService.serializeQueryString options.qs
+    url += '?' + UrlLib.serializeQueryString options.qs
 
   window.fetch url, options
   .then statusCheck

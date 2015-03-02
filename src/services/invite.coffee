@@ -1,5 +1,5 @@
 config = require '../config'
-UrlService = require './url'
+UrlLib = require '../lib/url'
 kik = require 'kik'
 
 class InviteService
@@ -9,7 +9,7 @@ class InviteService
   sendFacebookInvite: ({userId}) =>
     ga? 'send', 'event', 'invite', 'facebook', userId
 
-    queryString = UrlService.serializeQueryString {
+    queryString = UrlLib.serializeQueryString {
       app_id: config.FB_APP_ID
       display: 'popup'
       href: @getUrl {userId}
@@ -33,7 +33,7 @@ class InviteService
   sendTwitterInvite: ({userId}) =>
     ga? 'send', 'event', 'invite', 'twitter', userId
 
-    queryString = UrlService.serializeQueryString {
+    queryString = UrlLib.serializeQueryString {
       text: 'Come play games with me! ' + @getUrl({userId})
     }
     inviteUrl = "https://twitter.com/intent/tweet?#{queryString}"

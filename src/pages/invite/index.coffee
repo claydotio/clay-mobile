@@ -28,7 +28,7 @@ module.exports = class InvitePage
       z $appBar, {
         height: "#{styleConfig.$appBarHeightMedium}px"
         isDescriptive: true
-        $topLeftButton: $menuButton
+        $topLeftButton: z $menuButton, {isShiftedLeft: true}
         title: 'Invite Friends'
         description: 'Build your friends list, see what they play.'
       }

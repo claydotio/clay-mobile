@@ -4,7 +4,9 @@ json('../../stylus/vars.json')
 
 .z-marketplace-share
   display: block
-  padding: 8px
+
+  &.is-shifted-right
+    margin-right: -12px // touch target offset
 
   &:active
     border-radius: 50%

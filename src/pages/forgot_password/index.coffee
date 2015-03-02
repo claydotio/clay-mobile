@@ -6,7 +6,7 @@ BackButton = require '../../components/back_button'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
-vars = require './vars.json'
+localStyleConfig = require './vars.json'
 
 module.exports = class ForgotPasswordPage
   constructor: ->
@@ -23,12 +23,12 @@ module.exports = class ForgotPasswordPage
     z 'div.z-forgot-password-page',
       z $appBar, {
         height: "#{styleConfig.$appBarHeightTall}px"
-        overlapBottomPadding: "#{vars.$cardOverlapHeight}px"
+        overlapBottomPadding: "#{localStyleConfig.$cardOverlapHeight}px"
         isDescriptive: true
-        $topLeftButton: $backButton
+        $topLeftButton: z $backButton, {isShiftedLeft: true}
         title: 'Forgot Password'
         description: 'Bummer. Let\'s reset it.'
       }
       z 'div.l-content-container.content',
-        {style: marginTop: "-#{vars.$cardOverlapHeight}px"}
+        {style: marginTop: "-#{localStyleConfig.$cardOverlapHeight}px"}
         $forgotPassword

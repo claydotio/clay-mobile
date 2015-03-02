@@ -4,7 +4,7 @@ Button = require 'zorium-paper/button'
 
 GooglePlayAdCard = require '../google_play_ad'
 Icon = require '../icon'
-ButtonPrimary = require '../button_primary'
+PrimaryButton = require '../primary_button'
 NavDrawerModel = require '../../models/nav_drawer'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
@@ -12,7 +12,7 @@ styleConfig = require '../../stylus/vars.json'
 styles = require './index.styl'
 
 DRAWER_RIGHT_PADDING = 56
-DRAWER_MAX_WIDTH = 392
+DRAWER_MAX_WIDTH = 336
 
 module.exports = class NavDrawer
   constructor: ->
@@ -22,20 +22,40 @@ module.exports = class NavDrawer
       isOpen: NavDrawerModel.isOpen()
       me: User.getMe()
       isLoggedIn: User.isLoggedIn()
-      $signinButton: new ButtonPrimary()
+      $signinButton: new PrimaryButton()
       $signupButton: new Button()
       $googlePlayAdCard: new GooglePlayAdCard()
-      $icons: _.reduce NavDrawer.PAGES, (icons, page) ->
-        icons[page.ICON] = new Icon()
-        return icons
-      , {}
+      pages: [
+        {
+          page: NavDrawer.PAGES.GAMES
+          title: 'Games'
+          $icon: new Icon()
+          iconName: 'controller'
+        }
+        {
+          page: NavDrawer.PAGES.FRIENDS
+          title: 'Friends'
+          $icon: new Icon()
+          iconName: 'group'
+          reqAuth: true
+        }
+        {
+          page: NavDrawer.PAGES.INVITE
+          title: 'Invite Friends'
+          $icon: new Icon()
+          iconName: 'add-circle'
+          reqAuth: true
+        }
+      ]
+
 
   render: ({currentPage}) =>
     {isOpen, me, isLoggedIn, $signupButton, $signinButton,
-      $googlePlayAdCard, $icons} = @state()
+      $googlePlayAdCard, pages} = @state()
 
     drawerWidth = Math.min \
       window.innerWidth - DRAWER_RIGHT_PADDING, DRAWER_MAX_WIDTH
+    translateX = if isOpen then '0' else "-#{drawerWidth}px"
 
     z 'div.z-nav-drawer', {
       className: z.classKebab {isOpen}
@@ -49,8 +69,8 @@ module.exports = class NavDrawer
       z 'div.drawer', {
         style:
           width: "#{drawerWidth}px"
-          transform: "translate(-#{drawerWidth}px, 0)"
-          webkitTransform: "translate(-#{drawerWidth}px, 0)"
+          transform: "translate(#{translateX}, 0)"
+          webkitTransform: "translate(#{translateX}, 0)"
       },
         z 'div.header',
           if isLoggedIn
@@ -78,42 +98,30 @@ module.exports = class NavDrawer
                     z.router.go '/join'
         z 'div.content',
           z 'ul.menu',
-            _.map NavDrawer.PAGES, (page) ->
-              isSelected = currentPage is page.ROUTE
-              isUnavailable = page.REQ_AUTH and not isLoggedIn
-              z "li.menu-item.menu-item-#{page.ROUTE}", {
+            _.map pages, ({page, title, $icon, iconName, reqAuth}) ->
+              isSelected = currentPage is page
+              isUnavailable = reqAuth and not isLoggedIn
+              z "li.menu-item.menu-item-#{page}", {
                 className: z.classKebab {isSelected, isUnavailable}
               },
-                z "a[href=/#{page.ROUTE}].menu-item-link", {
+                z "a[href=/#{page}].menu-item-link", {
                   onclick: (e) ->
                     e.preventDefault()
                     NavDrawerModel.close()
-                    z.router.go "/#{page.ROUTE}"
+                    z.router.go "/#{page}"
                 },
                   z '.icon',
-                    z $icons[page.ICON],
-                      icon: page.ICON
-                      size: '24px'
+                    z $icon,
+                      icon: iconName
                       color: if isSelected
                       then styleConfig.$blue500
                       else if isUnavailable
                       then styleConfig.$grey300
                       else styleConfig.$grey500
-                  page.TITLE
+                  title
           $googlePlayAdCard
 
 NavDrawer.PAGES =
-  GAMES:
-    ROUTE: 'games'
-    TITLE: 'Games'
-    ICON: 'controller'
-  FRIENDS:
-    ROUTE: 'friends'
-    TITLE: 'Friends'
-    ICON: 'group'
-    REQ_AUTH: true
-  INVITE:
-    ROUTE: 'invite'
-    TITLE: 'Invite Friends'
-    ICON: 'addCircle'
-    REQ_AUTH: true
+  GAMES: 'games'
+  FRIENDS: 'friends'
+  INVITE: 'invite'

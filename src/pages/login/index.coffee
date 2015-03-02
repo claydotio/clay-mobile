@@ -6,7 +6,7 @@ Login = require '../../components/login'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
-vars = require './vars.json'
+localStyleConfig = require './vars.json'
 
 module.exports = class LoginPage
   constructor: ->
@@ -23,13 +23,13 @@ module.exports = class LoginPage
     z 'div.z-login-page',
       z $appBar, {
         height: "#{styleConfig.$appBarHeightTall}px"
-        overlapBottomPadding: "#{vars.$cardOverlapHeight}px"
+        overlapBottomPadding: "#{localStyleConfig.$cardOverlapHeight}px"
         isDescriptive: true
-        $topLeftButton: $backButton
+        $topLeftButton: z $backButton, {isShiftedLeft: true}
         $topRightButton: z.router.link z 'a[href=/join].sign-in', 'Sign Up'
         title: 'Sign in'
         description: 'Welcome back!'
       }
       z 'div.l-content-container.content',
-        {style: marginTop: "-#{vars.$cardOverlapHeight}px"}
+        {style: marginTop: "-#{localStyleConfig.$cardOverlapHeight}px"}
         $login

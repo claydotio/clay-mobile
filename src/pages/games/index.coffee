@@ -49,8 +49,8 @@ module.exports = class GamesPage
     z 'div.z-games-page', [
       z $appBar, {
         height: "#{styleConfig.$appBarHeightShort}px"
-        $topLeftButton: $menuButton
-        $topRightButton: $marketplaceShare
+        $topLeftButton: z $menuButton, {isShiftedLeft: true}
+        $topRightButton: z $marketplaceShare, {isShiftedRight: true}
       }
       z $navDrawer, {currentPage: 'games'}
       $modalViewer

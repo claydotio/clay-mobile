@@ -3,9 +3,8 @@ log = require 'clay-loglevel'
 Input = require 'zorium-paper/input'
 
 User = require '../../models/user'
-Card = require '../card'
-ButtonPrimary = require '../button_primary'
-ButtonSecondary = require '../button_secondary'
+PrimaryButton = require '../primary_button'
+SecondaryButton = require '../secondary_button'
 PhoneService = require '../../services/phone'
 styleConfig = require '../../stylus/vars.json'
 
@@ -21,7 +20,6 @@ module.exports = class Login
     o_passwordError = z.observe null
 
     @state = z.state
-      $formCard: new Card()
       $phoneInput: new Input {
         o_value: o_phone
         o_error: o_phoneError
@@ -30,8 +28,8 @@ module.exports = class Login
         o_value: o_password
         o_error: o_passwordError
       }
-      $forgotButton: new ButtonSecondary()
-      $signinButton: new ButtonPrimary()
+      $forgotButton: new SecondaryButton()
+      $signinButton: new PrimaryButton()
       o_phone: o_phone
       o_phoneError: o_phoneError
       o_password: o_password
@@ -54,36 +52,34 @@ module.exports = class Login
       z.router.go '/'
 
   render: =>
-    {$formCard, $phoneInput, $passwordInput, $signinButton,
+    {$phoneInput, $passwordInput, $signinButton,
       $forgotButton} = @state()
 
     z '.z-login',
-      z $formCard, {
-        content:
-          z 'form.z-login_form', {
-            onsubmit: (e) =>
-              e.preventDefault()
+      z 'form.form', {
+        onsubmit: (e) =>
+          e.preventDefault()
+          @login().catch log.trace
+      },
+        z $phoneInput,
+          hintText: 'Phone number'
+          type: 'tel'
+          isFloating: true
+          colors:
+            c500: styleConfig.$orange500
+        z $passwordInput,
+          hintText: 'Password'
+          type: 'password'
+          isFloating: true
+          colors:
+            c500: styleConfig.$orange500
+        z 'div.actions',
+          z $forgotButton,
+            text: 'Forgot'
+            onclick: ->
+              z.router.go '/forgot-password'
+          z $signinButton,
+            text: 'Sign in'
+            type: 'submit'
+            onclick: =>
               @login().catch log.trace
-          },
-            z $phoneInput,
-              hintText: 'Phone number'
-              type: 'tel'
-              isFloating: true
-              colors:
-                c500: styleConfig.$orange500
-            z $passwordInput,
-              hintText: 'Password'
-              type: 'password'
-              isFloating: true
-              colors:
-                c500: styleConfig.$orange500
-            z 'div.actions',
-              z $forgotButton,
-                text: 'Forgot'
-                onclick: ->
-                  z.router.go '/forgot-password'
-              z $signinButton,
-                text: 'Sign in'
-                onclick: =>
-                  @login().catch log.trace
-      }

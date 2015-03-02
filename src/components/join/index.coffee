@@ -4,8 +4,7 @@ Input = require 'zorium-paper/input'
 
 User = require '../../models/user'
 PhoneService = require '../../services/phone'
-ButtonPrimary = require '../button_primary'
-Card = require '../card'
+PrimaryButton = require '../primary_button'
 config = require '../../config'
 styleConfig = require '../../stylus/vars.json'
 
@@ -23,7 +22,6 @@ module.exports = class Join
     o_passwordError = z.observe null
 
     @state = z.state
-      $formCard: new Card()
       $nameInput: new Input {
         o_value: o_name
         o_error: o_nameError
@@ -36,7 +34,7 @@ module.exports = class Join
         o_value: o_password
         o_error: o_passwordError
       }
-      $signupButton: new ButtonPrimary()
+      $signupButton: new PrimaryButton()
       o_nameError: o_nameError
       o_name: o_name
       o_phone: o_phone
@@ -73,40 +71,38 @@ module.exports = class Join
       z.router.go '/invite'
 
   render: ({fromUserId}) =>
-    {$formCard, $nameInput, $phoneInput, $passwordInput,
-      $signupButton} = @state()
+    {$nameInput, $phoneInput, $passwordInput, $signupButton} = @state()
 
     z '.z-join',
-      z $formCard, {
-        content:
-          z 'form.z-join_form', {
-            onsubmit: (e) =>
-              e.preventDefault()
+      z 'form.form', {
+        onsubmit: (e) =>
+          e.preventDefault()
+          @signup(fromUserId).catch log.trace
+      },
+        z $nameInput,
+          hintText: 'Name'
+          isFloating: true
+          colors:
+            c500: styleConfig.$orange500
+        z $phoneInput,
+          hintText: 'Phone number'
+          type: 'tel'
+          isFloating: true
+          colors:
+            c500: styleConfig.$orange500
+        z $passwordInput,
+          hintText: 'Password'
+          type: 'password'
+          isFloating: true
+          colors:
+            c500: styleConfig.$orange500
+        z 'div.signup-button',
+          z $signupButton,
+            text: 'Sign up'
+            type: 'submit'
+            onclick: =>
               @signup(fromUserId).catch log.trace
-          },
-            z $nameInput,
-              hintText: 'Name'
-              isFloating: true
-              colors:
-                c500: styleConfig.$orange500
-            z $phoneInput,
-              hintText: 'Phone number'
-              type: 'tel'
-              isFloating: true
-              colors:
-                c500: styleConfig.$orange500
-            z $passwordInput,
-              hintText: 'Password'
-              type: 'password'
-              isFloating: true
-              colors:
-                c500: styleConfig.$orange500
-            z 'div.signup-button',
-              z $signupButton,
-                text: 'Sign up'
-                onclick: =>
-                  @signup(fromUserId).catch log.trace
-      }
+
       z 'div.terms',
         'By signing up, you agree to receive SMS messages and to our '
         z 'a[href=/privacy][target=_system]', 'Privacy Policy'

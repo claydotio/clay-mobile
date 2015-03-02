@@ -19,17 +19,17 @@ module.exports = class FriendsPage
       $friends: new Friends()
 
   render: =>
-    {$appBar, $menuButton, $marketplaceShare, $navDrawer, $friends} = @state()
+    {$appBar, $menuButton, $navDrawer, $friends} = @state()
 
     contentHeight = window.innerHeight - styleConfig.$appBarHeightShort
 
     z 'div.z-friends-page',
       z $appBar, {
         height: "#{styleConfig.$appBarHeightShort}px"
-        $topLeftButton: $menuButton
+        $topLeftButton: z $menuButton, {isShiftedLeft: true}
         title: 'Friends'
       }
-      z $navDrawer, {currentPage: NavDrawer.PAGES.FRIENDS.ROUTE}
+      z $navDrawer, {currentPage: NavDrawer.PAGES.FRIENDS}
       z 'div.l-content-container.content', {
         style:
           height: "#{contentHeight}px"

@@ -4,7 +4,6 @@ Dropzone = require 'dropzone'
 
 config = require '../../config'
 User = require '../../models/user'
-Card = require '../card'
 EnvironmentService = require '../../services/environment'
 styleConfig = require '../../stylus/vars.json'
 
@@ -22,7 +21,6 @@ module.exports = class RequestAvatar
     styles.use()
 
     @state = z.state
-      $card: new Card()
       $dismissButton: new Button()
       $addButton: new Button()
       dropzone: null
@@ -51,37 +49,34 @@ module.exports = class RequestAvatar
       })
 
   render: =>
-    {$card, $dismissButton, $addButton, isUploaded, isDismissed} = @state()
+    {$dismissButton, $addButton, isUploaded, isDismissed} = @state()
 
-    # TODO: (Austin) re-implement as stream
+    # TODO: (Austin) re-implement as stream where parent handles show/hide
     if isUploaded or isDismissed
       return
 
     z 'div.z-request-avatar-card',
-      z $card,
-        content:
-          z 'div.z-request-avatar-card_content',
-            z 'h2.title', 'Add a profile photo'
-            z 'div.description', 'Add some personality to your profile :)'
-            z 'div.actions',
-              z $dismissButton,
-                text: 'Dismiss'
-                colors:
-                  c500: styleConfig.$white
-                  ink: styleConfig.$orange500
-                onclick: =>
-                  @state.set isDismissed: true
-              # .dz-message necessary to be clickable (no workaround)
-              z 'div.dz-message.clickable',
-                z $addButton,
-                  text: 'Add'
-                  colors:
-                    c500: styleConfig.$white
-                    ink: styleConfig.$orange500
-                  onclick: =>
-                    if EnvironmentService.isKikEnabled()
-                      kik.photo?.get? {
-                        minResults: 1
-                        maxResults: 1
-                      }, (photos) =>
-                        @state().dropzone.addFile dataUriToBlob photos[0]
+      z 'h2.title', 'Add a profile photo'
+      z 'div.description', 'Add some personality to your profile :)'
+      z 'div.actions',
+        z $dismissButton,
+          text: 'Dismiss'
+          colors:
+            c500: styleConfig.$white
+            ink: styleConfig.$orange500
+          onclick: =>
+            @state.set isDismissed: true
+        # .dz-message necessary to be clickable (no workaround)
+        z 'div.dz-message.clickable',
+          z $addButton,
+            text: 'Add'
+            colors:
+              c500: styleConfig.$white
+              ink: styleConfig.$orange500
+            onclick: =>
+              if EnvironmentService.isKikEnabled()
+                kik.photo?.get? {
+                  minResults: 1
+                  maxResults: 1
+                }, (photos) =>
+                  @state().dropzone.addFile dataUriToBlob photos[0]

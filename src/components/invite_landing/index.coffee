@@ -1,6 +1,6 @@
 z = require 'zorium'
-Button = require 'zorium-paper/button'
 
+PrimaryButton = require '../primary_button'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
 
@@ -15,7 +15,7 @@ module.exports = class InviteLanding
     styles.use()
 
     @state = z.state
-      $befriendButton: new Button()
+      $befriendButton: new PrimaryButton()
       fromUser: z.observe User.getById fromUserId
 
   render: =>
@@ -42,9 +42,6 @@ module.exports = class InviteLanding
         z $befriendButton,
           text: "Become friends with #{name or 'everyone'}"
           isFullWidth: true
-          colors:
-            c500: styleConfig.$orange500
-            ink: styleConfig.$white
           onclick: ->
             User.isLoggedIn().then (isLoggedIn) ->
               if isLoggedIn

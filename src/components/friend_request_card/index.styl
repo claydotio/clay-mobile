@@ -3,7 +3,12 @@
 
 json('../../stylus/vars.json')
 
-.z-friend-request-card_content
+.z-friend-request-card
+  zp-shadow-1()
+  background: $white
+  border-radius: 2px
+  padding: 16px
+
   > .single-friend, > .many-friends
     display: flex
 

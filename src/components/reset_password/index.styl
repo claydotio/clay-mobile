@@ -1,8 +1,15 @@
 @require 'nib'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
-.z-reset-password_form
-  > .actions
-    margin-top: 16px
-    text-align: right
+.z-reset-password
+  > .form
+    zp-shadow-1()
+    background: $white
+    border-radius: 2px
+    padding: 16px
+
+    > .actions
+      margin-top: 16px
+      text-align: right

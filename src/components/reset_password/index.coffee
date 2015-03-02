@@ -3,9 +3,8 @@ log = require 'clay-loglevel'
 Input = require 'zorium-paper/input'
 
 User = require '../../models/user'
-Card = require '../card'
-ButtonPrimary = require '../button_primary'
-ButtonSecondary = require '../button_secondary'
+PrimaryButton = require '../primary_button'
+SecondaryButton = require '../secondary_button'
 PhoneService = require '../../services/phone'
 styleConfig = require '../../stylus/vars.json'
 
@@ -21,7 +20,6 @@ module.exports = class ResetPassword
     o_newPasswordError = z.observe null
 
     @state = z.state
-      $formCard: new Card()
       $recoveryTokenInput: new Input {
         o_value: o_recoveryToken
         o_error: o_recoveryTokenError
@@ -30,8 +28,8 @@ module.exports = class ResetPassword
         o_value: o_newPassword
         o_error: o_newPasswordError
       }
-      $changePasswordButton: new ButtonPrimary()
-      $resendButton: new ButtonSecondary()
+      $changePasswordButton: new PrimaryButton()
+      $resendButton: new SecondaryButton()
       o_recoveryToken: o_recoveryToken
       o_recoveryTokenError: o_recoveryTokenError
       o_newPassword: o_newPassword
@@ -65,35 +63,33 @@ module.exports = class ResetPassword
       z.router.go '/'
 
   render: ({phone}) =>
-    {$formCard, $recoveryTokenInput, $newPasswordInput, $changePasswordButton,
+    {$recoveryTokenInput, $newPasswordInput, $changePasswordButton,
       $resendButton} = @state()
 
     z '.z-reset-password',
-      z $formCard, {
-        content:
-          z 'form.z-reset-password_form', {
-            onsubmit: (e) =>
-              e.preventDefault()
-              @changePassword( phone ).catch log.trace
-          },
-            z $recoveryTokenInput,
-              hintText: 'Reset Code'
-              isFloating: true
-              colors:
-                c500: styleConfig.$orange500
-            z $newPasswordInput,
-              hintText: 'New Password'
-              type: 'password'
-              isFloating: true
-              colors:
-                c500: styleConfig.$orange500
-            z 'div.actions',
-              z $resendButton,
-                text: 'Resend'
-                onclick: =>
-                  @resend phone
-              z $changePasswordButton,
-                text: 'Change'
-                onclick: =>
-                  @changePassword(phone).catch log.trace
-      }
+      z 'form.form', {
+        onsubmit: (e) =>
+          e.preventDefault()
+          @changePassword( phone ).catch log.trace
+      },
+        z $recoveryTokenInput,
+          hintText: 'Reset Code'
+          isFloating: true
+          colors:
+            c500: styleConfig.$orange500
+        z $newPasswordInput,
+          hintText: 'New Password'
+          type: 'password'
+          isFloating: true
+          colors:
+            c500: styleConfig.$orange500
+        z 'div.actions',
+          z $resendButton,
+            text: 'Resend'
+            onclick: =>
+              @resend phone
+          z $changePasswordButton,
+            text: 'Change'
+            type: 'submit'
+            onclick: =>
+              @changePassword(phone).catch log.trace

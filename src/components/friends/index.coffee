@@ -52,7 +52,6 @@ module.exports = class Friends
           colors: {c500: styleConfig.$orange500}
           $icon: z $addIcon,
             icon: 'add'
-            size: '24px'
             color: styleConfig.$white
           onclick: ->
             z.router.go '/invite'

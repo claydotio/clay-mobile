@@ -1,21 +1,25 @@
 z = require 'zorium'
 
 Icon = require '../icon'
-NavDrawerModel = require '../../models/nav_drawer'
 styleConfig = require '../../stylus/vars.json'
+
+styles = require './index.styl'
 
 module.exports = class BackButton
   constructor: ->
+    styles.use()
+
     @state = z.state
       $backIcon: new Icon()
 
-  render: =>
+  render: ({isShiftedLeft}) =>
     {$backIcon} = @state()
 
-    z 'div.z-back-button',
+    z 'div.z-back-button', {
+      className: z.classKebab {isShiftedLeft}
+    },
       z $backIcon,
-        icon: 'arrowBack'
-        size: '24px'
+        icon: 'arrow-back'
         color: styleConfig.$white
         onclick: ->
           window.history.back()

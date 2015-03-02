@@ -28,14 +28,14 @@ module.exports = class PopularGames
     featuredGameRow ?= 0
 
     if window.matchMedia('(min-width: 360px)').matches
-      gameBoxSize = 96
-      gamePromoWidth = 320
-      gamePromoHeight = 204
+      gameBoxSize = 98
+      gamePromoWidth = 328
+      gamePromoHeight = 209
       featuredGamePosition = featuredGameRow * BOXES_PER_ROW_MEDIUM_SCREEN
     else
-      gameBoxSize = 135
-      gamePromoWidth = 280
-      gamePromoHeight = 178
+      gameBoxSize = 136
+      gamePromoWidth = 288
+      gamePromoHeight = 183
       featuredGamePosition = featuredGameRow * BOXES_PER_ROW_SMALL_SCREEN
 
     @isListeningForScroll = true

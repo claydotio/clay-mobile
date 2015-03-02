@@ -1,8 +1,19 @@
 @require 'nib'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
 .z-join
+  > .form
+    zp-shadow-1()
+    background: $white
+    border-radius: 2px
+    padding: 16px
+
+    > .signup-button
+      margin-top: 16px
+      text-align: right
+
   > .terms
     color: $grey400
     width: 180px
@@ -11,8 +22,3 @@ json('../../stylus/vars.json')
 
     > a
       color: inherit
-
-.z-join_form
-  > .signup-button
-    margin-top: 16px
-    text-align: right

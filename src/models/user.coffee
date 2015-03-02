@@ -13,7 +13,9 @@ LOCALSTORE_FRIENDS = 'user:friends'
 SMALL_AVATAR_SIZE = 96
 LARGE_AVATAR_SIZE = 512
 
-me = z.observe Promise.resolve false
+# FIXME: this is a hack for detecting if we've tried setting `me` or
+# not. It'll get resolved when we implement streams.
+me = z.observe Promise.resolve 'unset'
 experiments = null
 
 getCookieValue = (key) ->
@@ -33,10 +35,14 @@ deleteHostCookie = (key) ->
                     'expires=Thu, 01 Jan 1970 00:00:01 GMT'
 
 class User
+  AVATAR_SIZES:
+    SMALL: SMALL_AVATAR_SIZE
+    LARGE: LARGE_AVATAR_SIZE
+
   signedUpThisSession: false
 
   getMe: =>
-    if me() is false
+    if me() is 'unset'
       me.set @loginAnon()
 
       # Save accessToken in cookie
@@ -226,22 +232,21 @@ class User
     deleteHostCookie config.ACCESS_TOKEN_COOKIE_KEY
     @setMe @loginAnon
 
-  getAvatarUrl: (user, {size} = {}) ->
-    size ?= 'small'
+  getAvatarUrl: (user, {size} = {}) =>
+    size ?= @AVATAR_SIZES.SMALL
 
     if user?.avatarImage
       pxSize = if size is 'large' then LARGE_AVATAR_SIZE else SMALL_AVATAR_SIZE
-      avatarObject = _.find user.avatarImage?.versions, width: pxSize
+      avatarObject = _.find user?.avatarImage?.versions, width: pxSize
 
       return avatarObject.url or DEFAULT_PROFILE_PIC
     else
       return DEFAULT_PROFILE_PIC
 
-  getSignedUpThisSession: ->
+  getSignedUpThisSession: =>
     return @signedUpThisSession
 
-  setSignedUpThisSession: (signedUp) ->
+  setSignedUpThisSession: (signedUp) =>
     @signedUpThisSession = signedUp
-
 
 module.exports = new User()
