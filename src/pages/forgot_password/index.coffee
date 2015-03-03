@@ -25,7 +25,7 @@ module.exports = class ForgotPasswordPage
         height: "#{styleConfig.$appBarHeightTall}px"
         overlapBottomPadding: "#{localStyleConfig.$cardOverlapHeight}px"
         isDescriptive: true
-        $topLeftButton: z $backButton, {isShiftedLeft: true}
+        $topLeftButton: z $backButton, {isAlignedLeft: true}
         title: 'Forgot Password'
         description: 'Bummer. Let\'s reset it.'
       }

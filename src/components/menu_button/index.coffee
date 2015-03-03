@@ -4,22 +4,17 @@ Icon = require '../icon'
 NavDrawerModel = require '../../models/nav_drawer'
 styleConfig = require '../../stylus/vars.json'
 
-styles = require './index.styl'
-
 module.exports = class MenuButton
   constructor: ->
-    styles.use()
-
     @state = z.state
       $menuIcon: new Icon()
 
-  render: ({isShiftedLeft}) =>
+  render: ({isAlignedLeft}) =>
     {$menuIcon} = @state()
 
-    z 'div.z-menu-button', {
-      className: z.classKebab {isShiftedLeft}
-    },
+    z 'div.z-menu-button',
       z $menuIcon,
+        isAlignedLeft: isAlignedLeft
         icon: 'menu'
         color: styleConfig.$white
         onclick: ->

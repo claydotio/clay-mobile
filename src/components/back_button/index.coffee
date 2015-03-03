@@ -12,13 +12,12 @@ module.exports = class BackButton
     @state = z.state
       $backIcon: new Icon()
 
-  render: ({isShiftedLeft}) =>
+  render: ({isAlignedLeft}) =>
     {$backIcon} = @state()
 
-    z 'div.z-back-button', {
-      className: z.classKebab {isShiftedLeft}
-    },
+    z 'div.z-back-button',
       z $backIcon,
+        isAlignedLeft: isAlignedLeft
         icon: 'arrow-back'
         color: styleConfig.$white
         onclick: ->

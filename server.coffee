@@ -132,7 +132,6 @@ router.get '/ping', (req, res) ->
   res.end 'pong'
 
 router.get '/game/:key', (req, res) ->
-  log.info 'user_agent=', req.useragent.source
   gameKey = req.params.key
 
   renderGamePage gameKey, req.useragent.isProbablyKik
@@ -157,7 +156,6 @@ router.get '/game/:key', (req, res) ->
         res.status(500).send()
 
 router.get '/invite-landing/:fromUserId', (req, res) ->
-  log.info 'user_agent=', req.useragent.source
   fromUserId = req.params.fromUserId
 
   renderInviteLandingPage fromUserId, req.useragent.isProbablyKik
@@ -182,7 +180,6 @@ router.get '/invite-landing/:fromUserId', (req, res) ->
         res.status(500).send()
 
 router.get '*', (req, res) ->
-  log.info 'user_agent=', req.useragent.source
   host = req.headers.host
 
   # Game Subdomain - 0.0.0.0 used when running tests locally

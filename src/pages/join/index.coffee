@@ -26,7 +26,7 @@ module.exports = class JoinPage
         height: "#{stylusConfig.$appBarHeightTall}px"
         overlapBottomPadding: "#{localStyleConfig.$cardOverlapHeight}px"
         isDescriptive: true
-        $topLeftButton: z $backButton, {isShiftedLeft: true}
+        $topLeftButton: z $backButton, {isAlignedLeft: true}
         $topRightButton: z.router.link z 'a[href=/login].sign-in', 'Sign In'
         title: 'Join Clay'
         description: 'Unlock the full potential.'

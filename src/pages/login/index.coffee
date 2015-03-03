@@ -25,7 +25,7 @@ module.exports = class LoginPage
         height: "#{styleConfig.$appBarHeightTall}px"
         overlapBottomPadding: "#{localStyleConfig.$cardOverlapHeight}px"
         isDescriptive: true
-        $topLeftButton: z $backButton, {isShiftedLeft: true}
+        $topLeftButton: z $backButton, {isAlignedLeft: true}
         $topRightButton: z.router.link z 'a[href=/join].sign-in', 'Sign Up'
         title: 'Sign in'
         description: 'Welcome back!'

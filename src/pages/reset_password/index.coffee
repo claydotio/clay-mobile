@@ -26,7 +26,7 @@ module.exports = class ResetPasswordPage
         height: "#{styleConfig.$appBarHeightMedium}px"
         overlapBottomPadding: "#{localStyleConfig.$cardOverlapHeight}px"
         isDescriptive: true
-        $topLeftButton: z $backButton, {isShiftedLeft: true}
+        $topLeftButton: z $backButton, {isAlignedLeft: true}
         description:
           z 'div',
             z 'div', 'We\'ve texted you a reset code.'

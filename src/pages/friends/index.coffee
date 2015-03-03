@@ -26,7 +26,7 @@ module.exports = class FriendsPage
     z 'div.z-friends-page',
       z $appBar, {
         height: "#{styleConfig.$appBarHeightShort}px"
-        $topLeftButton: z $menuButton, {isShiftedLeft: true}
+        $topLeftButton: z $menuButton, {isAlignedLeft: true}
         title: 'Friends'
       }
       z $navDrawer, {currentPage: NavDrawer.PAGES.FRIENDS}

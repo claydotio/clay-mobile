@@ -11,16 +11,10 @@ EnvironmentService = require '../../services/environment'
 
 module.exports = class HomeCards
   constructor: ->
-
-    o_isLoggedIn = User.isLoggedIn()
-
     @state = z.state
       me: User.getMe()
-      isLoggedIn: o_isLoggedIn
-      newFriends: z.observe o_isLoggedIn.then (isLoggedIn) ->
-        return if isLoggedIn and not EnvironmentService.isiOS() \
-               then User.getLocalNewFriends()
-               else Promise.resolve []
+      isLoggedIn: User.isLoggedIn()
+      newFriends: z.observe User.getLocalNewFriends()
       isInFeedbackExperiment: z.observe \
       User.getExperiments().then ({feedbackCard}) ->
         return feedbackCard is 'show'

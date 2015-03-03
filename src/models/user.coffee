@@ -175,13 +175,17 @@ class User
           accessToken: accessToken
 
   getLocalNewFriends: =>
-    Promise.all [
-      localstore.get LOCALSTORE_FRIENDS
-      @getFriends()
-    ]
-    .then ([localFriends, friends]) ->
-      localstore.set LOCALSTORE_FRIENDS, friends
-      return _.filter friends, localFriends
+    @isLoggedIn().then (isLoggedIn) =>
+      if isLoggedIn and not EnvironmentService.isiOS()
+        Promise.all [
+          localstore.get LOCALSTORE_FRIENDS
+          @getFriends()
+        ]
+        .then ([localFriends, friends]) ->
+          localstore.set LOCALSTORE_FRIENDS, friends
+          return _.filter friends, localFriends
+      else
+        Promise.resolve []
 
   loginAnon: ->
     request PATH + '/login/anon',

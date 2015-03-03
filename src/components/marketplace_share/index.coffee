@@ -11,7 +11,7 @@ styles = require './index.styl'
 
 MARKETPLACE_GAME_ID = '1'
 
-module.exports = class ModalClose
+module.exports = class MarketplaceShare
   constructor: ->
     styles.use()
 
@@ -30,11 +30,14 @@ module.exports = class ModalClose
     User.convertExperiment 'marketplace_share'
     .catch log.trace
 
-  render: ({isShiftedRight}) =>
+  render: ({isAlignedRight}) =>
     {$shareIcon} = @state()
 
     z 'a.z-marketplace-share[href=#]', {
-      className: z.classKebab {isShiftedRight}
       onclick: @share
     },
-      z $shareIcon, {icon: 'share', size: '24px', color: styleConfig.$white}
+      z $shareIcon,
+        isAlignedRight: isAlignedRight
+        icon: 'share'
+        size: '24px'
+        color: styleConfig.$white
