@@ -30,10 +30,12 @@ window.Promise = window.Promise or Promise
 # Fetch polyfill - https://github.com/github/fetch
 require 'whatwg-fetch'
 
-# window.screen.orientation.unlock polyfill
+# window.screen.unlockOrientation polyfill
+# Cannot override window.screen.orientation.unlock due to old browser conflicts
+# Be careful with scope application `this`
 window.screen ?= {}
-window.screen.orientation ?= {}
-window.screen.orientation.unlock = window.screen.orientation.unlock or
-                                   window.screen.unlockOrientation or
-                                   window.screen.webkitUnlockOrientation or
-                                   window.screen.mozUnlockOrientation
+window.screen.unlockOrientation = (window.screen.orientation?.unlock and
+                                  (-> window.screen.orientation.unlock())) or
+                                  window.screen.unlockOrientation or
+                                  window.screen.webkitUnlockOrientation or
+                                  window.screen.mozUnlockOrientation

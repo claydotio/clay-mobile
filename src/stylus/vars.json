@@ -42,13 +42,6 @@
   "$grey900Text": "#ffffff",
 
   "$black": "#000000",
-  "$greyDarkest": "#262626",
-  "$greyDarker": "#757575",
-  "$greyDark": "#999999",
-  "$greyMedium": "#cccccc",
-  "$greyLight": "#dedede",
-  "$greyLighter": "#e6e6e6",
-  "$greyLightest": "#f7f7f7",
   "$white": "#ffffff",
 
   "$black12": "rgba(0, 0, 0, 0.12)",

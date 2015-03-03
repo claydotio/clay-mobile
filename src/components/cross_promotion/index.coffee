@@ -8,21 +8,19 @@ GameBox = require '../game_box'
 styles = require './index.styl'
 
 module.exports = class CrossPromotion
-  constructor: ({iconSize}) ->
+  constructor: ->
     styles.use()
 
     randomVariance = Math.floor(Math.random() * 4)
-    @gameBoxes = []
+    @state = z.state
+      games: z.observe (Game.getTop(limit: 2, skip: randomVariance)
+      ).catch log.trace
+      $gameBox: new GameBox()
 
-    Game.getTop(limit: 2, skip: randomVariance)
-    .then (games) =>
-      @gameBoxes = _.map games, (game) ->
-        new GameBox {game, iconSize}
-    .then z.redraw
-    .catch log.trace
+  render: ({iconSize}) =>
+    {games, $gameBox} = @state()
 
-  render: =>
     z 'div.z-cross-promotion',
-      _.map @gameBoxes, (GameBox) ->
-        z 'div.z-cross-promotion-game-box',
-          GameBox
+      _.map games, (game) ->
+        z 'div.game-box',
+          z $gameBox, {game, iconSize}

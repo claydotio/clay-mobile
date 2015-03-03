@@ -4,9 +4,15 @@ HeaderBase = require '../header_base'
 User = require '../../models/user'
 
 module.exports = class DevHeader
-  constructor: ({currentPage} = {}) ->
+  constructor: ->
     @state = z.state
-      header: new HeaderBase {
+      $header: new HeaderBase()
+
+  render: ({currentPage} = {}) =>
+    {$header} = @state()
+
+    z '.z-dev-header',
+      z $header, {
         logoUrl: '//cdn.wtf/d/images/logos/logo_dev.svg'
         homeUrl: '/dashboard'
         links: [
@@ -31,7 +37,3 @@ module.exports = class DevHeader
           }
         ]
       }
-
-  render: ({header}) ->
-    z '.z-dev-header',
-      header

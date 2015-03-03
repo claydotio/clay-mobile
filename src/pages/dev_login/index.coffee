@@ -7,20 +7,19 @@ GuestFooter = require '../../components/guest_footer'
 module.exports = class Login
   constructor: ->
     @state = z.state
-      guestHeader: new GuestHeader(currentPage: 'login')
-      devLogin: new DevLogin()
-      guestFooter: new GuestFooter()
+      $guestHeader: new GuestHeader()
+      $devLogin: new DevLogin()
+      $guestFooter: new GuestFooter()
 
-  render: (
+  render: =>
     {
-      guestHeader
-      devLoginBanner
-      devLogin
-      devLoginPlayerMessage
-      guestFooter
-    }
-  ) ->
+      $guestHeader
+      $devLogin
+      $guestFooter
+    } = @state()
+
     z 'div',
-      z 'div', guestHeader
-      z 'div', devLogin
-      z 'div', guestFooter
+      z 'div',
+        z $guestHeader, currentPage: 'login'
+      z 'div', $devLogin
+      z 'div', $guestFooter

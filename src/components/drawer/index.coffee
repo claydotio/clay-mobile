@@ -21,7 +21,7 @@ module.exports = class Drawer
     @state = z.state
       game: game
       isOpen: false
-      crossPromotion: new CrossPromotion iconSize: GAME_BOX_ICON_SIZE
+      crossPromotion: new CrossPromotion()
       nub: new Nub toggleCallback: @toggleState
       googlePlayAdDrawer: if GooglePlayAdService.shouldShowAds() \
                           then new GooglePlayAdDrawer()
@@ -80,7 +80,9 @@ module.exports = class Drawer
     else
       window.location.href = UrlService.getMarketplaceBase()
 
-  render: ({isOpen, game, nub, googlePlayAdDrawer, crossPromotion}) ->
+  render: =>
+    {isOpen, game, nub, googlePlayAdDrawer, crossPromotion} = @state()
+
     if isOpen
       drawerIsOpen = '.is-open'
       drawerOverlayIsOpen = '.is-open'
@@ -125,7 +127,7 @@ module.exports = class Drawer
               z 'i.icon.icon-heart'
               z 'span.z-drawer-menu-item', 'Recommended games'
             z 'div.z-drawer-cross-promotion',
-              crossPromotion
+              z crossPromotion, iconSize: GAME_BOX_ICON_SIZE
               z 'button.button-secondary.is-block.z-drawer-browse-more',
                 onclick: @openMarketplace,
                 'Browse more games'

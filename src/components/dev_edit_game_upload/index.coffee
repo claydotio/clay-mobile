@@ -33,7 +33,9 @@ module.exports = class DevEditGameUpload
             o_hasUploaded: o_hasUploaded
           }
 
-  render: ({zipUpload}) ->
+  render: =>
+    {zipUpload} = @state()
+
     # TODO (Austin): remove when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
     z 'div.z-dev-edit-game-upload.l-flex', {key: 3},

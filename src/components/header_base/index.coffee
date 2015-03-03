@@ -3,10 +3,8 @@ z = require 'zorium'
 styles = require './index.styl'
 
 module.exports = class HeaderBase
-  constructor: ({logoUrl, homeUrl, links}) ->
+  constructor: ->
     styles.use()
-
-    @state = z.state {logoUrl, homeUrl, links}
 
   render: ({logoUrl, homeUrl, links}) ->
     z '.z-header-base',

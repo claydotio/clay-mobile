@@ -163,7 +163,7 @@ module.exports = class DevEditGameDetails
           }
       }
 
-  render: (
+  render: =>
     {
       game
       categoryInput
@@ -173,8 +173,8 @@ module.exports = class DevEditGameDetails
       iconUpload
       headerUpload
       screenshots
-    }
-  ) ->
+    } = @state()
+
     # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
     z 'div.z-dev-edit-game-details', {key: 1},

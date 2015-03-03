@@ -21,7 +21,7 @@ renderLoadingCanvas = (ctx, {size, percentUploaded}) ->
     ctx.stroke()
     return
 
-  drawCircle styleConfig.$green, lineWidth, percentUploaded / 100
+  drawCircle styleConfig.$green500, lineWidth, percentUploaded / 100
 
 
 module.exports = class UploaderBase
@@ -108,7 +108,9 @@ module.exports = class UploaderBase
 
   getDropzone$: -> null
 
-  render: ({isLoading, width, height, loadingCircleDiameter}) =>
+  render: =>
+    {isLoading, width, height, loadingCircleDiameter} = @state()
+
     z "div.z-uploader-base#{if isLoading then '.is-loading' else ''}", {
       style:
         width: "#{width}px"
