@@ -5,8 +5,6 @@ rewire = require 'rewire'
 MockGame = require '../../_models/game'
 KikService = rewire 'services/kik'
 
-urlRegex = require '../../lib/url_regex'
-
 describe 'KikService', ->
 
   describe 'isFromPush()', ->

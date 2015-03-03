@@ -1,0 +1,21 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-icon
+  text-align: center
+  display: flex
+
+  > svg
+    vertical-align: middle
+    margin: auto
+
+  &.is-touch-target
+    min-width: 48px
+    min-height: 48px
+
+    &.is-aligned-left
+      margin-left: -12px // touch target offset
+
+    &.is-aligned-right
+      margin-right: -12px // touch target offset

@@ -1,0 +1,10 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+json('./vars.json')
+
+.z-join-page
+  > .content
+    position: relative
+    z-index: $zIndexJoinPageContent
+    margin-top: -($cardOverlapHeight)px

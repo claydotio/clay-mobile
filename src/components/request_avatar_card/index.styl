@@ -1,0 +1,25 @@
+@require 'nib'
+@require 'zorium-paper/base'
+
+json('../../stylus/vars.json')
+
+.z-request-avatar-card
+  zp-shadow-1()
+  background: $white
+  border-radius: 2px
+  padding: 16px
+
+  > .title
+    zp-font-headline()
+    font-weight: lighter
+    margin: 0 0 12px 0
+
+  > .description
+    zp-font-subhead()
+    margin: 0 0 16px 0
+
+  > .actions
+    text-align: right
+
+    > .clickable
+      display: inline-block

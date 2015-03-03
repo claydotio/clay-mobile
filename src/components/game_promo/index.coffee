@@ -30,11 +30,10 @@ module.exports = class GamePromo
         e?.preventDefault()
         @loadGame game
     },
-      z 'div.image', {
+      z 'div.image',
         style:
           backgroundImage: "url(#{backgroundImage})"
           width: "#{width}px",
           height: "#{height}px"
-      }
       z '.info',
         z 'h3', game.name

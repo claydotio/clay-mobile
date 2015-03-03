@@ -19,35 +19,30 @@ karmaConf = require './karma.defaults'
 
 outFiles =
   scripts: 'bundle.js'
-  styles: 'bundle.css'
 
 paths =
   static: './src/*.*'
   scripts: ['./src/**/*.coffee', './*.coffee']
-  styles: './src/stylus/**/*.styl'
 
   tests: './test/*/**/*.coffee'
   serverTests: './test/server.coffee'
   root: './src/root.coffee'
   rootTests: './test/index.coffee'
-  baseStyle: './src/stylus/base.styl'
   dist: './dist/'
   build: './build/'
 
 # start the dev server, and auto-update
-gulp.task 'dev', ['assets:dev', 'watch:dev'], ->
+gulp.task 'dev', ['assets:dev'], ->
   gulp.start 'server'
 
 # compile sources: src/* -> build/*
 gulp.task 'assets:dev', [
-  'styles:dev'
   'static:dev'
 ]
 
 # compile sources: src/* -> dist/*
 gulp.task 'assets:prod', [
   'scripts:prod'
-  'styles:prod'
   'static:prod'
 ]
 
@@ -89,7 +84,7 @@ gulp.task 'scripts:test', ->
         { test: /\.json$/, loader: 'json' }
         {
           test: /\.styl$/
-          loader: 'style/useable!css!stylus?paths=components/'
+          loader: 'style/useable!css!stylus?paths=node_modules'
         }
       ]
     externals:
@@ -121,9 +116,6 @@ gulp.task 'server', ->
   # Don't actually watch for changes, just run the server
   nodemon {script: 'bin/dev_server.coffee', ext: 'null', ignore: ['**/*.*']}
 
-gulp.task 'watch:dev', ->
-  gulp.watch paths.styles, ['styles:dev']
-
 gulp.task 'watch:test', ->
   gulp.watch paths.scripts.concat([paths.tests]), ['test:phantom']
 
@@ -136,15 +128,6 @@ gulp.task 'lint:scripts', ->
 #
 # Dev compilation
 #
-
-# css/style.css --> build/css/bundle.css
-gulp.task 'styles:dev', ->
-  gulp.src paths.baseStyle
-    .pipe sourcemaps.init()
-      .pipe stylus 'include css': true
-      .pipe rename outFiles.styles
-    .pipe sourcemaps.write()
-    .pipe gulp.dest paths.build + '/css/'
 
 # * --> build/*
 gulp.task 'static:dev', ->
@@ -173,7 +156,7 @@ gulp.task 'scripts:prod', ->
         { test: /\.json$/, loader: 'json' }
         {
           test: /\.styl$/
-          loader: 'style/useable!css!stylus?paths=components/'
+          loader: 'style/useable!css!stylus?paths=node_modules'
         }
       ]
     plugins: [
@@ -185,16 +168,6 @@ gulp.task 'scripts:prod', ->
       extensions: ['.coffee', '.js', '.json', '']
   .pipe rename 'bundle.js'
   .pipe gulp.dest paths.dist + '/js/'
-
-# css/style.css --> dist/css/bundle.min.css
-gulp.task 'styles:prod', ->
-  gulp.src paths.baseStyle
-    .pipe sourcemaps.init()
-      .pipe stylus 'include css': true
-      .pipe rename outFiles.styles
-      .pipe minifyCss()
-    .pipe sourcemaps.write '../maps/'
-    .pipe gulp.dest paths.dist + '/css/'
 
 # * --> dist/*
 gulp.task 'static:prod', ->

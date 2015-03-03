@@ -1,11 +1,12 @@
 @require 'nib'
+@require 'zorium-paper/base'
 
 json('../../stylus/vars.json')
 
 .z-recent-games
   margin-bottom: 35px
 
-.z-recent-games-header
-  color: $grey600
-  margin-top: 15px
-  margin-bottom: 8px
+  > .header
+    zp-font-subhead()
+    margin-top: 16px
+    margin-bottom: 8px

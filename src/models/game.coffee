@@ -135,4 +135,7 @@ class Game
           accessToken: me.accessToken
         body: gameUpdate
 
+  getIconUrl: (game) ->
+    return game.iconImage?.versions[0].url or game.icon128Url
+
 module.exports = new Game()

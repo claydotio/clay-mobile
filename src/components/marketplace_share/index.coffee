@@ -4,14 +4,19 @@ portal = require 'portal-gun'
 
 User = require '../../models/user'
 ShareService = require '../../services/share'
+Icon = require '../icon'
+styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
 MARKETPLACE_GAME_ID = '1'
 
-module.exports = class ModalClose
+module.exports = class MarketplaceShare
   constructor: ->
     styles.use()
+
+    @state = z.state
+      $shareIcon: new Icon()
 
   share: (e) ->
     e?.preventDefault()
@@ -25,6 +30,13 @@ module.exports = class ModalClose
     User.convertExperiment 'marketplace_share'
     .catch log.trace
 
-  render: =>
-    z 'a.z-marketplace-share[href=#]', onclick: @share,
-      z 'i.icon.icon-share'
+  render: ({isAlignedRight}) =>
+    {$shareIcon} = @state()
+
+    z 'a.z-marketplace-share[href=#]', {
+      onclick: @share
+    },
+      z $shareIcon,
+        isAlignedRight: isAlignedRight
+        icon: 'share'
+        color: styleConfig.$white
