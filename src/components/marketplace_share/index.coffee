@@ -39,5 +39,4 @@ module.exports = class MarketplaceShare
       z $shareIcon,
         isAlignedRight: isAlignedRight
         icon: 'share'
-        size: '24px'
         color: styleConfig.$white
