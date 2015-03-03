@@ -35,3 +35,5 @@ module.exports = class GamePromo
           backgroundImage: "url(#{backgroundImage})"
           width: "#{width}px",
           height: "#{height}px"
+      z '.info',
+        z 'h3', game.name
