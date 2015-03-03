@@ -100,8 +100,6 @@ module.exports = class Join
           z $signupButton,
             text: 'Sign up'
             type: 'submit'
-            onclick: =>
-              @signup(fromUserId).catch log.trace
 
       z 'div.terms',
         'By signing up, you agree to receive SMS messages and to our '
