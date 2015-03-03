@@ -1,0 +1,67 @@
+@require 'nib'
+@require 'zorium-paper/base'
+
+json('../../stylus/vars.json')
+
+.z-app-bar
+  position: relative
+  z-index: $zIndexHeader
+
+  > .orange-bar
+    background: $orange500
+    color: $orange500Text
+    width: 100%
+    box-sizing: border-box
+    padding: 0 16px
+    display: flex
+    flex-direction: column
+
+    > .top
+      height: 56px
+      display: flex
+      align-items: center
+
+      > .top-left-button
+        margin-right: 32px
+
+      > .top-right-button
+        margin-left: auto
+
+        > .sign-in
+          zp-font-button()
+          color: $orange500Text
+          text-transform: uppercase
+
+      > .title
+        zp-font-headline()
+        color: $orange500Text
+
+        > .io
+          opacity: 0.54
+
+  &.is-fixed
+    > .orange-bar
+      zp-shadow-1()
+      position: fixed
+      top: 0
+
+  &.is-descriptive
+    > .orange-bar
+      > .content
+        width: 100%
+        text-align: center
+        margin-top: auto
+        margin-bottom: 24px
+        display: inline-block
+        align-self: flex-end
+
+        > .title
+          zp-font-display1()
+          color: $orange500Text
+          margin: 0 0 8px 0
+
+        > .description
+          zp-font-subhead()
+          color: $orange500Text
+          opacity: 0.54
+          margin: 0

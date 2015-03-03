@@ -1,16 +1,7 @@
 _ = require 'lodash'
 
+UrlLib = require './url'
 MIN_REQUEST_TIME_ERROR_MS = 2000 # 2s
-
-serializeQueryString = (obj, prefix) ->
-  str = []
-  for p of obj
-    if obj.hasOwnProperty(p)
-      k = (if prefix then prefix + '[' + p + ']' else p)
-      v = obj[p]
-      str.push (if typeof v is 'object' then serializeQueryString(v, k) \
-                else encodeURIComponent(k) + '=' + encodeURIComponent(v))
-  str.join '&'
 
 statusCheck = (response) ->
   if response.status >= 200 and response.status < 300
@@ -31,7 +22,7 @@ module.exports = (url, options) ->
     options.body = JSON.stringify options.body
 
   if _.isObject options?.qs
-    url += '?' + serializeQueryString options.qs
+    url += '?' + UrlLib.serializeQueryString options.qs
 
   window.fetch url, options
   .then statusCheck

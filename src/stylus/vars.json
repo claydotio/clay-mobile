@@ -1,4 +1,5 @@
 {
+  "$orange200": "#ffcc80",
   "$orange500": "#ff8a00",
   "$orange600": "#f47300",
   "$orange700": "#e96a03",
@@ -7,6 +8,7 @@
   "$orange600Text": "#ffffff",
   "$orange700Text": "#ffffff",
 
+  "$blue200": "#90caf9",
   "$blue500": "#008aff",
   "$blue600": "#0078ff",
   "$blue700": "#0060ff",
@@ -42,6 +44,11 @@
   "$black": "#000000",
   "$white": "#ffffff",
 
+  "$black12": "rgba(0, 0, 0, 0.12)",
+  "$black26": "rgba(0, 0, 0, 0.26)",
+  "$black54": "rgba(0, 0, 0, 0.54)",
+  "$black87": "rgba(0, 0, 0, 0.87)",
+
   "$transparent": "transparent",
   "$bgColor": "#f2f2f2",
   "$activeBgColor": "rgba(0, 0, 0, 0.05)",
@@ -73,7 +80,16 @@
   "$marketplaceGamePromoWidth": 440,
   "$marketplaceGamePromoHeight": 280,
 
+  "$appBarHeightShort": 56,
+  "$appBarHeightMedium": 168,
+  "$appBarHeightTall": 224,
+
   "$zIndexModal": 900,
-  "$zIndexDrawer": 200,
+  "$zIndexDrawer": 300,
+  "$zIndexNavDrawer": 400,
+  "$zIndexJoinPageContent": 200,
+  "$zIndexLoginPageContent": 200,
+  "$zIndexForgotPasswordPageContent": 200,
+  "$zIndexResetPasswordPageContent": 200,
   "$zIndexHeader": 100
 }

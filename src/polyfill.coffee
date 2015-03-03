@@ -28,7 +28,7 @@ Promise = require 'promiz'
 window.Promise = window.Promise or Promise
 
 # Fetch polyfill - https://github.com/github/fetch
-require 'fetch'
+require 'whatwg-fetch'
 
 # window.screen.unlockOrientation polyfill
 # Cannot override window.screen.orientation.unlock due to old browser conflicts

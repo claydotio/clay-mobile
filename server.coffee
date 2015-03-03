@@ -132,7 +132,6 @@ router.get '/ping', (req, res) ->
   res.end 'pong'
 
 router.get '/game/:key', (req, res) ->
-  log.info 'AGENT ', req.useragent.source
   gameKey = req.params.key
 
   renderGamePage gameKey, req.useragent.isProbablyKik
@@ -156,8 +155,31 @@ router.get '/game/:key', (req, res) ->
         log.trace err
         res.status(500).send()
 
+router.get '/invite-landing/:fromUserId', (req, res) ->
+  fromUserId = req.params.fromUserId
+
+  renderInviteLandingPage fromUserId, req.useragent.isProbablyKik
+  .then (html) ->
+    res.send html
+  .catch (err) ->
+    log.trace err
+
+    if err instanceof Error404 or err.statusCode is 404
+      fourOhFour()
+      .then (html) ->
+        res.status(404).send html
+      .catch (err) ->
+        log.trace err
+        res.status(500).send()
+    else
+      renderHomePage(req.useragent.isProbablyKik)
+      .then (html) ->
+        res.send html
+      .catch (err) ->
+        log.trace err
+        res.status(500).send()
+
 router.get '*', (req, res) ->
-  log.info 'AGENT ', req.useragent.source
   host = req.headers.host
 
   # Game Subdomain - 0.0.0.0 used when running tests locally
@@ -203,11 +225,13 @@ renderHomePage = do ->
                   Clay has the best HTML5 games.'
     keywords: 'mobile games, clay games, free mobile games, mobile web games'
     name: 'Clay Games - Play Free HTML5 Mobile Games'
-    icon256: '//cdn.wtf/d/images/icons/icon_256.png'
-    icon76: '//cdn.wtf/d/images/icons/icon_76.png'
-    icon120: '//cdn.wtf/d/images/icons/icon_120.png'
-    icon152: '//cdn.wtf/d/images/icons/icon_152.png'
-    icon440x280: '//cdn.wtf/d/images/icons/icon_440_280.png'
+    icon256: 'https://cdn.wtf/d/images/icons/icon_256.png'
+    icon76: 'https://cdn.wtf/d/images/icons/icon_76.png'
+    icon120: 'https://cdn.wtf/d/images/icons/icon_120.png'
+    icon152: 'https://cdn.wtf/d/images/icons/icon_152.png'
+    icon440x280: 'https://cdn.wtf/d/images/icons/icon_440_280.png'
+    # can't specify https because:
+    # https://github.com/kikinteractive/kik-js-issues/issues/12
     iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
     url: 'http://clay.io/'
     canonical: 'http://clay.io'
@@ -346,6 +370,8 @@ renderGamePage = (gameKey, isProbablyKik) ->
     if _.isEmpty game
       throw new Error404 'Game not found: ' + gameKey
 
+    # TODO: (Austin) use Game.getIcon() when zorium no longer depends on
+    # DOM/window (Game model depends on Zorium)
     iconUrl = game.iconImage?.versions[0].url or game.icon128Url
 
     page =
@@ -374,5 +400,29 @@ renderGamePage = (gameKey, isProbablyKik) ->
       canonical: "http://#{game.key}.clay.io"
 
     Promise.promisify(dust.render, dust) 'index', page
+
+
+renderInviteLandingPage = (fromUserId, isProbablyKik) ->
+
+  page =
+    isProbablyKik: isProbablyKik
+    inlineSource: config.ENV is config.ENVS.PROD
+    webpackDevHostname: config.WEBPACK_DEV_HOSTNAME
+    title: 'Please be my friend on Clay'
+    description: 'Play a bunch of great games and be my friend on Clay'
+    keywords: 'mobile games,  free mobile games'
+    name: 'Please be my friend on Clay'
+    distjs: distJs
+
+    icon256: 'https://cdn.wtf/d/images/icons/icon_256.png'
+    icon76: 'https://cdn.wtf/d/images/icons/icon_76.png'
+    icon120: 'https://cdn.wtf/d/images/icons/icon_120.png'
+    icon152: 'https://cdn.wtf/d/images/icons/icon_152.png'
+    icon440x280: 'https://cdn.wtf/d/images/icons/icon_440_280.png'
+    iconKik: '' # don't want this page to show on Kik
+    url: "http://clay.io/invite-landing/#{fromUserId}"
+    canonical: "http://clay.io/invite-landing/#{fromUserId}"
+
+  Promise.promisify(dust.render, dust) 'index', page
 
 module.exports = app

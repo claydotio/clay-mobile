@@ -25,6 +25,9 @@ class EnvironmentService
   isAndroid: ->
     _.contains navigator.appVersion, 'Android'
 
+  isiOS: ->
+    Boolean navigator.appVersion.match /iP(hone|od|ad)/g
+
   isClayApp: ->
     _.contains navigator.userAgent, 'Clay'
 
