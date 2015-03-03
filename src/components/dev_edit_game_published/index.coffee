@@ -15,7 +15,9 @@ module.exports = class DevEditGamePublished
     @state = z.state
       game: o_game
 
-  render: ({game}) ->
+  render: =>
+    {game} = @state()
+
     gameUrl = UrlService.getGameSubdomain {game}
     z 'div.z-dev-edit-game-published',
       z 'i.icon.icon-happy'

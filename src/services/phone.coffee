@@ -1,5 +1,6 @@
 dialCodes = require '../lib/dial_codes.json'
 request = require '../lib/request'
+log = require 'clay-loglevel'
 
 INTERNATIONAL_PHONE_REGEX = '\\+(9[976]\\d|8[987530]\\d|6[987]\\d|' +
                             '5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9' +
@@ -26,5 +27,9 @@ class PhoneService
         else
           # TODO: (Austin) throw an err here when we have client-side validation
           return ''
+      .catch (err) ->
+        # if ipinfo fails, log to server and just assume user is U.S.
+        log.trace err
+        return "+1#{phone}"
 
 module.exports = new PhoneService()

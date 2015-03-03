@@ -10,7 +10,9 @@ module.exports = class DevDashboardMenu
 
     @state = z.state {selected}
 
-  render: ({selected}) ->
+  render: =>
+    {selected} = @state()
+
     z '.z-dev-dashboard-menu',
       z '.menu',
         z.router.link z 'a[href=/edit-game/start]',

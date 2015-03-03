@@ -26,7 +26,9 @@ module.exports = class GooglePlayAdModal
     ga? 'send', 'event', 'to_google_play', 'convert'
     window.open 'https://play.google.com/store/apps/details?id=com.clay.clay'
 
-  render: ({modalHeader}) =>
+  render: =>
+    {modalHeader} = @state()
+
     z 'div.z-google-play-ad-modal',
       modalHeader
       z 'div.content',

@@ -45,7 +45,9 @@ module.exports = class DevEditGameGetStarted
           theme: '.theme-tiny-width'
         }
 
-  render: ({game, nameInput, keyInput, gameIdInput}) ->
+  render: =>
+    {game, nameInput, keyInput, gameIdInput} = @state()
+
     # TODO (Austin): remove key when v-dom diff/zorium unmount work properly
     # https://github.com/claydotio/zorium/issues/13
     z "div.z-dev-edit-game-get-started

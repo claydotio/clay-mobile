@@ -20,28 +20,28 @@ module.exports = class DevLogin
     @o_applyGameUrl = z.observe ''
 
     @state = z.state
-      emailInput: new InputText {
+      $emailInput: new InputText {
         label: 'Email'
         o_value: @o_email
         theme: '.theme-full-width'
       }
-      passwordInput: new InputText {
+      $passwordInput: new InputText {
         type: 'password'
         label: 'Password'
         o_value: @o_password
         theme: '.theme-full-width'
       }
-      applyEmailInput: new InputText {
+      $applyEmailInput: new InputText {
         label: 'Email'
         o_value: @o_applyEmail
         theme: '.theme-full-width'
       }
-      applyGameUrlInput: new InputText {
+      $applyGameUrlInput: new InputText {
         label: 'Game URL'
         o_value: @o_applyGameUrl
         theme: '.theme-full-width'
       }
-      verticalDivider: new VerticalDivider()
+      $verticalDivider: new VerticalDivider()
 
   login: =>
     User.loginBasic {email: @o_email(), password: @o_password()}
@@ -64,15 +64,15 @@ module.exports = class DevLogin
           gameUrl: @o_applyGameUrl()
       })
 
-  render: (
+  render: =>
     {
-      emailInput
-      passwordInput
-      applyEmailInput
-      applyGameUrlInput
-      verticalDivider
-    }
-  ) ->
+      $emailInput
+      $passwordInput
+      $applyEmailInput
+      $applyGameUrlInput
+      $verticalDivider
+    } = @state()
+
     z 'div.z-dev-login',
       z 'div.banner.l-flex.l-vertical-center',
         z 'div.content',
@@ -120,15 +120,15 @@ module.exports = class DevLogin
                 throw err
               .catch log.trace
             },
-            emailInput
-            passwordInput
+            $emailInput
+            $passwordInput
             # TODO (Austin) forgot password, whenever someone aks for it
             z 'button.button-secondary.sign-in-button', 'Sign In'
           z 'div.tos',
             'By signing up for Clay.io, you agree to our '
             z 'a[href=/tos]', 'Terms of Service'
 
-        verticalDivider
+        $verticalDivider
 
         z 'div.apply',
           z 'h1', 'Request an invite'
@@ -150,8 +150,8 @@ module.exports = class DevLogin
                 throw err
               .catch log.trace
             },
-            applyEmailInput
-            applyGameUrlInput
+            $applyEmailInput
+            $applyGameUrlInput
             z 'button.button-primary.apply-button', 'Invite me!'
 
       z 'div.player-message',

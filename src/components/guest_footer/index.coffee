@@ -11,9 +11,11 @@ module.exports = class GuestFooter
     styles.use()
 
     @state = z.state
-      SocialIcons: new SocialIcons()
+      $socialIcons: new SocialIcons()
 
-  render: ({SocialIcons}) ->
+  render: =>
+    {$socialIcons} = @state()
+
     z '.z-guest-footer',
       z '.l-content-container.l-flex.content',
         z 'section.section',
@@ -30,7 +32,7 @@ module.exports = class GuestFooter
               z 'li', z "a[href=//#{config.HOST}/privacy]", 'Privacy'
         z '.section',
           z 'h3.title', 'Connect'
-          SocialIcons
+          $socialIcons
         z 'section.clay-info',
           z "img.cloud[src=#{styleConfig.$logoCloudSvg}]"
           z 'div.copyright', '© 2015 Clay'

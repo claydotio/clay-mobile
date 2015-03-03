@@ -37,6 +37,7 @@ module.exports = class FriendRequestCard
           z 'div.profile-pic',
             z 'div.icon',
               z $groupIcon, {
+                isTouchTarget: false
                 icon: 'group'
                 color: styleConfig.$white
               }
