@@ -51,6 +51,7 @@ module.exports = class Friends
         z $addFriendFab,
           colors: {c500: styleConfig.$orange500}
           $icon: z $addIcon,
+            isTouchTarget: false
             icon: 'add'
             color: styleConfig.$white
           onclick: ->
