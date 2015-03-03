@@ -3,12 +3,8 @@ z = require 'zorium'
 Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
 
-styles = require './index.styl'
-
 module.exports = class BackButton
   constructor: ->
-    styles.use()
-
     @state = z.state
       $backIcon: new Icon()
 
