@@ -112,6 +112,7 @@ module.exports = class NavDrawer
                 },
                   z '.icon',
                     z $icon,
+                      isTouchTarget: false
                       icon: iconName
                       color: if isSelected
                       then styleConfig.$blue500

@@ -5,6 +5,7 @@ _ = require 'lodash'
 request = require '../lib/request'
 localstore = require '../lib/localstore'
 config = require '../config'
+EnvironmentService = require '../services/environment'
 
 PATH = config.PUBLIC_CLAY_API_URL + '/users'
 DEFAULT_PROFILE_PIC = '//cdn.wtf/d/images/general/profile-square.png'

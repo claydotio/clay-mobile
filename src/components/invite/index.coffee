@@ -52,6 +52,7 @@ module.exports = class Invite
             z "div.social-icon.#{className}",
               z 'div.icon',
                 z $icon,
+                  isTouchTarget: false
                   icon: iconName
                   color: styleConfig.$white
             z 'div', title

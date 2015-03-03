@@ -26,6 +26,7 @@ module.exports = class Friends
       if _.isEmpty friends
         z 'div.no-friends',
           z $groupIcon,
+            isTouchTarget: false
             icon: 'group'
             size: '80px'
             color: styleConfig.$grey300
