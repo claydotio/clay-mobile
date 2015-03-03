@@ -36,6 +36,7 @@ KikService = require './services/kik'
 baseStyles = require './stylus/base.styl'
 
 ENGAGED_ACTIVITY_TIME = 1000 * 60 # 1min
+KIK_PICKER_MIN_TIMEOUT_MS = 200
 
 baseStyles.use()
 PortalService.registerMethods()
@@ -46,6 +47,11 @@ PortalService.registerMethods()
 
 # Marketplace or game was loaded in picker
 if kik?.picker?.reply
+  kikPickerReply = (value = {}) ->
+    setTimeout ->
+      kik.picker.reply value
+    , KIK_PICKER_MIN_TIMEOUT_MS
+
   if UrlService.isRootPath() # marketplace in picker
     # will throw an error if token exists. better than waiting for roundtrip
     # to check for existence
@@ -54,18 +60,18 @@ if kik?.picker?.reply
       throw new Error 'always'
     .catch ->
       kik.getAnonymousUser (anonToken) ->
-        kik.picker.reply {anonToken}
+        kikPickerReply {anonToken}
     .catch (err) ->
       log.trace err
-      kik.picker.reply {}
+      kikPickerReply {}
   else # game subdomain in picker
     gameKey = UrlService.getSubdomain()
     PushToken.createByGameKey gameKey
     .then ->
-      kik.picker.reply {}
+      kikPickerReply {}
     .catch (err) ->
       log.trace err
-      kik.picker.reply {}
+      kikPickerReply {}
   throw new Error 'Stop code execution'
 
 ###########

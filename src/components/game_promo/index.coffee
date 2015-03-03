@@ -23,16 +23,15 @@ module.exports = class GamePromo
     width ?= styleConfig.$marketplaceGamePromoWidth
     height ?= styleConfig.$marketplaceGamePromoHeight
     gameSubdomainUrl = UrlService.getGameSubdomain {game}
+    backgroundImage = game.headerImage?.versions[0].url or game.promo440Url
 
-    z "a.z-game-promo[href=#{gameSubdomainUrl}]",
+    z "a.z-game-promo[href=#{gameSubdomainUrl}]", {
       onclick: (e) =>
         e?.preventDefault()
         @loadGame game
-      style:
-        width: "#{width}px",
-      z 'img.image',
-        src: game.headerImage?.versions[0].url or game.promo440Url
-        width: width
-        height: height
-      z '.info',
-        z 'h3', game.name
+    },
+      z 'div.image',
+        style:
+          backgroundImage: "url(#{backgroundImage})"
+          width: "#{width}px",
+          height: "#{height}px"
