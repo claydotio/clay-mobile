@@ -9,8 +9,11 @@ class NavDrawer
 
   open: =>
     @o_isOpen.set true
+    # prevent body scrolling while viewing menu
+    document.body.style.overflow = 'hidden'
 
   close: =>
     @o_isOpen.set false
+    document.body.style.overflow = 'auto'
 
 module.exports = new NavDrawer()
