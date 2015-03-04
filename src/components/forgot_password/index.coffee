@@ -57,5 +57,3 @@ module.exports = class ForgotPassword
           z $signinButton,
             text: 'Reset'
             type: 'submit'
-            onclick: =>
-              @recover().catch log.trace

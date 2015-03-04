@@ -91,5 +91,3 @@ module.exports = class ResetPassword
           z $changePasswordButton,
             text: 'Change'
             type: 'submit'
-            onclick: =>
-              @changePassword(phone).catch log.trace

@@ -81,5 +81,3 @@ module.exports = class Login
           z $signinButton,
             text: 'Sign in'
             type: 'submit'
-            onclick: =>
-              @login().catch log.trace
