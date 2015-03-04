@@ -82,6 +82,10 @@ module.exports = class Join
           e.preventDefault()
           @signup(fromUserId).catch log.trace
       },
+        # enter button on keyboard only calls onsubmit if there is
+        # an input[type=submit] in the form
+        # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
+        z 'input[type=submit]', {style: display: 'none'}
         z $nameInput,
           hintText: 'Name'
           isFloating: true
@@ -102,7 +106,9 @@ module.exports = class Join
         z 'div.signup-button',
           z $signupButton,
             text: 'Sign up'
-            type: 'submit'
+            onclick: (e) =>
+              e.preventDefault()
+              @signup(fromUserId).catch log.trace
 
       z 'div.terms',
         'By signing up, you agree to receive SMS messages and to our '

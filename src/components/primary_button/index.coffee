@@ -17,6 +17,7 @@ module.exports = class PrimaryButton
     z $button,
       text: text
       onclick: onclick
+      isRaised: true
       isFullWidth: isFullWidth
       type: type
       colors:

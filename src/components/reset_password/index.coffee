@@ -70,8 +70,12 @@ module.exports = class ResetPassword
       z 'form.form', {
         onsubmit: (e) =>
           e.preventDefault()
-          @changePassword( phone ).catch log.trace
+          @changePassword(phone).catch log.trace
       },
+        # enter button on keyboard only calls onsubmit if there is
+        # an input[type=submit] in the form
+        # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
+        z 'input[type=submit]', {style: display: 'none'}
         z $recoveryTokenInput,
           hintText: 'Reset Code'
           isFloating: true
@@ -90,4 +94,6 @@ module.exports = class ResetPassword
               @resend phone
           z $changePasswordButton,
             text: 'Change'
-            type: 'submit'
+            onclick: (e) =>
+              e.preventDefault()
+              @changePassword(phone).catch log.trace

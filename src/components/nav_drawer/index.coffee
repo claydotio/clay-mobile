@@ -90,8 +90,11 @@ module.exports = class NavDrawer
                     z.router.go '/login'
                 z $signupButton,
                   text: 'Sign up'
+                  isRaised: true
                   colors:
                     c500: styleConfig.$white
+                    c600: styleConfig.$white
+                    c700: styleConfig.$white
                     ink: styleConfig.$orange500
                   onclick: ->
                     NavDrawerModel.close()

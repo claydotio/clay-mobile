@@ -72,14 +72,12 @@ class User
     return me
 
   updateMe: (userUpdate) =>
-    @getMe().then (me) =>
+    @setMe @getMe().then (me) ->
       request "#{PATH}/me",
         method: 'PUT'
         qs:
           accessToken: me.accessToken
         body: userUpdate
-      .then (res) =>
-        @setMe Promise.resolve res
 
   getById: (userId) =>
     @getMe().then ({accessToken}) ->

@@ -60,6 +60,10 @@ module.exports = class Login
           e.preventDefault()
           @login().catch log.trace
       },
+        # enter button on keyboard only calls onsubmit if there is
+        # an input[type=submit] in the form
+        # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
+        z 'input[type=submit]', {style: display: 'none'}
         z $phoneInput,
           hintText: 'Phone number'
           type: 'tel'
@@ -79,4 +83,6 @@ module.exports = class Login
               z.router.go '/forgot-password'
           z $signinButton,
             text: 'Sign in'
-            type: 'submit'
+            onclick: (e) =>
+              e.preventDefault()
+              @login().catch log.trace

@@ -28,8 +28,11 @@ module.exports = class JoinThanksCard
       z 'div.actions',
         z $dismissButton,
           text: 'Dismiss'
+          isRaised: true
           colors:
             c500: styleConfig.$white
+            c600: styleConfig.$white
+            c700: styleConfig.$white
             ink: styleConfig.$blue500
           onclick: =>
             @state.set isDismissed: true

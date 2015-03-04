@@ -62,7 +62,6 @@ module.exports = class RequestAvatar
         z $dismissButton,
           text: 'Dismiss'
           colors:
-            c500: styleConfig.$white
             ink: styleConfig.$orange500
           onclick: =>
             @state.set isDismissed: true
