@@ -41,8 +41,8 @@ module.exports = class ResetPassword
     .then (phone) ->
       User.recoverLogin {phone}
     .catch (err) =>
-      error = JSON.parse err._body
-      @state.o_newPasswordError.set error.detail
+      # TODO: (Austin) better error handling
+      @state.o_newPasswordError.set err.detail
       throw err
     .then =>
       # hide resend button so they can't spam-click it
@@ -56,8 +56,8 @@ module.exports = class ResetPassword
     .then (phone) ->
       User.loginPhone {phone, recoveryToken, password: newPassword}
     .catch (err) =>
-      error = JSON.parse err._body
-      @state.o_newPasswordError.set error.detail
+      # TODO: (Austin) better error handling
+      @state.o_newPasswordError.set err.detail
       throw err
     .then ->
       z.router.go '/'

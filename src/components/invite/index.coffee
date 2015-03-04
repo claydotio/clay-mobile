@@ -3,6 +3,7 @@ z = require 'zorium'
 Icon = require '../icon'
 PrimaryButton = require '../primary_button'
 InviteService = require '../../services/invite'
+EnvironmentService = require '../../services/environment'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
 
@@ -45,6 +46,8 @@ module.exports = class Invite
     z '.z-invite',
       z 'div.invite-options',
         _.map shareMethods, ({className, title, $icon, iconName, inviteFn}) ->
+          if className is 'kik' and not EnvironmentService.isKikEnabled()
+            return
           z 'a[href=#].invite', {
             onclick: ->
               inviteFn {userId: me.id}

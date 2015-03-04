@@ -47,16 +47,19 @@ module.exports = class Join
     password = @state.o_password()
     phone = @state.o_phone()
 
+    unless name
+      @state.o_nameError.set 'Please enter a name'
+      return
+
     PhoneService.normalizePhoneNumber phone
     .then (phone) ->
       User.loginPhone {phone, password}
     .catch (err) =>
       # TODO: (Austin) better error handling
-      error = JSON.parse err._body
-      @state.o_phoneError.set error.detail
+      @state.o_phoneError.set err.detail
       throw err
     .then (me) ->
-      User.setMe me
+      User.setMe Promise.resolve me
     .then (me) ->
       User.updateMe({name: name}).catch log.trace
 

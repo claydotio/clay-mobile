@@ -33,8 +33,7 @@ module.exports = class ForgotPassword
       User.recoverLogin {phone}
     .catch (err) =>
       # TODO: (Austin) better error handling
-      error = JSON.parse err._body
-      @state.o_phoneError.set error.detail
+      @state.o_phoneError.set err.detail
       throw err
     .then ->
       z.router.go '/reset-password/' + encodeURIComponent phone
