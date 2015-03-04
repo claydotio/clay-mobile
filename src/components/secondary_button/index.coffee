@@ -19,5 +19,4 @@ module.exports = class SecondaryButton
       onclick: onclick
       isFullWidth: isFullWidth
       colors:
-        c500: styleConfig.$white
         ink: styleConfig.$black26

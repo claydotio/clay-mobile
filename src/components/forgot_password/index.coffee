@@ -47,6 +47,10 @@ module.exports = class ForgotPassword
           e.preventDefault()
           @recover().catch log.trace
       },
+        # enter button on keyboard only calls onsubmit if there is
+        # an input[type=submit] in the form
+        # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
+        z 'input[type=submit]', {style: display: 'none'}
         z $phoneNumberInput,
           hintText: 'Phone number'
           isFloating: true
@@ -55,4 +59,6 @@ module.exports = class ForgotPassword
         z 'div.reset-button',
           z $signinButton,
             text: 'Reset'
-            type: 'submit'
+            onclick: (e) =>
+              e.preventDefault()
+              @recover().catch log.trace

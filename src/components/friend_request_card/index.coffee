@@ -49,14 +49,12 @@ module.exports = class FriendRequestCard
         z $dismissButton,
           text: 'Dismiss'
           colors:
-            c500: styleConfig.$white
             ink: styleConfig.$orange500
           onclick: =>
             @state.set isDismissed: true
         z $viewFriendsButton,
           text: 'View Friends'
           colors:
-            c500: styleConfig.$white
             ink: styleConfig.$orange500
           onclick: ->
             z.router.go '/friends'
