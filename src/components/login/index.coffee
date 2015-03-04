@@ -5,6 +5,7 @@ Input = require 'zorium-paper/input'
 User = require '../../models/user'
 PrimaryButton = require '../primary_button'
 SecondaryButton = require '../secondary_button'
+Spinner = require '../spinner'
 PhoneService = require '../../services/phone'
 styleConfig = require '../../stylus/vars.json'
 
@@ -20,6 +21,8 @@ module.exports = class Login
     o_passwordError = z.observe null
 
     @state = z.state
+      isLoading: false
+      $spinner: new Spinner()
       $phoneInput: new Input {
         o_value: o_phone
         o_error: o_phoneError
@@ -36,15 +39,21 @@ module.exports = class Login
       o_passwordError: o_passwordError
 
   login: =>
+    @state.set isLoading: true
+
     password = @state.o_password()
     phone = @state.o_phone()
 
     PhoneService.normalizePhoneNumber phone
     .then (phone) ->
       User.loginPhone {phone, password}
+    .then (me) =>
+      @state.set isLoading: false
+      return me
     .catch (err) =>
       # TODO: (Austin) better error handling
       @state.o_phoneError.set err.detail
+      @state.set isLoading: false
       throw err
     .then (me) ->
       User.setMe Promise.resolve me
@@ -52,7 +61,7 @@ module.exports = class Login
 
   render: =>
     {$phoneInput, $passwordInput, $signinButton,
-      $forgotButton} = @state()
+      $forgotButton, $spinner, isLoading} = @state()
 
     z '.z-login',
       z 'form.form', {
@@ -76,13 +85,16 @@ module.exports = class Login
           isFloating: true
           colors:
             c500: styleConfig.$orange500
-        z 'div.actions',
-          z $forgotButton,
-            text: 'Forgot'
-            onclick: ->
-              z.router.go '/forgot-password'
-          z $signinButton,
-            text: 'Sign in'
-            onclick: (e) =>
-              e.preventDefault()
-              @login().catch log.trace
+        if isLoading
+          $spinner
+        else
+          z 'div.actions',
+            z $forgotButton,
+              text: 'Forgot'
+              onclick: ->
+                z.router.go '/forgot-password'
+            z $signinButton,
+              text: 'Sign in'
+              onclick: (e) =>
+                e.preventDefault()
+                @login().catch log.trace

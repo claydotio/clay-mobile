@@ -3,6 +3,7 @@ Button = require 'zorium-paper/button'
 Dropzone = require 'dropzone'
 
 config = require '../../config'
+Spinner = require '../spinner'
 User = require '../../models/user'
 EnvironmentService = require '../../services/environment'
 styleConfig = require '../../stylus/vars.json'
@@ -13,7 +14,7 @@ dataUriToBlob = (dataUri) ->
   binary = atob(dataUri.split(',')[1])
   byteArray = _.map _.range(binary.length), (i) ->
     binary.charCodeAt(i)
-  mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+  mimeString = dataUri.split(',')[0].split(':')[1].split(';')[0]
   return new Blob([new Uint8Array(byteArray)], {type: mimeString})
 
 module.exports = class RequestAvatar
@@ -23,7 +24,9 @@ module.exports = class RequestAvatar
     @state = z.state
       $dismissButton: new Button()
       $addButton: new Button()
+      $spinner: new Spinner()
       dropzone: null
+      isLoading: false
       isUploaded: false
       isDismissed: false
 
@@ -36,20 +39,24 @@ module.exports = class RequestAvatar
         paramName: 'image'
         acceptedFiles: 'image/jpeg,image/png'
         previewsContainer: false
+        addedfile: =>
+          @state.set isLoading: true
         success: (file, res) =>
-          @state.set isUploaded: true
+          @state.set {isLoading: false, isUploaded: true}
           User.setMe User.getMe().then (me) ->
             me.avatarImage = res
             return me
           ga? 'send', 'event', 'user', 'upload_avatar'
 
-        error: (file, res) ->
+        error: (file, res) =>
+          @state.set {isLoading: false}
           # TODO: (Austin) better error handling UX
           window.alert "Error: #{res.detail}"
       })
 
   render: =>
-    {$dismissButton, $addButton, isUploaded, isDismissed} = @state()
+    {$dismissButton, $addButton, $spinner, isUploaded,
+      isLoading, isDismissed} = @state()
 
     # TODO: (Austin) re-implement as stream where parent handles show/hide
     if isUploaded or isDismissed
@@ -58,24 +65,27 @@ module.exports = class RequestAvatar
     z 'div.z-request-avatar-card',
       z 'h2.title', 'Add a profile photo'
       z 'div.description', 'Add some personality to your profile :)'
-      z 'div.actions',
-        z $dismissButton,
-          text: 'Dismiss'
-          colors:
-            ink: styleConfig.$orange500
-          onclick: =>
-            @state.set isDismissed: true
-        # .dz-message necessary to be clickable (no workaround)
-        z 'div.dz-message.clickable',
-          z $addButton,
-            text: 'Add'
+      if isLoading
+        $spinner
+      else
+        z 'div.actions',
+          z $dismissButton,
+            text: 'Dismiss'
             colors:
-              c500: styleConfig.$white
               ink: styleConfig.$orange500
             onclick: =>
-              if EnvironmentService.isKikEnabled()
-                kik.photo?.get? {
-                  minResults: 1
-                  maxResults: 1
-                }, (photos) =>
-                  @state().dropzone.addFile dataUriToBlob photos[0]
+              @state.set isDismissed: true
+          # .dz-message necessary to be clickable (no workaround)
+          z 'div.dz-message.clickable',
+            z $addButton,
+              text: 'Add'
+              colors:
+                c500: styleConfig.$white
+                ink: styleConfig.$orange500
+              onclick: =>
+                if EnvironmentService.isKikEnabled()
+                  kik.photo?.get? {
+                    minResults: 1
+                    maxResults: 1
+                  }, (photos) =>
+                    @state().dropzone.addFile dataUriToBlob photos[0]

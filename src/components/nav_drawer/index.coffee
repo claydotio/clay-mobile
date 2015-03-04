@@ -4,7 +4,6 @@ Button = require 'zorium-paper/button'
 
 GooglePlayAdCard = require '../google_play_ad'
 Icon = require '../icon'
-PrimaryButton = require '../primary_button'
 NavDrawerModel = require '../../models/nav_drawer'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
@@ -22,7 +21,7 @@ module.exports = class NavDrawer
       isOpen: NavDrawerModel.isOpen()
       me: User.getMe()
       isLoggedIn: User.isLoggedIn()
-      $signinButton: new PrimaryButton()
+      $signinButton: new Button()
       $signupButton: new Button()
       $googlePlayAdCard: new GooglePlayAdCard()
       pages: [
@@ -85,6 +84,8 @@ module.exports = class NavDrawer
               z 'div.actions',
                 z $signinButton,
                   text: 'Sign in'
+                  colors:
+                    ink: styleConfig.$white
                   onclick: ->
                     NavDrawerModel.close()
                     z.router.go '/login'
