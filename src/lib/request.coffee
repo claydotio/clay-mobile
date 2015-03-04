@@ -36,3 +36,9 @@ module.exports = (url, options) ->
                         url=#{url},
                         options=#{options}"
     return res
+  .catch (err) ->
+    if err?.json
+      err.json().then (error) ->
+        throw error
+    else
+      throw err

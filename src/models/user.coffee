@@ -40,6 +40,8 @@ class User
     SMALL: SMALL_AVATAR_SIZE
     LARGE: LARGE_AVATAR_SIZE
 
+  DEFAULT_NAME: 'Nameless'
+
   signedUpThisSession: false
 
   getMe: =>
@@ -53,6 +55,7 @@ class User
 
     return me
 
+  #  FIXME: _me must be a promise (streams will hopefully fix)
   setMe: (_me) ->
     me.set _me
 
@@ -76,7 +79,7 @@ class User
           accessToken: me.accessToken
         body: userUpdate
       .then (res) =>
-        @setMe res
+        @setMe Promise.resolve res
 
   getById: (userId) =>
     @getMe().then ({accessToken}) ->

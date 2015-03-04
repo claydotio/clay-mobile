@@ -17,5 +17,9 @@ module.exports = class MenuButton
         isAlignedLeft: isAlignedLeft
         icon: 'menu'
         color: styleConfig.$white
-        onclick: ->
+        ontouchstart: (e) ->
+          e?.preventDefault()
+          NavDrawerModel.open()
+        onclick: (e) ->
+          e?.preventDefault()
           NavDrawerModel.open()

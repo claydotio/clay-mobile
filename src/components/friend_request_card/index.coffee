@@ -1,6 +1,7 @@
 z = require 'zorium'
 Button = require 'zorium-paper/button'
 
+User = require '../../models/user'
 Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
 
@@ -30,7 +31,7 @@ module.exports = class FriendRequestCard
           z 'img.profile-pic',
             src: User.getAvatarUrl friends[0]
           z 'div.friend-info',
-            z 'div.title', friends[0].name
+            z 'div.title', friends[0].name or User.DEFAULT_NAME
             z 'div.description', 'is now your friend!'
       else
         z 'div.many-friends',

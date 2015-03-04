@@ -41,7 +41,7 @@ module.exports = class Friends
                 z 'img.friend-avatar',
                   src: User.getAvatarUrl friend
                 z 'div.friend-info',
-                  z 'div.name', friend.name
+                  z 'div.name', friend.name or User.DEFAULT_NAME
                   if mostRecentGame
                     z 'div.game', mostRecentGame.name
                 if mostRecentGame

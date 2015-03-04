@@ -40,7 +40,7 @@ module.exports = class InviteLanding
           height: "#{CONTENT_HEIGHT}px"
       },
         z $befriendButton,
-          text: "Become friends with #{name or 'everyone'}"
+          text: "Become friends with #{fromUser?.name or 'everyone'}"
           isFullWidth: true
           onclick: ->
             User.isLoggedIn().then (isLoggedIn) ->

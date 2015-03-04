@@ -41,6 +41,12 @@ KIK_PICKER_MIN_TIMEOUT_MS = 200
 baseStyles.use()
 PortalService.registerMethods()
 
+# Facebook share redirects to ?#_=_, which isn't a route
+# TODO: (Austin) better workaround for this
+# FIXME: somehow send user back to Kik if they shared from Kik?
+if window.location.hash is '#_=_'
+  window.location.hash = ''
+
 ##############
 # KIK PICKER #
 ##############

@@ -46,7 +46,7 @@ module.exports = class DevLogin
   login: =>
     User.loginBasic {email: @o_email(), password: @o_password()}
     .then (me) ->
-      User.setMe me
+      User.setMe Promise.resolve me
     .then ({id}) ->
       Developer.find {ownerId: id }
     .then (developers) ->
