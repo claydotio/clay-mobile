@@ -4,7 +4,7 @@ log = require 'clay-loglevel'
 User = require '../../models/user'
 AppBar = require '../../components/app_bar'
 MenuButton = require '../../components/menu_button'
-MarketplaceShare = require '../../components/marketplace_share'
+MarketplaceShareButton = require '../../components/marketplace_share_button'
 NavDrawer = require '../../components/nav_drawer'
 ModalViewer = require '../../components/modal_viewer'
 HomeCards = require '../../components/home_cards'
@@ -22,7 +22,7 @@ module.exports = class GamesPage
     @state = z.state
       $appBar: new AppBar()
       $menuButton: new MenuButton()
-      $marketplaceShare: new MarketplaceShare()
+      $marketplaceShare: new MarketplaceShareButton()
       $navDrawer: new NavDrawer()
       $modalViewer: new ModalViewer()
       $homeCards: new HomeCards()
