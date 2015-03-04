@@ -1,19 +1,15 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
-portal = require 'portal-gun'
 
 User = require '../../models/user'
 ShareService = require '../../services/share'
 Icon = require '../icon'
 styleConfig = require '../../stylus/vars.json'
 
-styles = require './index.styl'
-
 MARKETPLACE_GAME_ID = '1'
 
-module.exports = class MarketplaceShare
+module.exports = class MarketplaceShareButton
   constructor: ->
-    styles.use()
 
     @state = z.state
       $shareIcon: new Icon()
@@ -33,10 +29,9 @@ module.exports = class MarketplaceShare
   render: ({isAlignedRight}) =>
     {$shareIcon} = @state()
 
-    z 'a.z-marketplace-share[href=#]', {
-      onclick: @share
-    },
+    z 'div.z-marketplace-share-button',
       z $shareIcon,
         isAlignedRight: isAlignedRight
         icon: 'share'
         color: styleConfig.$white
+        onclick: @share

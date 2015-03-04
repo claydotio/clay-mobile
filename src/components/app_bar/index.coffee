@@ -1,8 +1,5 @@
 z = require 'zorium'
 
-MarketplaceShare = require '../marketplace_share'
-Icon = require '../icon'
-NavDrawerModel = require '../../models/nav_drawer'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
