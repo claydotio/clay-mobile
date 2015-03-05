@@ -38,4 +38,12 @@ class UrlService
 
     matches?[1] or null
 
+  openWindow: (url) ->
+    if EnvironmentService.isKikEnabled()
+    then kik.open url, true
+    else if EnvironmentService.isClayApp()
+    then window.open url, '_system'
+    else window.open url, '_blank'
+
+
 module.exports = new UrlService()

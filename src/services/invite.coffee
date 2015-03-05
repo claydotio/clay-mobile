@@ -1,6 +1,6 @@
 config = require '../config'
 UrlLib = require '../lib/url'
-EnvironmentService = require '../services/environment'
+UrlService = require '../services/url'
 kik = require 'kik'
 
 class InviteService
@@ -18,11 +18,7 @@ class InviteService
     }
     inviteUrl = "https://www.facebook.com/dialog/share?#{queryString}"
 
-    windowTarget = if EnvironmentService.isClayApp() \
-                   then '_system'
-                   else '_blank'
-
-    window.open inviteUrl, windowTarget
+    UrlService.openWindow inviteUrl
 
   sendKikInvite: ({userId}) ->
     ga? 'send', 'event', 'invite', 'kik', userId
@@ -43,10 +39,6 @@ class InviteService
     }
     inviteUrl = "https://twitter.com/intent/tweet?#{queryString}"
 
-    windowTarget = if EnvironmentService.isClayApp() \
-                   then '_system'
-                   else '_blank'
-
-    window.open inviteUrl, windowTarget
+    UrlService.openWindow inviteUrl
 
 module.exports = new InviteService()
