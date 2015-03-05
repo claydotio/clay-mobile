@@ -19,10 +19,28 @@ describe 'InviteService', ->
       window.open = oldOpen
       url.should.match urlRegex
       url.should.match /123/
-      windowName.should.be '_system'
+      windowName.should.be '_blank'
       done()
 
     InviteService.sendFacebookInvite({userId: '123'})
+
+  it 'sendFacebookInvite() with target=_system', (done) ->
+    InviteService.__with
+    oldOpen = window.open
+    window.open = (url, windowName) ->
+      window.open = oldOpen
+      url.should.match urlRegex
+      url.should.match /123/
+      windowName.should.be '_system'
+      done()
+
+    overrides =
+      EnvironmentService:
+        isClayApp: ->
+          return true
+
+    InviteService.__with__(overrides) ->
+      InviteService.sendFacebookInvite({userId: '123'})
 
   it 'sendKikInvite()', (done) ->
     overrides =
@@ -46,7 +64,7 @@ describe 'InviteService', ->
       window.open = oldOpen
       url.should.match urlRegex
       url.should.match /123/
-      windowName.should.be '_system'
+      windowName.should.be '_blank'
       done()
 
     InviteService.sendTwitterInvite({userId: '123'})
