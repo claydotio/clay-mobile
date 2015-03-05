@@ -3,6 +3,7 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 
 Game = require '../../models/game'
+User = require '../../models/user'
 GameBox = require '../game_box'
 GamePromo = require '../game_promo'
 Spinner = require '../spinner'
@@ -15,6 +16,7 @@ LOAD_MORE_GAMES_LIMIT = 13
 SCROLL_THRESHOLD = 250
 BOXES_PER_ROW_SMALL_SCREEN = 2
 BOXES_PER_ROW_MEDIUM_SCREEN = 3
+ZOP_GAME_ID = '8343'
 
 elTopPosition = ($$el) ->
   if $$el
@@ -48,6 +50,11 @@ module.exports = class PopularGames
       gamePromoWidth
       gamePromoHeight
       featuredGamePosition
+      isZopVisible: z.observe User.getExperiments().then (params) ->
+        if params.zop is 'visible'
+          true
+        else
+          false
     }
 
   onMount: (@$$el) =>
@@ -121,12 +128,16 @@ module.exports = class PopularGames
       gamePromoHeight
       gameBoxSize
       isLoading
+      isZopVisible
     } = @state()
 
     z 'section.z-game-results',
       z 'h2.header', 'Most popular games'
       z 'div.game-boxes',
       (_.map gameLinks, (gameLink) ->
+        unless isZopVisible
+          if gameLink.game.id is ZOP_GAME_ID
+            return
         if gameLink.type is 'featured'
           z '.featured-game-box-container',
             z gameLink.$component,
