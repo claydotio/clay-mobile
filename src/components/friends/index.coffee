@@ -52,7 +52,7 @@ module.exports = class Friends
         z 'ul.friends',
           _.map friends, (friend) ->
             z 'li.friend',
-              z.router.link 'a.friend-link',
+              z.router.link z 'a.friend-link',
                 if friend.mostRecentGame then {
                   href: UrlService.getGameRoute {game: friend.mostRecentGame}
                 }
