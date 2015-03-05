@@ -3,6 +3,7 @@ _ = require 'lodash'
 Fab = require 'zorium-paper/floating_action_button'
 
 Icon = require '../icon'
+Spinner = require '../spinner'
 styleConfig = require '../../stylus/vars.json'
 User = require '../../models/user'
 Game = require '../../models/game'
@@ -17,13 +18,16 @@ module.exports = class Friends
       $addFriendFab: new Fab()
       $groupIcon: new Icon()
       $addIcon: new Icon()
+      $spinner: new Spinner()
       friends: z.observe User.getFriends()
 
   render: =>
-    {$addFriendFab, $groupIcon, $addIcon, friends} = @state()
+    {$addFriendFab, $groupIcon, $addIcon, $spinner, friends} = @state()
 
     z '.z-friends',
-      if _.isEmpty friends
+      if friends is null
+        z 'div.spinner', $spinner
+      else if _.isEmpty friends
         z 'div.no-friends',
           z $groupIcon,
             isTouchTarget: false

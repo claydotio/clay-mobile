@@ -4,6 +4,7 @@ Input = require 'zorium-paper/input'
 
 User = require '../../models/user'
 PhoneService = require '../../services/phone'
+EnvironmentService = require '../../services/environment'
 PrimaryButton = require '../primary_button'
 Spinner = require '../spinner'
 config = require '../../config'
@@ -87,6 +88,10 @@ module.exports = class Join
     {$nameInput, $phoneInput, $passwordInput, $signupButton,
       $spinner, isLoading} = @state()
 
+    windowTarget = if EnvironmentService.isClayApp() \
+                   then '_system'
+                   else '_blank'
+
     z '.z-join',
       z 'form.form', {
         onsubmit: (e) =>
@@ -126,7 +131,7 @@ module.exports = class Join
 
       z 'div.terms',
         'By signing up, you agree to receive SMS messages and to our '
-        z 'a[href=/privacy][target=_system]', 'Privacy Policy'
+        z "a[href=/privacy][target=#{windowTarget}]", 'Privacy Policy'
         ' and '
-        z 'a[href=/tos][target=_system]', 'Terms'
+        z "a[href=/tos][target=#{windowTarget}]", 'Terms'
         '.'
