@@ -3,7 +3,9 @@
 
 json('../../stylus/vars.json')
 
-$navDrawerHeaderHeight = 200
+$navDrawerHeaderHeight = 144
+$zIndexDrawerUserHeader = 200
+$zIndexDrawerGuestHeader = 200
 $zIndexNavDrawerHeader = 100
 
 .z-nav-drawer
@@ -54,29 +56,41 @@ $zIndexNavDrawerHeader = 100
       box-sizing: border-box
       position: relative
       z-index: $zIndexNavDrawerHeader
-      background: $orange500
+      background: url('//cdn.wtf/d/images/general/dot_pattern.svg') $orange500
       // prevents flicker glitch http://stackoverflow.com/a/3921870
       backface-visibility: hidden
+
+      &:after
+        content: ''
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        background: linear-gradient(top, rgba(255, 138, 0, 0.52), $orange500)
 
       > .user-header
         display: flex
         flex-direction: column
+        position: relative
+        z-index: $zIndexDrawerUserHeader
 
         > .avatar
-          width: 72px
-          height: 72px
+          width: 64px
+          height: 64px
           border-radius: 50%
 
         > .name
           zp-font-subhead()
           color: $white
           margin-top: auto
-          margin-bottom: 8px
 
       > .guest-header
         display: flex
         flex-direction: column
         width: 100%
+        position: relative
+        z-index: $zIndexDrawerUserHeader
 
         > .description
           zp-font-subhead()

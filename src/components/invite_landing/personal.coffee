@@ -1,8 +1,8 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 Button = require 'zorium-paper/button'
 
 PrimaryButton = require '../primary_button'
-SecondaryButton = require '../secondary_button'
 User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
 
@@ -16,7 +16,7 @@ module.exports = class InviteLanding
 
     @state = z.state
       $befriendButton: new PrimaryButton()
-      $whatIsClayButton: new SecondaryButton()
+      $whatIsClayButton: new Button()
       fromUser: z.observe User.getById fromUserId
 
   render: =>
@@ -36,7 +36,7 @@ module.exports = class InviteLanding
           else ''
       },
         z 'div.header-content',
-          z 'h1.name', fromUser?.name
+          z 'h1.name', fromUser?.name or User.DEFAULT_NAME
           z 'div.description',
             'Has invited you to become friends.'
       z 'div.content', {
@@ -51,12 +51,21 @@ module.exports = class InviteLanding
               if isLoggedIn
                 User.addFriend(fromUser.id).then ->
                   z.router.go '/'
+                .catch (err) ->
+                  log.trace err
+                  z.router.go '/'
               else
-                z.router.go "/join/#{fromUser.id}"
+                z.router.go "/join?from=#{fromUser.id}"
 
         z $whatIsClayButton,
           text: 'What is Clay?'
           isFullWidth: true
+          isRaised: true
+          colors:
+            c500: styleConfig.$white
+            c600: styleConfig.$white
+            c700: styleConfig.$white
+            ink: styleConfig.$whiteText
           onclick: ->
             z.router.go "/what-is-clay/#{fromUser.id}"
 
@@ -65,6 +74,8 @@ module.exports = class InviteLanding
             e.preventDefault()
 
             User.isLoggedIn().then (isLoggedIn) ->
-              z.router.go if isLoggedIn then '/' else "/join/#{fromUser.id}"
+              z.router.go if isLoggedIn \
+                          then '/'
+                          else "/join?from=#{fromUser.id}"
         },
           'I prefer to play alone'

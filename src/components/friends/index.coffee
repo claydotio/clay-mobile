@@ -1,5 +1,6 @@
 z = require 'zorium'
 _ = require 'lodash'
+Promise = require 'bluebird'
 Fab = require 'zorium-paper/floating_action_button'
 
 Icon = require '../icon'
@@ -7,6 +8,8 @@ Spinner = require '../spinner'
 styleConfig = require '../../stylus/vars.json'
 User = require '../../models/user'
 Game = require '../../models/game'
+request = require '../../lib/request'
+UrlService = require '../../services/url'
 
 styles = require './index.styl'
 
@@ -19,7 +22,16 @@ module.exports = class Friends
       $groupIcon: new Icon()
       $addIcon: new Icon()
       $spinner: new Spinner()
-      friends: z.observe User.getFriends()
+      friends: z.observe User.getFriends().then (friends) ->
+        Promise.map friends, (friend) ->
+          recentGamesHref = friend.links.recentGames?.href
+          if recentGamesHref
+            request friend.links.recentGames.href
+            .then (recentGames) ->
+              friend.mostRecentGame = recentGames[0]
+              return friend
+          else
+            return friend
 
   render: =>
     {$addFriendFab, $groupIcon, $addIcon, $spinner, friends} = @state()
@@ -39,18 +51,21 @@ module.exports = class Friends
       else
         z 'ul.friends',
           _.map friends, (friend) ->
-            mostRecentGame = friend.links.recentGames?[0]
             z 'li.friend',
               z 'a.friend-link',
+                if friend.mostRecentGame then {
+                  href: UrlService.getGameRoute {game: friend.mostRecentGame}
+                }
+                else {},
                 z 'img.friend-avatar',
                   src: User.getAvatarUrl friend
                 z 'div.friend-info',
                   z 'div.name', friend.name or User.DEFAULT_NAME
-                  if mostRecentGame
-                    z 'div.game', mostRecentGame.name
-                if mostRecentGame
+                  if friend.mostRecentGame
+                    z 'div.game', friend.mostRecentGame.name
+                if friend.mostRecentGame
                   z 'img.game-pic',
-                    src: Game.getIconUrl mostRecentGame
+                    src: Game.getIconUrl friend.mostRecentGame
 
       z 'div.fab',
         z $addFriendFab,

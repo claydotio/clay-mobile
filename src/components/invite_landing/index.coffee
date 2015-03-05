@@ -1,4 +1,5 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 
 PrimaryButton = require '../primary_button'
 User = require '../../models/user'
@@ -40,15 +41,18 @@ module.exports = class InviteLanding
           height: "#{CONTENT_HEIGHT}px"
       },
         z $befriendButton,
-          text: "Become friends with #{fromUser?.name or 'everyone'}"
+          text: "Become friends with #{fromUser?.name or User.DEFAULT_NAME}"
           isFullWidth: true
           onclick: ->
             User.isLoggedIn().then (isLoggedIn) ->
               if isLoggedIn
                 User.addFriend(fromUser.id).then ->
                   z.router.go '/'
+                .catch (err) ->
+                  log.trace err
+                  z.router.go '/'
               else
-                z.router.go "/join/#{fromUser.id}"
+                z.router.go "/join?from=#{fromUser.id}"
 
         z.router.link z 'a[href=/join].skip-friend',
           'I prefer to play alone'

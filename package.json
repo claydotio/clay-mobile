@@ -73,7 +73,7 @@
     "promiz": "1.0.0",
     "request-promise": "0.3.2",
     "whatwg-fetch": "^0.7.0",
-    "zorium": "^0.7.1",
-    "zorium-paper": "^0.3.6"
+    "zorium": "^0.7.5",
+    "zorium-paper": "^0.3.7"
   }
 }

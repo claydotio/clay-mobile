@@ -44,7 +44,7 @@ module.exports = class ForgotPassword
       @state.set isLoading: false
       throw err
     .then ->
-      z.router.go '/reset-password/' + encodeURIComponent phone
+      z.router.go '/reset-password?phone=' + encodeURIComponent phone
 
   render: =>
     {$phoneNumberInput, $signinButton, $spinner, isLoading} = @state()
@@ -55,12 +55,9 @@ module.exports = class ForgotPassword
           e.preventDefault()
           @recover().catch log.trace
       },
-        # enter button on keyboard only calls onsubmit if there is
-        # an input[type=submit] in the form
-        # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
-        z 'input[type=submit]', {style: display: 'none'}
         z $phoneNumberInput,
           hintText: 'Phone number'
+          type: 'tel'
           isFloating: true
           colors:
             c500: styleConfig.$orange500
@@ -70,6 +67,4 @@ module.exports = class ForgotPassword
           z 'div.reset-button',
             z $signinButton,
               text: 'Reset'
-              onclick: (e) =>
-                e.preventDefault()
-                @recover().catch log.trace
+              type: 'submit'

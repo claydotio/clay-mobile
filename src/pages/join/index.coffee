@@ -9,17 +9,21 @@ styles = require './index.styl'
 localStyleConfig = require './vars.json'
 
 module.exports = class JoinPage
-  constructor: ({fromUserId}) ->
+  constructor: ({}, {from}) ->
     styles.use()
 
     @state = z.state
       $appBar: new AppBar()
       $backButton: new BackButton()
       $join: new Join()
-      fromUserId: fromUserId
+      fromUserId: from
 
   render: =>
     {$appBar, $backButton, $join, fromUserId} = @state()
+
+    loginRoute = if fromUserId \
+                 then "/login?from=#{fromUserId}"
+                 else '/login'
 
     z 'div.z-join-page',
       z $appBar, {
@@ -27,7 +31,8 @@ module.exports = class JoinPage
         overlapBottomPadding: "#{localStyleConfig.$cardOverlapHeight}px"
         isDescriptive: true
         $topLeftButton: z $backButton, {isAlignedLeft: true}
-        $topRightButton: z.router.link z 'a[href=/login].sign-in', 'Sign In'
+        $topRightButton: z.router.link z "a[href=#{loginRoute}].sign-in",
+                          'Sign In'
         title: 'Join Clay'
         description: 'Unlock the full potential.'
       }
