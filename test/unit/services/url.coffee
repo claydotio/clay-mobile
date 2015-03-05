@@ -61,3 +61,47 @@ describe 'UrlService', ->
   it 'getSubdomain({url: "test"})', ->
     testUrl = 'test'
     should.not.exist UrlService.getSubdomain({url: testUrl})
+
+  it 'openWindow() kik', (done) ->
+    overrides =
+      kik:
+        open: (url) ->
+          url.should.be 'http://clay.io'
+          done()
+
+      EnvironmentService:
+        isKikEnabled: ->
+          return true
+        isClayApp: ->
+          return false
+
+    UrlService.__with__(overrides) ->
+      UrlService.openWindow 'http://clay.io'
+
+  it 'openWindow() Clay App', (done) ->
+    oldOpen = window.open
+    window.open = (url, windowName) ->
+      window.open = oldOpen
+      url.should.be 'http://clay.io'
+      windowName.should.be '_system'
+      done()
+
+    overrides =
+      EnvironmentService:
+        isKikEnabled: ->
+          return false
+        isClayApp: ->
+          return true
+
+    UrlService.__with__(overrides) ->
+      UrlService.openWindow 'http://clay.io'
+
+  it 'openWindow()', (done) ->
+    oldOpen = window.open
+    window.open = (url, windowName) ->
+      window.open = oldOpen
+      url.should.be 'http://clay.io'
+      windowName.should.be '_blank'
+      done()
+
+    UrlService.openWindow 'http://clay.io'
