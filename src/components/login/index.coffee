@@ -38,7 +38,7 @@ module.exports = class Login
       o_password: o_password
       o_passwordError: o_passwordError
 
-  login: =>
+  login: (fromUserId) =>
     @state.set isLoading: true
 
     password = @state.o_password()
@@ -57,9 +57,13 @@ module.exports = class Login
       throw err
     .then (me) ->
       User.setMe Promise.resolve me
+
+      if fromUserId
+        User.addFriend(fromUserId).catch log.trace
+
       z.router.go '/'
 
-  render: =>
+  render: ({fromUserId}) =>
     {$phoneInput, $passwordInput, $signinButton,
       $forgotButton, $spinner, isLoading} = @state()
 
@@ -67,12 +71,8 @@ module.exports = class Login
       z 'form.form', {
         onsubmit: (e) =>
           e.preventDefault()
-          @login().catch log.trace
+          @login(fromUserId).catch log.trace
       },
-        # enter button on keyboard only calls onsubmit if there is
-        # an input[type=submit] in the form
-        # https://html.spec.whatwg.org/multipage/forms.html#implicit-submission
-        z 'input[type=submit]', {style: display: 'none'}
         z $phoneInput,
           hintText: 'Phone number'
           type: 'tel'
@@ -95,6 +95,4 @@ module.exports = class Login
                 z.router.go '/forgot-password'
             z $signinButton,
               text: 'Sign in'
-              onclick: (e) =>
-                e.preventDefault()
-                @login().catch log.trace
+              type: 'submit'

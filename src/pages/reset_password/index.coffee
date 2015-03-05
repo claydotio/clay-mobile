@@ -9,7 +9,7 @@ styles = require './index.styl'
 localStyleConfig = require './vars.json'
 
 module.exports = class ResetPasswordPage
-  constructor: ({phone}) ->
+  constructor: ({}, {phone}) ->
     styles.use()
 
     @state = z.state

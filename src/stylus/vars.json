@@ -44,6 +44,8 @@
   "$black": "#000000",
   "$white": "#ffffff",
 
+  "$whiteText": "rgba(0, 0, 0, 0.87)",
+
   "$black12": "rgba(0, 0, 0, 0.12)",
   "$black26": "rgba(0, 0, 0, 0.26)",
   "$black54": "rgba(0, 0, 0, 0.54)",
