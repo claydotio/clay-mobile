@@ -1,6 +1,7 @@
 z = require 'zorium'
 Button = require 'zorium-paper/button'
 
+User = require '../../models/user'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -36,3 +37,4 @@ module.exports = class JoinThanksCard
             ink: styleConfig.$blue500
           onclick: =>
             @state.set isDismissed: true
+            User.setSignedUpThisSession false

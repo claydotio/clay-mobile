@@ -5,6 +5,7 @@ Input = require 'zorium-paper/input'
 User = require '../../models/user'
 PhoneService = require '../../services/phone'
 PrimaryButton = require '../primary_button'
+Spinner = require '../spinner'
 config = require '../../config'
 styleConfig = require '../../stylus/vars.json'
 
@@ -22,6 +23,8 @@ module.exports = class Join
     o_passwordError = z.observe null
 
     @state = z.state
+      isLoading: false
+      $spinner: new Spinner()
       $nameInput: new Input {
         o_value: o_name
         o_error: o_nameError
@@ -43,20 +46,27 @@ module.exports = class Join
       o_passwordError: o_passwordError
 
   signup: (fromUserId) =>
+    @state.set isLoading: true
+
     name = @state.o_name()
     password = @state.o_password()
     phone = @state.o_phone()
 
     unless name
       @state.o_nameError.set 'Please enter a name'
-      return
+      @state.set isLoading: false
+      return Promise.resolve null
 
     PhoneService.normalizePhoneNumber phone
     .then (phone) ->
       User.loginPhone {phone, password}
+    .then (me) =>
+      @state.set isLoading: false
+      return me
     .catch (err) =>
       # TODO: (Austin) better error handling
       @state.o_phoneError.set err.detail
+      @state.set isLoading: false
       throw err
     .then (me) ->
       User.setMe Promise.resolve me
@@ -69,12 +79,13 @@ module.exports = class Join
         User.addFriend(fromUserId).catch log.trace
 
       ga? 'send', 'event', 'user', 'signup', fromUserId
-      User.convertExperiment 'phone_signup'
+      User.convertExperiment('phone_signup').catch log.trace
 
       z.router.go '/invite'
 
   render: ({fromUserId}) =>
-    {$nameInput, $phoneInput, $passwordInput, $signupButton} = @state()
+    {$nameInput, $phoneInput, $passwordInput, $signupButton,
+      $spinner, isLoading} = @state()
 
     z '.z-join',
       z 'form.form', {
@@ -103,12 +114,15 @@ module.exports = class Join
           isFloating: true
           colors:
             c500: styleConfig.$orange500
-        z 'div.signup-button',
-          z $signupButton,
-            text: 'Sign up'
-            onclick: (e) =>
-              e.preventDefault()
-              @signup(fromUserId).catch log.trace
+        if isLoading
+          $spinner
+        else
+          z 'div.signup-button',
+            z $signupButton,
+              text: 'Sign up'
+              onclick: (e) =>
+                e.preventDefault()
+                @signup(fromUserId).catch log.trace
 
       z 'div.terms',
         'By signing up, you agree to receive SMS messages and to our '

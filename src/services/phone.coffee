@@ -25,11 +25,12 @@ class PhoneService
         if internationalPhone.match new RegExp INTERNATIONAL_PHONE_REGEX
           return dialCodes[locationData.country] + digitPhone
         else
+          log.trace new Error "invalid phone number #{internationalPhone}"
           # TODO: (Austin) throw an err here when we have client-side validation
           return ''
       .catch (err) ->
         # if ipinfo fails, log to server and just assume user is U.S.
         log.trace err
-        return "+1#{phone}"
+        return "+1#{digitPhone}"
 
 module.exports = new PhoneService()

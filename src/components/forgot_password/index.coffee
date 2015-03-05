@@ -5,6 +5,7 @@ Input = require 'zorium-paper/input'
 User = require '../../models/user'
 PhoneService = require '../../services/phone'
 PrimaryButton = require '../primary_button'
+Spinner = require '../spinner'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -17,6 +18,8 @@ module.exports = class ForgotPassword
     o_phoneError = z.observe null
 
     @state = z.state
+      isLoading: false
+      $spinner: new Spinner()
       $phoneNumberInput: new Input {
         o_value: o_phone
         o_error: o_phoneError
@@ -26,20 +29,25 @@ module.exports = class ForgotPassword
       o_phoneError: o_phoneError
 
   recover: =>
+    @state.set isLoading: true
+
     phone = @state.o_phone()
 
     PhoneService.normalizePhoneNumber phone
     .then (phone) ->
       User.recoverLogin {phone}
+    .then =>
+      @state.set isLoading: false
     .catch (err) =>
       # TODO: (Austin) better error handling
       @state.o_phoneError.set err.detail
+      @state.set isLoading: false
       throw err
     .then ->
       z.router.go '/reset-password/' + encodeURIComponent phone
 
   render: =>
-    {$phoneNumberInput, $signinButton} = @state()
+    {$phoneNumberInput, $signinButton, $spinner, isLoading} = @state()
 
     z '.z-forgot-password',
       z 'form.form', {
@@ -56,9 +64,12 @@ module.exports = class ForgotPassword
           isFloating: true
           colors:
             c500: styleConfig.$orange500
-        z 'div.reset-button',
-          z $signinButton,
-            text: 'Reset'
-            onclick: (e) =>
-              e.preventDefault()
-              @recover().catch log.trace
+        if isLoading
+          $spinner
+        else
+          z 'div.reset-button',
+            z $signinButton,
+              text: 'Reset'
+              onclick: (e) =>
+                e.preventDefault()
+                @recover().catch log.trace
