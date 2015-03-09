@@ -13,6 +13,7 @@ LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 LOCALSTORE_FRIENDS = 'user:friends'
 SMALL_AVATAR_SIZE = 96
 LARGE_AVATAR_SIZE = 512
+COOKIE_DURATION_MS = 365 * 24 * 3600 * 1000
 
 # FIXME: this is a hack for detecting if we've tried setting `me` or
 # not. It'll get resolved when we implement streams.
@@ -28,8 +29,12 @@ secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
 domain = '.' + secondLevelDomain
 
 setHostCookie = (key, value) ->
+  expireTimestampMs = Date.now() + COOKIE_DURATION_MS
+  expireDate = (new Date(expireTimestampMs)).toUTCString()
+
   # The '.' prefix allows subdomains access
-  document.cookie = "#{key}=#{value};path=/;domain=#{domain}"
+  document.cookie = "#{key}=#{value};path=/;domain=#{domain};" +
+                    "expires=#{expireDate}"
 
 deleteHostCookie = (key) ->
   document.cookie = "#{key}=;path=/;domain=#{domain};" +
