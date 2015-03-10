@@ -3,7 +3,6 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 
 Drawer = require '../drawer'
-Nub = require '../nub/home'
 Spinner = require '../spinner'
 GameShare = require '../game_share'
 Game = require '../../models/game'
@@ -36,10 +35,7 @@ module.exports = class GamePlayer
         unless EnvironmentService.isMobile()
           return null
 
-        User.getExperiments().then ({nub}) ->
-          if nub is 'go_home'
-          then z 'div.nub', new Nub()
-          else new Drawer {game}
+        new Drawer {game}
 
     @playCountPromise = Promise.all [
       Game.incrementPlayCount(gameKey)
