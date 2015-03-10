@@ -6,6 +6,7 @@ GooglePlayAdCard = require '../google_play_ad'
 Icon = require '../icon'
 NavDrawerModel = require '../../models/nav_drawer'
 User = require '../../models/user'
+GooglePlayAdService = require '../../services/google_play_ad'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -23,7 +24,9 @@ module.exports = class NavDrawer
       isLoggedIn: User.isLoggedIn()
       $signinButton: new Button()
       $signupButton: new Button()
-      $googlePlayAdCard: new GooglePlayAdCard()
+      $googlePlayAdCard: if GooglePlayAdService.shouldShowAds() \
+                         then new GooglePlayAdCard()
+                         else null
       pages: [
         {
           page: NavDrawer.PAGES.GAMES
