@@ -8,14 +8,18 @@ module.exports = class Icon
   constructor: ->
     styles.use()
 
-  render: ({icon, size, isAlignedLeft, isAlignedRight, isTouchTarget,
-            color, onclick}) ->
+  render: ({icon, size, isAlignedTop, isAlignedLeft, isAlignedRight,
+            isTouchTarget, color, onclick}) ->
     size ?= '24px'
     isTouchTarget ?= true
 
     z 'div.z-icon', {
-      className: z.classKebab {isAlignedLeft, isAlignedRight, isTouchTarget}
+      className: z.classKebab {isAlignedTop, isAlignedLeft, isAlignedRight,
+                                isTouchTarget}
       onclick: onclick
+      style:
+        width: size
+        height: size
     },
       z 'svg', {
         namespace: 'http://www.w3.org/2000/svg'

@@ -2,18 +2,16 @@
 
 json('../../stylus/vars.json')
 
-.z-nub
-  $nubRadius = 42.5
+$nubRadius = 48
 
+.z-nub
+  display: block
   cursor: pointer
   width: $nubRadius px
   height: ($nubRadius * 2) px
   border-bottom-left-radius: $nubRadius px
   margin-top: (-1 * $nubRadius) px
-  padding: 50px 0 0 16px
+  padding: ($nubRadius + 5)px 5px 0 0
   background-color: rgba(255, 255, 255, 0.9)
   box-sizing: border-box
-
-  .icon-menu
-    font-size: $fontSizeMedium
-    color: $orange500
+  -webkit-highlight-tap-color: $transparent
