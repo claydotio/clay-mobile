@@ -1,5 +1,7 @@
 @require 'nib'
 
+$zIndexShareNub = 1
+
 .z-game-player
   > iframe
     // some games (eg flytrap) on iOS bug out if we set width and height 100%
@@ -7,6 +9,12 @@
     border: none
     position: absolute
     -webkit-overflow-scrolling: touch
+
+  > .share-nub
+    position: fixed
+    left: 0
+    top: 0
+    z-index: $zIndexShareNub
 
 .z-game-player-missing
   position: absolute

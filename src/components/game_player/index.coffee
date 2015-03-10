@@ -3,6 +3,7 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 
 Drawer = require '../drawer'
+ShareNub = require '../share_nub'
 Spinner = require '../spinner'
 GameShare = require '../game_share'
 Game = require '../../models/game'
@@ -30,8 +31,12 @@ module.exports = class GamePlayer
       width: window.innerWidth + 'px'
       gameKey: gameKey
       game: o_game
-      spinner: new Spinner()
-      drawer: z.observe o_game.then (game) ->
+      $spinner: new Spinner()
+      $shareNub: z.observe User.getExperiments().then ({shareNub}) ->
+        return if shareNub is 'visible' \
+               then new ShareNub()
+               else null
+      $drawer: z.observe o_game.then (game) ->
         unless EnvironmentService.isMobile()
           return null
 
@@ -103,17 +108,19 @@ module.exports = class GamePlayer
       window.location.href = UrlService.getMarketplaceBase()
 
   render: =>
-    {game, width, height, spinner, drawer} = @state()
+    {game, width, height, $spinner, $shareNub, $drawer} = @state()
 
     if not game
       z '.z-game-player-missing',
-        spinner
+        $spinner
         z 'button.button-ghost', {onclick: @redirectToMarketplace},
           'Return to Clay.io'
     else if game?.gameUrl
       z 'div.z-game-player',
         style:
           height: height
+        z 'div.share-nub',
+          z $shareNub, {game}
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',
@@ -121,7 +128,7 @@ module.exports = class GamePlayer
                 width: width
                 height: height
               src: game.gameUrl
-        drawer
+        $drawer
     else
       z '.z-game-player-missing',
         z 'div', 'Game Not Found'

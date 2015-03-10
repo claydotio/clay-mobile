@@ -16,8 +16,12 @@ json('../../stylus/vars.json')
     min-width: 48px
     min-height: 48px
 
+    &.is-aligned-top
+      margin-top: -12px // touch target offset
+
     &.is-aligned-left
       margin-left: -12px // touch target offset
 
     &.is-aligned-right
+      margin-left: auto
       margin-right: -12px // touch target offset
