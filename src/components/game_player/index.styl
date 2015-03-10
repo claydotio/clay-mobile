@@ -1,6 +1,6 @@
 @require 'nib'
 
-$zIndexShareNub = 1
+json('../../stylus/vars.json')
 
 .z-game-player
   > iframe
@@ -14,7 +14,7 @@ $zIndexShareNub = 1
     position: fixed
     left: 0
     top: 0
-    z-index: $zIndexShareNub
+    z-index: $zIndexGamePlayerShareNub
 
 .z-game-player-missing
   position: absolute
