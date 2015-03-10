@@ -87,8 +87,9 @@
   "$appBarHeightTall": 224,
 
   "$zIndexModal": 900,
-  "$zIndexDrawer": 300,
   "$zIndexNavDrawer": 400,
+  "$zIndexDrawer": 300,
+  "$zIndexGamePlayerShareNub": 200,
   "$zIndexJoinPageContent": 200,
   "$zIndexLoginPageContent": 200,
   "$zIndexForgotPasswordPageContent": 200,
