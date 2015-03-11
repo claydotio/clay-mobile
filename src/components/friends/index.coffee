@@ -13,6 +13,8 @@ UrlService = require '../../services/url'
 
 styles = require './index.styl'
 
+GROUP_ICON_SIZE_PX = 80
+
 module.exports = class Friends
   constructor: ->
     styles.use()
@@ -41,11 +43,15 @@ module.exports = class Friends
         z 'div.spinner', $spinner
       else if _.isEmpty friends
         z 'div.no-friends',
-          z $groupIcon,
-            isTouchTarget: false
-            icon: 'group'
-            size: '80px'
-            color: styleConfig.$grey300
+          z 'div.icon-container', {
+            style:
+              width: "#{GROUP_ICON_SIZE_PX}px"
+          },
+            z $groupIcon,
+              isTouchTarget: false
+              icon: 'group'
+              size: "#{GROUP_ICON_SIZE_PX}px"
+              color: styleConfig.$grey300
           z 'h2.title', 'Oh no! You don\'t have any friends.'
           z 'div.description', 'You should invite someone to join you.'
       else
