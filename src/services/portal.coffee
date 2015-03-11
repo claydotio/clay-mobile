@@ -42,8 +42,11 @@ class PortalService
       accessToken: String user.id
 
   shareAny: ({text, gameId}) ->
-    Game.get(gameId)
-    .then (game) ->
+    Promise.all [
+      Game.get(gameId)
+      User.getMe()
+    ]
+    .then ([game, me]) ->
       unless game
         throw new Error 'gameId invalid'
 
@@ -56,6 +59,8 @@ class PortalService
           text: text
           data:
             gameKey: "#{game.key}"
+            share:
+              originUserId: me.id
       else
         console.log 'no handlers found'
         throw new Error 'No handlers found'
