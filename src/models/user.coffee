@@ -13,7 +13,7 @@ LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 LOCALSTORE_FRIENDS = 'user:friends'
 SMALL_AVATAR_SIZE = 96
 LARGE_AVATAR_SIZE = 512
-COOKIE_DURATION_MS = 365 * 24 * 3600 * 1000
+COOKIE_DURATION_MS = 365 * 24 * 3600 * 1000 # 1 year
 
 # FIXME: this is a hack for detecting if we've tried setting `me` or
 # not. It'll get resolved when we implement streams.
@@ -49,25 +49,20 @@ class User
 
   signedUpThisSession: false
 
+  constructor: ->
+    me (user) ->
+      if user?.accessToken
+        setHostCookie config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
+
   getMe: =>
     if me() is 'unset'
-      me.set @loginAnon()
-
-      # Save accessToken in cookie
-      me.then (user) ->
-        setHostCookie config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
-      .catch log.trace
+      me.set @loginAnon getCookieValue config.ACCESS_TOKEN_COOKIE_KEY
 
     return me
 
   #  FIXME: _me must be a promise (streams will hopefully fix)
   setMe: (_me) ->
     me.set _me
-
-    # Save accessToken in cookie
-    me.then (user) ->
-      setHostCookie config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
-    .catch log.trace
 
     experiments = me.then (user) ->
       request config.PUBLIC_FC_API_URL + '/experiments',
@@ -194,11 +189,13 @@ class User
       else
         Promise.resolve []
 
-  loginAnon: ->
+  loginAnon: (accessToken) ->
+    accessToken ?= null
+
     request PATH + '/login/anon',
       method: 'POST'
       qs:
-        accessToken: getCookieValue config.ACCESS_TOKEN_COOKIE_KEY
+        accessToken: accessToken
 
   loginKikAnon: (kikAnonToken) ->
     request PATH + '/login/kikAnon',
@@ -239,9 +236,8 @@ class User
           phone
         }
 
-  logout: ->
-    deleteHostCookie config.ACCESS_TOKEN_COOKIE_KEY
-    @setMe @loginAnon
+  logout: =>
+    @setMe @loginAnon()
 
   getAvatarUrl: (user, {size} = {}) =>
     size ?= @AVATAR_SIZES.SMALL
