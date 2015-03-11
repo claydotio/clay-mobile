@@ -1,4 +1,5 @@
 z = require 'zorium'
+log = require 'clay-loglevel'
 
 Icon = require '../icon'
 ShareService = require '../../services/share'
@@ -11,12 +12,12 @@ share = (game) ->
   text = "Come play #{game.name} with me!
          #{UrlService.getMarketplaceGame({game})}"
 
+  ga? 'send', 'event', 'share_nub', 'share', game.key
+
   ShareService.any
     gameId: game.id
     text: text
   .catch log.trace
-
-  ga? 'send', 'event', 'share_nub', 'share', game.key
 
 module.exports = class ShareNub
   constructor: ->
