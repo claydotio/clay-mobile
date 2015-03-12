@@ -41,4 +41,18 @@ class EnvironmentService
   isKikEnabled: ->
     kik?.enabled
 
+  isWebglSupported: ->
+    canvas = document.createElement 'canvas'
+    isWebglSupported = false
+
+    try
+      isWebglSupported = canvas.getContext('webgl')
+    catch
+      try
+        isWebglSupported = canvas.getContext('experimental-webgl')
+      catch
+        isWebglSupported = null
+
+    return isWebglSupported
+
 module.exports = new EnvironmentService()
