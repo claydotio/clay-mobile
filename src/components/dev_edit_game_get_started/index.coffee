@@ -60,9 +60,8 @@ module.exports = class DevEditGameGetStarted
             z.router.go "/edit-game/details/#{game.id}"
           .catch (err) ->
             log.trace err
-            error = JSON.parse err._body
             # TODO: (Austin) better error handling UX
-            window.alert "Error: #{error.detail}"
+            window.alert "Error: #{err.detail}"
           .catch log.trace
         },
 

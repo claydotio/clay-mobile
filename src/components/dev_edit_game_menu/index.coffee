@@ -81,9 +81,8 @@ module.exports = class DevEditGameMenu
               @save().then ->
                 z.router.go "/edit-game/#{step}/#{game?.id}"
               .catch (err) ->
-                error = JSON.parse err._body
                 # TODO: (Austin) better error handling UX
-                window.alert "Error: #{error.detail}"
+                window.alert "Error: #{err.detail}"
               .catch log.trace
             },
             z 'div.l-flex.l-vertical-center.menu-item-content',
@@ -104,9 +103,8 @@ module.exports = class DevEditGameMenu
             @publish().then ->
               z.router.go "/edit-game/published/#{game.id}"
             .catch (err) ->
-              error = JSON.parse err._body
               # TODO: (Austin) better error handling UX
-              window.alert "Error: #{error.detail}"
+              window.alert "Error: #{err.detail}"
             .catch log.trace
           },
           z 'div.l-flex.l-vertical-center.menu-item-content',
