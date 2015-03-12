@@ -34,7 +34,7 @@ module.exports = (url, options) ->
         throw new Error "event=long_request,
                         request_time_ms=#{requestTime},
                         url=#{url},
-                        options=#{options}"
+                        options=#{JSON.stringify(options)}"
     return res
   .catch (err) ->
     if err?.json
