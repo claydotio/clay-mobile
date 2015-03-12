@@ -5,6 +5,7 @@ localstore = require '../lib/localstore'
 config = require '../config'
 request = require '../lib/request'
 User = require '../models/user'
+EnvironmentService = require '../services/environment'
 
 PATH = config.PUBLIC_CLAY_API_URL + '/games'
 LOCALSTORE_PLAY_COUNT_KEY_PREFIX = 'game:play_count'
@@ -19,8 +20,16 @@ class Game
     skip ?= 0
     limit ?= 10
 
+    query = {limit, skip}
+
+    unless EnvironmentService.isWebglSupported()
+      query.isWebglRequired = false
+
+    unless EnvironmentService.isKikEnabled()
+      query.isKikRequired = false
+
     request PATH + '/top',
-      qs: {limit, skip}
+      qs: query
 
   # TODO: (Zoli) Deprecate
   getNew: ({limit, skip}) ->
