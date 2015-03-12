@@ -4,8 +4,9 @@ kik = require 'kik'
 
 User = require '../models/user'
 Game = require '../models/game'
+Modal = require '../models/modal'
 EnvironmentService = require './environment'
-
+ShareAnyModal = require '../components/share_any_modal'
 
 class PortalService
   constructor: ->
@@ -45,25 +46,31 @@ class PortalService
     Promise.all [
       Game.get(gameId)
       User.getMe()
+      User.getExperiments()
     ]
-    .then ([game, me]) ->
-      unless game
-        throw new Error 'gameId invalid'
-
+    .then ([game, me, experiments]) ->
       # WARNING: this is not tracked if game is played inside native app
-      ga? 'send', 'event', 'game', 'share', game.key
 
-      if EnvironmentService.isKikEnabled()
-        kik.send
-          title: "#{game.name}"
-          text: text
-          data:
-            gameKey: "#{game.key}"
-            share:
-              originUserId: me.id
+      if experiments.shareModal is 'modal'
+        ga? 'send', 'event', 'share_modal', 'open', game.key
+        $shareAnyModal = new ShareAnyModal({text, game})
+        Modal.openComponent(
+          component: $shareAnyModal
+        )
       else
-        console.log 'no handlers found'
-        throw new Error 'No handlers found'
+        ga? 'send', 'event', 'game', 'share', game.key
+
+        if EnvironmentService.isKikEnabled()
+          kik.send
+            title: "#{game.name}"
+            text: text
+            data:
+              gameKey: "#{game.key}"
+              share:
+                originUserId: me.id
+        else
+          console.log 'no handlers found'
+          throw new Error 'No handlers found'
 
       return null
 

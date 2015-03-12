@@ -1,0 +1,46 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-share-any-modal
+
+  > .content
+    text-align: center
+    background: $white
+
+    > .message
+      padding: 16px
+
+      > .share
+        zp-font-subhead()
+        padding: 8px 0
+        display: flex
+        height: 100%
+        align-items: center
+
+        &:active
+          background: $activeBgColor
+
+        > .social-icon
+          display: flex
+          width: 40px
+          height: 40px
+          border-radius: 50%
+          background-size: 50% 50%
+          background-position: center center
+          background-repeat: no-repeat
+          margin-right: 16px
+
+          > .icon
+            margin: auto
+            // svg's display: inline-block adds bottom margin. this fixes
+            font-size: 0
+
+        > .facebook
+          background-color: #3B5998
+
+        > .twitter
+          background-color: #00aced
+
+        > .kik
+          background-color: #83ba23
