@@ -1,6 +1,5 @@
 z = require 'zorium'
 _ = require 'lodash'
-Promise = require 'bluebird'
 Fab = require 'zorium-paper/floating_action_button'
 
 Icon = require '../icon'
@@ -25,7 +24,7 @@ module.exports = class Friends
       $addIcon: new Icon()
       $spinner: new Spinner()
       friends: z.observe User.getFriends().then (friends) ->
-        Promise.map friends, (friend) ->
+        Promise.all _.map friends, (friend) ->
           recentGamesHref = friend.links.recentGames?.href
           if recentGamesHref
             request friend.links.recentGames.href
