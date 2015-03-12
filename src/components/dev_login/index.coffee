@@ -114,9 +114,8 @@ module.exports = class DevLogin
                 z.router.go '/dashboard'
               .catch (err) ->
                 log.trace err
-                error = JSON.parse err._body
                 # TODO: (Austin) better error handling UX
-                window.alert "Error: #{error.detail}"
+                window.alert "Error: #{err.detail}"
                 throw err
               .catch log.trace
             },
@@ -144,9 +143,8 @@ module.exports = class DevLogin
                 window.alert 'Application recieved. Thanks!'
               .catch (err) ->
                 log.trace err
-                error = JSON.parse err._body
                 # TODO: (Austin) better error handling UX
-                window.alert "Error: #{error.detail}"
+                window.alert "Error: #{err.detail}"
                 throw err
               .catch log.trace
             },

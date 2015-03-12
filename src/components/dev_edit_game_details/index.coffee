@@ -186,9 +186,8 @@ module.exports = class DevEditGameDetails
             z.router.go "/edit-game/upload/#{game.id}"
           .catch (err) ->
             log.trace err
-            error = JSON.parse err._body
             # TODO: (Austin) better error handling UX
-            window.alert "Error: #{error.detail}"
+            window.alert "Error: #{err.detail}"
           .catch log.trace
         },
 
