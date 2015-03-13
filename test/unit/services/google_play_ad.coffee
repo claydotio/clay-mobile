@@ -53,7 +53,7 @@ describe 'GooglePlayAdService', ->
       GooglePlayAdService.hasAdModalBeenShown = false
 
   describe 'shouldShowAdModal', ->
-    it 'visit 1, 5, 10, 20 -> true, others false', ->
+    it 'visit 2, 5, 10, 20 -> true, others false', ->
       visitCount = 0
       overrides =
       User:
@@ -69,7 +69,7 @@ describe 'GooglePlayAdService', ->
         visitCount += 1
         GooglePlayAdService.__with__(overrides) ->
           GooglePlayAdService.shouldShowAdModal().then (shouldShow) ->
-            if _.contains [1, 5, 10, 20], visitCount
+            if _.contains [2, 5, 10, 20], visitCount
               shouldShow.should.be.true
             else
               shouldShow.should.be.false
@@ -90,7 +90,7 @@ describe 'GooglePlayAdService', ->
         visitCount += 1
         GooglePlayAdService.__with__(overrides) ->
           GooglePlayAdService.shouldShowAdModal().then (shouldShow) ->
-            if visitCount is 1
+            if visitCount is 2
               shouldShow.should.be.true
               GooglePlayAdService.showAdModal()
             else

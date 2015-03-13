@@ -2,6 +2,7 @@ z = require 'zorium'
 log = require 'clay-loglevel'
 _ = require 'lodash'
 
+cookies = require '../lib/cookies'
 request = require '../lib/request'
 localstore = require '../lib/localstore'
 config = require '../config'
@@ -13,32 +14,11 @@ LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 LOCALSTORE_FRIENDS = 'user:friends'
 SMALL_AVATAR_SIZE = 96
 LARGE_AVATAR_SIZE = 512
-COOKIE_DURATION_MS = 365 * 24 * 3600 * 1000 # 1 year
 
 # FIXME: this is a hack for detecting if we've tried setting `me` or
 # not. It'll get resolved when we implement streams.
 me = z.observe Promise.resolve 'unset'
 experiments = null
-
-getCookieValue = (key) ->
-  match = document.cookie.match('(^|;)\\s*' + key + '\\s*=\\s*([^;]+)')
-  return if match then match.pop() else null
-
-secondLevelDomain = window.location.hostname.split('.').slice(-2).join('.')
-# The '.' prefix allows subdomains access
-domain = '.' + secondLevelDomain
-
-setHostCookie = (key, value) ->
-  expireTimestampMs = Date.now() + COOKIE_DURATION_MS
-  expireDate = (new Date(expireTimestampMs)).toUTCString()
-
-  # The '.' prefix allows subdomains access
-  document.cookie = "#{key}=#{value};path=/;domain=#{domain};" +
-                    "expires=#{expireDate}"
-
-deleteHostCookie = (key) ->
-  document.cookie = "#{key}=;path=/;domain=#{domain};" +
-                    'expires=Thu, 01 Jan 1970 00:00:01 GMT'
 
 class User
   AVATAR_SIZES:
@@ -52,11 +32,11 @@ class User
   constructor: ->
     me (user) ->
       if user?.accessToken
-        setHostCookie config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
+        cookies.set config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
 
   getMe: =>
     if me() is 'unset'
-      me.set @loginAnon getCookieValue config.ACCESS_TOKEN_COOKIE_KEY
+      me.set @loginAnon cookies.get config.ACCESS_TOKEN_COOKIE_KEY
 
     return me
 
