@@ -104,7 +104,8 @@ module.exports = class ShareAnyModal
             if className is 'kik' and not EnvironmentService.isKikEnabled()
               return
             z 'a[href=#].share', {
-              onclick: ->
+              onclick: (e) ->
+                e.preventDefault()
                 shareFn {text, game, me}
             },
               z "div.social-icon.#{className}",
