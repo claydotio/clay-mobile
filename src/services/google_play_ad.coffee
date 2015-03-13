@@ -3,7 +3,7 @@ User = require '../models/user'
 Modal = require '../models/modal'
 GooglePlayAdModal = require '../components/google_play_ad_modal'
 
-FIRST_DISPLAY_VISIT_COUNT = 1
+FIRST_DISPLAY_VISIT_COUNT = 2
 SECOND_DISPLAY_VISIT_COUNT = 5
 NTH_DISPLAY_VISIT_COUNT = 10
 

@@ -4,9 +4,11 @@ log = require 'clay-loglevel'
 
 Game = require '../../models/game'
 User = require '../../models/user'
+Modal = require '../../models/modal'
 GameBox = require '../game_box'
 GamePromo = require '../game_promo'
 Spinner = require '../spinner'
+FirstVisitModal = require '../first_visit_modal'
 
 styles = require './index.styl'
 
@@ -31,16 +33,29 @@ module.exports = class PopularGames
 
     if window.matchMedia('(min-width: 360px)').matches
       gameBoxSize = 98
+      modalGameBoxSize = 118
       gamePromoWidth = 328
       gamePromoHeight = 209
       featuredGamePosition = featuredGameRow * BOXES_PER_ROW_MEDIUM_SCREEN
     else
       gameBoxSize = 136
+      modalGameBoxSize = 108
       gamePromoWidth = 288
       gamePromoHeight = 183
       featuredGamePosition = featuredGameRow * BOXES_PER_ROW_SMALL_SCREEN
 
     @isListeningForScroll = true
+
+    Promise.all [
+      User.getExperiments()
+      User.getVisitCount()
+    ]
+    .then ([{firstVisitModal}, visitCount]) ->
+      if firstVisitModal is 'modal' and visitCount is 1
+        Modal.openComponent
+          component: new FirstVisitModal
+            gameBoxSize: modalGameBoxSize
+    .catch log.trace
 
     @state = z.state {
       $spinner: new Spinner()

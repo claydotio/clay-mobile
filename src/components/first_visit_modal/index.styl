@@ -1,0 +1,15 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-first-visit-modal
+  > .content
+    text-align: center
+    background: $white
+
+    > .message
+      padding: 16px
+
+      > .boxes
+        display: flex
+        justify-content: space-around
