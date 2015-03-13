@@ -22,13 +22,14 @@ module.exports = class GameBox
     httpSubDomainUrl = UrlService.getGameSubdomain({game, protocol: 'http'})
     kik?.picker?(httpSubDomainUrl, {}, -> null)
 
-  render: ({game, iconSize}) =>
+  render: ({game, iconSize, onclick}) =>
     iconSize ?= DEFAULT_GAME_BOX_ICON_SIZE
     gameSubdomainUrl = UrlService.getGameSubdomain {game}
 
     z "a.z-game-box[href=#{gameSubdomainUrl}]",
       onclick: (e) =>
         e?.preventDefault()
+        onclick?()
         @loadGame game
       style:
         width: "#{iconSize}px",

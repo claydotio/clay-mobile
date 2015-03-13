@@ -51,7 +51,9 @@ module.exports = class PopularGames
       User.getVisitCount()
     ]
     .then ([{firstVisitModal}, visitCount]) ->
-      if firstVisitModal is 'modal' and visitCount is 1
+      if firstVisitModal is 'modal' and visitCount is 1 and
+      not User.getViewedFirstVisitModalThisSession()
+        User.setViewedFirstVisitModalThisSession true
         Modal.openComponent
           component: new FirstVisitModal
             gameBoxSize: modalGameBoxSize

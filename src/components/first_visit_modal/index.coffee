@@ -6,6 +6,7 @@ ModalHeader = require '../modal_header'
 Game = require '../../models/game'
 config = require '../../config'
 GameBox = require '../game_box'
+Modal = require '../../models/modal'
 
 styles = require './index.styl'
 
@@ -58,3 +59,5 @@ module.exports = class FirstVisitModal
               z gameBox.$box,
                 game: gameBox.game
                 iconSize: gameBoxSize
+                onclick: ->
+                  Modal.closeComponent()
