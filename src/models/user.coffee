@@ -27,9 +27,9 @@ class User
 
   DEFAULT_NAME: 'Nameless'
 
-  signedUpThisSession: false
-
   constructor: ->
+    @signedUpThisSession = false
+    @viewedFirstVisitModalThisSession = false
     me (user) ->
       if user?.accessToken
         cookies.set config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
@@ -235,5 +235,11 @@ class User
 
   setSignedUpThisSession: (signedUp) =>
     @signedUpThisSession = signedUp
+
+  getViewedFirstVisitModalThisSession: ->
+    return @viewedFirstVisitModalThisSession
+
+  setViewedFirstVisitModalThisSession: (viewed) ->
+    @viewedFirstVisitModalThisSession = viewed
 
 module.exports = new User()
