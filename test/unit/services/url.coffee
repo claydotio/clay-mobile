@@ -22,12 +22,6 @@ describe 'UrlService', ->
   it 'getMarketplaceGame({game})', ->
     UrlService.getMarketplaceGame({game: MockGame}).should.match urlRegex
 
-  it 'getMarketplaceGame({protocol: "card"}) is card...', ->
-    options = {game: MockGame, protocol: 'card'}
-    marketplaceGameUrl = UrlService.getMarketplaceGame(options)
-    marketplaceGameUrl.should.match urlRegex
-    marketplaceGameUrl.should.match /^card:/
-
   it 'getGameRoute({game}) (should be relative)', ->
     UrlService.getGameRoute({game: MockGame})
       .should.match routeRegex
