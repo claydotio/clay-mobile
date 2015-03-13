@@ -11,7 +11,7 @@ Modal = require '../../models/modal'
 styles = require './index.styl'
 
 LITTLE_ALCHEMY_GAME_ID = '2074'
-ZOP_GAME_ID = '8343'
+PRISM_GAME_ID = '4875'
 WORD_WARS_GAME_ID = '22'
 LUNCHBUG_GAME_ID = '389'
 
@@ -28,7 +28,7 @@ module.exports = class FirstVisitModal
     else
       Promise.all [
         Game.get LITTLE_ALCHEMY_GAME_ID
-        Game.get ZOP_GAME_ID
+        Game.get PRISM_GAME_ID
       ]
     ).then (games) ->
       _.map games, (game) ->
