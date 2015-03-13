@@ -15,8 +15,8 @@ class UrlService
     return "#{protocol}://#{config.HOST}"
 
   # full path to marketplace and game
-  getMarketplaceGame: ({protocol, game}) =>
-    return @getMarketplaceBase({protocol}) + '/#' + @getGameRoute {game}
+  getMarketplaceGame: ({game}) =>
+    return @getMarketplaceBase({protocol: 'http'}) + '/#' + @getGameRoute {game}
 
   # FIXME: game methods should be server-side as class methods in game model
   # relative path to game
