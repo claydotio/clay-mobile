@@ -89,7 +89,6 @@
   "$zIndexModal": 900,
   "$zIndexNavDrawer": 400,
   "$zIndexDrawer": 300,
-  "$zIndexGamePlayerShareNub": 200,
   "$zIndexJoinPageContent": 200,
   "$zIndexLoginPageContent": 200,
   "$zIndexForgotPasswordPageContent": 200,
