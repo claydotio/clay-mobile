@@ -3,7 +3,6 @@ _ = require 'lodash'
 log = require 'clay-loglevel'
 
 Drawer = require '../drawer'
-ShareNub = require '../share_nub'
 Spinner = require '../spinner'
 GameShare = require '../game_share'
 Game = require '../../models/game'
@@ -32,10 +31,6 @@ module.exports = class GamePlayer
       gameKey: gameKey
       game: o_game
       $spinner: new Spinner()
-      $shareNub: z.observe User.getExperiments().then ({shareNub}) ->
-        return if shareNub is 'visible' \
-               then new ShareNub()
-               else null
       $drawer: z.observe o_game.then (game) ->
         unless EnvironmentService.isMobile()
           return null
@@ -108,7 +103,7 @@ module.exports = class GamePlayer
       window.location.href = UrlService.getMarketplaceBase()
 
   render: =>
-    {game, width, height, $spinner, $shareNub, $drawer} = @state()
+    {game, width, height, $spinner, $drawer} = @state()
 
     if not game
       z '.z-game-player-missing',
@@ -119,8 +114,6 @@ module.exports = class GamePlayer
       z 'div.z-game-player',
         style:
           height: height
-        z 'div.share-nub',
-          z $shareNub, {game}
         z 'iframe' +
           '[webkitallowfullscreen][mozallowfullscreen][allowfullscreen]' +
           '[scrolling=no]',
