@@ -17,7 +17,9 @@ LARGE_AVATAR_SIZE = 512
 
 # FIXME: this is a hack for detecting if we've tried setting `me` or
 # not. It'll get resolved when we implement streams.
-me = z.observe Promise.resolve 'unset'
+# This doesn't need to be a promise because getMe() will make it a promise
+# if it's 'unset', and nothing else accesses `me` directly as a promise
+me = z.observe 'unset'
 experiments = null
 
 class User
@@ -67,8 +69,7 @@ class User
           accessToken: accessToken
 
   isLoggedIn: do ->
-    o_isLoggedIn = z.observe me.then (me) ->
-      Boolean me?.phone
+    o_isLoggedIn = z.observe false
 
     me (me) ->
       o_isLoggedIn.set Promise.resolve Boolean me?.phone
