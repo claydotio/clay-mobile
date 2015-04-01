@@ -23,6 +23,7 @@ class PortalService
     portal.register 'share.any', @shareAny
 
     portal.register 'kik.isEnabled', -> EnvironmentService.isKikEnabled()
+    portal.register 'kik.getMessage', -> kik?.message
     portal.register 'kik.send', -> kik?.send.apply null, arguments
     portal.register 'kik.browser.setOrientationLock', ->
       kik?.browser.setOrientationLock.apply null, arguments
