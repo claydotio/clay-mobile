@@ -45,13 +45,9 @@ module.exports = class PopularGames
 
     @isListeningForScroll = true
 
-    Promise.all [
-      User.getExperiments()
-      User.getVisitCount()
-    ]
-    .then ([{firstVisitModal}, visitCount]) ->
-      if firstVisitModal is 'modal' and visitCount is 1 and
-      not User.getViewedFirstVisitModalThisSession()
+    User.getVisitCount()
+    .then (visitCount) ->
+      if visitCount is 1 and not User.getViewedFirstVisitModalThisSession()
         User.setViewedFirstVisitModalThisSession true
         Modal.openComponent
           component: new FirstVisitModal
