@@ -49,7 +49,7 @@ describe 'PortalService', ->
     portal.up timeout: 1
 
     # Stub user dependency
-    User.setMe Promise.resolve {id: 1}
+    User.setMe Promise.resolve {id: '1'}
 
   it 'pong()', ->
     emit {method: 'ping', id: 1}

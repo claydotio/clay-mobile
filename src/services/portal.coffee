@@ -33,6 +33,7 @@ class PortalService
   ###
   @typedef AuthStatus
   @property {String} accessToken
+  @property {String} userId
   ###
 
   ###
@@ -40,7 +41,8 @@ class PortalService
   ###
   authGetStatus: ->
     User.getMe().then (user) ->
-      accessToken: String user.id
+      accessToken: user.id # Temporary
+      userId: user.id
 
   shareAny: ({text, gameId}) ->
     Promise.all [
