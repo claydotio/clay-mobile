@@ -235,7 +235,8 @@ Promise.all [User.incrementVisitCount(), KikService.isFromPush()]
     unless ga
       return
     for experimentParam, experimentTestGroup of params
-      ga 'send', 'event', 'A/B Test', experimentParam, experimentTestGroup
+      ga 'send', 'event', 'A/B Test', experimentParam,
+        "#{experimentParam}:#{experimentTestGroup}"
   .catch log.trace
 
   window.setTimeout ->
