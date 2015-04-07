@@ -28,6 +28,9 @@ class PortalService
       kik?.browser.setOrientationLock.apply null, arguments
     portal.register 'kik.metrics.enableGoogleAnalytics', ->
       kik?.metrics.enableGoogleAnalytics.apply null, arguments
+    portal.register 'kik.getUser', ->
+      new Promise (resolve) ->
+        kik?.getUser resolve
 
 
   ###
