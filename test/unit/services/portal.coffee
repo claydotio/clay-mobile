@@ -62,33 +62,6 @@ describe 'PortalService', ->
     .then (res) ->
       res.result.accessToken.should.be '1'
 
-  describe 'share.any()', ->
-    before ->
-      Zock
-        .base(config.PUBLIC_CLAY_API_URL)
-        .get "/games/#{MockGame.id}"
-        .reply 200, (res) ->
-          return MockGame
-
-    it 'shares via kik', ->
-      kikSent = false
-      overrides =
-        EnvironmentService:
-          isKikEnabled: -> true
-        kik:
-          send: (params) ->
-            params.title.should.be MockGame.name
-            params.text.should.be 'HELLO'
-            kikSent = true
-            return params
-
-      PortalService.__with__(overrides) ->
-        emit {method: 'share.any', id: 1, params: [
-          {text: 'HELLO', gameId: MockGame.id}
-        ]}
-        .then ->
-          kikSent.should.be true
-
   describe 'kik methods', ->
     it 'kik.isEnabled', ->
       overrides =

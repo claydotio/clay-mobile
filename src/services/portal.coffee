@@ -52,31 +52,15 @@ class PortalService
     Promise.all [
       Game.get(gameId)
       User.getMe()
-      User.getExperiments()
     ]
-    .then ([game, me, experiments]) ->
+    .then ([game, me]) ->
       # WARNING: this is not tracked if game is played inside native app
 
-      if experiments.shareModal is 'modal'
-        ga? 'send', 'event', 'share_modal', 'open', game.key
-        $shareAnyModal = new ShareAnyModal({text, game})
-        Modal.openComponent(
-          component: $shareAnyModal
-        )
-      else
-        ga? 'send', 'event', 'game', 'share', game.key
-
-        if EnvironmentService.isKikEnabled()
-          kik.send
-            title: "#{game.name}"
-            text: text
-            data:
-              gameKey: "#{game.key}"
-              share:
-                originUserId: me.id
-        else
-          console.log 'no handlers found'
-          throw new Error 'No handlers found'
+      ga? 'send', 'event', 'share_modal', 'open', game.key
+      $shareAnyModal = new ShareAnyModal({text, game})
+      Modal.openComponent(
+        component: $shareAnyModal
+      )
 
       return null
 
