@@ -29,14 +29,18 @@ class PortalService
       kik?.browser?.setOrientationLock.apply null, arguments
     portal.register 'kik.metrics.enableGoogleAnalytics', ->
       kik?.metrics.enableGoogleAnalytics.apply null, arguments
-    portal.register 'kik.getAnonymousUser', (anonToken) ->
-      new Promise (resolve, reject) ->
+    portal.register 'kik.getAnonymousUser', ->
+      new Promise (resolve) ->
         kik?.getAnonymousUser resolve
+    portal.register 'kik.getUser', ->
+      new Promise (resolve) ->
+        kik?.getUser resolve
 
 
   ###
   @typedef AuthStatus
   @property {String} accessToken
+  @property {String} userId
   ###
 
   ###
@@ -44,37 +48,22 @@ class PortalService
   ###
   authGetStatus: ->
     User.getMe().then (user) ->
-      accessToken: String user.id
+      accessToken: user.id # Temporary
+      userId: user.id
 
   shareAny: ({text, gameId}) ->
     Promise.all [
       Game.get(gameId)
       User.getMe()
-      User.getExperiments()
     ]
-    .then ([game, me, experiments]) ->
+    .then ([game, me]) ->
       # WARNING: this is not tracked if game is played inside native app
 
-      if experiments.shareModal is 'modal'
-        ga? 'send', 'event', 'share_modal', 'open', game.key
-        $shareAnyModal = new ShareAnyModal({text, game})
-        Modal.openComponent(
-          component: $shareAnyModal
-        )
-      else
-        ga? 'send', 'event', 'game', 'share', game.key
-
-        if EnvironmentService.isKikEnabled()
-          kik.send
-            title: "#{game.name}"
-            text: text
-            data:
-              gameKey: "#{game.key}"
-              share:
-                originUserId: me.id
-        else
-          console.log 'no handlers found'
-          throw new Error 'No handlers found'
+      ga? 'send', 'event', 'share_modal', 'open', game.key
+      $shareAnyModal = new ShareAnyModal({text, game})
+      Modal.openComponent(
+        component: $shareAnyModal
+      )
 
       return null
 

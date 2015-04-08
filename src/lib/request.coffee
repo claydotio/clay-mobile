@@ -1,7 +1,8 @@
 _ = require 'lodash'
 
 UrlLib = require './url'
-MIN_REQUEST_TIME_ERROR_MS = 2000 # 2s
+MIN_REQUEST_TIME_ERROR_MS = 5000 # 5s
+
 statusCheck = (response) ->
   if response.status >= 200 and response.status < 300
     Promise.resolve response

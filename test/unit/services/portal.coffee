@@ -49,7 +49,7 @@ describe 'PortalService', ->
     portal.up timeout: 1
 
     # Stub user dependency
-    User.setMe Promise.resolve {id: 1}
+    User.setMe Promise.resolve {id: '1'}
 
   it 'pong()', ->
     emit {method: 'ping', id: 1}
@@ -61,33 +61,6 @@ describe 'PortalService', ->
     emit {method: 'auth.getStatus', id: 1}
     .then (res) ->
       res.result.accessToken.should.be '1'
-
-  describe 'share.any()', ->
-    before ->
-      Zock
-        .base(config.PUBLIC_CLAY_API_URL)
-        .get "/games/#{MockGame.id}"
-        .reply 200, (res) ->
-          return MockGame
-
-    it 'shares via kik', ->
-      kikSent = false
-      overrides =
-        EnvironmentService:
-          isKikEnabled: -> true
-        kik:
-          send: (params) ->
-            params.title.should.be MockGame.name
-            params.text.should.be 'HELLO'
-            kikSent = true
-            return params
-
-      PortalService.__with__(overrides) ->
-        emit {method: 'share.any', id: 1, params: [
-          {text: 'HELLO', gameId: MockGame.id}
-        ]}
-        .then ->
-          kikSent.should.be true
 
   describe 'kik methods', ->
     it 'kik.isEnabled', ->
