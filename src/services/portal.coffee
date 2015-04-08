@@ -26,9 +26,12 @@ class PortalService
     portal.register 'kik.getMessage', -> kik?.message
     portal.register 'kik.send', -> kik?.send.apply null, arguments
     portal.register 'kik.browser.setOrientationLock', ->
-      kik?.browser.setOrientationLock.apply null, arguments
+      kik?.browser?.setOrientationLock.apply null, arguments
     portal.register 'kik.metrics.enableGoogleAnalytics', ->
       kik?.metrics.enableGoogleAnalytics.apply null, arguments
+    portal.register 'kik.getAnonymousUser', ->
+      new Promise (resolve) ->
+        kik?.getAnonymousUser resolve
     portal.register 'kik.getUser', ->
       new Promise (resolve) ->
         kik?.getUser resolve
