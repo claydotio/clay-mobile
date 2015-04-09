@@ -1,19 +1,24 @@
+_ = require 'lodash'
+
 config = require '../config'
 
-class ErrorReportService
-  report: ->
-    # Remove the circular dependency within error objects
-    args = _.map arguments, (arg) ->
+stringifyError = (error) ->
+  errorString = try
+    JSON.stringify error
+  catch
+    ''
 
-      if arg instanceof Error and arg.stack
-      then arg.stack
-      else if arg instanceof Error
-      then arg.message
-      else if arg instanceof ErrorEvent and arg.error
-      then arg.error.stack
-      else if arg instanceof ErrorEvent
-      then arg.message
-      else arg
+  try
+    JSON.stringify
+      message: error.message or errorString or String error
+      stack: error.stack or error.error?.stack or '' # ErrorEvent
+  catch
+    String error
+
+class ErrorReportService
+  report: (errors...) ->
+    # Remove the circular dependency within error objects
+    errors = _.map errors, stringifyError
 
     window.fetch config.PUBLIC_CLAY_API_URL + '/log',
       method: 'POST'
@@ -21,7 +26,7 @@ class ErrorReportService
         'Accept': 'application/json'
         'Content-Type': 'application/json'
       body:
-        JSON.stringify message: args.join ' '
+        JSON.stringify message: errors.join ' '
     .catch (err) ->
       console?.error err
 
