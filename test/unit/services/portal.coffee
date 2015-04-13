@@ -24,15 +24,14 @@ emit = (message) ->
         target.should.be '*'
         parsed = JSON.parse res
 
+        if parsed.acknowledge
+          return
+
         if parsed.id
           if parsed.error
             return reject parsed
 
           resolve parsed
-        else
-          method = parsed.method
-          listenerId = method.match(/ClayEventListener\.(\d+)/)[1]
-          eventListeners[listenerId].call null, parsed
     }
 
     window.dispatchEvent event
@@ -46,19 +45,23 @@ describe 'PortalService', ->
 
     portal = PortalService.__get__ 'portal'
     portal.down()
-    portal.up timeout: 1
+    portal.up()
 
     # Stub user dependency
     User.setMe Promise.resolve {id: '1'}
 
+  # coffeelint: disable=missing_fat_arrows
   it 'pong()', ->
-    emit {method: 'ping', id: 1}
+    # first request takes up to a second
+    this.timeout 1500
+    emit {method: 'ping', id: '1'}
     .then (res) ->
-      res.id.should.be 1
+      res.id.should.be '1'
       res.result.should.be 'pong'
+  # coffeelint: enable=missing_fat_arrows
 
   it 'auth.getStatus()', ->
-    emit {method: 'auth.getStatus', id: 1}
+    emit {method: 'auth.getStatus', id: '1'}
     .then (res) ->
       res.result.accessToken.should.be '1'
 
@@ -68,7 +71,7 @@ describe 'PortalService', ->
         EnvironmentService:
           isKikEnabled: -> true
       PortalService.__with__(overrides) ->
-        emit {method: 'kik.isEnabled', id: 1}
+        emit {method: 'kik.isEnabled', id: '1'}
         .then (res) ->
           res.result.should.be true
 
@@ -80,7 +83,11 @@ describe 'PortalService', ->
           send: (params) ->
             return params
       PortalService.__with__(overrides) ->
-        emit {method: 'kik.send', params: [{title: 'abc', text: 'def'}], id: 1}
+        emit({
+          method: 'kik.send'
+          params: [{title: 'abc', text: 'def'}]
+          id: '1'
+        })
         .then (data) ->
           data.result.title.should.be 'abc'
           data.result.text.should.be 'def'
@@ -91,7 +98,7 @@ describe 'PortalService', ->
           browser:
             setOrientationLock: -> null
       PortalService.__with__(overrides) ->
-        emit {method: 'kik.browser.setOrientationLock', id: 1}
+        emit {method: 'kik.browser.setOrientationLock', id: '1'}
           .then (res) ->
             should.not.exist res.result
 
@@ -101,13 +108,13 @@ describe 'PortalService', ->
           metrics:
             enableGoogleAnalytics: -> null
       PortalService.__with__(overrides) ->
-        emit {method: 'kik.metrics.enableGoogleAnalytics', id: 1}
+        emit {method: 'kik.metrics.enableGoogleAnalytics', id: '1'}
           .then (res) ->
             should.not.exist res.result
 
   describe 'unsupported methods', ->
     it 'fails', ->
-      emit {method: 'NONE', id: 1}
+      emit {method: 'NONE', id: '1'}
       .then (res) ->
         throw new Error 'expected error'
       , (res) ->

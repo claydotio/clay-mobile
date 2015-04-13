@@ -2,12 +2,11 @@ PortalService = require './portal'
 
 tweet = (text) ->
   text = encodeURIComponent text.substr 0, 140
-  PortalService.windowOpen "https://twitter.com/intent/tweet?text=#{text}"
+  window.open "https://twitter.com/intent/tweet?text=#{text}"
 
 class ShareService
   any: ({text, gameId}) ->
-    PortalService.beforeWindowOpen()
-    PortalService.get 'share.any',
+    PortalService.call 'share.any',
       gameId: gameId
       text: text
     .catch (err) ->
