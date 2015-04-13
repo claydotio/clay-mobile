@@ -39,6 +39,7 @@ emit = (message) ->
 
 describe 'PortalService', ->
 
+  # coffeelint: disable=missing_fat_arrows
   before ->
     window.XMLHttpRequest = ->
       Zock.XMLHttpRequest()
@@ -50,15 +51,16 @@ describe 'PortalService', ->
     # Stub user dependency
     User.setMe Promise.resolve {id: '1'}
 
-  # coffeelint: disable=missing_fat_arrows
-  it 'pong()', ->
-    # first request takes up to a second
+    # first request takes up to a second, let's get it out of the way now
     this.timeout 1500
+    emit {method: 'ping', id: '1'}
+  # coffeelint: enable=missing_fat_arrows
+
+  it 'pong()', ->
     emit {method: 'ping', id: '1'}
     .then (res) ->
       res.id.should.be '1'
       res.result.should.be 'pong'
-  # coffeelint: enable=missing_fat_arrows
 
   it 'auth.getStatus()', ->
     emit {method: 'auth.getStatus', id: '1'}
