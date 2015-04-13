@@ -12,27 +12,23 @@ class PortalService
   constructor: ->
     portal.up()
 
-  get: portal.get
-
-  beforeWindowOpen: portal.beforeWindowOpen
-
-  windowOpen: portal.windowOpen
+  call: portal.call
 
   registerMethods: =>
-    portal.register 'auth.getStatus', @authGetStatus
-    portal.register 'share.any', @shareAny
+    portal.on 'auth.getStatus', @authGetStatus
+    portal.on 'share.any', @shareAny
 
-    portal.register 'kik.isEnabled', -> EnvironmentService.isKikEnabled()
-    portal.register 'kik.getMessage', -> kik?.message
-    portal.register 'kik.send', -> kik?.send.apply null, arguments
-    portal.register 'kik.browser.setOrientationLock', ->
+    portal.on 'kik.isEnabled', -> EnvironmentService.isKikEnabled()
+    portal.on 'kik.getMessage', -> kik?.message
+    portal.on 'kik.send', -> kik?.send.apply null, arguments
+    portal.on 'kik.browser.setOrientationLock', ->
       kik?.browser?.setOrientationLock.apply null, arguments
-    portal.register 'kik.metrics.enableGoogleAnalytics', ->
+    portal.on 'kik.metrics.enableGoogleAnalytics', ->
       kik?.metrics.enableGoogleAnalytics.apply null, arguments
-    portal.register 'kik.getAnonymousUser', ->
+    portal.on 'kik.getAnonymousUser', ->
       new Promise (resolve) ->
         kik?.getAnonymousUser resolve
-    portal.register 'kik.getUser', ->
+    portal.on 'kik.getUser', ->
       new Promise (resolve) ->
         kik?.getUser resolve
 

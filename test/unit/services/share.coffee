@@ -6,12 +6,13 @@ describe 'Shareservice', ->
   it 'shares via twitter if kik unavailable', (done) ->
     overrides =
       PortalService:
-        beforeWindowOpen: -> null
-        get: ->
+        call: ->
           Promise.reject new Error 'Method not handled'
-        windowOpen: (url) ->
-          url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
-          done()
+    oldOpen = window.open
+    window.open = (url) ->
+      window.open = oldOpen
+      url.should.be 'https://twitter.com/intent/tweet?text=HELLO'
+      done()
 
     ShareService.__with__(overrides) ->
       ShareService.any
