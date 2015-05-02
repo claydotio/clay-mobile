@@ -21,6 +21,7 @@ class PhoneService
     else
       request('https://ipinfo.io/json')
       .then (locationData) ->
+        console.log locationData
         internationalPhone = dialCodes[locationData.country] + digitPhone
         if internationalPhone.match new RegExp INTERNATIONAL_PHONE_REGEX
           return dialCodes[locationData.country] + digitPhone
