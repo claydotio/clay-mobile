@@ -31,6 +31,9 @@ class PortalService
     portal.on 'kik.getUser', ->
       new Promise (resolve) ->
         kik?.getUser resolve
+    portal.on 'kik.photo.getFromCamera', ->
+      new Promise (resolve) ->
+        kik?.photo.getFromCamera arguments[0], resolve
 
 
   ###
