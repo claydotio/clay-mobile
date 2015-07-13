@@ -1,7 +1,8 @@
-PortalService = require './portal'
-Game = require '../models/game'
 Vibrant = require 'vibrant'
 Vibrant = window.Vibrant # FIXME
+
+PortalService = require './portal'
+Game = require '../models/game'
 
 styleConfig = require '../stylus/vars.json'
 

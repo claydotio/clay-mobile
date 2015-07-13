@@ -91,12 +91,16 @@ gulp.task 'scripts:test', ->
       kik: '{}'
     plugins: [
       new RewirePlugin()
+      new webpackSource.ResolverPlugin \
+        new webpackSource.ResolverPlugin.DirectoryDescriptionFilePlugin \
+          'bower.json', ['main']
     ]
     resolve:
       extensions: ['.coffee', '.js', '.json', '']
       # browser-builtins is for modules requesting native node modules
       modulesDirectories: ['web_modules', 'node_modules', './src',
       'bower_components', './node_modules/browser-builtins/builtin']
+      root: [__dirname + '/bower_components']
   .pipe rename 'bundle.js'
   .pipe gulp.dest paths.build + '/test/'
 
@@ -161,11 +165,15 @@ gulp.task 'scripts:prod', ->
       ]
     plugins: [
       new webpackSource.optimize.UglifyJsPlugin()
+      new webpackSource.ResolverPlugin \
+        new webpackSource.ResolverPlugin.DirectoryDescriptionFilePlugin \
+          'bower.json', ['main']
     ]
     externals:
       kik: 'kik'
     resolve:
       extensions: ['.coffee', '.js', '.json', '']
+      root: [__dirname + '/bower_components']
   .pipe rename 'bundle.js'
   .pipe gulp.dest paths.dist + '/js/'
 
