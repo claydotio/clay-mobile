@@ -17,5 +17,4 @@ describe 'Shareservice', ->
     ShareService.__with__(overrides) ->
       ShareService.any
         text: 'HELLO'
-        game: 1
     .catch done
