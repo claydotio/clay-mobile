@@ -1,4 +1,4 @@
-FROM dockerfile/nodejs:latest
+FROM node:0.10
 
 # Install Git
 RUN apt-get install -y git

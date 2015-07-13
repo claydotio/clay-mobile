@@ -13,6 +13,8 @@
   "$blue600": "#0078ff",
   "$blue700": "#0060ff",
 
+  "$blueGrey500": "#607D8B",
+
   "$blue500Text": "#ffffff",
   "$blue600Text": "#ffffff",
   "$blue700Text": "#ffffff",

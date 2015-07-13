@@ -55,6 +55,9 @@ module.exports = class NavDrawer
     {isOpen, me, isLoggedIn, $signupButton, $signinButton,
       $googlePlayAdCard, pages} = @state()
 
+    # FIXME: fully remove
+    return ''
+
     drawerWidth = Math.min \
       window.innerWidth - DRAWER_RIGHT_PADDING, DRAWER_MAX_WIDTH
     translateX = if isOpen then '0' else "-#{drawerWidth}px"

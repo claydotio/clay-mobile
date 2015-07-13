@@ -96,7 +96,7 @@ gulp.task 'scripts:test', ->
       extensions: ['.coffee', '.js', '.json', '']
       # browser-builtins is for modules requesting native node modules
       modulesDirectories: ['web_modules', 'node_modules', './src',
-      './node_modules/browser-builtins/builtin']
+      'bower_components', './node_modules/browser-builtins/builtin']
   .pipe rename 'bundle.js'
   .pipe gulp.dest paths.build + '/test/'
 

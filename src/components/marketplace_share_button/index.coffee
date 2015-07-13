@@ -18,7 +18,6 @@ module.exports = class MarketplaceShareButton
     e?.preventDefault()
 
     ShareService.any
-      gameId: MARKETPLACE_GAME_ID
       text: 'Play with me! http://clay.io'
     .catch log.trace
 

@@ -1,6 +1,7 @@
 /node_modules
 /dist
 /components
+/bower_components
 /build
 /specs
 roadmap.md

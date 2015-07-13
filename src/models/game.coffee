@@ -147,4 +147,7 @@ class Game
   getIconUrl: (game) ->
     return game.iconImage?.versions[0].url or game.icon128Url
 
+  getHeaderImageUrl: (game) ->
+    return game.headerImage?.versions[0].url or game.promo440Url
+
 module.exports = new Game()

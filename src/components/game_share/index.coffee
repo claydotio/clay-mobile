@@ -30,7 +30,7 @@ module.exports = class GameShare
     text = "Come play #{@game.name} with me!
            #{UrlService.getMarketplaceGame({@game})}"
     ShareService.any
-      gameId: @game.id
+      game: @game
       text: text
     .catch log.trace
 

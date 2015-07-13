@@ -2,10 +2,8 @@
 
 json('../../stylus/vars.json')
 
-$drawerWidth = 288
 $drawerContentPadding = 20
 $drawerHeaderHeight = 50
-$drawerNubRadius = 48
 $zIndexDrawerPromoAfter = 0
 $zIndexDrawerPromoText = 1
 $zIndexDrawerHeader = 100
@@ -22,7 +20,6 @@ $zIndexDrawerHeader = 100
     display: block
 
 .z-drawer-nub
-  width: $drawerNubRadius px
   height: $drawerNubRadius px
   position: fixed
   top: 0
@@ -31,21 +28,16 @@ $zIndexDrawerHeader = 100
   pointer-events: all // not supported in ie9/10
 
 .z-drawer
-  width: ($drawerWidth + $drawerNubRadius) px
-  right: -($drawerWidth)px
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)
   height: 100%
   top: 0
-  padding-left: $drawerNubRadius px
+  right: 0
+  padding-left: $drawerNubRadius
   position: fixed
   z-index: $zIndexDrawer
-  transform: translateZ(0) /* gpu accelerate */
-  transition: right 0.25s
   text-align: left
   pointer-events: none // not supported in ie9/10
   box-sizing: border-box
-
-  &.is-open
-    right: 0
 
 .z-drawer-header
   width: 100%

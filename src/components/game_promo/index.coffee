@@ -4,6 +4,7 @@ log = require 'clay-loglevel'
 
 UrlService = require '../../services/url'
 User = require '../../models/user'
+Game = require '../../models/game'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -23,7 +24,7 @@ module.exports = class GamePromo
     width ?= styleConfig.$marketplaceGamePromoWidth
     height ?= styleConfig.$marketplaceGamePromoHeight
     gameSubdomainUrl = UrlService.getGameSubdomain {game}
-    backgroundImage = game.headerImage?.versions[0].url or game.promo440Url
+    backgroundImage = Game.getHeaderImageUrl game
 
     z "a.z-game-promo[href=#{gameSubdomainUrl}]", {
       onclick: (e) =>

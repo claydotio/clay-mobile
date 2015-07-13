@@ -9,6 +9,7 @@ Nub = require '../nub'
 UrlService = require '../../services/url'
 ShareService = require '../../services/share'
 GooglePlayAdService = require '../../services/google_play_ad'
+Game = require '../../models/game'
 
 styles = require './index.styl'
 
@@ -50,7 +51,7 @@ module.exports = class Drawer
            #{UrlService.getMarketplaceGame({game})}"
 
     ShareService.any
-      gameId: game.id
+      game: game
       text: text
     .catch log.trace
 
@@ -90,15 +91,27 @@ module.exports = class Drawer
       drawerIsOpen = ''
       drawerOverlayIsOpen = ''
 
-    headerImageUrl = game.headerImage?.versions[0].url or game.promo440Url
+    headerImageUrl = Game.getHeaderImageUrl game
+
+    drawerWidth = 288
+    drawerNubRadius = 48
+    translateX = if isOpen then '0' else "#{window.innerWidth}px"
 
     # TODO: (Austin) some sort of fast-click equivalent on top of zorium
     [
       z "div.z-drawer-overlay#{drawerOverlayIsOpen}",
         ontouchstart: @close
-      z 'div.z-drawer-nub',
+      z 'div.z-drawer-nub', {
+        style:
+          width: "#{drawerNubRadius}px"
+      },
         nub
-      z "div.z-drawer#{drawerIsOpen}",
+      z "div.z-drawer#{drawerIsOpen}", {
+        style:
+          width: "#{drawerWidth}px"
+          transform: "translate(#{translateX}, 0)"
+          webkitTransform: "translate(#{translateX}, 0)"
+      },
         z 'div.z-drawer-header',
           z 'a[href=#].z-drawer-close',
             onclick: @close,

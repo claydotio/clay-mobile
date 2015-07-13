@@ -12,6 +12,9 @@ module.exports = class MenuButton
   render: ({isAlignedLeft}) =>
     {$menuIcon} = @state()
 
+    # FIXME: fully remove
+    return ''
+
     z 'div.z-menu-button',
       z $menuIcon,
         isAlignedLeft: isAlignedLeft

@@ -15,7 +15,7 @@ module.exports = class Nub
   render: =>
     {$menuIcon} = @state()
 
-    z 'div.z-nub', ontouchstart: @toggleCallback,
+    z 'div.z-nub', onclick: @toggleCallback, # FIXME
       z $menuIcon,
         icon: 'menu'
         color: styleConfig.$orange500

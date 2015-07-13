@@ -164,6 +164,8 @@ route = ->
     .catch log.trace
     z.router.go()
 
+  PortalService.call 'gameIsReady'
+
   # FIXME when zorium hsa better support for redirects, move this up
   if subdomain is 'dev' and z.router.currentPath is null
     User.getMe().then ({id}) ->

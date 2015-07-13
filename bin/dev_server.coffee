@@ -52,6 +52,9 @@ new WebpackDevServer webpack({
     kik: 'kik'
   resolve:
     extensions: ['.coffee', '.js', '.json', '']
+    # browser-builtins is for modules requesting native node modules
+    modulesDirectories: ['web_modules', 'node_modules', './src',
+    'bower_components', './node_modules/browser-builtins/builtin']
 }),
   publicPath: "//#{webpackDevHostname}:#{webpackDevPort}/js/"
   hot: true
