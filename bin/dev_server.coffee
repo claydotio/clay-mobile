@@ -47,6 +47,9 @@ new WebpackDevServer webpack({
     ]
   plugins: [
     new webpack.HotModuleReplacementPlugin()
+    new webpack.ResolverPlugin \
+      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin \
+        'bower.json', ['main']
   ]
   externals:
     kik: 'kik'
@@ -55,6 +58,7 @@ new WebpackDevServer webpack({
     # browser-builtins is for modules requesting native node modules
     modulesDirectories: ['web_modules', 'node_modules', './src',
     'bower_components', './node_modules/browser-builtins/builtin']
+    root: [__dirname + '/bower_components']
 }),
   publicPath: "//#{webpackDevHostname}:#{webpackDevPort}/js/"
   hot: true

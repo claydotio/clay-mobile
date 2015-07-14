@@ -177,9 +177,9 @@ class ShareService
     gameId = game?.id or 1
 
     cardPromise.then (cardDataUrl) ->
-      # FIXME: make shared game go to that game's page when loaded
       PortalService.call 'share.any',
-        data: {}
+        data:
+          gameKey: game?.key
         context: 'compose'
         gameId: gameId
         cardDataUrl: cardDataUrl

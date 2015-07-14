@@ -54,7 +54,7 @@
     "style-loader": "0.8.1",
     "stylus-loader": "0.5.0",
     "transform-loader": "0.2.1",
-    "webpack": "1.8.4",
+    "webpack": "1.10.1",
     "webpack-dev-server": "1.6.5",
     "zock": "0.0.11"
   },

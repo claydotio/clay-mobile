@@ -145,15 +145,9 @@ else
   z.router.add '/what-is-clay/:fromUserId', WhatIsClayPage
   z.router.add '/friends', FriendsPage
 
-route = ->
-  # invite from kik message
-  fromUserId = kik?.message?.fromUserId
-  if fromUserId
-    z.router.go "/invite-landing/#{fromUserId}"
-    return
-
+handleData = (data) ->
   # Passed via message to denote game (share button in drawer uses this)
-  gameKey = kik?.message?.gameKey or (subdomain isnt 'dev' and subdomain)
+  gameKey = data?.gameKey or (subdomain isnt 'dev' and subdomain)
 
   if gameKey
     PushToken.createByGameKey gameKey
@@ -164,9 +158,21 @@ route = ->
     .catch log.trace
     z.router.go()
 
+route = ->
+  # invite from kik message
+  fromUserId = kik?.message?.fromUserId
+  if fromUserId
+    z.router.go "/invite-landing/#{fromUserId}"
+    return
+
+  PortalService.call 'top.getData'
+  .then handleData
+
+  PortalService.call 'top.onData', handleData
+
   PortalService.call 'gameIsReady'
 
-  # FIXME when zorium hsa better support for redirects, move this up
+  # FIXME when zorium has better support for redirects, move this up
   if subdomain is 'dev' and z.router.currentPath is null
     User.getMe().then ({id}) ->
       Developer.find({ownerId: id})

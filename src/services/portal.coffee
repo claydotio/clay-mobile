@@ -18,6 +18,8 @@ class PortalService
     portal.on 'auth.getStatus', @authGetStatus
     portal.on 'share.any', @shareAny
 
+    portal.on 'top.getData', @topGetData
+
     portal.on 'kik.isEnabled', -> EnvironmentService.isKikEnabled()
     portal.on 'kik.getMessage', -> kik?.message
     portal.on 'kik.send', -> kik?.send.apply null, arguments
@@ -65,5 +67,8 @@ class PortalService
       )
 
       return null
+
+  topGetData: ->
+    kik?.message
 
 module.exports = new PortalService()
