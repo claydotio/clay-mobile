@@ -2,6 +2,7 @@ Joi = require 'joi'
 log = require 'clay-loglevel'
 Zock = new (require 'zock')()
 should = require('clay-chai').should()
+_ = require 'lodash'
 
 config = require 'config'
 ErrorReportService = require 'services/error_report'
