@@ -11,6 +11,7 @@ HomeCards = require '../../components/home_cards'
 RecentGames = require '../../components/recent_games'
 PopularGames = require '../../components/popular_games'
 GooglePlayAdService = require '../../services/google_play_ad'
+PortalService = require '../../services/portal'
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -33,6 +34,7 @@ module.exports = class GamesPage
                then new PopularGames({featuredGameRow: 1})
                else new PopularGames({featuredGameRow: 0})
       ).catch log.trace
+      isMessengerInstalled: z.observe PortalService.call 'messenger.isInstalled'
 
 
     @googlePlayAdModalPromise = GooglePlayAdService.shouldShowAdModal()
@@ -44,13 +46,16 @@ module.exports = class GamesPage
 
   render: =>
     {$appBar, $navDrawer, $homeCards, $menuButton, $marketplaceShare,
-      $recentGames, $popularGames, $modalViewer} = @state()
+      $recentGames, $popularGames, $modalViewer,
+      isMessengerInstalled} = @state()
 
     z 'div.z-games-page', [
       z $appBar, {
         height: "#{styleConfig.$appBarHeightShort}px"
         $topLeftButton: z $menuButton, {isAlignedLeft: true}
-        $topRightButton: z $marketplaceShare, {isAlignedRight: true}
+        $topRightButton: if isMessengerInstalled is false \
+                         then z $marketplaceShare, {isAlignedRight: true}
+                         else null
       }
       z $navDrawer, {currentPage: 'games'}
       $modalViewer

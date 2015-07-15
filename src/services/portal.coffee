@@ -20,6 +20,8 @@ class PortalService
 
     portal.on 'top.getData', @topGetData
 
+    portal.on 'messenger.isInstalled', -> false
+
     portal.on 'kik.isEnabled', -> EnvironmentService.isKikEnabled()
     portal.on 'kik.getMessage', -> kik?.message
     portal.on 'kik.send', -> kik?.send.apply null, arguments

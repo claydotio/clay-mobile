@@ -6,10 +6,14 @@ config = require '../../config'
 CrossPromotion = require '../cross_promotion'
 GooglePlayAdDrawer = require '../google_play_ad_drawer'
 Nub = require '../nub'
+Icon = require '../icon'
 UrlService = require '../../services/url'
 ShareService = require '../../services/share'
 GooglePlayAdService = require '../../services/google_play_ad'
+PortalService = require '../../services/portal'
 Game = require '../../models/game'
+
+styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
 
@@ -22,11 +26,14 @@ module.exports = class Drawer
     @state = z.state
       game: game
       isOpen: false
-      crossPromotion: new CrossPromotion()
-      nub: new Nub toggleCallback: @toggleState
-      googlePlayAdDrawer: if GooglePlayAdService.shouldShowAds() \
+      $messengerIcon: new Icon()
+      $shareIcon: new Icon()
+      $crossPromotion: new CrossPromotion()
+      $nub: new Nub toggleCallback: @toggleState
+      $googlePlayAdDrawer: if GooglePlayAdService.shouldShowAds() \
                           then new GooglePlayAdDrawer()
                           else null
+      isMessengerInstalled: z.observe PortalService.call 'messenger.isInstalled'
 
   toggleState: (e) =>
     e?.preventDefault()
@@ -82,7 +89,8 @@ module.exports = class Drawer
       window.location.href = UrlService.getMarketplaceBase()
 
   render: =>
-    {isOpen, game, nub, googlePlayAdDrawer, crossPromotion} = @state()
+    {isOpen, game, $nub, $googlePlayAdDrawer, $crossPromotion,
+      $messengerIcon, $shareIcon, isMessengerInstalled} = @state()
 
     if isOpen
       drawerIsOpen = '.is-open'
@@ -97,6 +105,7 @@ module.exports = class Drawer
     drawerNubRadius = 48
     translateX = if isOpen then '0' else "#{window.innerWidth}px"
 
+
     # TODO: (Austin) some sort of fast-click equivalent on top of zorium
     [
       z "div.z-drawer-overlay#{drawerOverlayIsOpen}",
@@ -105,7 +114,7 @@ module.exports = class Drawer
         style:
           width: "#{drawerNubRadius}px"
       },
-        nub
+        $nub
       z "div.z-drawer#{drawerIsOpen}", {
         style:
           width: "#{drawerWidth}px"
@@ -129,18 +138,35 @@ module.exports = class Drawer
           z 'div.z-drawer-content',
             z '.z-drawer-share',
               z 'div.z-drawer-share-inner',
-                z 'button.button-primary.is-block.z-drawer-share-button',
-                  onclick: @shareGame,
-                  z 'i.icon.icon-share'
-                  'Share with friends'
-            z 'div.z-drawer-google-play-ad-drawer', googlePlayAdDrawer
+                z 'button.button-primary.z-drawer-share-button', {
+                  className: z.classKebab {isMessenger: isMessengerInstalled}
+                  onclick: @shareGame
+                },
+                  if isMessengerInstalled \
+                  then [
+                    z '.icon',
+                      z $messengerIcon,
+                        icon: 'messenger-bubble'
+                        isTouchTarget: false
+                        color: styleConfig.$white
+                    'Send to Messenger'
+                  ]
+                  else [
+                    z '.icon',
+                      z $shareIcon,
+                        icon: 'share'
+                        isTouchTarget: false
+                        color: styleConfig.$white
+                    'Share with friends'
+                  ]
+            z 'div.z-drawer-google-play-ad-drawer', $googlePlayAdDrawer
             z "a[href=#{UrlService.getMarketplaceBase()}]
               .z-drawer-marketplace-link",
               onclick: @openMarketplace,
               z 'i.icon.icon-heart'
               z 'span.z-drawer-menu-item', 'Recommended games'
             z 'div.z-drawer-cross-promotion',
-              z crossPromotion, iconSize: GAME_BOX_ICON_SIZE
+              z $crossPromotion, iconSize: GAME_BOX_ICON_SIZE
               z 'button.button-secondary.is-block.z-drawer-browse-more',
                 onclick: @openMarketplace,
                 'Browse more games'

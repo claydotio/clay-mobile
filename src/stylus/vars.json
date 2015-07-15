@@ -43,6 +43,9 @@
   "$grey600Text": "#ffffff",
   "$grey900Text": "#ffffff",
 
+  "$messengerBlue500": "#0088ff",
+  "$messengerBlue500Text": "#ffffff",
+
   "$black": "#000000",
   "$white": "#ffffff",
 
