@@ -75,5 +75,5 @@ module.exports = class GameShare
                 icon: 'share'
                 isTouchTarget: false
                 color: styleConfig.$white
-            'Share with friends'
+            z '.text', 'Share with friends'
           ]

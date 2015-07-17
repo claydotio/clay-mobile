@@ -157,7 +157,7 @@ module.exports = class Drawer
                         icon: 'share'
                         isTouchTarget: false
                         color: styleConfig.$white
-                    'Share with friends'
+                    z '.text', 'Share with friends'
                   ]
             z 'div.z-drawer-google-play-ad-drawer', $googlePlayAdDrawer
             z "a[href=#{UrlService.getMarketplaceBase()}]

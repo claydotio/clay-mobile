@@ -131,8 +131,7 @@ $zIndexDrawerHeader = 100
 
     .z-drawer-share-button
       display: flex
-      align-items: center
-      justify-content: center
+      text-align: center
       width: 100%
 
       &.is-messenger
@@ -140,7 +139,14 @@ $zIndexDrawerHeader = 100
         color: $messengerBlue500Text
 
       > .icon
+        display: inline-block
+        margin-top: auto
+        margin-bottom: auto
+        margin-left: auto
         margin-right: 10px
+
+      > .text
+        margin-right: auto
 
 .z-drawer-google-play-ad-drawer
   margin: 20px 0 0 0

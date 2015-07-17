@@ -13,8 +13,7 @@ json('../../stylus/vars.json')
 
 .z-game-share-button
   display: flex
-  align-items: center
-  justify-content: center
+  text-align: center
   width: 100%
 
   &.is-messenger
@@ -22,4 +21,11 @@ json('../../stylus/vars.json')
     color: $messengerBlue500Text
 
   > .icon
+    display: inline-block
+    margin-top: auto
+    margin-bottom: auto
+    margin-left: auto
     margin-right: 10px
+
+  > .text
+    margin-right: auto
