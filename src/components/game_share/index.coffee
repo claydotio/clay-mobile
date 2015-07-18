@@ -67,7 +67,7 @@ module.exports = class GameShare
                 icon: 'messenger-bubble'
                 isTouchTarget: false
                 color: styleConfig.$white
-            'Send to Messenger'
+            z '.text', 'Send to Messenger'
           ]
           else [
             z '.icon',
