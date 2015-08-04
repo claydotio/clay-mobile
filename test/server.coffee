@@ -48,7 +48,6 @@ describe 'healthcheck', ->
       .get '/healthcheck'
       .expect 200,
         clayApi: true
-        flakCannon: true
         healthy: true
 
 describe 'index.dust', ->
