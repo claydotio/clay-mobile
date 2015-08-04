@@ -32,13 +32,14 @@ module.exports = class Home
           z 'img.kik[src=//cdn.wtf/d/images/kik/kik_logo.svg]'
         z 'img.phones[src=//cdn.wtf/d/images/desktop_site/devices.jpg]' +
           '[width=430][height=325]'
-      z '.featured',
-        z '.l-content-container',
-            _.map featuredGames, (game) ->
-              headerImageUrl = game.headerImage?.versions[0].url or
-                               game.promo440Url
-              z.router.link z "a.link[href=/game/#{game.key}]",
-                z "img.image[src=#{headerImageUrl}]"
+      # FIXME: temporary due to migration
+      # z '.featured',
+      #   z '.l-content-container',
+      #       _.map featuredGames, (game) ->
+      #         headerImageUrl = game.headerImage?.versions[0].url or
+      #                          game.promo440Url
+      #         z.router.link z "a.link[href=/game/#{game.key}]",
+      #           z "img.image[src=#{headerImageUrl}]"
       z '.dev-info.l-content-container',
         z 'h1', 'Publish your mobile games to over 5 million players'
         z '.sdk-features',
