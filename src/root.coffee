@@ -214,12 +214,6 @@ Promise.all [User.incrementVisitCount(), KikService.isFromPush()]
   shareOriginUserId = kik?.message?.share?.originUserId
   isFromShare = Boolean shareOriginUserId
 
-  if isFromShare
-    User.setExperimentsFrom shareOriginUserId
-    .then ->
-      User.convertExperiment 'hit_from_share'
-    .catch log.trace
-
   # track kik metrics (users sending messages, etc...)
   kik?.metrics?.enableGoogleAnalytics?()
 
@@ -232,20 +226,6 @@ Promise.all [User.incrementVisitCount(), KikService.isFromPush()]
   ####################
   #    ANALYTICS     #
   ####################
-
-  # track A/B tests in Google Analytics
-  # Google's intended solution for this is custom dimensions
-  # https://developers.google.com/analytics/devguides/platform/customdimsmets
-  # however, that requires adding each dimension inside of FA's admin panel.
-  # using events we can get the same results with a filter for users with
-  # specific events
-  User.getExperiments().then (params) ->
-    unless ga
-      return
-    for experimentParam, experimentTestGroup of params
-      ga 'send', 'event', 'A/B Test', experimentParam,
-        "#{experimentParam}:#{experimentTestGroup}"
-  .catch log.trace
 
   window.setTimeout ->
     User.logEngagedActivity()

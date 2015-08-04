@@ -22,8 +22,6 @@ module.exports = class MarketplaceShareButton
     .catch log.trace
 
     ga? 'send', 'event', 'marketplace_share', 'share', 'marketplace'
-    User.convertExperiment 'marketplace_share'
-    .catch log.trace
 
   render: ({isAlignedRight}) =>
     {$shareIcon} = @state()

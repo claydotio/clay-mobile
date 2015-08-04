@@ -15,9 +15,6 @@ module.exports = class HomeCards
       me: User.getMe()
       isLoggedIn: User.isLoggedIn()
       newFriends: z.observe User.getLocalNewFriends()
-      isInFeedbackExperiment: z.observe \
-      User.getExperiments().then ({feedbackCard}) ->
-        return feedbackCard is 'show'
       $joinThanksCard: new JoinThanksCard()
       $friendRequestCard: new FriendRequestCard()
       $requestAvatarCard: new RequestAvatarCard()
@@ -25,7 +22,7 @@ module.exports = class HomeCards
       $googlePlayAdCard: new GooglePlayAd()
 
   render: =>
-    {me, isLoggedIn, newFriends, isInFeedbackExperiment, $friendRequestCard,
+    {me, isLoggedIn, newFriends, $friendRequestCard,
       $requestAvatarCard, $feedbackCard, $googlePlayAdCard,
       $joinThanksCard} = @state()
 
@@ -36,7 +33,5 @@ module.exports = class HomeCards
         $joinThanksCard
       else if isLoggedIn and not me.avatarImage
         $requestAvatarCard
-      else if isInFeedbackExperiment and EnvironmentService.isKikEnabled()
-        $feedbackCard
       else if GooglePlayAdService.shouldShowAds()
         $googlePlayAdCard

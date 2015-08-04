@@ -67,7 +67,6 @@ module.exports = class GamePlayer
           @logEngagedPlay().catch(log.trace)
         , ENGAGED_PLAY_TIME
 
-    User.convertExperiment('game_play').catch log.trace
     GooglePlayAdService.shouldShowAdModal().then (shouldShow) ->
       if shouldShow
         GooglePlayAdService.showAdModal()
@@ -83,7 +82,6 @@ module.exports = class GamePlayer
       width: window.innerWidth + 'px'
 
   logEngagedPlay: =>
-    User.convertExperiment('engaged_play').catch log.trace
     @state.game.then (game) ->
       ga? 'send', 'event', 'game', 'engaged_play', game.key
       User.addRecentGame(game.id)

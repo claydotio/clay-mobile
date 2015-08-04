@@ -20,7 +20,6 @@ LARGE_AVATAR_SIZE = 512
 # This doesn't need to be a promise because getMe() will make it a promise
 # if it's 'unset', and nothing else accesses `me` directly as a promise
 me = z.observe 'unset'
-experiments = null
 
 class User
   AVATAR_SIZES:
@@ -45,12 +44,6 @@ class User
   #  FIXME: _me must be a promise (streams will hopefully fix)
   setMe: (_me) ->
     me.set _me
-
-    experiments = me.then (user) ->
-      request config.PUBLIC_FC_API_URL + '/experiments',
-        method: 'POST'
-        body:
-          userId: user.id
     return me
 
   updateMe: (userUpdate) =>
@@ -77,42 +70,10 @@ class User
       o_isLoggedIn
 
   logEngagedActivity: =>
-    @getMe().then (me) =>
-      Promise.all [
-        @convertExperiment('engaged_activity')
-        request PATH + '/me/lastEngagedActivity',
-          method: 'POST'
-          qs: {accessToken: me.accessToken}
-      ]
-      .then ([exp, res]) ->
-        res
-
-  getExperiments: =>
-    unless experiments
-      experiments = @getMe().then (user) ->
-        request config.PUBLIC_FC_API_URL + '/experiments',
-          method: 'POST'
-          body:
-            userId: user.id
-
-    return experiments
-
-  setExperimentsFrom: (shareOriginUserId) =>
-    experiments = @getMe().then (user) ->
-      request config.PUBLIC_FC_API_URL + '/experiments',
+    @getMe().then (me) ->
+      request PATH + '/me/lastEngagedActivity',
         method: 'POST'
-        body:
-          fromUserId: shareOriginUserId
-          userId: user.id
-
-  convertExperiment: (event, {uniq} = {}) =>
-    @getMe().then (user) ->
-      request config.PUBLIC_FC_API_URL + '/conversions',
-        method: 'POST'
-        body:
-          event: event
-          uniq: uniq
-          userId: user.id
+        qs: {accessToken: me.accessToken}
 
   addRecentGame: (gameId) =>
     @getMe().then (me) ->

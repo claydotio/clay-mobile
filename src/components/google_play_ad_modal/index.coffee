@@ -22,7 +22,6 @@ module.exports = class GooglePlayAdModal
 
   openGooglePlay: (e) ->
     e.preventDefault()
-    User.convertExperiment('to_google_play').catch log.trace
     ga? 'send', 'event', 'to_google_play', 'convert'
     window.open 'https://play.google.com/store/apps/details?id=com.clay.clay'
 

@@ -80,7 +80,6 @@ module.exports = class Join
         User.addFriend(fromUserId).catch log.trace
 
       ga? 'send', 'event', 'user', 'signup', fromUserId
-      User.convertExperiment('phone_signup').catch log.trace
 
       z.router.go '/invite'
 
