@@ -10,22 +10,15 @@ Modal = require '../../models/modal'
 
 styles = require './index.styl'
 
-LITTLE_ALCHEMY_GAME_ID = '2074'
-ZOP_GAME_ID = '8343'
-WORD_WARS_GAME_ID = '22'
-LUNCHBUG_GAME_ID = '389'
+LITTLE_ALCHEMY_GAME_ID = '42db4b0a-464e-4ae6-b06e-96440ce66573'
+ZOP_GAME_ID = '7c5d01ac-9fc0-4f19-8dca-fb21e3777007'
 
 module.exports = class FirstVisitModal
   constructor: ({gameBoxSize}) ->
     styles.use()
 
     # devs may not have games locally
-    gameBoxes = z.observe (if config.ENV is config.ENVS.DEV
-      Promise.all [
-        Game.get WORD_WARS_GAME_ID
-        Game.get LUNCHBUG_GAME_ID
-      ]
-    else
+    gameBoxes = z.observe (
       Promise.all [
         Game.get LITTLE_ALCHEMY_GAME_ID
         Game.get ZOP_GAME_ID
