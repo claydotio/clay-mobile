@@ -47,6 +47,7 @@ module.exports = class PopularGames
 
     User.getVisitCount()
     .then (visitCount) ->
+      return null # FIXME: temporarily disable during migration
       if visitCount is 1 and not User.getViewedFirstVisitModalThisSession()
         User.setViewedFirstVisitModalThisSession true
         Modal.openComponent
