@@ -24,9 +24,6 @@ describe 'Drawer', ->
       .base(config.PUBLIC_CLAY_API_URL)
       .post '/users/login/anon'
       .reply 200, MockUser
-      .base(config.PUBLIC_FC_API_URL)
-      .get '/experiments'
-      .reply 200, {}
 
     DrawerComponent = new Drawer({game: MockGame})
 
@@ -53,9 +50,6 @@ describe 'Drawer', ->
       .base(config.PUBLIC_CLAY_API_URL)
       .post '/users/login/anon'
       .reply 200, MockUser
-      .base(config.PUBLIC_FC_API_URL)
-      .get '/experiments'
-      .reply 200, {}
 
     DrawerComponent = new Drawer(MockGame)
 

@@ -76,8 +76,5 @@ mock = new Zock()
   .post '/pushTokens'
   .reply 200, (res) ->
     {gameId: prism.id, token: 'mocked_token'}
-  .base(config.PUBLIC_FC_API_URL)
-  .post '/experiments'
-  .reply 200, {}
 
 module.exports = mock

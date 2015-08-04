@@ -119,14 +119,11 @@ router.get '/healthcheck', (req, res) ->
   Promise.settle [
       Promise.cast(request.get(config.CLAY_API_URL + '/ping'))
         .timeout HEALTHCHECK_TIMEOUT
-      Promise.cast(request.get(config.FC_API_URL + '/ping'))
-        .timeout HEALTHCHECK_TIMEOUT
     ]
-    .spread (clayApi, flakCannon) ->
+    .spread (clayApi) ->
       res.json
         clayApi: clayApi.isFulfilled()
-        flakCannon: flakCannon.isFulfilled()
-        healthy: clayApi.isFulfilled() and flakCannon.isFulfilled()
+        healthy: clayApi.isFulfilled()
 
 router.get '/ping', (req, res) ->
   res.end 'pong'

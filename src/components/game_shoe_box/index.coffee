@@ -18,7 +18,6 @@ module.exports = class GameShoeBox
     e?.preventDefault()
 
     ga? 'send', 'event', 'game_shoe_box', 'click', @game.key
-    User.convertExperiment('game_shoe_box_click').catch log.trace
     z.router.go UrlService.getGameRoute {@game}
     httpSubDomainUrl = UrlService.getGameSubdomain({@game, protocol: 'http'})
     kik?.picker?(httpSubDomainUrl, {}, -> null)

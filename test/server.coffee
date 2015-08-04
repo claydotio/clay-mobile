@@ -42,15 +42,6 @@ nock config.CLAY_API_URL
   .reply 200,
     'pong'
 
-nock config.FC_API_URL
-  .persist()
-  .post '/experiments'
-  .reply 200,
-    login_button: 'red'
-  .get '/ping'
-  .reply 200,
-    'pong'
-
 describe 'healthcheck', ->
   it 'is healthy', ->
     flare

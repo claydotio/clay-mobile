@@ -15,7 +15,6 @@ module.exports = class GamePromo
 
   loadGame: (game) ->
     ga? 'send', 'event', 'game_promo', 'click', game.key
-    User.convertExperiment('game_promo').catch log.trace
     z.router.go UrlService.getGameRoute {game}
     httpSubDomainUrl = UrlService.getGameSubdomain({game, protocol: 'http'})
     kik?.picker?(httpSubDomainUrl, {}, -> null)
