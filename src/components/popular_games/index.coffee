@@ -66,13 +66,13 @@ module.exports = class PopularGames
 
   onMount: (@$$el) =>
     # Bind event listeners
-    document.getElementById('app').addEventListener 'scroll', @scrollListener
+    window.addEventListener 'scroll', @scrollListener
     window.addEventListener 'resize', @scrollListener
 
     @scrollListener()
 
   onBeforeUnmount: =>
-    document.getElementById('app').removeEventListener 'scroll', @scrollListener
+    window.removeEventListener 'scroll', @scrollListener
     window.removeEventListener 'resize', @scrollListener
 
   scrollListener: =>
@@ -82,7 +82,10 @@ module.exports = class PopularGames
     # Infinite Scroll
     $$el = @$$el
 
-    scrollTop = document.getElementById('app').scrollTop
+    scrollTop = window.pageYOffset
+    scrollTop ?= document.documentElement.scrollTop
+    scrollTop ?= document.body.parentNode.scrollTop
+    scrollTop ?= document.body.scrollTop
 
     totalScrolled = elTopPosition($$el) + $$el.offsetHeight
     totalScrollHeight = scrollTop + window.innerHeight

@@ -1,7 +1,5 @@
 z = require 'zorium'
 
-EnvironmentService = require '../../services/environment'
-
 styleConfig = require '../../stylus/vars.json'
 
 styles = require './index.styl'
@@ -20,11 +18,9 @@ module.exports = class AppBar
     # share state between AppBar and the overlapping component(s)
     overlapBottomPadding ?= 0
 
-    isiOSApp = EnvironmentService.isClayApp() and EnvironmentService.isiOS()
-
     z 'header.z-app-bar', {
       className: z.classKebab {
-        isFixed: not isDescriptive and not isiOSApp
+        isFixed: not isDescriptive
         isDescriptive
       }
       style:
