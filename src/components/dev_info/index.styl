@@ -1,0 +1,44 @@
+@require 'nib'
+
+json('../../stylus/vars.json')
+
+.z-dev-info
+  text-align: center
+
+  > h1
+    display: inline-block
+    font-weight: lighter
+    font-size: $fontSizeXXLarge
+    max-width: 550px
+    margin: 40px 0
+
+  > .sdk-features
+    > .sdk-feature
+      display: inline-block
+      width: 320px
+
+      > .icon
+        color $blue500
+        font-size: $iconXXLarge
+
+      > .title
+        font-size: $fontSizeLarge
+        font-weight: bold
+        padding: 20px
+
+      > .info
+        display: block
+        margin: 0 auto
+        max-width: 270px
+        font-size: $fontSizeMedium
+        color: $grey600
+
+  > .dev-actions
+    padding: 40px
+
+    > .get-started
+      width: 180px
+      margin-right: 40px
+
+    > .explore-sdk
+      color: $blue500

@@ -2,7 +2,7 @@ z = require 'zorium'
 
 DevHeader = require '../../components/dev_header'
 DevDashboardMenu = require '../../components/dev_dashboard_menu'
-DevDashboardContact = require '../../components/dev_dashboard_contact'
+Contact = require '../../components/contact'
 DevDashboardGames = require '../../components/dev_dashboard_games'
 DevBottomPadding = require '../../components/dev_bottom_padding'
 

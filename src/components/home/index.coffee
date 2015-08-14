@@ -2,6 +2,7 @@ z = require 'zorium'
 log = require 'clay-loglevel'
 
 Game = require '../../models/game'
+DevInfo = require '../dev_info'
 config = require '../../config'
 
 styles = require './index.styl'
@@ -19,10 +20,11 @@ module.exports = class Home
     ]
 
     @state = z.state
+      $devInfo: new DevInfo()
       featuredGames: z.observe Game.get(featuredGameIds).catch log.trace
 
   render: =>
-    {featuredGames} = @state()
+    {$devInfo, featuredGames} = @state()
     z '.z-home',
       z '.hero.l-content-container',
         z '.info',
@@ -41,30 +43,7 @@ module.exports = class Home
                                game.promo440Url
               z.router.link z "a.link[href=/game/#{game.key}]",
                 z "img.image[src=#{headerImageUrl}]"
-      z '.dev-info.l-content-container',
-        z 'h1', 'Publish your mobile games to over 5 million players'
-        z '.sdk-features',
-          z '.sdk-feature',
-            z 'i.icon.icon-cloud-upload'
-            z '.title', 'Distribution'
-            z '.info', 'Distribute your game to the Clay Marketplace and get
-                        exposed to millions of players!'
-          z '.sdk-feature',
-            z 'i.icon.icon-ads'
-            z '.title', 'Advertising'
-            z '.info', 'Easily implement advertisements in your game to
-                        start making money right away.'
-          z '.sdk-feature',
-            z 'i.icon.icon-share'
-            z '.title', 'Social Sharing'
-            z '.info', 'Get your players posting to Facebook, Twitter, Kik,
-                        and more - inviting their friends to play your game!'
-        z '.dev-actions',
-          z 'a.button-primary.get-started' +
-            "[href=https://#{config.DEV_HOST}/login]",
-            'Get started!'
-          z 'a.button-ghost.explore-sdk'+
-            '[href=https://github.com/claydotio/clay-sdk]', 'Explore the SDK'
+      $devInfo
       z '.team',
         z '.l-content-container',
           z 'h1', 'Join the team!'

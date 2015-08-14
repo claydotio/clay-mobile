@@ -23,6 +23,12 @@ FriendsPage = require './pages/friends'
 DevLoginPage = require './pages/dev_login'
 DevDashboardPage = require './pages/dev_dashboard'
 DevEditGamePage = require './pages/dev_edit_game'
+TosPage = require './pages/tos'
+PrivacyPage = require './pages/privacy'
+ContactPage = require './pages/contact'
+DevelopmentToolsPage = require './pages/development_tools'
+DocsPage = require './pages/docs'
+AboutPage = require './pages/about'
 PushToken = require './models/push_token'
 User = require './models/user'
 Developer = require './models/developer'
@@ -144,6 +150,14 @@ else
   z.router.add '/invite-landing/:fromUserId', InviteLandingPage
   z.router.add '/what-is-clay/:fromUserId', WhatIsClayPage
   z.router.add '/friends', FriendsPage
+  z.router.add '/tos', TosPage
+  z.router.add '/privacy', PrivacyPage
+  z.router.add '/contact', ContactPage
+  z.router.add '/about', AboutPage
+  z.router.add '/development-tools', DevelopmentToolsPage
+  z.router.add '/docs', DocsPage
+  z.router.add '/play', GamesPage
+  z.router.add '/play/:filter', GamesPage
 
 handleData = (data) ->
   # Passed via message to denote game (share button in drawer uses this)

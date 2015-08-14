@@ -13,7 +13,7 @@ module.exports = class Contact
 
   render: =>
     {$socialIcons} = @state()
-    z 'div.z-contact',
+    z 'div.z-dev-dashboard-contact',
       z 'h1', 'Get in touch with us.'
       z 'div',
         'Have a general question? Experiencing issues and need help? '
