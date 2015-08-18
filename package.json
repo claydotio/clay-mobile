@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "node_modules/bower/bin/bower install",
     "test": "CLAY_API_URL=https://clay.io/api/m/v1 PUBLIC_CLAY_API_URL=https://clay.io/api/m/v1 CLAY_MOBILE_HOST=clay.io NODE_ENV=test node_modules/gulp/bin/gulp.js test",
-    "start": "npm run build && mkdir -p /var/log/clay && ./node_modules/pm2/bin/pm2 start ./bin/server.coffee -i max --name clay_mobile --no-daemon -o /var/log/clay/clay_mobile.log -e /var/log/clay/clay_mobile.error.log",
+    "start": "NODE_ENV=production npm run build && NODE_ENV=production ./node_modules/coffee-script/bin/coffee ./bin/server.coffee",
     "dev": "NODE_ENV=development node_modules/gulp/bin/gulp.js dev",
     "mock": "NODE_ENV=development MOCK=true node_modules/gulp/bin/gulp.js dev",
     "watch-tests": "NODE_ENV=test node_modules/gulp/bin/gulp.js watch:test",
@@ -70,7 +70,6 @@
     "helmet": "0.5.4",
     "loglevel": "1.2.0",
     "normalize-css": "^2.3.1",
-    "pm2": "0.10.3",
     "portal-gun": "0.2.4",
     "promiz": "1.0.0",
     "request-promise": "0.3.2",
