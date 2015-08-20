@@ -11,7 +11,7 @@ module.exports = class DevDashboard
     @state = z.state
       $devHeader: new DevHeader()
       $devDashboardMenu: new DevDashboardMenu({selected: tab})
-      $devDashboardContact: new DevDashboardContact()
+      $devDashboardContact: new Contact()
       $devDashboardGames: new DevDashboardGames()
       $devBottomPadding: new DevBottomPadding()
       selectedTab: tab
