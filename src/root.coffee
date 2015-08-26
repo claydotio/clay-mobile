@@ -166,7 +166,12 @@ handleData = (data) ->
   if gameKey
     PushToken.createByGameKey gameKey
     .catch log.trace
-    z.router.go "/game/#{gameKey}"
+    # TODO (Austin): get these games working in iframe (https support)
+    # once that's done, rm the first parts of if statement
+    if gameKey in ['indecency', 'kittencards']
+      window.location.href = "https://#{gameKey}.clay.juegos"
+    else
+      z.router.go "/game/#{gameKey}"
   else
     PushToken.createForMarketplace()
     .catch log.trace

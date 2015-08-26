@@ -17,7 +17,12 @@ module.exports = class GameBox
 
   loadGame: (game) ->
     ga? 'send', 'event', 'game_box', 'click', game.key
-    z.router.go UrlService.getGameRoute {game}
+    # TODO (Austin): get these games working in iframe (https support)
+    # once that's done, rm the first parts of if statement
+    if game.key in ['indecency', 'kittencards']
+      window.location.href = "https://#{game.key}.clay.juegos"
+    else
+      z.router.go UrlService.getGameRoute {game}
     httpSubDomainUrl = UrlService.getGameSubdomain({game, protocol: 'http'})
     kik?.picker?(httpSubDomainUrl, {}, -> null)
 
