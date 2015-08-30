@@ -18,6 +18,12 @@ LOAD_MORE_GAMES_LIMIT = 13
 SCROLL_THRESHOLD = 250
 BOXES_PER_ROW_SMALL_SCREEN = 2
 BOXES_PER_ROW_MEDIUM_SCREEN = 3
+FEATURED_GAME_IDS = [
+  'ff17638a-1df7-42ad-bda4-b2849c80db6d' # indecency
+  'f8e7190a-48d7-4b02-94e3-a6f7563049c7' # bloomball
+  '9a0fce33-3640-409c-82ab-1cbb30de0b91' # kittencards
+  'c7040a1b-003c-44bb-8c42-d80a9f6b2e50' # epicalchemy
+]
 
 elTopPosition = ($$el) ->
   if $$el
@@ -112,7 +118,9 @@ module.exports = class PopularGames
       @state.set
         isLoading: false
         gameLinks: gameLinks.concat _.map games, (game, index) ->
-          if index is featuredGamePosition
+          isFeatured = index is featuredGamePosition or
+                       FEATURED_GAME_IDS.indexOf(game.id) isnt -1
+          if isFeatured
             type: 'featured'
             game: game
             $component: new GamePromo()
