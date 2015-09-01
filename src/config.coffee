@@ -1,7 +1,8 @@
+env = process.env
+
 module.exports =
   PUBLIC_CLAY_API_URL:
     process.env.PUBLIC_CLAY_API_URL or 'https://clay.io/api/m/v1'
-  CLAY_API_URL: process.env.CLAY_API_URL
   HOST: process.env.CLAY_MOBILE_HOST or 'clay.io'
   DEV_HOST: process.env.CLAY_MOBILE_DEV_HOST or 'dev.clay.io'
   PORT: process.env.CLAY_MOBILE_PORT or process.env.PORT or 50040
@@ -16,3 +17,6 @@ module.exports =
     DEV: 'development'
     PROD: 'production'
     TEST: 'test'
+
+  # Server only
+  CLAY_API_URL: env.CLAY_API_URL
