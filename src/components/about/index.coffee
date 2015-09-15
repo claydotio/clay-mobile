@@ -30,12 +30,12 @@ module.exports = class About
           'Cristian\'s blog'
       z 'div',
         z 'a', {
-          href: 'http://twitter.com/razgriz94'
+          href: 'https://twitter.com/razgriz94'
         },
           'Twitter'
       z 'div',
         z 'a', {
-          href: 'http://behance.net/c_ruiz'
+          href: 'https://behance.net/c_ruiz'
         },
           'Behance'
 
@@ -59,12 +59,12 @@ module.exports = class About
         '''
       z 'div',
         z 'a', {
-          href: 'http://zolmeister.com/'
+          href: 'https://zolmeister.com/'
         },
           'Zoli\'s blog'
       z 'div',
         z 'a', {
-          href: 'http://twitter.com/zolmeister'
+          href: 'https://twitter.com/zolmeister'
         },
           'Twitter'
       z 'div',
@@ -92,7 +92,7 @@ module.exports = class About
           'Austin\'s blog'
       z 'div',
         z 'a', {
-          href: 'http://twitter.com/austinhallock'
+          href: 'https://twitter.com/austinhallock'
         },
           'Twitter'
       z 'div',

@@ -33,7 +33,7 @@ module.exports = class DevEditGameGetStarted
         labelWidth: 125
         o_value: o_key
         theme: '.theme-subdomain'
-        helpText: 'Your game will be accessible at http://SUBDOMAIN.clay.io'
+        helpText: 'Your game will be accessible at https://SUBDOMAIN.clay.io'
         postfix: '.clay.io'
         }
       gameIdInput: z.observe o_game.then (game) ->

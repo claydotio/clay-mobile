@@ -23,7 +23,7 @@ module.exports = class GameBox
       window.location.href = "https://#{game.key}.clay.juegos"
     else
       z.router.go UrlService.getGameRoute {game}
-    httpSubDomainUrl = UrlService.getGameSubdomain({game, protocol: 'http'})
+    httpSubDomainUrl = UrlService.getGameSubdomain({game, protocol: 'https'})
     kik?.picker?(httpSubDomainUrl, {}, -> null)
 
   render: ({game, iconSize, onclick}) =>

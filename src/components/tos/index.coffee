@@ -20,7 +20,7 @@ module.exports = class Tos
           policies (including, without limitation,
           '''
           z 'a', {
-            href: 'http://clay.io/privacy/'
+            href: 'https://clay.io/privacy/'
           },
             'Clay.io\'s Privacy Policy'
           '''

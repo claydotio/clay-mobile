@@ -14,10 +14,10 @@ describe 'UrlService', ->
   it 'getMarketplaceBase()', ->
     UrlService.getMarketplaceBase().should.match urlRegex
 
-  it 'getMarketplaceBase({protocol: "card"}) is card...', ->
-    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'card'})
+  it 'getMarketplaceBase({protocol: "cards"}) is cards...', ->
+    marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'cards'})
     marketplaceBaseUrl.should.match urlRegex
-    marketplaceBaseUrl.should.match /^card:/
+    marketplaceBaseUrl.should.match /^cards:/
 
   it 'getMarketplaceGame({game})', ->
     UrlService.getMarketplaceGame({game: MockGame}).should.match urlRegex
@@ -30,11 +30,11 @@ describe 'UrlService', ->
     UrlService.getGameSubdomain({game: MockGame})
       .should.match urlRegex
 
-  it 'getGameSubdomain({game, protocol: "card"}) is card...', ->
-    options = {game: MockGame, protocol: 'card'}
+  it 'getGameSubdomain({game, protocol: "cards"}) is cards...', ->
+    options = {game: MockGame, protocol: 'cards'}
     gameSubdomain = UrlService.getGameSubdomain(options)
     gameSubdomain.should.match urlRegex
-    gameSubdomain.should.match /^card:/
+    gameSubdomain.should.match /^cards:/
 
   it 'getSubdomain() when window.location.host is slime.clay.io', ->
     UrlService.__set__ 'host', 'slime.clay.io'
@@ -44,8 +44,8 @@ describe 'UrlService', ->
     UrlService.__set__ 'host', 'clay.io'
     should.not.exist UrlService.getSubdomain()
 
-  it 'getSubdomain({url: "http://slime.clay.io"})', ->
-    testUrl = 'http://slime.clay.io'
+  it 'getSubdomain({url: "https://slime.clay.io"})', ->
+    testUrl = 'https://slime.clay.io'
     UrlService.getSubdomain({url: testUrl}).should.be 'slime'
 
   it 'getSubdomain({url: "clay.io"})', ->
@@ -60,7 +60,7 @@ describe 'UrlService', ->
     overrides =
       kik:
         open: (url) ->
-          url.should.be 'http://clay.io'
+          url.should.be 'https://clay.io'
           done()
 
       EnvironmentService:
@@ -70,13 +70,13 @@ describe 'UrlService', ->
           return false
 
     UrlService.__with__(overrides) ->
-      UrlService.openWindow 'http://clay.io'
+      UrlService.openWindow 'https://clay.io'
 
   it 'openWindow() Clay App', (done) ->
     oldOpen = window.open
     window.open = (url, windowName) ->
       window.open = oldOpen
-      url.should.be 'http://clay.io'
+      url.should.be 'https://clay.io'
       windowName.should.be '_system'
       done()
 
@@ -88,14 +88,14 @@ describe 'UrlService', ->
           return true
 
     UrlService.__with__(overrides) ->
-      UrlService.openWindow 'http://clay.io'
+      UrlService.openWindow 'https://clay.io'
 
   it 'openWindow()', (done) ->
     oldOpen = window.open
     window.open = (url, windowName) ->
       window.open = oldOpen
-      url.should.be 'http://clay.io'
+      url.should.be 'https://clay.io'
       windowName.should.be '_blank'
       done()
 
-    UrlService.openWindow 'http://clay.io'
+    UrlService.openWindow 'https://clay.io'

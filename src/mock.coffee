@@ -17,8 +17,8 @@ game = (i, isNew) ->
 
   id: i
   key: i
-  gameUrl: 'http://cdn.wtf/g/8/game/'
-  icon128Url: 'http://clay.io/games/slime/claymedia/icon128.png'
+  gameUrl: 'https://cdn.wtf/g/8/game/'
+  icon128Url: 'https://clay.io/games/slime/claymedia/icon128.png'
   name: title
   description: "This is the description for game #{i}"
   rating: i % 6
@@ -26,8 +26,8 @@ game = (i, isNew) ->
 prism =
   id: 4875
   key: 'prism'
-  gameUrl: "http://#{config.HOST}:3003"
-  icon128Url: 'http://clay.io/games/slime/claymedia/icon128.png'
+  gameUrl: "https://#{config.HOST}:3003"
+  icon128Url: 'https://clay.io/games/slime/claymedia/icon128.png'
   name: 'Prism'
   description: 'The most amazing game ever'
   rating: 5

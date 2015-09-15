@@ -46,15 +46,16 @@
 
     <link rel="kik-icon" href="{iconKik}">
     <link rel="canonical" href="{canonical}">
+    <meta name="kik-https" content="{host}">
 
     {! fonts !}
     <link href='//fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
 
     {! misc !}
     <meta name="theme-color" content="#ff8a00">
-    <link rel="shortcut icon" href="http://cdn.wtf/d/images/icons/favicon.ico">
-    <link rel="terms" href="http://clay.io/tos">
-    <link rel="privacy" href="http://clay.io/privacy">
+    <link rel="shortcut icon" href="https://cdn.wtf/d/images/icons/favicon.ico">
+    <link rel="terms" href="https://clay.io/tos">
+    <link rel="privacy" href="https://clay.io/privacy">
   </head>
 
   <body>

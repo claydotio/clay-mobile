@@ -227,11 +227,10 @@ renderHomePage = do ->
     icon120: 'https://cdn.wtf/d/images/icons/icon_120.png'
     icon152: 'https://cdn.wtf/d/images/icons/icon_152.png'
     icon440x280: 'https://cdn.wtf/d/images/icons/icon_440_280.png'
-    # can't specify https because:
-    # https://github.com/kikinteractive/kik-js-issues/issues/12
-    iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
-    url: 'http://clay.io/'
-    canonical: 'http://clay.io'
+    iconKik: 'https://cdn.wtf/d/images/icons/icon_256_orange.png'
+    url: 'https://clay.io/'
+    canonical: 'https://clay.io'
+    host: 'clay.io'
     distjs: distJs
 
   kikDescription = 'Play fun mobile games instantly on your phone for free.'
@@ -341,14 +340,15 @@ fourOhFour = do ->
     description: 'The HTML5 mobile game you are looking for could not be found'
     keywords: 'mobile games, clay games, free mobile games, mobile web games'
     name: 'Game not found - Clay Games'
-    icon256: '//cdn.wtf/d/images/icons/icon_256.png'
-    icon76: '//cdn.wtf/d/images/icons/icon_76.png'
-    icon120: '//cdn.wtf/d/images/icons/icon_120.png'
-    icon152: '//cdn.wtf/d/images/icons/icon_152.png'
-    icon440x280: '//cdn.wtf/d/images/icons/icon_440_280.png'
-    iconKik: '//cdn.wtf/d/images/icons/icon_256_orange.png'
-    url: 'http://clay.io/404'
-    canonical: 'http://clay.io/404'
+    icon256: 'https://cdn.wtf/d/images/icons/icon_256.png'
+    icon76: 'https://cdn.wtf/d/images/icons/icon_76.png'
+    icon120: 'https://cdn.wtf/d/images/icons/icon_120.png'
+    icon152: 'https://cdn.wtf/d/images/icons/icon_152.png'
+    icon440x280: 'https://cdn.wtf/d/images/icons/icon_440_280.png'
+    iconKik: 'https://cdn.wtf/d/images/icons/icon_256_orange.png'
+    url: 'https://clay.io/404'
+    canonical: 'https://clay.io/404'
+    host: 'clay.io'
     distjs: distJs
 
   rendered = Promise.promisify(dust.render, dust) 'index', page
@@ -392,9 +392,10 @@ renderGamePage = (gameKey, isProbablyKik) ->
       iconKik: iconUrl?.replace /^https?:/, ''
 
       # TODO: (Zoli) this should be returned by the server
-      icon440x280: "http://cdn.wtf/g/#{game.id}/meta/promo_440.png"
-      url: "http://#{game.key}.clay.io"
-      canonical: "http://#{game.key}.clay.io"
+      icon440x280: "https://cdn.wtf/g/#{game.id}/meta/promo_440.png"
+      url: "https://#{game.key}.clay.io"
+      canonical: "https://#{game.key}.clay.io"
+      host: "#{game.key}.clay.io"
 
     Promise.promisify(dust.render, dust) 'index', page
 
@@ -417,8 +418,9 @@ renderInviteLandingPage = (fromUserId, isProbablyKik) ->
     icon152: 'https://cdn.wtf/d/images/icons/icon_152.png'
     icon440x280: 'https://cdn.wtf/d/images/icons/icon_440_280.png'
     iconKik: '' # don't want this page to show on Kik
-    url: "http://clay.io/invite-landing/#{fromUserId}"
-    canonical: "http://clay.io/invite-landing/#{fromUserId}"
+    url: "https://clay.io/invite-landing/#{fromUserId}"
+    canonical: "https://clay.io/invite-landing/#{fromUserId}"
+    host: 'clay.io'
 
   Promise.promisify(dust.render, dust) 'index', page
 

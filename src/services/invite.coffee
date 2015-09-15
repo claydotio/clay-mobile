@@ -5,7 +5,7 @@ kik = require 'kik'
 
 class InviteService
   getUrl: ({userId}) ->
-    return "http://#{config.HOST}/invite-landing/#{userId}"
+    return "https://#{config.HOST}/invite-landing/#{userId}"
 
   sendFacebookInvite: ({userId}) =>
     ga? 'send', 'event', 'invite', 'facebook', userId
@@ -14,7 +14,7 @@ class InviteService
       app_id: config.FB_APP_ID
       display: 'popup'
       href: @getUrl {userId}
-      redirect_uri: "http://#{config.HOST}"
+      redirect_uri: "https://#{config.HOST}"
     }
     inviteUrl = "https://www.facebook.com/dialog/share?#{queryString}"
 
