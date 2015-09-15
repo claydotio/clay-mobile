@@ -11,10 +11,9 @@ module.exports = class Home
   constructor: ->
     styles.use()
 
-    # Prism, Treasure Arena, Little Alchemy, Cut The Rope
+    # Prism, Little Alchemy, Cut The Rope
     featuredGameIds = [
       'b339f236-9bda-46cb-ae26-d0d255bae4fd'
-      'b25349c1-86ad-45d4-9257-33e444f89041'
       '42db4b0a-464e-4ae6-b06e-96440ce66573'
       '2c0d64c9-fb3e-4a75-a14c-ee2c6a2ba1cf'
     ]
