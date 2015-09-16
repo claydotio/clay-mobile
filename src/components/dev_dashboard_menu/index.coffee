@@ -26,3 +26,5 @@ module.exports = class DevDashboardMenu
         z.router.link z "a[href=/dashboard/contact]
                    #{if selected is 'contact' then '.is-selected' else ''}",
           z '.text', 'Contact Us'
+
+      'New submissions are currently disabled.'
