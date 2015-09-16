@@ -40,14 +40,14 @@ twitterShare = ({text, game, me}) ->
 
 # TODO: (Zoli) share text, not just game
 facebookShare = ({text, game, me}) ->
-  href = if game.id is MARKETPLACE_GAME_ID then "http://#{config.HOST}" \
-         else "http://#{config.HOST}/game/#{game.key}"
+  href = if game.id is MARKETPLACE_GAME_ID then "https://#{config.HOST}" \
+         else "https://#{config.HOST}/game/#{game.key}"
 
   queryString = UrlLib.serializeQueryString {
     app_id: config.FB_APP_ID
     display: 'popup'
     href: href
-    redirect_uri: "http://#{config.HOST}"
+    redirect_uri: "https://#{config.HOST}"
   }
   shareUrl = "https://www.facebook.com/dialog/share?#{queryString}"
 

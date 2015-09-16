@@ -18,7 +18,7 @@ module.exports = class MarketplaceShareButton
     e?.preventDefault()
 
     ShareService.any
-      text: 'Play with me! http://clay.io'
+      text: 'Play with me! https://clay.io'
     .catch log.trace
 
     ga? 'send', 'event', 'marketplace_share', 'share', 'marketplace'

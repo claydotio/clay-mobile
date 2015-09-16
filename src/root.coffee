@@ -201,7 +201,7 @@ route = ->
 Promise.all [User.incrementVisitCount(), KikService.isFromPush()]
 .then ([visitCount, isFromPush]) ->
   if isFromPush
-    ga? 'set', 'referrer', 'http://kikpush.claycustomreferrer.com'
+    ga? 'set', 'referrer', 'https://kikpush.claycustomreferrer.com'
 .catch log.trace
 .then ->
   new Promise (resolve) ->
@@ -215,7 +215,7 @@ Promise.all [User.incrementVisitCount(), KikService.isFromPush()]
         kik.getAnonymousUser (token) ->
           resolve token
       else if kik?.picker
-        marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'http'})
+        marketplaceBaseUrl = UrlService.getMarketplaceBase({protocol: 'https'})
         kik?.picker? marketplaceBaseUrl, {}, (res) ->
           resolve(res?.anonToken)
       else resolve()

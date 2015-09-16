@@ -11,12 +11,13 @@ class UrlService
     return host is config.HOST
 
   getMarketplaceBase: ({protocol} = {}) ->
-    protocol ?= if EnvironmentService.isKikEnabled() then 'card' else 'http'
+    protocol ?= if EnvironmentService.isKikEnabled() then 'cards' else 'https'
     return "#{protocol}://#{config.HOST}"
 
   # full path to marketplace and game
   getMarketplaceGame: ({game}) =>
-    return @getMarketplaceBase({protocol: 'http'}) + '/#' + @getGameRoute {game}
+    return @getMarketplaceBase({protocol: 'https'}) +
+      '/#' + @getGameRoute {game}
 
   # FIXME: game methods should be server-side as class methods in game model
   # relative path to game
@@ -26,7 +27,7 @@ class UrlService
   # returns the full url to a game's subdomain page (eg http://slime.clay.io)
   getGameSubdomain: ({game, protocol}) =>
     protocol ?= if EnvironmentService.isKikEnabled() and @isRootPath() \
-                then 'card' else 'http'
+                then 'cards' else 'https'
     return "#{protocol}://#{game?.key}.#{config.HOST}"
 
   # url is optional, if undefined use config.HOST as base domain
