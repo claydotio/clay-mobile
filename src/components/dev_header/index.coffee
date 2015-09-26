@@ -13,7 +13,7 @@ module.exports = class DevHeader
 
     z '.z-dev-header',
       z $header, {
-        logoUrl: '//cdn.wtf/d/images/logos/logo_dev.svg'
+        logoUrl: 'https://cdn.wtf/d/images/logos/logo_dev.svg'
         homeUrl: '/dashboard'
         links: [
           {

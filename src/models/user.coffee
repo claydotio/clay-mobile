@@ -9,7 +9,7 @@ config = require '../config'
 EnvironmentService = require '../services/environment'
 
 PATH = config.PUBLIC_CLAY_API_URL + '/users'
-DEFAULT_PROFILE_PIC = '//cdn.wtf/d/images/general/profile-square.png'
+DEFAULT_PROFILE_PIC = 'https://cdn.wtf/d/images/general/profile-square.png'
 LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 LOCALSTORE_FRIENDS = 'user:friends'
 SMALL_AVATAR_SIZE = 96
