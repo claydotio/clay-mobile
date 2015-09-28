@@ -17,6 +17,7 @@ styles = require './index.styl'
 
 ENGAGED_PLAY_TIME = 60000 # 1 min
 SHARE_MODAL_DISPLAY_PLAY_COUNT = 3
+KITTEN_CARDS_MODAL_DISPLAY_PLAY_COUNT = 1
 
 module.exports = class GamePlayer
   constructor: ({gameKey}) ->
@@ -46,9 +47,13 @@ module.exports = class GamePlayer
       if isReturningVisitor
         ga? 'send', 'event', 'game', 'retained_play', gameKey
 
-      shouldShowModal = playCount is SHARE_MODAL_DISPLAY_PLAY_COUNT
-      if shouldShowModal
+      shouldShowShareModal = playCount is SHARE_MODAL_DISPLAY_PLAY_COUNT
+      if shouldShowShareModal
         @showShareModal game
+
+      shouldShowKittenModal = playCount is KITTEN_CARDS_MODAL_DISPLAY_PLAY_COUNT
+      if shouldShowKittenModal
+        @showKittenModal()
     .catch log.trace
 
   onBeforeUnmount: =>
@@ -91,6 +96,25 @@ module.exports = class GamePlayer
       Modal.openComponent(
         component: new GameShare({game})
       )
+
+  showKittenModal: ->
+    Modal.openComponent
+      isTransparent: true
+      component: z 'div',
+        z '.close',
+          onclick: Modal.closeComponent
+          style:
+            color: 'white'
+            fontSize: '30px'
+            marginBottom: '10px'
+          z 'i.icon.icon-close'
+        z 'a',
+          href: 'https://kittencards.clay.io'
+          z 'img',
+            src:
+              'https://cdn.wtf/d/images/ads/kitten_cards/kc_interstitial_1.png'
+            style:
+              width: '100%'
 
   # if already on marketplace, keep them there with root route, otherwise
   # hard redirect to marketplace

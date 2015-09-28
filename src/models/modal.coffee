@@ -4,11 +4,12 @@ class Modal
   constructor: ->
     @component = null
 
-  openComponent: ({@component}) ->
+  openComponent: ({@component, @isTransparent}) =>
     z.redraw()
 
-  closeComponent: ->
+  closeComponent: =>
     @component = null
+    @isTransparent = null
     z.redraw()
 
 module.exports = new Modal()
