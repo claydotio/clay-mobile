@@ -18,5 +18,6 @@ module.exports = class ModalViewer
 
     z 'div.z-modal-viewer-overlay',
       z 'div.z-modal-viewer-container',
-        z 'div.z-modal-viewer',
+        z 'div.z-modal-viewer' +
+          "#{if Modal.isTransparent then '.is-transparent' else ''}",
           Modal.component
