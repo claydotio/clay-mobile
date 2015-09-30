@@ -50,10 +50,14 @@ module.exports = class GamePlayer
       shouldShowShareModal = playCount is SHARE_MODAL_DISPLAY_PLAY_COUNT
       if shouldShowShareModal
         @showShareModal game
+        .catch log.error
 
       shouldShowKittenModal = playCount is KITTEN_CARDS_MODAL_DISPLAY_PLAY_COUNT
       if shouldShowKittenModal
         @showKittenModal()
+        .catch log.error
+
+      return null
     .catch log.trace
 
   onBeforeUnmount: =>
@@ -98,23 +102,34 @@ module.exports = class GamePlayer
       )
 
   showKittenModal: ->
-    Modal.openComponent
-      isTransparent: true
-      component: z 'div',
-        z '.close',
-          onclick: Modal.closeComponent
-          style:
-            color: 'white'
-            fontSize: '30px'
-            marginBottom: '10px'
-          z 'i.icon.icon-close'
-        z 'a',
-          href: 'https://kittencards.clay.io'
-          z 'img',
-            src:
-              'https://cdn.wtf/d/images/ads/kitten_cards/kc_interstitial_1.png'
+    User.getExperiments()
+    .then ({kittenAd}) ->
+      adUrl = switch kittenAd
+        when 'v8'
+          'https://cdn.wtf/d/images/ads/kitten_cards/kc_interstitial_8.png'
+        else
+          'https://cdn.wtf/d/images/ads/kitten_cards/kc_interstitial_1.png'
+
+      Modal.openComponent
+        isTransparent: true
+        component: z 'div',
+          z '.close',
+            onclick: Modal.closeComponent
             style:
-              width: '100%'
+              color: 'white'
+              fontSize: '30px'
+              marginBottom: '10px'
+            z 'i.icon.icon-close'
+          z 'a',
+            href: '#'
+            onclick: ->
+              User.emit('kittenAdClick').catch(log.error)
+              .then ->
+                window.location.href = 'https://kittencards.clay.io'
+            z 'img',
+              src: adUrl
+              style:
+                width: '100%'
 
   # if already on marketplace, keep them there with root route, otherwise
   # hard redirect to marketplace
