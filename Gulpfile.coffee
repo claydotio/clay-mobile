@@ -76,6 +76,8 @@ gulp.task 'scripts:test', ->
   gulp.src paths.rootTests
   .pipe webpack
     module:
+      exprContextRegExp: /$^/
+      exprContextCritical: false
       postLoaders: [
         { test: /\.coffee$/, loader: 'transform/cacheable?envify' }
       ]
@@ -152,6 +154,8 @@ gulp.task 'scripts:prod', ->
   gulp.src paths.root
   .pipe webpack
     module:
+      exprContextRegExp: /$^/
+      exprContextCritical: false
       postLoaders: [
         { test: /\.coffee$/, loader: 'transform/cacheable?envify' }
       ]
