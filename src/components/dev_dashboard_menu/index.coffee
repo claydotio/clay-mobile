@@ -27,4 +27,6 @@ module.exports = class DevDashboardMenu
                    #{if selected is 'contact' then '.is-selected' else ''}",
           z '.text', 'Contact Us'
 
-      'New submissions are currently disabled.'
+      'New submissions are currently disabled'
+      z.router.link z 'a[href=/edit-game/start]',
+        '.'
