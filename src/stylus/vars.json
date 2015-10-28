@@ -80,9 +80,9 @@
   "$iconXLarge": "3.2rem",
   "$iconXXLarge": "4.2rem",
 
-  "$logoSvg": "//cdn.wtf/d/images/logos/logo_standard_bw.svg",
-  "$logoCloudSvg": "//cdn.wtf/d/images/logos/logo_cloud.svg",
-  "$icon256": "//cdn.wtf/d/images/icons/icon_256.png",
+  "$logoSvg": "https://cdn.wtf/d/images/logos/logo_standard_bw.svg",
+  "$logoCloudSvg": "https://cdn.wtf/d/images/logos/logo_cloud.svg",
+  "$icon256": "https://cdn.wtf/d/images/icons/icon_256.png",
 
   "$marketplaceGamePromoWidth": 440,
   "$marketplaceGamePromoHeight": 280,

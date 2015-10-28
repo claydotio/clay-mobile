@@ -392,7 +392,7 @@ renderGamePage = (gameKey, isProbablyKik) ->
       iconKik: iconUrl?.replace /^https?:/, ''
 
       # TODO: (Zoli) this should be returned by the server
-      icon440x280: "https://cdn.wtf/g/#{game.id}/meta/promo_440.png"
+      icon440x280: "https://#{game.id}.cdn.wtf/g/#{game.id}/meta/promo_440.png"
       url: "https://#{game.key}.clay.io"
       canonical: "https://#{game.key}.clay.io"
       host: "#{game.key}.clay.io"

@@ -14,7 +14,8 @@ module.exports = class GooglePlayAdModal
       modalHeader: new ModalHeader(
         title: 'Get the app'
         isDark: true
-        backgroundImage: '//cdn.wtf/d/images/google_play/google_play_banner.png'
+        backgroundImage:
+          'https://cdn.wtf/d/images/google_play/google_play_banner.png'
       )
 
   onMount: ->

@@ -30,7 +30,7 @@ module.exports = class InviteLanding
         z 'div.header-content',
           z 'h1.name', 'Clay is the best place to play!'
           z 'img.games',
-            src: '//cdn.wtf/d/images/general/promo_game_grid.png'
+            src: 'https://cdn.wtf/d/images/general/promo_game_grid.png'
             width: PROMO_GAME_GRID_WIDTH
             height: PROMO_GAME_GRID_HEIGHT
           z 'div.description',

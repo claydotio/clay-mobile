@@ -13,6 +13,8 @@ module.exports =
   ACCESS_TOKEN_COOKIE_KEY: 'accessToken2'
   FB_APP_ID: process.env.FB_APP_ID or 176274425805503
   SCREENSHOT_MIN_COUNT: 2
+  HYPERPLANE_KEY: 'mobile'
+  HYPERPLANE_API_URL: process.env.PUBLIC_HYPERPLANE_API_URL
   ENVS:
     DEV: 'development'
     PROD: 'production'

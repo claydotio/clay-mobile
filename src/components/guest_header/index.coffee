@@ -12,8 +12,8 @@ module.exports = class GuestHeader
     {$header} = @state()
     z '.z-guest-header',
       z $header, {
-        logoUrl: '//cdn.wtf/d/images/logos/logo.svg'
-        homeUrl: "//#{config.HOST}/"
+        logoUrl: 'https://cdn.wtf/d/images/logos/logo.svg'
+        homeUrl: "https://#{config.HOST}/"
         links: [
           {
             text: 'Sign in'

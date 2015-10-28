@@ -1,6 +1,10 @@
 z = require 'zorium'
 log = require 'clay-loglevel'
 _ = require 'lodash'
+Rx = require 'rx-lite'
+cookie = require 'cookie'
+Hyperplane = require 'node-hyperplane'
+request = require 'clay-request'
 
 cookies = require '../lib/cookies'
 request = require '../lib/request'
@@ -9,7 +13,7 @@ config = require '../config'
 EnvironmentService = require '../services/environment'
 
 PATH = config.PUBLIC_CLAY_API_URL + '/users'
-DEFAULT_PROFILE_PIC = '//cdn.wtf/d/images/general/profile-square.png'
+DEFAULT_PROFILE_PIC = 'https://cdn.wtf/d/images/general/profile-square.png'
 LOCALSTORE_VISIT_COUNT_KEY = 'user:visit_count'
 LOCALSTORE_FRIENDS = 'user:friends'
 SMALL_AVATAR_SIZE = 96
@@ -21,6 +25,14 @@ LARGE_AVATAR_SIZE = 512
 # if it's 'unset', and nothing else accesses `me` directly as a promise
 me = z.observe 'unset'
 
+# for hyperplane
+setCookies = (currentCookies) ->
+  (newCookies) ->
+    _.map newCookies, (value, key) ->
+      unless currentCookies[key] is value
+        cookies.set key, value
+    currentCookies = newCookies
+
 class User
   AVATAR_SIZES:
     SMALL: SMALL_AVATAR_SIZE
@@ -31,9 +43,29 @@ class User
   constructor: ->
     @signedUpThisSession = false
     @viewedFirstVisitModalThisSession = false
+
+    currentCookies = cookie.parse(document.cookie)
+    cookieSubject = new Rx.BehaviorSubject currentCookies
+    cookieSubject.subscribeOnNext setCookies(currentCookies)
+
+    @hyperplane = new Hyperplane {
+      cookieSubject: cookieSubject
+      app: config.HYPERPLANE_KEY
+      apiUrl: config.HYPERPLANE_API_URL
+      proxy: request
+      joinEventFn: ->
+        Promise.resolve {}
+    }
+
     me (user) ->
       if user?.accessToken
         cookies.set config.ACCESS_TOKEN_COOKIE_KEY, user.accessToken
+
+    @emit('view').catch log.error
+
+  getExperiments: => @hyperplane.getExperiments().take(1).toPromise()
+  emit: (event, opts) =>
+    @hyperplane.emit event,  opts
 
   getMe: =>
     if me() is 'unset'
