@@ -93,6 +93,7 @@ module.exports = class GamePlayer
   logEngagedPlay: =>
     @state.game.then (game) ->
       ga? 'send', 'event', 'game', 'engaged_play', game.key
+      User.emit('mobile_engaged_game_play').catch(log.error)
       User.addRecentGame(game.id)
 
   showShareModal: (game) =>

@@ -111,16 +111,20 @@ module.exports = class PopularGames
     @state.set isLoading: true
     z.redraw()
 
-    Game.getTop
-      limit: LOAD_MORE_GAMES_LIMIT
-      skip: gameLinks.length
-    .then (games) =>
+    Promise.all [
+      Game.getTop
+        limit: LOAD_MORE_GAMES_LIMIT
+        skip: gameLinks.length
+      User.getExperiments().then ({gridLayout}) ->
+        gridLayout is 'featured'
+    ]
+    .then ([games, isNewGridLayout]) =>
       @state.set
         isLoading: false
         gameLinks: gameLinks.concat _.map games, (game, index) ->
           isFeatured = index is featuredGamePosition or
                        FEATURED_GAME_IDS.indexOf(game.id) isnt -1
-          if isFeatured
+          if isFeatured or isNewGridLayout
             type: 'featured'
             game: game
             $component: new GamePromo()
